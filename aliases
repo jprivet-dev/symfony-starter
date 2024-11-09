@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Usage:
+#   . aliases [options]
+source scripts/aliases.sh
