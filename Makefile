@@ -29,18 +29,16 @@ endif
 
 APP_DIR            = app
 APP_PATH           = $(PWD)/$(APP_DIR)
-REPOSITORY         = git@github.com:jprivet-dev/symfony-docker.git
-BRANCH            ?= main
-DOCKER_DIR         = docker
+REPOSITORY         = git@github.com:dunglas/symfony-docker.git
 DOCKER_PATH        = $(PWD)/$(DOCKER_DIR)
 DOCKER_BUILD_OPTS ?=
 PROJECT_NAME       = $(shell basename $(CURDIR))
 SERVER_NAME       ?= $(PROJECT_NAME).localhost
 
-COMPOSE_BASE     = $(DOCKER_DIR)/compose.yaml
-COMPOSE_OVERRIDE = $(DOCKER_DIR)/compose.override.yaml
+COMPOSE_BASE     = $(APP_DIR)/compose.yaml
+COMPOSE_OVERRIDE = $(APP_DIR)/compose.override.yaml
 COMPOSE          =\
-	APP_PATH=$(APP_PATH) DOCKER_PATH=$(DOCKER_PATH) SERVER_NAME=$(SERVER_NAME) $(DOCKER_BUILD_OPTS)\
+	SERVER_NAME=$(SERVER_NAME) $(DOCKER_BUILD_OPTS)\
 	docker compose \
 	-p $(PROJECT_NAME) -f $(COMPOSE_BASE) -f $(COMPOSE_OVERRIDE)
 
@@ -97,15 +95,8 @@ restart: stop start ## Restart the project
 ##
 
 .PHONY: clean
-clean: confirm_continue clean_app clean_docker ## Remove app & docker directories [y/N]
-
-.PHONY: clean_app
-clean_app: confirm_continue ## Remove app directory [y/N]
+clean: confirm_continue ## Remove app directory [y/N]
 	rm -rf app
-
-.PHONY: clean_docker
-clean_docker: confirm_continue ## Remove docker directory [y/N]
-	rm -rf docker
 
 ##
 
@@ -203,13 +194,13 @@ PHONY: clone
 clone: ## Clone Symfony Docker (forked version)
 	@printf "\n$(Y)Clone Symfony Docker$(S)"
 	@printf "\n$(Y)--------------------$(S)\n\n"
-ifeq ($(wildcard $(DOCKER_DIR)),)
+ifeq ($(wildcard $(APP_DIR)),)
 	@printf "Repository: $(Y)$(REPOSITORY)$(S)\n"
-	@printf "Branch    : $(Y)$(BRANCH)$(S)\n"
-	git clone $(REPOSITORY) $(DOCKER_DIR) -b $(BRANCH)
-	@printf " $(G)✔$(S) Symfony Docker cloned.\n\n"
+	git clone $(REPOSITORY) $(APP_DIR)
+	rm -rf $(APP_DIR)/.git
+	@printf " $(G)✔$(S) Symfony Docker cloned in $(Y)$(APP_DIR)$(S).\n\n"
 else
-	@printf " $(G)✔$(S) Symfony Docker already cloned.\n\n"
+	@printf " $(G)✔$(S) Symfony Docker already cloned in $(Y)$(APP_DIR)$(S).\n\n"
 endif
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
