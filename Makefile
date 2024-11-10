@@ -9,13 +9,13 @@ Y = "\\033[33m"
 S = "\\033[0m"
 
 #
-# ENVIRONMENT VARIABLES
+# MAKEFILE ENVIRONMENT VARIABLES
 #
 
 -include .env
 
 #
-# EXECUTABLES (LOCAL)
+# EXECUTABLES - PART 1 (LOCAL)
 #
 
 USER_ID  = $(shell id -u)
@@ -27,20 +27,61 @@ ifndef COMPOSE_V2
 $(error Docker Compose CLI plugin is required but is not available on your system)
 endif
 
-APP_DIR            = app
-APP_PATH           = $(PWD)/$(APP_DIR)
-REPOSITORY         = git@github.com:dunglas/symfony-docker.git
-DOCKER_PATH        = $(PWD)/$(DOCKER_DIR)
-DOCKER_BUILD_OPTS ?=
-PROJECT_NAME       = $(shell basename $(CURDIR))
-SERVER_NAME       ?= $(PROJECT_NAME).localhost
+APP_DIR                 = app
+REPOSITORY              = git@github.com:dunglas/symfony-docker.git
+PROJECT_NAME           ?= $(shell basename $(CURDIR))
+COMPOSE_BUILD_OPTS     ?=
+COMPOSE_UP_SERVER_NAME ?= $(PROJECT_NAME).localhost
+COMPOSE_UP_ENV_VARS    ?=
+
+#
+# SYMFONY ENVIRONMENT VARIABLES
+#
+
+# Files in order of increasing priority.
+# @see https://github.com/jprivet-dev/makefiles/tree/main/symfony-env-include
+# @see https://www.gnu.org/software/make/manual/html_node/Environment.html
+# @see https://github.com/symfony/recipes/issues/18
+# @see https://symfony.com/doc/current/quick_tour/the_architecture.html#environment-variables
+# @see https://symfony.com/doc/current/configuration.html#listing-environment-variables
+# @see https://symfony.com/doc/current/configuration.html#overriding-environment-values-via-env-local
+-include $(APP_DIR)/.env
+-include $(APP_DIR)/.env.local
+
+# get APP_ENV original value
+FILE_ENV := $(APP_ENV)
+-include $(APP_DIR)/.env.$(FILE_ENV)
+-include $(APP_DIR)/.env.$(FILE_ENV).local
+
+ifneq ($(FILE_ENV),$(APP_ENV))
+$(info Warning: APP_ENV is overloaded outside .env and .env.local files)
+endif
+
+ifeq ($(FILE_ENV),prod)
+$(info Warning: Your are in the prod environment)
+else ifeq ($(FILE_ENV),test)
+$(info Warning: Your are in the test environment)
+endif
+
+# @see https://symfony.com/doc/current/deployment.html#b-configure-your-environment-variables
+ifneq ($(wildcard .env.local.php),)
+$(info Warning: It is not possible to use variables from .env.local.php file)
+$(info Warning: The final APP_ENV of that Makefile may be different from the APP_ENV of .env.local.php)
+endif
+
+#
+# EXECUTABLES - PART 2 (LOCAL)
+#
 
 COMPOSE_BASE     = $(APP_DIR)/compose.yaml
 COMPOSE_OVERRIDE = $(APP_DIR)/compose.override.yaml
-COMPOSE          =\
-	SERVER_NAME=$(SERVER_NAME) $(DOCKER_BUILD_OPTS)\
-	docker compose \
-	-p $(PROJECT_NAME) -f $(COMPOSE_BASE) -f $(COMPOSE_OVERRIDE)
+COMPOSE_PROD     = $(APP_DIR)/compose.prod.yaml
+
+ifeq ($(FILE_ENV),prod)
+COMPOSE = docker compose -p $(PROJECT_NAME) -f $(COMPOSE_BASE) -f $(COMPOSE_PROD)
+else
+COMPOSE = docker compose -p $(PROJECT_NAME) -f $(COMPOSE_BASE) -f $(COMPOSE_OVERRIDE)
+endif
 
 CONTAINER_PHP = $(COMPOSE) exec php
 PHP           = $(CONTAINER_PHP) php
@@ -104,7 +145,7 @@ PHONY: info
 info i: $(call title Info) ## Show info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-	@printf "Go on $(G)https://$(SERVER_NAME)/$(S)\n"
+	@printf "Go on $(G)https://$(COMPOSE_UP_SERVER_NAME)/$(S)\n"
 	@printf "Run $(Y)make$(S) to see all shorcuts for the most common tasks.\n"
 	@printf "Run $(Y). aliases$(S) to load all the project aliases.\n"
 	@printf "\n"
@@ -211,7 +252,7 @@ up: ## Start the container
 
 .PHONY: up_d
 up_d: ## Start the container (wait for services to be running|healthy - detached mode)
-	$(COMPOSE) up --pull always -d --wait
+	SERVER_NAME=$(COMPOSE_UP_SERVER_NAME) $(COMPOSE_UP_ENV_VARS) $(COMPOSE) up --pull always -d --wait
 
 .PHONY: down
 down: ## Stop the container
@@ -219,7 +260,7 @@ down: ## Stop the container
 
 .PHONY: build
 build: ## Build or rebuild services
-	$(COMPOSE) build
+	$(COMPOSE) build $(COMPOSE_BUILD_OPTS)
 
 .PHONY: logs
 logs: ## See the container’s logs
