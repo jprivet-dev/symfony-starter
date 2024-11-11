@@ -147,7 +147,8 @@ clean: confirm_continue ## Remove app directory [y/N]
 ##
 
 PHONY: info
-info i: overload_file env_files vars ## Show info
+info i: ## Show info
+	@$(MAKE) -s overload_file env_files vars
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
 	@printf "* Go on $(G)https://$(COMPOSE_UP_SERVER_NAME)/$(S)\n"
