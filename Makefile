@@ -81,11 +81,12 @@ endif
 COMPOSE_BASE     = $(APP_DIR)/compose.yaml
 COMPOSE_OVERRIDE = $(APP_DIR)/compose.override.yaml
 COMPOSE_PROD     = $(APP_DIR)/compose.prod.yaml
+COMPOSE_PREFIX   = APP_PATH=$(APP_PATH) DOCKER_PATH=$(DOCKER_PATH) docker compose -p $(PROJECT_NAME) -f $(COMPOSE_BASE)
 
 ifeq ($(FILE_ENV),prod)
-COMPOSE = docker compose -p $(PROJECT_NAME) -f $(COMPOSE_BASE) -f $(COMPOSE_PROD)
+COMPOSE = $(COMPOSE_PREFIX) -f $(COMPOSE_PROD)
 else
-COMPOSE = docker compose -p $(PROJECT_NAME) -f $(COMPOSE_BASE) -f $(COMPOSE_OVERRIDE)
+COMPOSE = $(COMPOSE_PREFIX) -f $(COMPOSE_OVERRIDE)
 endif
 
 CONTAINER_PHP = $(COMPOSE) exec php
@@ -127,7 +128,7 @@ help: ## Print self-documented Makefile
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
 .PHONY: generate
-generate: confirm_continue clone build up_d permissions info ## Generate a fresh Symfony application, with the Docker configuration in a parallel directory
+generate: confirm_continue clone build up_d permissions info ## Generate a fresh Symfony application with the Docker configuration
 
 .PHONY: start
 start: up_d info ## Start the project (implies detached mode)
@@ -316,6 +317,9 @@ vars: ## Show variables
 	@printf "\n$(G)DOCKER$(S)\n"
 	@printf "  COMPOSE_V2: $(COMPOSE_V2)\n"
 	@printf "  COMPOSE   : $(COMPOSE)\n"
+	@printf "  PHP       : $(PHP)\n"
+	@printf "  COMPOSER  : $(COMPOSER)\n"
+	@printf "  CONSOLE   : $(CONSOLE)\n"
 
 .PHONY: overload_file
 overload_file: ## Show overload file loaded into that Makefile
