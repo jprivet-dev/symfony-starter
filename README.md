@@ -1,12 +1,10 @@
-# Symfony starter (Compose in another directory)
+# Symfony starter
 
 ## Presentation
 
-Generate a fresh Symfony application, with the Docker configuration in a parallel directory.
+Generate a fresh Symfony application with the Docker configuration ([Symfony Docker](https://github.com/dunglas/symfony-docker)).
 
-The aim is to be able to generate a project that **clearly separates responsibilities**, between what concerns the Symfony application and what concerns its dockerization.
-
-> This project [use a fork](https://github.com/jprivet-dev/symfony-docker) and a modified version of [Symfony Docker](https://github.com/dunglas/symfony-docker), which can be used in another directory.
+> This project is a variant of https://github.com/jprivet-dev/symfony-starter-compose-in-another-dir.
 
 ## Prerequisites
 
@@ -14,14 +12,23 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
 
 ## Installation
  
-- `git clone git@github.com:jprivet-dev/symfony-starter-compose-in-another-dir.git`
-- `cd symfony-starter-compose-in-another-dir`
+- `git clone git@github.com:jprivet-dev/symfony-starter.git`
+- `cd symfony-starter`
 - `make generate`:
-  - That clone `git@github.com:jprivet-dev/symfony-docker` in `docker/`.
+  - That clone `git@github.com:dunglas/symfony-docker.git` in `app/`.
+  - Remove `.git` from `app/`.
   - Build fresh images.
   - Generate a fresh Symfony application in `app/`.
   - Fix permissions.
-- Go on https://symfony-starter-compose-in-another-dir.localhost/.
+- Go on https://symfony-starter.localhost/.
+
+All in one:
+
+```shell
+git clone git@github.com:jprivet-dev/symfony-starter.git \
+&& cd symfony-starter \
+&& make generate
+```
 
 ## Clean all and generate again
 
@@ -29,7 +36,7 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
 # 1. Stop the container
 make stop
 
-# 2. Remove app/ and docker/ directories
+# 2. Remove app/ directory
 make clean
 
 # 3. Generate again
@@ -63,8 +70,7 @@ make restart
 
 ```
 ./
-├── app/       <-- Fresh Symfony application
-├── docker/    <-- Fresh Docker configuration (in a parallel directory to app/)
+├── app/       <-- Fresh Symfony application with a Docker configuration 
 ├── scripts/
 ├── aliases
 ├── LICENSE
@@ -81,34 +87,23 @@ To save the generated Symfony application:
 - Remove `app/` from [.gitignore](.gitignore).
 - `git add . && git commit -m "Fresh Symfony application"`
 
-### `docker/`
+## Makefile: variables overloading
 
-To save the Docker configuration:
-
-- Remove `docker/` from [.gitignore](.gitignore).
-- `rm -rf docker/.git`
-- `git add . && git commit -m "Fresh Docker configuration"`
-
-## Makefile: variables override
-
-You can choose an another branch of my forked Symfony Docker repository, or customize the docker build process. To do this, create an `.env` file and override the following variables :
+You can customize the docker build process. To do this, create an `.overload` file and override the following variables :
 
 ```dotenv
-# .env
-BRANCH=next
-DOCKER_BUILD_OPTS=SYMFONY_VERSION=6.4.*
-SERVER_NAME=custom-server-name.localhost
+# See https://docs.docker.com/compose/how-tos/project-name/
+PROJECT_NAME=my-project
+
+# See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#docker-build-options
+COMPOSE_UP_SERVER_NAME=my.localhost
+COMPOSE_UP_ENV_VARS=SYMFONY_VERSION=6.4.*
+
+# See https://docs.docker.com/reference/cli/docker/compose/build/#options
+COMPOSE_BUILD_OPTS=--no-cache
 ```
 
 These variables will be taken into account by the `make` commands.
-
-> See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#docker-build-options
-
-## Shortcomings of this approach
-
-Putting Docker in another folder, outside the application, prevents the use of [Flex Recipes & Docker Configuration](https://symfony.com/doc/current/setup/docker.html#flex-recipes-docker-configuration).
-
-⏱️ Search for a solution underway...
 
 ## Troubleshooting
 
@@ -116,7 +111,7 @@ Putting Docker in another folder, outside the application, prevents the use of [
 
 If you have the following error:
 
-> Error response from daemon: driver failed programming external connectivity on endpoint symfony-starter-compose-in-another-dir-php-1 (...): Error starting userland proxy: listen tcp4 0.0.0.0:80: bind: address already in use
+> Error response from daemon: driver failed programming external connectivity on endpoint symfony-starter-php-1 (...): Error starting userland proxy: listen tcp4 0.0.0.0:80: bind: address already in use
 
 See the network statistics:
 
@@ -151,12 +146,11 @@ If you work on linux and cannot edit some of the project files right after the f
 - https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md
 - https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#docker-build-options
 - https://github.com/jprivet-dev/symfony-docker
-- https://medium.com/@unhandlederror/how-to-run-docker-compose-from-another-directory-e94e081a80cc
 
 ## Comments, suggestions?
 
-Feel free to make comments/suggestions to me in the [Git issues section](https://github.com/jprivet-dev/symfony-starter-compose-in-another-dir/issues).
+Feel free to make comments/suggestions to me in the [Git issues section](https://github.com/jprivet-dev/symfony-starter/issues).
 
 ## License
 
-This project is released under the [**MIT License**](https://github.com/jprivet-dev/symfony-starter-compose-in-another-dir/blob/main/LICENSE).
+This project is released under the [**MIT License**](https://github.com/jprivet-dev/symfony-starter/blob/main/LICENSE).
