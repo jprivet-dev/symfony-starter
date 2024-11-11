@@ -9,26 +9,25 @@ Y = "\\033[33m"
 S = "\\033[0m"
 
 #
-# MAKEFILE ENVIRONMENT VARIABLES
-#
-
--include .env
-
-#
-# EXECUTABLES - PART 1 (LOCAL)
+# USER
 #
 
 USER_ID  = $(shell id -u)
 GROUP_ID = $(shell id -g)
 
-COMPOSE_V2 := $(shell docker compose version 2> /dev/null)
+#
+# BASE
+#
 
-ifndef COMPOSE_V2
-$(error Docker Compose CLI plugin is required but is not available on your system)
-endif
+APP_DIR    = app
+REPOSITORY = git@github.com:dunglas/symfony-docker.git
 
-APP_DIR                 = app
-REPOSITORY              = git@github.com:dunglas/symfony-docker.git
+#
+# OVERLOADING
+#
+
+-include .overload
+
 PROJECT_NAME           ?= $(shell basename $(CURDIR))
 COMPOSE_BUILD_OPTS     ?=
 COMPOSE_UP_SERVER_NAME ?= $(PROJECT_NAME).localhost
@@ -64,14 +63,20 @@ $(info Warning: Your are in the test environment)
 endif
 
 # @see https://symfony.com/doc/current/deployment.html#b-configure-your-environment-variables
-ifneq ($(wildcard .env.local.php),)
+ifneq ($(wildcard $(APP_DIR)/.env.local.php),)
 $(info Warning: It is not possible to use variables from .env.local.php file)
 $(info Warning: The final APP_ENV of that Makefile may be different from the APP_ENV of .env.local.php)
 endif
 
 #
-# EXECUTABLES - PART 2 (LOCAL)
+# DOCKER
 #
+
+COMPOSE_V2 := $(shell docker compose version 2> /dev/null)
+
+ifndef COMPOSE_V2
+$(error Docker Compose CLI plugin is required but is not available on your system)
+endif
 
 COMPOSE_BASE     = $(APP_DIR)/compose.yaml
 COMPOSE_OVERRIDE = $(APP_DIR)/compose.override.yaml
@@ -180,7 +185,7 @@ dumpenv: ## Generate .env.local.php (PROD)
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
 
 .PHONY: php
-php: ## Run PHP - $ make php [p=<params>]
+php: ## Run PHP - $ make php [p=<params>]- Example: $ make php p=--version
 	@$(eval p ?=)
 	$(PHP) $(p)
 
@@ -199,7 +204,7 @@ php_modules: ## Show compiled in modules
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
 .PHONY: composer
-composer: ## Run composer - $ make composer [p=<param>] - Example: $ make composer p="require --dev phpunit/phpunit"
+composer: ## Run composer - $ make composer [p=<params>] - Example: $ make composer p="require --dev phpunit/phpunit"
 	@$(eval p ?=)
 	$(COMPOSER) $(p)
 
@@ -247,20 +252,23 @@ endif
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: up
-up: ## Start the container
-	$(COMPOSE) up --pull always
+up: ## Start the container - $ make up [p=<params>] - Example: $ make up p=-d
+	@$(eval p ?=)
+	SERVER_NAME=$(COMPOSE_UP_SERVER_NAME) $(COMPOSE_UP_ENV_VARS) $(COMPOSE) up --pull always $(p)
+
 
 .PHONY: up_d
 up_d: ## Start the container (wait for services to be running|healthy - detached mode)
-	SERVER_NAME=$(COMPOSE_UP_SERVER_NAME) $(COMPOSE_UP_ENV_VARS) $(COMPOSE) up --pull always -d --wait
+	$(MAKE) -s up p="--wait -d"
 
 .PHONY: down
 down: ## Stop the container
 	$(COMPOSE) down --remove-orphans
 
 .PHONY: build
-build: ## Build or rebuild services
-	$(COMPOSE) build $(COMPOSE_BUILD_OPTS)
+build: ## Build or rebuild services - $ make build [p=<params>] - Example: $ make build p=--no-cache
+	@$(eval p ?=)
+	$(COMPOSE) build $(COMPOSE_BUILD_OPTS) $(p)
 
 .PHONY: logs
 logs: ## See the container’s logs
@@ -284,6 +292,38 @@ permissions: ## Run it if you cannot edit some of the project files on Linux (ht
 	@printf "\n$(Y)-----------$(S)\n\n"
 	$(COMPOSE) run --rm php chown -R $(USER_ID):$(GROUP_ID) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER_ID):$(GROUP_ID)$(S) of the project files.\n\n"
+
+## — UTILS 🛠️  —————————————————————————————————————————————————————————————————
+
+.PHONY: vars
+vars: ## Show variables
+	@printf "$(Y)Vars:$(S)\n"
+	@printf "APP_ENV   : $(APP_ENV)\n"
+	@printf "APP_SECRET: $(APP_SECRET)\n"
+
+.PHONY: env_files
+env_files: ## Show env files loaded into that Makefile
+	@printf "$(Y)Env files loaded into that Makefile (in order of decreasing priority) [FILE_ENV=$(FILE_ENV)]:$(S)\n"
+ifneq ("$(wildcard $(APP_DIR)/.env.$(FILE_ENV).local)","")
+	@printf "* $(G)✔$(S) .env.$(FILE_ENV).local\n"
+else
+	@printf "* $(R)⨯$(S) .env.$(FILE_ENV).local\n"
+endif
+ifneq ("$(wildcard $(APP_DIR)/.env.$(FILE_ENV))","")
+	@printf "* $(G)✔$(S) .env.$(FILE_ENV)\n"
+else
+	@printf "* $(R)⨯$(S) .env.$(FILE_ENV)\n"
+endif
+ifneq ("$(wildcard $(APP_DIR)/.env.local)","")
+	@printf "* $(G)✔$(S) .env.local\n"
+else
+	@printf "* $(R)⨯$(S) .env.local\n"
+endif
+ifneq ("$(wildcard $(APP_DIR)/.env)","")
+	@printf "* $(G)✔$(S) .env\n"
+else
+	@printf "* $(R)⨯$(S) .env\n"
+endif
 
 ## — INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
 
