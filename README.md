@@ -77,9 +77,9 @@ To save the generated Symfony application:
 - Remove `app/` from [.gitignore](.gitignore).
 - `git add . && git commit -m "Fresh Symfony application"`
 
-## Makefile: variables override
+## Makefile: variables overloading
 
-You can customize the docker build process. To do this, create an `.env` file and override the following variables :
+You can customize the docker build process. To do this, create an `.overload` file and override the following variables :
 
 ```dotenv
 # See https://docs.docker.com/compose/how-tos/project-name/
