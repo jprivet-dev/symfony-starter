@@ -2,7 +2,9 @@
 
 ## Presentation
 
-Generate a fresh Symfony application, with the Docker configuration ([Symfony Docker](https://github.com/dunglas/symfony-docker)).
+Generate a fresh Symfony application with the Docker configuration ([Symfony Docker](https://github.com/dunglas/symfony-docker)).
+
+> This project is a variant of https://github.com/jprivet-dev/symfony-starter-compose-in-another-dir.
 
 ## Prerequisites
 
@@ -19,6 +21,14 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
   - Generate a fresh Symfony application in `app/`.
   - Fix permissions.
 - Go on https://symfony-starter.localhost/.
+
+All in one:
+
+```shell
+git clone git@github.com:jprivet-dev/symfony-starter.git \
+&& cd symfony-starter \
+&& make generate
+```
 
 ## Clean all and generate again
 
