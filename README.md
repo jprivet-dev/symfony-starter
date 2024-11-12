@@ -99,6 +99,8 @@ After `make generate`:
 You can customize the Docker build and up processes. To do this, create an `.overload` file and override the following variables :
 
 ```dotenv
+# .overload
+
 # See https://docs.docker.com/compose/how-tos/project-name/
 PROJECT_NAME=my-project
 
@@ -111,6 +113,8 @@ COMPOSE_BUILD_OPTS=--no-cache
 ```
 
 These variables will be taken into account by the `make` commands.
+
+> As the variables are common to the `Makefile` and `docker compose`, I'm not attaching an environment file with the `--env-file` option at the moment. See https://docs.docker.com/compose/how-tos/environment-variables/.
 
 ## Troubleshooting
 
