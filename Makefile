@@ -296,31 +296,6 @@ permissions: ## Run it if you cannot edit some of the project files on Linux (ht
 
 ## — UTILS 🛠️  —————————————————————————————————————————————————————————————————
 
-.PHONY: vars
-vars: ## Show variables
-	@printf "\n$(Y)Vars$(S)"
-	@printf "\n$(Y)----$(S)\n"
-	@printf "\n$(G)USER$(S)\n"
-	@printf "  USER_ID : $(USER_ID)\n"
-	@printf "  GROUP_ID: $(GROUP_ID)\n"
-	@printf "\n$(G)BASE$(S)\n"
-	@printf "  APP_DIR   : $(APP_DIR)\n"
-	@printf "  REPOSITORY: $(REPOSITORY)\n"
-	@printf "\n$(G)OVERLOADING$(S)\n"
-	@printf "  PROJECT_NAME          : $(PROJECT_NAME)\n"
-	@printf "  COMPOSE_BUILD_OPTS    : $(COMPOSE_BUILD_OPTS)\n"
-	@printf "  COMPOSE_UP_SERVER_NAME: $(COMPOSE_UP_SERVER_NAME)\n"
-	@printf "  COMPOSE_UP_ENV_VARS   : $(COMPOSE_UP_ENV_VARS)\n"
-	@printf "\n$(G)SYMFONY ENVIRONMENT VARIABLES$(S)\n"
-	@printf "  APP_ENV   : $(APP_ENV)\n"
-	@printf "  APP_SECRET: $(APP_SECRET)\n"
-	@printf "\n$(G)DOCKER$(S)\n"
-	@printf "  COMPOSE_V2: $(COMPOSE_V2)\n"
-	@printf "  COMPOSE   : $(COMPOSE)\n"
-	@printf "  PHP       : $(PHP)\n"
-	@printf "  COMPOSER  : $(COMPOSER)\n"
-	@printf "  CONSOLE   : $(CONSOLE)\n"
-
 .PHONY: overload_file
 overload_file: ## Show overload file loaded into that Makefile
 	@printf "\n$(Y)Overload file$(S)"
@@ -357,6 +332,28 @@ ifneq ("$(wildcard $(APP_DIR)/.env)","")
 else
 	@printf "* $(R)⨯$(S) $(APP_DIR)/.env\n"
 endif
+
+.PHONY: vars
+vars: ## Show variables
+	@printf "\n$(Y)Vars$(S)"
+	@printf "\n$(Y)----$(S)\n"
+	@printf "\n$(G)USER$(S)\n"
+	@printf "  USER_ID : $(USER_ID)\n"
+	@printf "  GROUP_ID: $(GROUP_ID)\n"
+	@printf "\n$(G)BASE$(S)\n"
+	@printf "  APP_DIR   : $(APP_DIR)\n"
+	@printf "  REPOSITORY: $(REPOSITORY)\n"
+	@printf "\n$(G)OVERLOADING$(S)\n"
+	@printf "  PROJECT_NAME          : $(PROJECT_NAME)\n"
+	@printf "  COMPOSE_BUILD_OPTS    : $(COMPOSE_BUILD_OPTS)\n"
+	@printf "  COMPOSE_UP_SERVER_NAME: $(COMPOSE_UP_SERVER_NAME)\n"
+	@printf "  COMPOSE_UP_ENV_VARS   : $(COMPOSE_UP_ENV_VARS)\n"
+	@printf "\n$(G)SYMFONY ENVIRONMENT VARIABLES$(S)\n"
+	@printf "  APP_ENV   : $(APP_ENV)\n"
+	@printf "  APP_SECRET: $(APP_SECRET)\n"
+	@printf "\n$(G)DOCKER$(S)\n"
+	@printf "  COMPOSE_V2: $(COMPOSE_V2)\n"
+	@printf "  COMPOSE   : $(COMPOSE)\n"
 
 ## — INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
 
