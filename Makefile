@@ -260,7 +260,7 @@ up: ## Start the container - $ make up [p=<params>] - Example: $ make up p=-d
 
 .PHONY: up_d
 up_d: ## Start the container (wait for services to be running|healthy - detached mode)
-	$(MAKE) -s up p="--wait -d"
+	$(MAKE) up p="--wait -d"
 
 .PHONY: down
 down: ## Stop the container
