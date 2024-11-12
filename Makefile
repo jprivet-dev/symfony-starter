@@ -296,6 +296,43 @@ permissions: ## Run it if you cannot edit some of the project files on Linux (ht
 
 ## — UTILS 🛠️  —————————————————————————————————————————————————————————————————
 
+.PHONY: overload_file
+overload_file: ## Show overload file loaded into that Makefile
+	@printf "\n$(Y)Overload file$(S)"
+	@printf "\n$(Y)-------------$(S)\n\n"
+	@printf "File loaded into that Makefile:\n\n"
+ifneq ("$(wildcard .overload)","")
+	@printf "* $(G)✔$(S) .overload\n"
+else
+	@printf "* $(R)⨯$(S) .overload\n"
+endif
+
+.PHONY: env_files
+env_files: ## Show Symfony env files loaded into that Makefile
+	@printf "\n$(Y)Symfony env files$(S)"
+	@printf "\n$(Y)-----------------$(S)\n\n"
+	@printf "Files loaded into that Makefile (in order of decreasing priority) $(Y)[FILE_ENV=$(FILE_ENV)]$(S):\n\n"
+ifneq ("$(wildcard $(APP_DIR)/.env.$(FILE_ENV).local)","")
+	@printf "* $(G)✔$(S) $(APP_DIR)/.env.$(FILE_ENV).local\n"
+else
+	@printf "* $(R)⨯$(S) $(APP_DIR)/.env.$(FILE_ENV).local\n"
+endif
+ifneq ("$(wildcard $(APP_DIR)/.env.$(FILE_ENV))","")
+	@printf "* $(G)✔$(S) $(APP_DIR)/.env.$(FILE_ENV)\n"
+else
+	@printf "* $(R)⨯$(S) $(APP_DIR)/.env.$(FILE_ENV)\n"
+endif
+ifneq ("$(wildcard $(APP_DIR)/.env.local)","")
+	@printf "* $(G)✔$(S) $(APP_DIR)/.env.local\n"
+else
+	@printf "* $(R)⨯$(S) $(APP_DIR)/.env.local\n"
+endif
+ifneq ("$(wildcard $(APP_DIR)/.env)","")
+	@printf "* $(G)✔$(S) $(APP_DIR)/.env\n"
+else
+	@printf "* $(R)⨯$(S) $(APP_DIR)/.env\n"
+endif
+
 .PHONY: vars
 vars: ## Show variables
 	@printf "\n$(Y)Vars$(S)"
@@ -317,46 +354,6 @@ vars: ## Show variables
 	@printf "\n$(G)DOCKER$(S)\n"
 	@printf "  COMPOSE_V2: $(COMPOSE_V2)\n"
 	@printf "  COMPOSE   : $(COMPOSE)\n"
-	@printf "  PHP       : $(PHP)\n"
-	@printf "  COMPOSER  : $(COMPOSER)\n"
-	@printf "  CONSOLE   : $(CONSOLE)\n"
-
-.PHONY: overload_file
-overload_file: ## Show overload file loaded into that Makefile
-	@printf "\n$(Y)Overload file$(S)"
-	@printf "\n$(Y)-------------$(S)\n\n"
-	@printf "Overload file loaded into that Makefile:\n\n"
-ifneq ("$(wildcard .overload)","")
-	@printf "* $(G)✔$(S) .overload\n"
-else
-	@printf "* $(R)⨯$(S) .overload\n"
-endif
-
-.PHONY: env_files
-env_files: ## Show env files loaded into that Makefile
-	@printf "\n$(Y)Env files$(S)"
-	@printf "\n$(Y)---------$(S)\n\n"
-	@printf "Env files loaded into that Makefile (in order of decreasing priority) $(Y)[FILE_ENV=$(FILE_ENV)]$(S):\n\n"
-ifneq ("$(wildcard $(APP_DIR)/.env.$(FILE_ENV).local)","")
-	@printf "* $(G)✔$(S) $(APP_DIR)/.env.$(FILE_ENV).local\n"
-else
-	@printf "* $(R)⨯$(S) $(APP_DIR)/.env.$(FILE_ENV).local\n"
-endif
-ifneq ("$(wildcard $(APP_DIR)/.env.$(FILE_ENV))","")
-	@printf "* $(G)✔$(S) $(APP_DIR)/.env.$(FILE_ENV)\n"
-else
-	@printf "* $(R)⨯$(S) $(APP_DIR)/.env.$(FILE_ENV)\n"
-endif
-ifneq ("$(wildcard $(APP_DIR)/.env.local)","")
-	@printf "* $(G)✔$(S) $(APP_DIR)/.env.local\n"
-else
-	@printf "* $(R)⨯$(S) $(APP_DIR)/.env.local\n"
-endif
-ifneq ("$(wildcard $(APP_DIR)/.env)","")
-	@printf "* $(G)✔$(S) $(APP_DIR)/.env\n"
-else
-	@printf "* $(R)⨯$(S) $(APP_DIR)/.env\n"
-endif
 
 ## — INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
 
