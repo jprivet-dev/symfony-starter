@@ -300,7 +300,7 @@ permissions: ## Run it if you cannot edit some of the project files on Linux (ht
 overload_file: ## Show overload file loaded into that Makefile
 	@printf "\n$(Y)Overload file$(S)"
 	@printf "\n$(Y)-------------$(S)\n\n"
-	@printf "Overload file loaded into that Makefile:\n\n"
+	@printf "File loaded into that Makefile:\n\n"
 ifneq ("$(wildcard .overload)","")
 	@printf "* $(G)✔$(S) .overload\n"
 else
@@ -308,10 +308,10 @@ else
 endif
 
 .PHONY: env_files
-env_files: ## Show env files loaded into that Makefile
-	@printf "\n$(Y)Env files$(S)"
-	@printf "\n$(Y)---------$(S)\n\n"
-	@printf "Env files loaded into that Makefile (in order of decreasing priority) $(Y)[FILE_ENV=$(FILE_ENV)]$(S):\n\n"
+env_files: ## Show Symfony env files loaded into that Makefile
+	@printf "\n$(Y)Symfony env files$(S)"
+	@printf "\n$(Y)-----------------$(S)\n\n"
+	@printf "Files loaded into that Makefile (in order of decreasing priority) $(Y)[FILE_ENV=$(FILE_ENV)]$(S):\n\n"
 ifneq ("$(wildcard $(APP_DIR)/.env.$(FILE_ENV).local)","")
 	@printf "* $(G)✔$(S) $(APP_DIR)/.env.$(FILE_ENV).local\n"
 else
