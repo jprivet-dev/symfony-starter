@@ -55,7 +55,7 @@ make restart
 
 ## Structure
 
-### Before `make generate`
+Before `make generate`:
 
 ```
 ./
@@ -66,7 +66,7 @@ make restart
 └── README.md
 ```
 
-### After `make generate`
+After `make generate`:
 
 ```
 ./
@@ -78,13 +78,21 @@ make restart
 └── README.md
 ```
 
-## Save all after installation
+## Save the generated Symfony application (`app/`)
 
-To save the generated Symfony application:
-
-- Remove `app/` from [.gitignore](.gitignore).
-- `app/.git` is already removed on `make generate` command.
-- `git add . && git commit -m "Fresh Symfony application"`
+1. Remove `app/` from [.gitignore](.gitignore).
+2. `app/.git` is already removed on `make generate` command.
+3. Remove the following block from [app/frankenphp/docker-entrypoint.sh](app/frankenphp/docker-entrypoint.sh) :
+```shell
+	# Install the project the first time PHP is started
+	# After the installation, the following block can be deleted
+	if [ ! -f composer.json ]; then
+		rm -Rf tmp/
+		composer create-project "symfony/skeleton $SYMFONY_VERSION" tmp --stability="$STABILITY" --prefer-dist --no-progress --no-interaction --no-install
+		# ...
+	fi
+```
+4. `git add . && git commit -m "Fresh Symfony application"`
 
 ## Makefile: variables overloading
 
