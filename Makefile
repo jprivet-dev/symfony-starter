@@ -19,7 +19,7 @@ GROUP_ID = $(shell id -g)
 # BASE
 #
 
-APP_DIR    = app
+CLONE_DIR  = app
 REPOSITORY = git@github.com:dunglas/symfony-docker.git
 
 #
@@ -44,13 +44,13 @@ COMPOSE_UP_ENV_VARS    ?=
 # @see https://symfony.com/doc/current/quick_tour/the_architecture.html#environment-variables
 # @see https://symfony.com/doc/current/configuration.html#listing-environment-variables
 # @see https://symfony.com/doc/current/configuration.html#overriding-environment-values-via-env-local
--include $(APP_DIR)/.env
--include $(APP_DIR)/.env.local
+-include .env
+-include .env.local
 
 # get APP_ENV original value
 FILE_ENV := $(APP_ENV)
--include $(APP_DIR)/.env.$(FILE_ENV)
--include $(APP_DIR)/.env.$(FILE_ENV).local
+-include .env.$(FILE_ENV)
+-include .env.$(FILE_ENV).local
 
 ifneq ($(FILE_ENV),$(APP_ENV))
 $(info Warning: APP_ENV is overloaded outside .env and .env.local files)
@@ -63,7 +63,7 @@ $(info Warning: Your are in the test environment)
 endif
 
 # @see https://symfony.com/doc/current/deployment.html#b-configure-your-environment-variables
-ifneq ($(wildcard $(APP_DIR)/.env.local.php),)
+ifneq ($(wildcard .env.local.php),)
 $(info Warning: It is not possible to use variables from .env.local.php file)
 $(info Warning: The final APP_ENV of that Makefile may be different from the APP_ENV of .env.local.php)
 endif
@@ -78,9 +78,9 @@ ifndef COMPOSE_V2
 $(error Docker Compose CLI plugin is required but is not available on your system)
 endif
 
-COMPOSE_BASE     = $(APP_DIR)/compose.yaml
-COMPOSE_OVERRIDE = $(APP_DIR)/compose.override.yaml
-COMPOSE_PROD     = $(APP_DIR)/compose.prod.yaml
+COMPOSE_BASE     = compose.yaml
+COMPOSE_OVERRIDE = compose.override.yaml
+COMPOSE_PROD     = compose.prod.yaml
 COMPOSE_PREFIX   = APP_PATH=$(APP_PATH) DOCKER_PATH=$(DOCKER_PATH) docker compose -p $(PROJECT_NAME) -f $(COMPOSE_BASE)
 
 ifeq ($(FILE_ENV),prod)
@@ -142,8 +142,27 @@ restart: stop start ## Restart the project
 ##
 
 .PHONY: clean
-clean: confirm_continue ## Remove app directory [y/N]
-	rm -rf app
+clean: confirm_continue ## Remove generated files [y/N]
+	rm -rf bin
+	rm -rf config
+	rm -rf docs
+	rm -rf frankenphp
+	rm -rf public
+	rm -rf src
+	rm -rf var
+	rm -rf vendor
+	rm     .dockerignore
+	rm     .editorconfig
+	rm     .env
+	rm     .gitattributes
+	rm     .gitignore
+	rm     compose.override.yaml
+	rm     compose.prod.yaml
+	rm     compose.yaml
+	rm     composer.json
+	rm     composer.lock
+	rm     Dockerfile
+	rm     symfony.lock
 
 ##
 
@@ -241,13 +260,17 @@ PHONY: clone
 clone: ## Clone Symfony Docker (forked version)
 	@printf "\n$(Y)Clone Symfony Docker$(S)"
 	@printf "\n$(Y)--------------------$(S)\n\n"
-ifeq ($(wildcard $(APP_DIR)),)
+ifeq ($(wildcard Dockerfile),)
 	@printf "Repository: $(Y)$(REPOSITORY)$(S)\n"
-	git clone $(REPOSITORY) $(APP_DIR)
-	rm -rf $(APP_DIR)/.git
-	@printf " $(G)✔$(S) Symfony Docker cloned in $(Y)$(APP_DIR)$(S).\n\n"
+	git clone $(REPOSITORY) $(CLONE_DIR)
+	rm -rf $(CLONE_DIR)/.git
+	rm     $(CLONE_DIR)/LICENCE
+	rm     $(CLONE_DIR)/README
+	mv     $(CLONE_DIR)/{.,}* .
+    rm -rf $(CLONE_DIR)
+	@printf " $(G)✔$(S) Symfony Docker cloned.\n\n"
 else
-	@printf " $(G)✔$(S) Symfony Docker already cloned in $(Y)$(APP_DIR)$(S).\n\n"
+	@printf " $(G)✔$(S) Symfony Docker already cloned.\n\n"
 endif
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
@@ -312,25 +335,25 @@ env_files: ## Show Symfony env files loaded into that Makefile
 	@printf "\n$(Y)Symfony env files$(S)"
 	@printf "\n$(Y)-----------------$(S)\n\n"
 	@printf "Files loaded into that Makefile (in order of decreasing priority) $(Y)[FILE_ENV=$(FILE_ENV)]$(S):\n\n"
-ifneq ("$(wildcard $(APP_DIR)/.env.$(FILE_ENV).local)","")
-	@printf "* $(G)✔$(S) $(APP_DIR)/.env.$(FILE_ENV).local\n"
+ifneq ("$(wildcard .env.$(FILE_ENV).local)","")
+	@printf "* $(G)✔$(S) .env.$(FILE_ENV).local\n"
 else
-	@printf "* $(R)⨯$(S) $(APP_DIR)/.env.$(FILE_ENV).local\n"
+	@printf "* $(R)⨯$(S) .env.$(FILE_ENV).local\n"
 endif
-ifneq ("$(wildcard $(APP_DIR)/.env.$(FILE_ENV))","")
-	@printf "* $(G)✔$(S) $(APP_DIR)/.env.$(FILE_ENV)\n"
+ifneq ("$(wildcard .env.$(FILE_ENV))","")
+	@printf "* $(G)✔$(S) .env.$(FILE_ENV)\n"
 else
-	@printf "* $(R)⨯$(S) $(APP_DIR)/.env.$(FILE_ENV)\n"
+	@printf "* $(R)⨯$(S) .env.$(FILE_ENV)\n"
 endif
-ifneq ("$(wildcard $(APP_DIR)/.env.local)","")
-	@printf "* $(G)✔$(S) $(APP_DIR)/.env.local\n"
+ifneq ("$(wildcard .env.local)","")
+	@printf "* $(G)✔$(S) .env.local\n"
 else
-	@printf "* $(R)⨯$(S) $(APP_DIR)/.env.local\n"
+	@printf "* $(R)⨯$(S) .env.local\n"
 endif
-ifneq ("$(wildcard $(APP_DIR)/.env)","")
-	@printf "* $(G)✔$(S) $(APP_DIR)/.env\n"
+ifneq ("$(wildcard .env)","")
+	@printf "* $(G)✔$(S) .env\n"
 else
-	@printf "* $(R)⨯$(S) $(APP_DIR)/.env\n"
+	@printf "* $(R)⨯$(S) .env\n"
 endif
 
 .PHONY: vars
@@ -341,7 +364,7 @@ vars: ## Show variables
 	@printf "  USER_ID : $(USER_ID)\n"
 	@printf "  GROUP_ID: $(GROUP_ID)\n"
 	@printf "\n$(G)BASE$(S)\n"
-	@printf "  APP_DIR   : $(APP_DIR)\n"
+	@printf "  CLONE_DIR : $(CLONE_DIR)\n"
 	@printf "  REPOSITORY: $(REPOSITORY)\n"
 	@printf "\n$(G)OVERLOADING$(S)\n"
 	@printf "  PROJECT_NAME          : $(PROJECT_NAME)\n"
