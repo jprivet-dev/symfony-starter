@@ -81,7 +81,7 @@ endif
 COMPOSE_BASE     = compose.yaml
 COMPOSE_OVERRIDE = compose.override.yaml
 COMPOSE_PROD     = compose.prod.yaml
-COMPOSE_PREFIX   = APP_PATH=$(APP_PATH) DOCKER_PATH=$(DOCKER_PATH) docker compose -p $(PROJECT_NAME) -f $(COMPOSE_BASE)
+COMPOSE_PREFIX   = docker compose -p $(PROJECT_NAME) -f $(COMPOSE_BASE)
 
 ifeq ($(FILE_ENV),prod)
 COMPOSE = $(COMPOSE_PREFIX) -f $(COMPOSE_PROD)
@@ -251,7 +251,6 @@ ifeq ($(wildcard Dockerfile),)
 	git clone $(REPOSITORY) $(CLONE_DIR)
 	@printf "\n$(Y)Extract Symfony Docker at the root$(S)"
 	@printf "\n$(Y)----------------------------------$(S)\n\n"
-	sleep .2
 	rm -rf $(CLONE_DIR)/.git
 	rm  -f $(CLONE_DIR)/README.md
 	-mv -vf $(CLONE_DIR)/.*
