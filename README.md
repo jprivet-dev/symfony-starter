@@ -15,10 +15,9 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
 - `git clone git@github.com:jprivet-dev/symfony-starter.git`
 - `cd symfony-starter`
 - `make generate`:
-  - That clone `git@github.com:dunglas/symfony-docker.git` in `app/`.
-  - Remove `.git` from `app/`.
+  - That clone `git@github.com:dunglas/symfony-docker.git` and extract files at the root.
   - Build fresh images.
-  - Generate a fresh Symfony application in `app/`.
+  - Generate a fresh Symfony application at the root.
   - Fix permissions.
 - Go on https://symfony-starter.localhost/.
 
@@ -36,7 +35,7 @@ git clone git@github.com:jprivet-dev/symfony-starter.git \
 # 1. Stop the container
 make stop
 
-# 2. Remove app/ directory
+# 2. Remove all generated files
 make clean
 
 # 3. Generate again
@@ -59,6 +58,7 @@ Before `make generate`:
 
 ```
 ./
+├── overload/
 ├── scripts/
 ├── aliases
 ├── LICENSE
@@ -70,19 +70,34 @@ After `make generate`:
 
 ```
 ./
-├── app/       <-- Fresh Symfony application with a Docker configuration 
+├──*bin/
+├──*config/
+├──*docs/
+├──*frankenphp/
+├── overload/
+├──*public/
 ├── scripts/
+├──*src/
+├──*var/
+├──*vendor/
 ├── aliases
+├──*compose.override.yaml
+├──*compose.prod.yaml
+├──*composer.json
+├──*composer.lock
+├──*compose.yaml
+├──*Dockerfile
 ├── LICENSE
 ├── Makefile
-└── README.md
+├── README.md
+└──*symfony.lock 
 ```
 
-## Save the generated Symfony application (`app/`)
+(*) Fresh Symfony application with a Docker configuration
 
-1. Remove `app/` from [.gitignore](.gitignore).
-2. `app/.git` is already removed on `make generate` command.
-3. Remove the following block from [app/frankenphp/docker-entrypoint.sh](app/frankenphp/docker-entrypoint.sh) :
+## Save the generated Symfony application
+
+1. Remove the following block from [frankenphp/docker-entrypoint.sh](app/frankenphp/docker-entrypoint.sh) :
 ```shell
 	# Install the project the first time PHP is started
 	# After the installation, the following block can be deleted
@@ -92,14 +107,14 @@ After `make generate`:
 		# ...
 	fi
 ```
-4. `git add . && git commit -m "Fresh Symfony application"`
+2. `git add . && git commit -m "Fresh Symfony application"`
 
 ## Makefile: variables overloading
 
-You can customize the Docker build and up processes. To do this, create an `.overload` file and override the following variables :
+You can customize the Docker build and up processes. To do this, create an `overload/.env` file and override the following variables :
 
 ```dotenv
-# .overload
+# overload/.env
 
 # See https://docs.docker.com/compose/how-tos/project-name/
 PROJECT_NAME=my-project
@@ -130,7 +145,7 @@ On the `docker compose up`, you can have the followings errors:
 
 See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#using-custom-http-ports.
 
-Overload `COMPOSE_UP_ENV_VARS` in `.overload`:
+Overload `COMPOSE_UP_ENV_VARS` in `overload/.env`:
 
 ```dotenv
 COMPOSE_UP_ENV_VARS=HTTP_PORT=8000 HTTPS_PORT=4443 HTTP3_PORT=4443
