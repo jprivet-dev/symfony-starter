@@ -19,14 +19,14 @@ GROUP_ID = $(shell id -g)
 # BASE
 #
 
-CLONE_DIR  = app
+CLONE_DIR  = clone
 REPOSITORY = git@github.com:dunglas/symfony-docker.git
 
 #
 # OVERLOADING
 #
 
--include .overload
+-include overload/.env
 
 PROJECT_NAME           ?= $(shell basename $(CURDIR))
 COMPOSE_BUILD_OPTS     ?=
@@ -142,27 +142,13 @@ restart: stop start ## Restart the project
 ##
 
 .PHONY: clean
-clean: confirm_continue ## Remove generated files [y/N]
-	rm -rf bin
-	rm -rf config
-	rm -rf docs
-	rm -rf frankenphp
-	rm -rf public
-	rm -rf src
-	rm -rf var
-	rm -rf vendor
-	rm     .dockerignore
-	rm     .editorconfig
-	rm     .env
-	rm     .gitattributes
-	rm     .gitignore
-	rm     compose.override.yaml
-	rm     compose.prod.yaml
-	rm     compose.yaml
-	rm     composer.json
-	rm     composer.lock
-	rm     Dockerfile
-	rm     symfony.lock
+clean: confirm_continue ## Remove all generated files [y/N]
+	rm -rf $(CLONE_DIR) \
+      .github bin config docs frankenphp public src var vendor
+	rm  -f \
+      .dockerignore .editorconfig .env .gitattributes .gitignore \
+      compose.override.yaml compose.prod.yaml compose.yaml \
+      composer.json composer.lock Dockerfile symfony.lock
 
 ##
 
@@ -257,20 +243,23 @@ composer_update@prod: ## Update packages using composer (PROD)
 ## — SYMFONY DOCKER 🎵 🐳 —————————————————————————————————————————————————————
 
 PHONY: clone
-clone: ## Clone Symfony Docker (forked version)
+clone: ## Clone Symfony Docker
 	@printf "\n$(Y)Clone Symfony Docker$(S)"
 	@printf "\n$(Y)--------------------$(S)\n\n"
 ifeq ($(wildcard Dockerfile),)
 	@printf "Repository: $(Y)$(REPOSITORY)$(S)\n"
 	git clone $(REPOSITORY) $(CLONE_DIR)
+	@printf "\n$(Y)Extract Symfony Docker at the root$(S)"
+	@printf "\n$(Y)----------------------------------$(S)\n\n"
+	sleep .2
 	rm -rf $(CLONE_DIR)/.git
-	rm     $(CLONE_DIR)/LICENCE
-	rm     $(CLONE_DIR)/README
-	mv     $(CLONE_DIR)/{.,}* .
-    rm -rf $(CLONE_DIR)
-	@printf " $(G)✔$(S) Symfony Docker cloned.\n\n"
+	rm  -f $(CLONE_DIR)/README.md
+	-mv -vf $(CLONE_DIR)/.*
+	-mv -vf $(CLONE_DIR)/* .
+	rm -rf $(CLONE_DIR)
+	@printf " $(G)✔$(S) Symfony Docker cloned and extracted at the root.\n\n"
 else
-	@printf " $(G)✔$(S) Symfony Docker already cloned.\n\n"
+	@printf " $(G)✔$(S) Symfony Docker already cloned and extracted at the root.\n\n"
 endif
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
@@ -279,7 +268,6 @@ endif
 up: ## Start the container - $ make up [p=<params>] - Example: $ make up p=-d
 	@$(eval p ?=)
 	SERVER_NAME=$(COMPOSE_UP_SERVER_NAME) $(COMPOSE_UP_ENV_VARS) $(COMPOSE) up --pull always $(p)
-
 
 .PHONY: up_d
 up_d: ## Start the container (wait for services to be running|healthy - detached mode)
@@ -324,10 +312,10 @@ overload_file: ## Show overload file loaded into that Makefile
 	@printf "\n$(Y)Overload file$(S)"
 	@printf "\n$(Y)-------------$(S)\n\n"
 	@printf "File loaded into that Makefile:\n\n"
-ifneq ("$(wildcard .overload)","")
-	@printf "* $(G)✔$(S) .overload\n"
+ifneq ("$(wildcard overload/.env)","")
+	@printf "* $(G)✔$(S) overload/.env\n"
 else
-	@printf "* $(R)⨯$(S) .overload\n"
+	@printf "* $(R)⨯$(S) overload/.env\n"
 endif
 
 .PHONY: env_files
