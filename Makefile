@@ -266,7 +266,7 @@ endif
 .PHONY: up
 up: ## Start the container - $ make up [p=<params>] - Example: $ make up p=-d
 	@$(eval p ?=)
-	SERVER_NAME=$(COMPOSE_UP_SERVER_NAME) $(COMPOSE_UP_ENV_VARS) $(COMPOSE) up --pull always $(p)
+	SERVER_NAME=$(COMPOSE_UP_SERVER_NAME) $(COMPOSE_UP_ENV_VARS) $(COMPOSE) up --remove-orphans --pull always $(p)
 
 .PHONY: up_d
 up_d: ## Start the container (wait for services to be running|healthy - detached mode)
