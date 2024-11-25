@@ -220,7 +220,7 @@ composer_version: ## Composer version
 
 .PHONY: composer_validate
 composer_validate: ## Validate composer.json and composer.lock
-	$(COMPOSER) validate --strict --lock
+	$(COMPOSER) validate --strict --check-lock
 
 ##
 
