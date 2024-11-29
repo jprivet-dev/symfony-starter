@@ -298,7 +298,7 @@ docker_remove_all: confirm_continue ## Remove all stopped containers [y/N]
 ## — TROUBLESHOOTING 😵‍️ ———————————————————————————————————————————————————————
 
 .PHONY: permissions
-permissions: ## Run it if you cannot edit some of the project files on Linux (https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md)
+permissions p: ## Run it if you cannot edit some of the project files on Linux (https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md)
 	@printf "\n$(Y)Permissions$(S)"
 	@printf "\n$(Y)-----------$(S)\n\n"
 	$(COMPOSE) run --rm php chown -R $(USER_ID):$(GROUP_ID) .
@@ -368,25 +368,25 @@ vars: ## Show variables
 ## — INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
 
 .PHONY: confirm
-confirm: ## Display a confirmation before executing a makefile command - @$(MAKE) -s confirm question=<question> [make_yes=<command>] [make_no=<command>] [yes_by_default=<bool>]
+confirm: ## Display a confirmation before executing a makefile command - @$(MAKE) -s confirm question=<question> [make_yes=<command>] [make_no=<command>] [no_interaction=<bool>]
 	@$(if $(question),, $(error question argument is required))   # Question to display
 	@$(eval make_yes ?=)                                          # Makefile commands to execute on yes
 	@$(eval make_no ?=)                                           # Makefile commands to execute on no
-	@$(eval yes_by_default ?=)                                    # Default ‘yes’ answer
+	@$(eval no_interaction ?=)                                    # Interactive question or not
 	@\
 	question=$${question:-"Confirm?"}; \
-	if [ "$${yes_by_default}" != "true" ]; then \
+	if [ "$${no_interaction}" != "true" ]; then \
 		printf "$(G)$${question}$(S) [$(Y)y/N$(S)]: " && read answer; \
 	fi; \
 	answer=$${answer:-N}; \
-	if [ "$${answer}" = y ] || [ "$${answer}" = Y ] || [ "$${yes_by_default}" = "true" ]; then \
-		[ -z "$$make_yes" ] && printf "$(Y)(YES) no action!$(S)\n" || $(MAKE) -s $$make_yes yes_by_default=true; \
+	if [ "$${answer}" = y ] || [ "$${answer}" = Y ] || [ "$${no_interaction}" = "true" ]; then \
+		[ -z "$$make_yes" ] && printf "$(Y)(YES) no action!$(S)\n" || $(MAKE) -s $$make_yes no_interaction=true; \
 	else \
 		[ -z "$$make_no" ] && printf "$(Y)(NO) no action!$(S)\n" || $(MAKE) -s $$make_no; \
 	fi
 
 PHONY: confirm_continue
 confirm_continue: ## Display a confirmation before continuing [y/N]
-	@$(eval yes_by_default ?=) # Default ‘yes’ answer
-	@if [ "$${yes_by_default}" = "true" ]; then exit 0; fi; \
+	@$(eval no_interaction ?=) # Interactive question or not
+	@if [ "$${no_interaction}" = "true" ]; then exit 0; fi; \
 	printf "$(G)Do you want to continue?$(S) [$(Y)y/N$(S)]: " && read answer && [ $${answer:-N} = y ]
