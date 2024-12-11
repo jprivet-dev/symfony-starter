@@ -195,15 +195,12 @@ php: ## Run PHP - $ make php [p=<params>]- Example: $ make php p=--version
 	@$(eval p ?=)
 	$(PHP) $(p)
 
-.PHONY: php_sh
 php_sh: ## Connect to the PHP container
 	$(CONTAINER_PHP) sh
 
-.PHONY: php_version
 php_version: ## PHP version number
 	$(PHP) -v
 
-.PHONY: php_modules
 php_modules: ## Show compiled in modules
 	$(PHP) -m
 
@@ -214,29 +211,23 @@ composer: ## Run composer - $ make composer [p=<params>] - Example: $ make compo
 	@$(eval p ?=)
 	$(COMPOSER) $(p)
 
-.PHONY: composer_version
 composer_version: ## Composer version
 	$(COMPOSER) --version
 
-.PHONY: composer_validate
 composer_validate: ## Validate composer.json and composer.lock
-	$(COMPOSER) validate --strict --lock
+	$(COMPOSER) validate --strict --check-lock
 
 ##
 
-.PHONY: composer_install
 composer_install: ## Install packages using composer
 	$(COMPOSER) install
 
-.PHONY: composer_install@prod
 composer_install@prod: ## Install packages using composer (PROD)
 	$(COMPOSER) install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 
-.PHONY: composer_update
 composer_update: ## Update packages using composer
 	$(COMPOSER) update
 
-.PHONY: composer_update@prod
 composer_update@prod: ## Update packages using composer (PROD)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 
@@ -266,9 +257,8 @@ endif
 .PHONY: up
 up: ## Start the container - $ make up [p=<params>] - Example: $ make up p=-d
 	@$(eval p ?=)
-	SERVER_NAME=$(COMPOSE_UP_SERVER_NAME) $(COMPOSE_UP_ENV_VARS) $(COMPOSE) up --pull always $(p)
+	SERVER_NAME=$(COMPOSE_UP_SERVER_NAME) $(COMPOSE_UP_ENV_VARS) $(COMPOSE) up --remove-orphans --pull always $(p)
 
-.PHONY: up_d
 up_d: ## Start the container (wait for services to be running|healthy - detached mode)
 	$(MAKE) up p="--wait -d"
 
@@ -287,18 +277,16 @@ logs: ## See the container’s logs
 
 ##
 
-.PHONY: docker_stop_all
 docker_stop_all: confirm_continue ## Stop all running containers [y/N]
 	docker stop $$(docker ps -a -q)
 
-.PHONY: docker_remove_all
 docker_remove_all: confirm_continue ## Remove all stopped containers [y/N]
 	docker rm $$(docker ps -a -q)
 
 ## — TROUBLESHOOTING 😵‍️ ———————————————————————————————————————————————————————
 
 .PHONY: permissions
-permissions: ## Run it if you cannot edit some of the project files on Linux (https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md)
+permissions p: ## Run it if you cannot edit some of the project files on Linux (https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md)
 	@printf "\n$(Y)Permissions$(S)"
 	@printf "\n$(Y)-----------$(S)\n\n"
 	$(COMPOSE) run --rm php chown -R $(USER_ID):$(GROUP_ID) .
@@ -306,7 +294,6 @@ permissions: ## Run it if you cannot edit some of the project files on Linux (ht
 
 ## — UTILS 🛠️  —————————————————————————————————————————————————————————————————
 
-.PHONY: overload_file
 overload_file: ## Show overload file loaded into that Makefile
 	@printf "\n$(Y)Overload file$(S)"
 	@printf "\n$(Y)-------------$(S)\n\n"
@@ -317,7 +304,6 @@ else
 	@printf "* $(R)⨯$(S) overload/.env\n"
 endif
 
-.PHONY: env_files
 env_files: ## Show Symfony env files loaded into that Makefile
 	@printf "\n$(Y)Symfony env files$(S)"
 	@printf "\n$(Y)-----------------$(S)\n\n"
@@ -368,25 +354,24 @@ vars: ## Show variables
 ## — INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
 
 .PHONY: confirm
-confirm: ## Display a confirmation before executing a makefile command - @$(MAKE) -s confirm question=<question> [make_yes=<command>] [make_no=<command>] [yes_by_default=<bool>]
+confirm: ## Display a confirmation before executing a makefile command - @$(MAKE) -s confirm question=<question> [make_yes=<command>] [make_no=<command>] [no_interaction=<bool>]
 	@$(if $(question),, $(error question argument is required))   # Question to display
 	@$(eval make_yes ?=)                                          # Makefile commands to execute on yes
 	@$(eval make_no ?=)                                           # Makefile commands to execute on no
-	@$(eval yes_by_default ?=)                                    # Default ‘yes’ answer
+	@$(eval no_interaction ?=)                                    # Interactive question or not
 	@\
 	question=$${question:-"Confirm?"}; \
-	if [ "$${yes_by_default}" != "true" ]; then \
+	if [ "$${no_interaction}" != "true" ]; then \
 		printf "$(G)$${question}$(S) [$(Y)y/N$(S)]: " && read answer; \
 	fi; \
 	answer=$${answer:-N}; \
-	if [ "$${answer}" = y ] || [ "$${answer}" = Y ] || [ "$${yes_by_default}" = "true" ]; then \
-		[ -z "$$make_yes" ] && printf "$(Y)(YES) no action!$(S)\n" || $(MAKE) -s $$make_yes yes_by_default=true; \
+	if [ "$${answer}" = y ] || [ "$${answer}" = Y ] || [ "$${no_interaction}" = "true" ]; then \
+		[ -z "$$make_yes" ] && printf "$(Y)(YES) no action!$(S)\n" || $(MAKE) -s $$make_yes no_interaction=true; \
 	else \
 		[ -z "$$make_no" ] && printf "$(Y)(NO) no action!$(S)\n" || $(MAKE) -s $$make_no; \
 	fi
 
-PHONY: confirm_continue
 confirm_continue: ## Display a confirmation before continuing [y/N]
-	@$(eval yes_by_default ?=) # Default ‘yes’ answer
-	@if [ "$${yes_by_default}" = "true" ]; then exit 0; fi; \
+	@$(eval no_interaction ?=) # Interactive question or not
+	@if [ "$${no_interaction}" = "true" ]; then exit 0; fi; \
 	printf "$(G)Do you want to continue?$(S) [$(Y)y/N$(S)]: " && read answer && [ $${answer:-N} = y ]

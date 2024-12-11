@@ -1,5 +1,5 @@
 # Usage:
-#   . scripts/alias.sh [options]
+#   . scripts/aliases.sh [options]
 
 # (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET
 G="\033[32m"
