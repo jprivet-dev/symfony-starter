@@ -11,14 +11,18 @@ Generate a fresh Symfony application with the Docker configuration ([Symfony Doc
 Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
 
 ## Installation
+
+### The very first time
  
 - `git clone git@github.com:jprivet-dev/symfony-starter.git`
 - `cd symfony-starter`
 - `make generate`:
   - That clone `git@github.com:dunglas/symfony-docker.git` and extract files at the root.
   - Build fresh images.
+  - Start the containers.
   - Generate a fresh Symfony application at the root.
   - Fix permissions.
+  - Show info.
 - Go on https://symfony-starter.localhost/.
 
 All in one:
@@ -29,25 +33,21 @@ git clone git@github.com:jprivet-dev/symfony-starter.git \
 && make generate
 ```
 
-## Clean all and generate again
+Clean all and generate again:
 
 ```shell
-# 1. Stop the container
-make stop
-
-# 2. Remove all generated files
-make clean
-
-# 3. Generate again
-make generate
+make stop     # 1. Stop the container
+make clean    # 2. Remove all generated files
+make generate # 3. Generate again
 ```
 
-## Start and stop the project (Docker)
+### The following times
 
 ```shell
-make start
-make stop
-make restart
+make start    # Start the project
+make stop     # Stop the project
+make restart  # Stop and start the project
+make install  # Install all (for example, after an update of your curent branch)
 ```
 
 > Run `make` to see all shorcuts for the most common tasks.
