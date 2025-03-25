@@ -109,22 +109,26 @@ After `make generate`:
 ```
 2. `git add . && git commit -m "Fresh Symfony application"`
 
-## Makefile: variables overloading
+## Makefile: Docker build and up options
 
-You can customize the Docker build and up processes. To do this, create an `overload/.env` file and override the following variables :
+You can customize the Docker build and up processes. To do this, add the following variables in your `.env.options.local` file:
 
 ```dotenv
-# overload/.env
+# .env.options.local
+
+# Editing Permissions on Linux
+# See https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md
+LINUX=on
 
 # See https://docs.docker.com/compose/how-tos/project-name/
 PROJECT_NAME=my-project
 
 # See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#docker-build-options
-COMPOSE_UP_SERVER_NAME=my.localhost
-COMPOSE_UP_ENV_VARS=SYMFONY_VERSION=6.4.* HTTP_PORT=8000 HTTPS_PORT=4443 HTTP3_PORT=4443
-
-# See https://docs.docker.com/reference/cli/docker/compose/build/#options
-COMPOSE_BUILD_OPTS=--no-cache
+SERVER_NAME=my.localhost
+XDEBUG_MODE=coverage
+HTTP_PORT=80
+HTTPS_PORT=4443
+HTTP3_PORT=4443
 ```
 
 These variables will be taken into account by the `make` commands.
@@ -145,10 +149,12 @@ On the `docker compose up`, you can have the followings errors:
 
 See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#using-custom-http-ports.
 
-Overload `COMPOSE_UP_ENV_VARS` in `overload/.env`:
+Overload `HTTP_PORT` in `.env.options.local`:
 
 ```dotenv
-COMPOSE_UP_ENV_VARS=HTTP_PORT=8000 HTTPS_PORT=4443 HTTP3_PORT=4443
+HTTP_PORT=8000
+HTTPS_PORT=4443
+HTTP3_PORT=4443
 ```
 
 #### Solution #2 - Find and stop the container using the port

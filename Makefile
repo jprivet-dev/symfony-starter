@@ -23,17 +23,6 @@ CLONE_DIR  = clone
 REPOSITORY = git@github.com:dunglas/symfony-docker.git
 
 #
-# OVERLOADING
-#
-
--include overload/.env
-
-PROJECT_NAME           ?= $(shell basename $(CURDIR))
-COMPOSE_BUILD_OPTS     ?=
-COMPOSE_UP_SERVER_NAME ?= $(PROJECT_NAME).localhost
-COMPOSE_UP_ENV_VARS    ?=
-
-#
 # SYMFONY ENVIRONMENT VARIABLES
 #
 
@@ -57,9 +46,9 @@ $(info Warning: APP_ENV is overloaded outside .env and .env.local files)
 endif
 
 ifeq ($(FILE_ENV),prod)
-$(info Warning: Your are in the prod environment)
+$(info Warning: Your are in the PROD environment)
 else ifeq ($(FILE_ENV),test)
-$(info Warning: Your are in the test environment)
+$(info Warning: Your are in the TEST environment)
 endif
 
 # @see https://symfony.com/doc/current/deployment.html#b-configure-your-environment-variables
@@ -78,21 +67,35 @@ ifndef COMPOSE_V2
 $(error Docker Compose CLI plugin is required but is not available on your system)
 endif
 
-COMPOSE_BASE     = compose.yaml
-COMPOSE_OVERRIDE = compose.override.yaml
-COMPOSE_PROD     = compose.prod.yaml
-COMPOSE_PREFIX   = docker compose -p $(PROJECT_NAME) -f $(COMPOSE_BASE)
+COMPOSE = docker compose -p $(PROJECT_NAME)
 
 ifeq ($(FILE_ENV),prod)
-COMPOSE = $(COMPOSE_PREFIX) -f $(COMPOSE_PROD)
-else
-COMPOSE = $(COMPOSE_PREFIX) -f $(COMPOSE_OVERRIDE)
+COMPOSE = $(COMPOSE) -f compose.yaml -f compose.prod.yaml
 endif
 
 CONTAINER_PHP = $(COMPOSE) exec php
 PHP           = $(CONTAINER_PHP) php
 COMPOSER      = $(CONTAINER_PHP) composer
 CONSOLE       = $(PHP) bin/console
+
+#
+# OTHER OPTIONS
+#
+
+-include .env.options.local
+
+# https://symfony.com/releases
+SYMFONY_LTS     = 6.4.*
+SYMFONY_VERSION ?= $(SYMFONY_LTS)
+BUILD_ENV       ?= SYMFONY_VERSION=$(SYMFONY_VERSION)
+
+PROJECT_NAME    ?= $(shell basename $(CURDIR))
+SERVER_NAME     ?= $(PROJECT_NAME).localhost
+XDEBUG_MODE     ?= coverage
+HTTP_PORT       ?= 80
+HTTPS_PORT      ?= 4443
+HTTP3_PORT      ?= 4443
+UP_ENV          ?= XDEBUG_MODE=$(XDEBUG_MODE) SERVER_NAME=$(SERVER_NAME) HTTP_PORT=$(HTTP_PORT) HTTPS_PORT=$(HTTPS_PORT) HTTP3_PORT=$(HTTP3_PORT)
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
 
@@ -103,35 +106,26 @@ CONSOLE       = $(PHP) bin/console
 .DEFAULT_GOAL = help
 .PHONY: help
 help: ## Print self-documented Makefile
-	@grep -E '(^[.a-zA-Z_-]+[^:]+:.*##.*?$$)|(^#{2})' Makefile \
-	| awk 'BEGIN {FS = "## "}; \
-		{ \
-			split($$1, line, ":"); \
-			targets=line[1]; \
-			description=$$2; \
-			if (targets == "##") { \
-				# --- space --- \
-				printf "\033[33m%s\n", ""; \
-			} else if (targets == "" && description != "") { \
-				# --- title --- \
-				printf "\033[33m\n%s\n", description; \
-			} else if (targets != "" && description != "") { \
-				# --- target, alias, description --- \
-				split(targets, parts, " "); \
-				target=parts[1]; \
-				alias=parts[2]; \
-				printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; \
-			} \
-		}'
+	@grep -E '(^[.a-zA-Z_-]+[^:]+:.*##.*?$$)|(^#{2})' Makefile | awk 'BEGIN {FS = "## "}; { \
+		split($$1, line, ":"); targets=line[1]; description=$$2; \
+		if (targets == "##") { \
+			printf "\033[33m%s\n", ""; # space \
+		} else if (targets == "" && description != "") { \
+			printf "\033[33m\n%s\n", description; # title \
+		} else if (targets != "" && description != "") { \
+			split(targets, parts, " "); target=parts[1]; alias=parts[2]; \
+			printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; # target alias: description \
+		} \
+	}'
 	@echo
 
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
 .PHONY: generate
-generate: confirm_continue clone build up_d permissions info ## Generate a fresh Symfony application with the Docker configuration
+generate: confirm_continue clone build up permissions info ## Generate a fresh Symfony application with the Docker configuration [y/N]
 
 .PHONY: start
-start: up_d info ## Start the project (implies detached mode)
+start: up info ## Start the project (implies detached mode)
 
 .PHONY: stop
 stop: down ## Stop the project
@@ -142,30 +136,30 @@ restart: stop start ## Restart the project
 ##
 
 .PHONY: clean
-clean: confirm_continue ## Remove all generated files [y/N]
+clean: confirm_continue ## Remove all generated files and restore original files [y/N]
 	rm -rf $(CLONE_DIR) \
       .github bin config docs frankenphp public src var vendor
 	rm  -f \
-      .dockerignore .editorconfig .env .gitattributes .gitignore \
+      .dockerignore .editorconfig .env .env.dev .gitattributes .gitignore \
       compose.override.yaml compose.prod.yaml compose.yaml \
       composer.json composer.lock Dockerfile symfony.lock
+	git restore LICENSE
 
 ##
 
 PHONY: info
 info i: ## Show info
-	@$(MAKE) -s overload_file env_files vars
+	@$(MAKE) -s dotenv vars
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-	@printf "* Go on $(G)https://$(COMPOSE_UP_SERVER_NAME)/$(S)\n"
 	@printf "* Run $(Y)make$(S) to see all shorcuts for the most common tasks.\n"
 	@printf "* Run $(Y). aliases$(S) to load all the project aliases.\n"
+	@printf "* Go on $(G)https://$(SERVER_NAME)/$(S)\n"
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
 .PHONY: symfony
 symfony sf: ## Run Symfony - $ make symfony [p=<params>] - Example: $ make symfony p=cache:clear
-	@$(eval p ?=)
 	$(CONSOLE) $(p)
 
 .PHONY: cc
@@ -192,7 +186,6 @@ dumpenv: ## Generate .env.local.php (PROD)
 
 .PHONY: php
 php: ## Run PHP - $ make php [p=<params>]- Example: $ make php p=--version
-	@$(eval p ?=)
 	$(PHP) $(p)
 
 php_sh: ## Connect to the PHP container
@@ -208,7 +201,6 @@ php_modules: ## Show compiled in modules
 
 .PHONY: composer
 composer: ## Run composer - $ make composer [p=<params>] - Example: $ make composer p="require --dev phpunit/phpunit"
-	@$(eval p ?=)
 	$(COMPOSER) $(p)
 
 composer_version: ## Composer version
@@ -220,16 +212,18 @@ composer_validate: ## Validate composer.json and composer.lock
 ##
 
 composer_install: ## Install packages using composer
-	$(COMPOSER) install
-
-composer_install@prod: ## Install packages using composer (PROD)
+ifeq ($(FILE_ENV),prod)
 	$(COMPOSER) install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
+else
+	$(COMPOSER) install
+endif
 
 composer_update: ## Update packages using composer
-	$(COMPOSER) update
-
-composer_update@prod: ## Update packages using composer (PROD)
+ifeq ($(FILE_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
+else
+	$(COMPOSER) update
+endif
 
 ## — SYMFONY DOCKER 🎵 🐳 —————————————————————————————————————————————————————
 
@@ -255,21 +249,21 @@ endif
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: up
-up: ## Start the container - $ make up [p=<params>] - Example: $ make up p=-d
-	@$(eval p ?=)
-	SERVER_NAME=$(COMPOSE_UP_SERVER_NAME) $(COMPOSE_UP_ENV_VARS) $(COMPOSE) up --remove-orphans --pull always $(p)
-
-up_d: ## Start the container (wait for services to be running|healthy - detached mode)
-	$(MAKE) up p="--wait -d"
+up: ## Start the container - $ make up [p=<params>] - Example: $ make up p=-d (wait for services to be running|healthy - detached mode by default)
+	@$(eval p ?=-d)
+	$(UP_ENV) $(COMPOSE) up --remove-orphans --pull always --wait $(p)
 
 .PHONY: down
 down: ## Stop the container
 	$(COMPOSE) down --remove-orphans
 
+.PHONY: kill
+kill: ## Stop the container
+	$(COMPOSE) kill --remove-orphans
+
 .PHONY: build
 build: ## Build or rebuild services - $ make build [p=<params>] - Example: $ make build p=--no-cache
-	@$(eval p ?=)
-	$(COMPOSE) build $(COMPOSE_BUILD_OPTS) $(p)
+	$(BUILD_ENV) $(COMPOSE) build $(p)
 
 .PHONY: logs
 logs: ## See the container’s logs
@@ -287,47 +281,16 @@ docker_remove_all: confirm_continue ## Remove all stopped containers [y/N]
 
 .PHONY: permissions
 permissions p: ## Run it if you cannot edit some of the project files on Linux (https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md)
-	@printf "\n$(Y)Permissions$(S)"
-	@printf "\n$(Y)-----------$(S)\n\n"
+	@printf "\n$(Y)Permissions (Linux)$(S)"
+	@printf "\n$(Y)-------------------$(S)\n\n"
+ifeq ($(LINUX),on)
 	$(COMPOSE) run --rm php chown -R $(USER_ID):$(GROUP_ID) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER_ID):$(GROUP_ID)$(S) of the project files.\n"
+else
+	@printf " $(G)✔$(S) You are not on linux: nothing to do.\n"
+endif
 
 ## — UTILS 🛠️  —————————————————————————————————————————————————————————————————
-
-overload_file: ## Show overload file loaded into that Makefile
-	@printf "\n$(Y)Overload file$(S)"
-	@printf "\n$(Y)-------------$(S)\n\n"
-	@printf "File loaded into that Makefile:\n\n"
-ifneq ("$(wildcard overload/.env)","")
-	@printf "* $(G)✔$(S) overload/.env\n"
-else
-	@printf "* $(R)⨯$(S) overload/.env\n"
-endif
-
-env_files: ## Show Symfony env files loaded into that Makefile
-	@printf "\n$(Y)Symfony env files$(S)"
-	@printf "\n$(Y)-----------------$(S)\n\n"
-	@printf "Files loaded into that Makefile (in order of decreasing priority) $(Y)[FILE_ENV=$(FILE_ENV)]$(S):\n\n"
-ifneq ("$(wildcard .env.$(FILE_ENV).local)","")
-	@printf "* $(G)✔$(S) .env.$(FILE_ENV).local\n"
-else
-	@printf "* $(R)⨯$(S) .env.$(FILE_ENV).local\n"
-endif
-ifneq ("$(wildcard .env.$(FILE_ENV))","")
-	@printf "* $(G)✔$(S) .env.$(FILE_ENV)\n"
-else
-	@printf "* $(R)⨯$(S) .env.$(FILE_ENV)\n"
-endif
-ifneq ("$(wildcard .env.local)","")
-	@printf "* $(G)✔$(S) .env.local\n"
-else
-	@printf "* $(R)⨯$(S) .env.local\n"
-endif
-ifneq ("$(wildcard .env)","")
-	@printf "* $(G)✔$(S) .env\n"
-else
-	@printf "* $(R)⨯$(S) .env\n"
-endif
 
 .PHONY: vars
 vars: ## Show variables
@@ -339,11 +302,11 @@ vars: ## Show variables
 	@printf "\n$(G)BASE$(S)\n"
 	@printf "  CLONE_DIR : $(CLONE_DIR)\n"
 	@printf "  REPOSITORY: $(REPOSITORY)\n"
-	@printf "\n$(G)OVERLOADING$(S)\n"
-	@printf "  PROJECT_NAME          : $(PROJECT_NAME)\n"
-	@printf "  COMPOSE_BUILD_OPTS    : $(COMPOSE_BUILD_OPTS)\n"
-	@printf "  COMPOSE_UP_SERVER_NAME: $(COMPOSE_UP_SERVER_NAME)\n"
-	@printf "  COMPOSE_UP_ENV_VARS   : $(COMPOSE_UP_ENV_VARS)\n"
+	@printf "\n$(G)OPTIONS$(S)\n"
+	@printf "  LINUX       : $(LINUX)\n"
+	@printf "  PROJECT_NAME: $(PROJECT_NAME)\n"
+	@printf "  BUILD_ENV   : $(BUILD_ENV)\n"
+	@printf "  UP_ENV      : $(UP_ENV)\n"
 	@printf "\n$(G)SYMFONY ENVIRONMENT VARIABLES$(S)\n"
 	@printf "  APP_ENV   : $(APP_ENV)\n"
 	@printf "  APP_SECRET: $(APP_SECRET)\n"
