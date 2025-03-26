@@ -21,24 +21,14 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
   - Build fresh images.
   - Start the containers.
   - Generate a fresh Symfony application at the root.
-  - Fix permissions.
+  - Fix permissions for Linux (add `PERMISSIONS=on` to `.env.options.local` to activate `permissions` command).
   - Show info.
 - Go on https://symfony-starter.localhost/.
 
 All in one:
 
 ```shell
-git clone git@github.com:jprivet-dev/symfony-starter.git \
-&& cd symfony-starter \
-&& make generate
-```
-
-Clean all and generate again:
-
-```shell
-make stop     # 1. Stop the container
-make clean    # 2. Remove all generated files
-make generate # 3. Generate again
+git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate
 ```
 
 ### The following times
@@ -52,15 +42,20 @@ make install  # Install all (for example, after an update of your curent branch)
 
 > Run `make` to see all shorcuts for the most common tasks.
 
+### Clean all and generate again
+
+```shell
+make stop     # 1. Stop the container
+make clean    # 2. Remove all generated files
+make generate # 3. Generate again
+```
+
 ## Structure
 
 Before `make generate`:
 
 ```
 ./
-├── overload/
-├── scripts/
-├── aliases
 ├── LICENSE
 ├── Makefile
 └── README.md
@@ -74,13 +69,10 @@ After `make generate`:
 ├──*config/
 ├──*docs/
 ├──*frankenphp/
-├── overload/
 ├──*public/
-├── scripts/
 ├──*src/
 ├──*var/
 ├──*vendor/
-├── aliases
 ├──*compose.override.yaml
 ├──*compose.prod.yaml
 ├──*composer.json
@@ -118,7 +110,7 @@ You can customize the Docker build and up processes. To do this, add the followi
 
 # Editing Permissions on Linux
 # See https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md
-LINUX=on
+PERMISSIONS=on
 
 # See https://docs.docker.com/compose/how-tos/project-name/
 PROJECT_NAME=my-project
@@ -126,7 +118,7 @@ PROJECT_NAME=my-project
 # See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#docker-build-options
 SERVER_NAME=my.localhost
 XDEBUG_MODE=coverage
-HTTP_PORT=80
+HTTP_PORT=8000
 HTTPS_PORT=4443
 HTTP3_PORT=4443
 ```
@@ -163,9 +155,6 @@ List containers using the `443` port:
 
 ```shell
 docker ps | grep :443
-```
-
-```
 c91d77c0994e   app-php   "docker-entrypoint f…"   15 hours ago   Up 15 hours (healthy)   0.0.0.0:80->80/tcp, :::80->80/tcp, 0.0.0.0:443->443/tcp, :::443->443/tcp, 0.0.0.0:443->443/udp, :::443->443/udp, 2019/tcp   other-container-php-1
 ```
 
@@ -188,9 +177,6 @@ See the network statistics:
 
 ```shell
 sudo netstat -pna | grep :80
-```
-
-```
 tcp6       0      0 :::80        :::*        LISTEN        4321/apache2
 ```
 

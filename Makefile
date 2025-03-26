@@ -79,7 +79,7 @@ COMPOSER      = $(CONTAINER_PHP) composer
 CONSOLE       = $(PHP) bin/console
 
 #
-# OTHER OPTIONS
+# OPTIONS
 #
 
 -include .env.options.local
@@ -91,11 +91,23 @@ BUILD_ENV       ?= SYMFONY_VERSION=$(SYMFONY_VERSION)
 
 PROJECT_NAME    ?= $(shell basename $(CURDIR))
 SERVER_NAME     ?= $(PROJECT_NAME).localhost
-XDEBUG_MODE     ?= coverage
-HTTP_PORT       ?= 80
-HTTPS_PORT      ?= 4443
-HTTP3_PORT      ?= 4443
-UP_ENV          ?= XDEBUG_MODE=$(XDEBUG_MODE) SERVER_NAME=$(SERVER_NAME) HTTP_PORT=$(HTTP_PORT) HTTPS_PORT=$(HTTPS_PORT) HTTP3_PORT=$(HTTP3_PORT)
+UP_ENV          ?= SERVER_NAME=$(SERVER_NAME)
+
+ifneq ($(XDEBUG_MODE),)
+UP_ENV = $(UP_ENV) XDEBUG_MODE=$(XDEBUG_MODE)
+endif
+
+ifneq ($(HTTP_PORT),)
+UP_ENV = $(UP_ENV) HTTP_PORT=$(HTTP_PORT)
+endif
+
+ifneq ($(HTTPS_PORT),)
+UP_ENV = $(UP_ENV) HTTPS_PORT=$(HTTPS_PORT)
+endif
+
+ifneq ($(HTTPS_PORT),)
+UP_ENV = $(UP_ENV) HTTPS_PORT=$(HTTPS_PORT)
+endif
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
 
@@ -122,7 +134,7 @@ help: ## Print self-documented Makefile
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
 .PHONY: generate
-generate: confirm_continue clone build up permissions info ## Generate a fresh Symfony application with the Docker configuration [y/N]
+generate: clone build up permissions info ## Generate a fresh Symfony application with the Docker configuration
 
 .PHONY: start
 start: up info ## Start the project (implies detached mode)
@@ -133,27 +145,21 @@ stop: down ## Stop the project
 .PHONY: restart
 restart: stop start ## Restart the project
 
-##
-
 .PHONY: clean
-clean: confirm_continue ## Remove all generated files and restore original files [y/N]
-	rm -rf $(CLONE_DIR) \
-      .github bin config docs frankenphp public src var vendor
+clean: ## Remove all generated files and restore original files
+	git restore LICENSE
+	rm -rf $(CLONE_DIR).github bin config docs frankenphp public src var vendor
 	rm  -f \
       .dockerignore .editorconfig .env .env.dev .gitattributes .gitignore \
       compose.override.yaml compose.prod.yaml compose.yaml \
       composer.json composer.lock Dockerfile symfony.lock
-	git restore LICENSE
-
-##
 
 PHONY: info
-info i: ## Show info
-	@$(MAKE) -s dotenv vars
+info: ## Show info
+	@$(MAKE) -s vars
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
 	@printf "* Run $(Y)make$(S) to see all shorcuts for the most common tasks.\n"
-	@printf "* Run $(Y). aliases$(S) to load all the project aliases.\n"
 	@printf "* Go on $(G)https://$(SERVER_NAME)/$(S)\n"
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
@@ -174,10 +180,6 @@ cw: ## Warm up an empty cache
 about: ## Display information about the current project
 	$(CONSOLE) about
 
-.PHONY: dotenv
-dotenv: ## Lists all dotenv files with variables and values
-	$(CONSOLE) debug:dotenv
-
 .PHONY: dumpenv
 dumpenv: ## Generate .env.local.php (PROD)
 	$(COMPOSER) dump-env prod
@@ -191,25 +193,11 @@ php: ## Run PHP - $ make php [p=<params>]- Example: $ make php p=--version
 php_sh: ## Connect to the PHP container
 	$(CONTAINER_PHP) sh
 
-php_version: ## PHP version number
-	$(PHP) -v
-
-php_modules: ## Show compiled in modules
-	$(PHP) -m
-
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
 .PHONY: composer
 composer: ## Run composer - $ make composer [p=<params>] - Example: $ make composer p="require --dev phpunit/phpunit"
 	$(COMPOSER) $(p)
-
-composer_version: ## Composer version
-	$(COMPOSER) --version
-
-composer_validate: ## Validate composer.json and composer.lock
-	$(COMPOSER) validate --strict --check-lock
-
-##
 
 composer_install: ## Install packages using composer
 ifeq ($(FILE_ENV),prod)
@@ -250,16 +238,11 @@ endif
 
 .PHONY: up
 up: ## Start the container - $ make up [p=<params>] - Example: $ make up p=-d (wait for services to be running|healthy - detached mode by default)
-	@$(eval p ?=-d)
 	$(UP_ENV) $(COMPOSE) up --remove-orphans --pull always --wait $(p)
 
 .PHONY: down
 down: ## Stop the container
 	$(COMPOSE) down --remove-orphans
-
-.PHONY: kill
-kill: ## Stop the container
-	$(COMPOSE) kill --remove-orphans
 
 .PHONY: build
 build: ## Build or rebuild services - $ make build [p=<params>] - Example: $ make build p=--no-cache
@@ -269,25 +252,17 @@ build: ## Build or rebuild services - $ make build [p=<params>] - Example: $ mak
 logs: ## See the container’s logs
 	$(COMPOSE) logs -f
 
-##
-
-docker_stop_all: confirm_continue ## Stop all running containers [y/N]
-	docker stop $$(docker ps -a -q)
-
-docker_remove_all: confirm_continue ## Remove all stopped containers [y/N]
-	docker rm $$(docker ps -a -q)
-
 ## — TROUBLESHOOTING 😵‍️ ———————————————————————————————————————————————————————
 
 .PHONY: permissions
 permissions p: ## Run it if you cannot edit some of the project files on Linux (https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md)
 	@printf "\n$(Y)Permissions (Linux)$(S)"
 	@printf "\n$(Y)-------------------$(S)\n\n"
-ifeq ($(LINUX),on)
+ifeq ($(PERMISSIONS),on)
 	$(COMPOSE) run --rm php chown -R $(USER_ID):$(GROUP_ID) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER_ID):$(GROUP_ID)$(S) of the project files.\n"
 else
-	@printf " $(G)✔$(S) You are not on linux: nothing to do.\n"
+	@printf " $(G)✔$(S) Nothing to do (add PERMISSIONS=on to .env.options.local to activate `permissions` command).\n"
 endif
 
 ## — UTILS 🛠️  —————————————————————————————————————————————————————————————————
@@ -303,7 +278,7 @@ vars: ## Show variables
 	@printf "  CLONE_DIR : $(CLONE_DIR)\n"
 	@printf "  REPOSITORY: $(REPOSITORY)\n"
 	@printf "\n$(G)OPTIONS$(S)\n"
-	@printf "  LINUX       : $(LINUX)\n"
+	@printf "  PERMISSIONS : $(PERMISSIONS)\n"
 	@printf "  PROJECT_NAME: $(PROJECT_NAME)\n"
 	@printf "  BUILD_ENV   : $(BUILD_ENV)\n"
 	@printf "  UP_ENV      : $(UP_ENV)\n"
@@ -313,28 +288,3 @@ vars: ## Show variables
 	@printf "\n$(G)DOCKER$(S)\n"
 	@printf "  COMPOSE_V2: $(COMPOSE_V2)\n"
 	@printf "  COMPOSE   : $(COMPOSE)\n"
-
-## — INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
-
-.PHONY: confirm
-confirm: ## Display a confirmation before executing a makefile command - @$(MAKE) -s confirm question=<question> [make_yes=<command>] [make_no=<command>] [no_interaction=<bool>]
-	@$(if $(question),, $(error question argument is required))   # Question to display
-	@$(eval make_yes ?=)                                          # Makefile commands to execute on yes
-	@$(eval make_no ?=)                                           # Makefile commands to execute on no
-	@$(eval no_interaction ?=)                                    # Interactive question or not
-	@\
-	question=$${question:-"Confirm?"}; \
-	if [ "$${no_interaction}" != "true" ]; then \
-		printf "$(G)$${question}$(S) [$(Y)y/N$(S)]: " && read answer; \
-	fi; \
-	answer=$${answer:-N}; \
-	if [ "$${answer}" = y ] || [ "$${answer}" = Y ] || [ "$${no_interaction}" = "true" ]; then \
-		[ -z "$$make_yes" ] && printf "$(Y)(YES) no action!$(S)\n" || $(MAKE) -s $$make_yes no_interaction=true; \
-	else \
-		[ -z "$$make_no" ] && printf "$(Y)(NO) no action!$(S)\n" || $(MAKE) -s $$make_no; \
-	fi
-
-confirm_continue: ## Display a confirmation before continuing [y/N]
-	@$(eval no_interaction ?=) # Interactive question or not
-	@if [ "$${no_interaction}" = "true" ]; then exit 0; fi; \
-	printf "$(G)Do you want to continue?$(S) [$(Y)y/N$(S)]: " && read answer && [ $${answer:-N} = y ]
