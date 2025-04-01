@@ -162,8 +162,8 @@ info: ## Show info
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
 .PHONY: symfony
-symfony sf: ## Run Symfony - $ make symfony [p=<params>] - Example: $ make symfony p=cache:clear
-	$(CONSOLE) $(p)
+symfony sf: ## Run Symfony - $ make symfony [ARG=<arguments>] - Example: $ make symfony ARG=cache:clear
+	$(CONSOLE) $(ARG)
 
 .PHONY: cc
 cc: ## Clear the cache
@@ -182,8 +182,8 @@ dumpenv: ## Generate .env.local.php (PROD)
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
 
 .PHONY: php
-php: ## Run PHP - $ make php [p=<params>]- Example: $ make php p=--version
-	$(PHP) $(p)
+php: ## Run PHP - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
+	$(PHP) $(ARG)
 
 php_sh: ## Connect to the PHP container
 	$(CONTAINER_PHP) sh
@@ -191,8 +191,8 @@ php_sh: ## Connect to the PHP container
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
 .PHONY: composer
-composer: ## Run composer - $ make composer [p=<params>] - Example: $ make composer p="require --dev phpunit/phpunit"
-	$(COMPOSER) $(p)
+composer: ## Run composer - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
+	$(COMPOSER) $(ARG)
 
 composer_install: ## Install packages using composer
 ifeq ($(FILE_ENV),prod)
@@ -234,13 +234,13 @@ endif
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: up
-up: ## Start the container - $ make up [p=<params>] - Example: $ make up p=-d (wait for services to be running|healthy)
+up: ## Start the container - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d (wait for services to be running|healthy)
 	@printf "\n$(Y)Up$(S)"
 	@printf "\n$(Y)--$(S)\n\n"
-	$(UP_ENV) $(COMPOSE) up --remove-orphans --pull always --wait $(p)
+	$(UP_ENV) $(COMPOSE) up --remove-orphans --pull always --wait $(ARG)
 
 .PHONY: upd
-upd: p=-d
+upd: ARG=-d
 upd: up ## Start the container (detached mode by default)
 
 .PHONY: down
@@ -250,10 +250,10 @@ down: ## Stop the container
 	$(COMPOSE) down --remove-orphans
 
 .PHONY: build
-build: ## Build or rebuild services - $ make build [p=<params>] - Example: $ make build p=--no-cache
+build: ## Build or rebuild services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
 	@printf "\n$(Y)Build$(S)"
 	@printf "\n$(Y)-----$(S)\n\n"
-	$(COMPOSE) build $(p)
+	$(COMPOSE) build $(ARG)
 
 .PHONY: logs
 logs: ## the container’s logs
