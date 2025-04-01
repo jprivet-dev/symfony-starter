@@ -21,7 +21,7 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
   - Build fresh images.
   - Start the containers.
   - Generate a fresh Symfony application at the root.
-  - Fix permissions for Linux (add `PERMISSIONS=on` to `.env.options.local` to activate `permissions` command).
+  - Fix permissions for Linux (add `PERMISSIONS=on` to `.env.local` to activate Makefile `permissions` command).
   - Show info.
 - Go on https://symfony-starter.localhost/.
 
@@ -35,9 +35,8 @@ git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter &
 
 ```shell
 make start    # Start the project
-make stop     # Stop the project
-make restart  # Stop and start the project
 make install  # Install all (for example, after an update of your curent branch)
+make stop     # Stop the project
 ```
 
 > Run `make` to see all shorcuts for the most common tasks.
@@ -45,9 +44,8 @@ make install  # Install all (for example, after an update of your curent branch)
 ### Clean all and generate again
 
 ```shell
-make stop     # 1. Stop the container
-make clean    # 2. Remove all generated files
-make generate # 3. Generate again
+make clean    # 1. Stop the container and remove all generated files
+make generate # 2. Generate again
 ```
 
 ## Structure
@@ -103,10 +101,10 @@ After `make generate`:
 
 ## Makefile: Docker build and up options
 
-You can customize the Docker build and up processes. To do this, add the following variables in your `.env.options.local` file:
+You can customize the Docker build and up processes. To do this, add the following variables in your `.env.local` file:
 
 ```dotenv
-# .env.options.local
+# .env.local
 
 # Editing Permissions on Linux
 # See https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md
@@ -117,10 +115,10 @@ PROJECT_NAME=my-project
 
 # See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#docker-build-options
 SERVER_NAME=my.localhost
-XDEBUG_MODE=coverage
 HTTP_PORT=8000
 HTTPS_PORT=4443
 HTTP3_PORT=4443
+XDEBUG_MODE=coverage
 ```
 
 These variables will be taken into account by the `make` commands.
@@ -141,7 +139,7 @@ On the `docker compose up`, you can have the followings errors:
 
 See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#using-custom-http-ports.
 
-Overload `HTTP_PORT` in `.env.options.local`:
+Overload `HTTP_PORT`, `HTTPS_PORT` or `HTTP3_PORT` in `.env.local`:
 
 ```dotenv
 HTTP_PORT=8000
