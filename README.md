@@ -4,8 +4,6 @@
 
 Generate a fresh Symfony application with the Docker configuration ([Symfony Docker](https://github.com/dunglas/symfony-docker)).
 
-> This project is a variant of https://github.com/jprivet-dev/symfony-starter-compose-in-another-dir.
-
 ## Prerequisites
 
 Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
@@ -18,11 +16,8 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
 - `cd symfony-starter`
 - `make generate`:
   - That clone `git@github.com:dunglas/symfony-docker.git` and extract files at the root.
-  - Build fresh images.
-  - Start the containers.
+  - Build fresh images and start the containers.
   - Generate a fresh Symfony application at the root.
-  - Fix permissions for Linux (add `PERMISSIONS=on` to `.env.options.local` to activate `permissions` command).
-  - Show info.
 - Go on https://symfony-starter.localhost/.
 
 All in one:
@@ -31,24 +26,14 @@ All in one:
 git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate
 ```
 
-### The following times
-
-```shell
-make start    # Start the project
-make stop     # Stop the project
-make restart  # Stop and start the project
-make install  # Install all (for example, after an update of your curent branch)
-```
-
-> Run `make` to see all shorcuts for the most common tasks.
-
 ### Clean all and generate again
 
 ```shell
-make stop     # 1. Stop the container
-make clean    # 2. Remove all generated files
-make generate # 3. Generate again
+make clean    # 1. Stop the container and remove all generated files
+make generate # 2. Generate again
 ```
+
+> Run `make` to see all shorcuts for the most common tasks.
 
 ## Structure
 
@@ -101,31 +86,26 @@ After `make generate`:
 ```
 2. `git add . && git commit -m "Fresh Symfony application"`
 
-## Makefile: Docker build and up options
+## Makefile: Docker build options
 
-You can customize the Docker build and up processes. To do this, add the following variables in your `.env.options.local` file:
+You can use the same variables from https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#docker-build-options with the `Makefile`:
 
-```dotenv
-# .env.options.local
+### Method #1
 
-# Editing Permissions on Linux
-# See https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md
-PERMISSIONS=on
-
-# See https://docs.docker.com/compose/how-tos/project-name/
-PROJECT_NAME=my-project
-
-# See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#docker-build-options
-SERVER_NAME=my.localhost
-XDEBUG_MODE=coverage
-HTTP_PORT=8000
-HTTPS_PORT=4443
-HTTP3_PORT=4443
+```shell
+SYMFONY_VERSION=6.4.* make generate
 ```
 
-These variables will be taken into account by the `make` commands.
+### Method #2
 
-> As the variables are common to the `Makefile` and `docker compose`, I'm not attaching an environment file with the `--env-file` option at the moment. See https://docs.docker.com/compose/how-tos/environment-variables/.
+```dotenv
+# .env.local
+SYMFONY_VERSION=6.4.*
+```
+
+```shell
+make generate
+```
 
 ## Troubleshooting
 
@@ -139,15 +119,7 @@ On the `docker compose up`, you can have the followings errors:
 
 #### Solution #1 - Custom HTTP ports
 
-See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#using-custom-http-ports.
-
-Overload `HTTP_PORT` in `.env.options.local`:
-
-```dotenv
-HTTP_PORT=8000
-HTTPS_PORT=4443
-HTTP3_PORT=4443
-```
+> See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#using-custom-http-ports.
 
 #### Solution #2 - Find and stop the container using the port
 
@@ -168,7 +140,7 @@ docker stop other-container-php-1
 It is also possible to stop all running containers at once:
 
 ```shell
-make docker_stop_all
+docker stop $(docker ps -a -q)
 ```
 
 #### Solution #3 - Find and stop the service using the port
