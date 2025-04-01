@@ -51,27 +51,6 @@ $(info Warning: The final APP_ENV of that Makefile may be different from the APP
 endif
 
 #
-# DOCKER
-#
-
-COMPOSE_V2 := $(shell docker compose version 2> /dev/null)
-
-ifndef COMPOSE_V2
-$(error Docker Compose CLI plugin is required but is not available on your system)
-endif
-
-COMPOSE = docker compose -p $(PROJECT_NAME)
-
-ifeq ($(FILE_ENV),prod)
-COMPOSE = $(COMPOSE) -f compose.yaml -f compose.prod.yaml
-endif
-
-CONTAINER_PHP = $(COMPOSE) exec php
-PHP           = $(CONTAINER_PHP) php
-COMPOSER      = $(CONTAINER_PHP) composer
-CONSOLE       = $(PHP) bin/console
-
-#
 # BASE
 #
 
@@ -83,9 +62,7 @@ REPOSITORY = git@github.com:dunglas/symfony-docker.git
 # https://github.com/dunglas/symfony-docker/blob/main/docs/options.md
 #
 
-PROJECT_NAME    ?= $(shell basename $(CURDIR))
-SERVER_NAME     ?= $(PROJECT_NAME).localhost
-UP_ENV          ?=
+UP_ENV ?=
 
 ifneq ($(SERVER_NAME),)
 UP_ENV += SERVER_NAME=$(SERVER_NAME)
@@ -93,6 +70,10 @@ endif
 
 ifneq ($(SYMFONY_VERSION),)
 UP_ENV += SYMFONY_VERSION=$(SYMFONY_VERSION)
+endif
+
+ifneq ($(STABILITY),)
+UP_ENV += STABILITY=$(STABILITY)
 endif
 
 ifneq ($(HTTP_PORT),)
@@ -106,6 +87,27 @@ endif
 ifneq ($(HTTP3_PORT),)
 UP_ENV += HTTP3_PORT=$(HTTP3_PORT)
 endif
+
+#
+# DOCKER
+#
+
+COMPOSE_V2 := $(shell docker compose version 2> /dev/null)
+
+ifndef COMPOSE_V2
+$(error Docker Compose CLI plugin is required but is not available on your system)
+endif
+
+COMPOSE = docker compose
+
+ifeq ($(FILE_ENV),prod)
+COMPOSE = $(COMPOSE) -f compose.yaml -f compose.prod.yaml
+endif
+
+CONTAINER_PHP = $(COMPOSE) exec php
+PHP           = $(CONTAINER_PHP) php
+COMPOSER      = $(CONTAINER_PHP) composer
+CONSOLE       = $(PHP) bin/console
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
 
@@ -132,7 +134,7 @@ help: ## Print self-documented Makefile
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
 .PHONY: generate
-generate: clone build upd permissions info ## Generate a fresh Symfony application with the Docker configuration
+generate: clone build upd info ## Generate a fresh Symfony application with the Docker configuration
 
 .PHONY: start
 start: upd info ## Start the project (implies detached mode)
@@ -144,20 +146,18 @@ stop: down ## Stop the project
 clean: stop ## Stop the project, remove all generated files and restore original files
 	@printf "\n$(Y)Clean$(S)"
 	@printf "\n$(Y)-----$(S)\n\n"
-	rm -rf $(CLONE_DIR).github bin config docs frankenphp public src var vendor
-	rm  -f \
-      .dockerignore .editorconfig .env .env.dev .gitattributes \
-      compose.override.yaml compose.prod.yaml compose.yaml \
-      composer.json composer.lock Dockerfile symfony.lock
+	rm -rf bin config frankenphp public src var vendor
+	rm  -f .dockerignore .env .env.dev .gitignore \
+      compose.override.yaml compose.prod.yaml compose.yaml Dockerfile \
+      composer.json composer.lock symfony.lock
 	git restore LICENSE
-	-git restore .gitignore
 
 PHONY: info
 info: ## Show info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
 	@printf "* Run $(Y)make$(S) to see all shorcuts for the most common tasks.\n"
-	@printf "* Go on $(G)https://$(SERVER_NAME)/$(S)\n"
+	@printf "* Go on $(G)https://localhost/$(S)\n"
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
@@ -168,10 +168,6 @@ symfony sf: ## Run Symfony - $ make symfony [p=<params>] - Example: $ make symfo
 .PHONY: cc
 cc: ## Clear the cache
 	$(CONSOLE) cache:clear
-
-.PHONY: cw
-cw: ## Warm up an empty cache
-	$(CONSOLE) cache:warmup --no-debug
 
 .PHONY: about
 about: ## Display information about the current project
@@ -220,13 +216,15 @@ clone: ## Clone Symfony Docker
 	@printf "\n$(Y)--------------------$(S)\n\n"
 ifeq ($(wildcard Dockerfile),)
 	@printf "Repository: $(Y)$(REPOSITORY)$(S)\n"
-	git clone $(REPOSITORY) $(CLONE_DIR)
+	git clone $(REPOSITORY) $(CLONE_DIR) --depth 1
 	@printf "\n$(Y)Extract Symfony Docker at the root$(S)"
 	@printf "\n$(Y)----------------------------------$(S)\n\n"
-	rm -rf $(CLONE_DIR)/.git
-	rm  -f $(CLONE_DIR)/README.md
-	-mv -vf $(CLONE_DIR)/.*
-	-mv -vf $(CLONE_DIR)/* .
+	mv -vf $(CLONE_DIR)/frankenphp .
+	mv -vf $(CLONE_DIR)/.dockerignore .
+	mv -vf $(CLONE_DIR)/compose.override.yaml .
+	mv -vf $(CLONE_DIR)/compose.prod.yaml .
+	mv -vf $(CLONE_DIR)/compose.yaml .
+	mv -vf $(CLONE_DIR)/Dockerfile .
 	rm -rf $(CLONE_DIR)
 	@printf " $(G)✔$(S) Symfony Docker cloned and extracted at the root.\n\n"
 else
@@ -267,12 +265,8 @@ logs: ## the container’s logs
 permissions p: ## Run it if you cannot edit some of the project files on Linux (https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md)
 	@printf "\n$(Y)Permissions (Linux)$(S)"
 	@printf "\n$(Y)-------------------$(S)\n\n"
-ifeq ($(PERMISSIONS),on)
 	$(COMPOSE) run --rm php chown -R $(USER_ID):$(GROUP_ID) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER_ID):$(GROUP_ID)$(S) of the project files.\n"
-else
-	@printf " $(R)⨯$(S) Nothing to do (add PERMISSIONS=on to .env.local to activate permissions command).\n"
-endif
 
 ## — UTILS 🛠️  —————————————————————————————————————————————————————————————————
 
@@ -287,9 +281,7 @@ vars: ## Show variables
 	@printf "  CLONE_DIR : $(CLONE_DIR)\n"
 	@printf "  REPOSITORY: $(REPOSITORY)\n"
 	@printf "$(G)OPTIONS$(S)\n"
-	@printf "  PERMISSIONS : $(PERMISSIONS)\n"
-	@printf "  PROJECT_NAME: $(PROJECT_NAME)\n"
-	@printf "  UP_ENV      : $(UP_ENV)\n"
+	@printf "  UP_ENV    : $(UP_ENV)\n"
 	@printf "$(G)SYMFONY ENVIRONMENT VARIABLES$(S)\n"
 	@printf "  APP_ENV   : $(APP_ENV)\n"
 	@printf "  APP_SECRET: $(APP_SECRET)\n"
