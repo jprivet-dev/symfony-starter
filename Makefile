@@ -16,23 +16,16 @@ USER_ID  = $(shell id -u)
 GROUP_ID = $(shell id -g)
 
 #
-# BASE
-#
-
-CLONE_DIR  = clone
-REPOSITORY = git@github.com:dunglas/symfony-docker.git
-
-#
 # SYMFONY ENVIRONMENT VARIABLES
 #
 
 # Files in order of increasing priority.
-# @see https://github.com/jprivet-dev/makefiles/tree/main/symfony-env-include
-# @see https://www.gnu.org/software/make/manual/html_node/Environment.html
-# @see https://github.com/symfony/recipes/issues/18
-# @see https://symfony.com/doc/current/quick_tour/the_architecture.html#environment-variables
-# @see https://symfony.com/doc/current/configuration.html#listing-environment-variables
-# @see https://symfony.com/doc/current/configuration.html#overriding-environment-values-via-env-local
+# https://github.com/jprivet-dev/makefiles/tree/main/symfony-env-include
+# https://www.gnu.org/software/make/manual/html_node/Environment.html
+# https://github.com/symfony/recipes/issues/18
+# https://symfony.com/doc/current/quick_tour/the_architecture.html#environment-variables
+# https://symfony.com/doc/current/configuration.html#listing-environment-variables
+# https://symfony.com/doc/current/configuration.html#overriding-environment-values-via-env-local
 -include .env
 -include .env.local
 
@@ -51,7 +44,7 @@ else ifeq ($(FILE_ENV),test)
 $(info Warning: Your are in the TEST environment)
 endif
 
-# @see https://symfony.com/doc/current/deployment.html#b-configure-your-environment-variables
+# https://symfony.com/doc/current/deployment.html#b-configure-your-environment-variables
 ifneq ($(wildcard .env.local.php),)
 $(info Warning: It is not possible to use variables from .env.local.php file)
 $(info Warning: The final APP_ENV of that Makefile may be different from the APP_ENV of .env.local.php)
@@ -79,34 +72,39 @@ COMPOSER      = $(CONTAINER_PHP) composer
 CONSOLE       = $(PHP) bin/console
 
 #
-# OPTIONS
+# BASE
 #
 
--include .env.options.local
+CLONE_DIR  = clone
+REPOSITORY = git@github.com:dunglas/symfony-docker.git
 
-# https://symfony.com/releases
-SYMFONY_LTS     = 6.4.*
-SYMFONY_VERSION ?= $(SYMFONY_LTS)
-BUILD_ENV       ?= SYMFONY_VERSION=$(SYMFONY_VERSION)
+#
+# OPTIONS
+# https://github.com/dunglas/symfony-docker/blob/main/docs/options.md
+#
 
 PROJECT_NAME    ?= $(shell basename $(CURDIR))
 SERVER_NAME     ?= $(PROJECT_NAME).localhost
-UP_ENV          ?= SERVER_NAME=$(SERVER_NAME)
+UP_ENV          ?=
 
-ifneq ($(XDEBUG_MODE),)
-UP_ENV = $(UP_ENV) XDEBUG_MODE=$(XDEBUG_MODE)
+ifneq ($(SERVER_NAME),)
+UP_ENV += SERVER_NAME=$(SERVER_NAME)
+endif
+
+ifneq ($(SYMFONY_VERSION),)
+UP_ENV += SYMFONY_VERSION=$(SYMFONY_VERSION)
 endif
 
 ifneq ($(HTTP_PORT),)
-UP_ENV = $(UP_ENV) HTTP_PORT=$(HTTP_PORT)
+UP_ENV += HTTP_PORT=$(HTTP_PORT)
 endif
 
 ifneq ($(HTTPS_PORT),)
-UP_ENV = $(UP_ENV) HTTPS_PORT=$(HTTPS_PORT)
+UP_ENV += HTTPS_PORT=$(HTTPS_PORT)
 endif
 
-ifneq ($(HTTPS_PORT),)
-UP_ENV = $(UP_ENV) HTTPS_PORT=$(HTTPS_PORT)
+ifneq ($(HTTP3_PORT),)
+UP_ENV += HTTP3_PORT=$(HTTP3_PORT)
 endif
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
@@ -134,29 +132,28 @@ help: ## Print self-documented Makefile
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
 .PHONY: generate
-generate: clone build up permissions info ## Generate a fresh Symfony application with the Docker configuration
+generate: clone build upd permissions info ## Generate a fresh Symfony application with the Docker configuration
 
 .PHONY: start
-start: up info ## Start the project (implies detached mode)
+start: upd info ## Start the project (implies detached mode)
 
 .PHONY: stop
 stop: down ## Stop the project
 
-.PHONY: restart
-restart: stop start ## Restart the project
-
 .PHONY: clean
-clean: ## Remove all generated files and restore original files
-	git restore LICENSE
+clean: stop ## Stop the project, remove all generated files and restore original files
+	@printf "\n$(Y)Clean$(S)"
+	@printf "\n$(Y)-----$(S)\n\n"
 	rm -rf $(CLONE_DIR).github bin config docs frankenphp public src var vendor
 	rm  -f \
-      .dockerignore .editorconfig .env .env.dev .gitattributes .gitignore \
+      .dockerignore .editorconfig .env .env.dev .gitattributes \
       compose.override.yaml compose.prod.yaml compose.yaml \
       composer.json composer.lock Dockerfile symfony.lock
+	git restore LICENSE
+	-git restore .gitignore
 
 PHONY: info
 info: ## Show info
-	@$(MAKE) -s vars
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
 	@printf "* Run $(Y)make$(S) to see all shorcuts for the most common tasks.\n"
@@ -178,7 +175,9 @@ cw: ## Warm up an empty cache
 
 .PHONY: about
 about: ## Display information about the current project
-	$(CONSOLE) about
+	@printf "\n$(Y)About$(S)"
+	@printf "\n$(Y)-----$(S)\n\n"
+	-$(CONSOLE) about
 
 .PHONY: dumpenv
 dumpenv: ## Generate .env.local.php (PROD)
@@ -231,25 +230,35 @@ ifeq ($(wildcard Dockerfile),)
 	rm -rf $(CLONE_DIR)
 	@printf " $(G)✔$(S) Symfony Docker cloned and extracted at the root.\n\n"
 else
-	@printf " $(G)✔$(S) Symfony Docker already cloned and extracted at the root.\n\n"
+	@printf " $(R)⨯$(S) Symfony Docker already cloned and extracted at the root.\n\n"
 endif
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: up
-up: ## Start the container - $ make up [p=<params>] - Example: $ make up p=-d (wait for services to be running|healthy - detached mode by default)
+up: ## Start the container - $ make up [p=<params>] - Example: $ make up p=-d (wait for services to be running|healthy)
+	@printf "\n$(Y)Up$(S)"
+	@printf "\n$(Y)--$(S)\n\n"
 	$(UP_ENV) $(COMPOSE) up --remove-orphans --pull always --wait $(p)
+
+.PHONY: upd
+upd: p=-d
+upd: up ## Start the container (detached mode by default)
 
 .PHONY: down
 down: ## Stop the container
+	@printf "\n$(Y)Down$(S)"
+	@printf "\n$(Y)----$(S)\n\n"
 	$(COMPOSE) down --remove-orphans
 
 .PHONY: build
 build: ## Build or rebuild services - $ make build [p=<params>] - Example: $ make build p=--no-cache
-	$(BUILD_ENV) $(COMPOSE) build $(p)
+	@printf "\n$(Y)Build$(S)"
+	@printf "\n$(Y)-----$(S)\n\n"
+	$(COMPOSE) build $(p)
 
 .PHONY: logs
-logs: ## See the container’s logs
+logs: ## the container’s logs
 	$(COMPOSE) logs -f
 
 ## — TROUBLESHOOTING 😵‍️ ———————————————————————————————————————————————————————
@@ -262,7 +271,7 @@ ifeq ($(PERMISSIONS),on)
 	$(COMPOSE) run --rm php chown -R $(USER_ID):$(GROUP_ID) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER_ID):$(GROUP_ID)$(S) of the project files.\n"
 else
-	@printf " $(G)✔$(S) Nothing to do (add PERMISSIONS=on to .env.options.local to activate `permissions` command).\n"
+	@printf " $(R)⨯$(S) Nothing to do (add PERMISSIONS=on to .env.local to activate permissions command).\n"
 endif
 
 ## — UTILS 🛠️  —————————————————————————————————————————————————————————————————
@@ -270,21 +279,20 @@ endif
 .PHONY: vars
 vars: ## Show variables
 	@printf "\n$(Y)Vars$(S)"
-	@printf "\n$(Y)----$(S)\n"
-	@printf "\n$(G)USER$(S)\n"
+	@printf "\n$(Y)----$(S)\n\n"
+	@printf "$(G)USER$(S)\n"
 	@printf "  USER_ID : $(USER_ID)\n"
 	@printf "  GROUP_ID: $(GROUP_ID)\n"
-	@printf "\n$(G)BASE$(S)\n"
+	@printf "$(G)BASE$(S)\n"
 	@printf "  CLONE_DIR : $(CLONE_DIR)\n"
 	@printf "  REPOSITORY: $(REPOSITORY)\n"
-	@printf "\n$(G)OPTIONS$(S)\n"
+	@printf "$(G)OPTIONS$(S)\n"
 	@printf "  PERMISSIONS : $(PERMISSIONS)\n"
 	@printf "  PROJECT_NAME: $(PROJECT_NAME)\n"
-	@printf "  BUILD_ENV   : $(BUILD_ENV)\n"
 	@printf "  UP_ENV      : $(UP_ENV)\n"
-	@printf "\n$(G)SYMFONY ENVIRONMENT VARIABLES$(S)\n"
+	@printf "$(G)SYMFONY ENVIRONMENT VARIABLES$(S)\n"
 	@printf "  APP_ENV   : $(APP_ENV)\n"
 	@printf "  APP_SECRET: $(APP_SECRET)\n"
-	@printf "\n$(G)DOCKER$(S)\n"
+	@printf "$(G)DOCKER$(S)\n"
 	@printf "  COMPOSE_V2: $(COMPOSE_V2)\n"
 	@printf "  COMPOSE   : $(COMPOSE)\n"
