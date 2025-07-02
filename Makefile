@@ -124,7 +124,7 @@ help: ## Print self-documented Makefile
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
 .PHONY: start
-start: upd info ## Start the project and show info (upd & info alias)
+start: up_detached info ## Start the project and show info (up_detached & info alias)
 
 .PHONY: stop
 stop: down ## Stop the project (down alias)
@@ -139,7 +139,7 @@ info: ## Show info
 ##
 
 .PHONY: generate
-generate: clone build upd info ## Generate a fresh Symfony application with the dunglas/symfony-docker configuration
+generate: clone build up_detached info ## Generate a fresh Symfony application with the dunglas/symfony-docker configuration
 
 PHONY: clone
 clone: ## Clone and extract dunglas/symfony-docker at the root
@@ -232,9 +232,9 @@ endif
 up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans --pull always $(ARG)
 
-.PHONY: upd
-upd: ARG=--wait -d
-upd: up ## Start the containers (wait for services to be running|healthy - detached mode)
+.PHONY: up_detached
+up_detached: ARG=--wait -d
+up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
 
 .PHONY: down
 down: ## Stop the containers
