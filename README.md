@@ -59,9 +59,51 @@ make stop  # Stop the project (down alias)
 
 > Run `make` to see all shorcuts for the most common tasks.
 
+## Structure
+
+Before `make generate`:
+
+```
+./
+├── LICENSE
+├── Makefile
+└── README.md
+```
+
+After `make generate`:
+
+```
+./
+├──*bin/
+├──*config/
+├──*docs/
+├──*frankenphp/
+├──*public/
+├──*src/
+├──*var/
+├──*vendor/
+├──*compose.override.yaml
+├──*compose.prod.yaml
+├──*composer.json
+├──*composer.lock
+├──*compose.yaml
+├──*Dockerfile
+├── LICENSE
+├── Makefile
+├── README.md
+└──*symfony.lock 
+```
+
+(*) Fresh Symfony application with a Docker configuration
+
+Show structure:
+
+```shell
+tree -A -L 1 -F --dirsfirst
+```
+
 ## Docs
 
-- [Structure](docs/structure.md)
 - [Save the generated Symfony application](docs/save.md)
 - [Makefile: use Docker build options](docs/options.md)
 - [Troubleshooting](docs%2Ftroubleshooting.md)
