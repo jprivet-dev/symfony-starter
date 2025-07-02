@@ -45,15 +45,15 @@ git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter &
 ```shell
 make clear_skeleton
 
-make upd
+make up_detached
 # or
-SYMFONY_VERSION=6.4.* make upd
+SYMFONY_VERSION=6.4.* make up_detached
 ```
 
 ### Then with Makefile...
 
 ```shell
-make start # Start the project and show info (upd & info alias)
+make start # Start the project and show info (up_detached & info alias)
 make stop  # Stop the project (down alias)
 ```
 
