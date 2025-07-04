@@ -232,7 +232,6 @@ endif
 up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans --pull always $(ARG)
 
-.PHONY: up_detached
 up_detached: ARG=--wait -d
 up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
 
