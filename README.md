@@ -10,31 +10,33 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
 
 ## Installation
 
-* **1 - Clone this repository:**
+### 1 - Clone this repository
 
-  ```shell
-  git clone git@github.com:jprivet-dev/symfony-starter.git
-  cd symfony-starter
-  ```
+```shell
+git clone git@github.com:jprivet-dev/symfony-starter.git
+cd symfony-starter
+```
 
-* **2 - Generate a fresh Symfony application at the root:**
+### 2 - Generate a fresh Symfony application at the root
 
-  ```shell
-  make generate
-  # or
-  SYMFONY_VERSION=6.4.* make generate
-  ```
-  This will:
-  * Clone `dunglas/symfony-docker` configuration files and extract them to your project root.
-  * Build the necessary Docker images and start the containers.
-  * Generate a fresh Symfony application inside the container.
+```shell
+make generate
+# or
+SYMFONY_VERSION=6.4.* make generate
+```
+
+This will:
+
+* Clone `dunglas/symfony-docker` configuration files and extract them to your project root.
+* Build the necessary Docker images and start the containers.
+* Generate a fresh Symfony application inside the container.
 
 
-* **3 - Access your application:**
+### 3 - Access your application
 
   Open `https://localhost/` in your browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
 
-**All in one command:**
+### All in one command
 
 ```shell
 git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate
@@ -45,19 +47,25 @@ git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter &
 * **1 - Copy this `Makefile` at the root** of your existing project (or a new empty directory).
 * **2 - Follow the same "Installation \> Step 2 & 3"** instructions.
 
-## Clear & Regenerate
+## Cleanup commands
 
-To remove your existing Symfony application files and generate a new one (e.g., to change the Symfony version):
+
+### **`make clear_skeleton`**
+
+Removes all Symfony application files (e.g., `bin/`, `config/`, `src/`, `vendor/`, `composer.json`, `.env`, etc.). This is useful if you want to **regenerate the Symfony app** from scratch, possibly with a different Symfony version.
 
 ```shell
 make clear_skeleton
 
+# Then regenerate the Symfony app:
 make generate
 # Or with a specific Symfony version:
 SYMFONY_VERSION=6.4.* make generate
 ```
 
-*Note: `make clear_skeleton` only removes the Symfony application files, not the Docker configuration.*
+### `make clear_docker`
+
+Stops all Docker containers and **removes all Docker-related configuration files** copied from `dunglas/symfony-docker` (e.g., `Dockerfile`, `compose.yaml`, `frankenphp/`). This effectively resets your project's Docker setup. Use this if you want to start over with the Docker configuration itself.
 
 ## Daily usage
 
