@@ -17,23 +17,29 @@ GROUP_ID = $(shell id -g)
 USER     = $(USER_ID):$(GROUP_ID)
 
 #
+# OS DETECTION
+#
+
+UNAME_S := $(shell uname -s)
+
+#
 # SYMFONY ENVIRONMENT VARIABLES
 #
 
-# Files in order of increasing priority.
-# See https://github.com/jprivet-dev/makefiles/tree/main/symfony-env-include
-# See https://www.gnu.org/software/make/manual/html_node/Environment.html
-# See https://github.com/symfony/recipes/issues/18
-# See https://symfony.com/doc/current/quick_tour/the_architecture.html#environment-variables
-# See https://symfony.com/doc/current/configuration.html#listing-environment-variables
-# See https://symfony.com/doc/current/configuration.html#overriding-environment-values-via-env-local
+# Files are loaded in order of increasing priority. For more details, refer to:
+# - https://github.com/jprivet-dev/makefiles/tree/main/symfony-env-include
+# - https://www.gnu.org/software/make/manual/html_node/Environment.html
+# - https://github.com/symfony/recipes/issues/18
+# - https://symfony.com/doc/current/quick_tour/the_architecture.html#environment-variables
+# - https://symfony.com/doc/current/configuration.html#listing-environment-variables
+# - https://symfony.com/doc/current/configuration.html#overriding-environment-values-via-env-local
 -include .env
 -include .env.local
 -include .env.$(APP_ENV)
 -include .env.$(APP_ENV).local
 
 ifeq ($(APP_ENV),prod)
-$(info Warning: Your are in the PROD environment)
+$(info Warning: You are in the PROD environment)
 endif
 
 # See https://symfony.com/doc/current/deployment.html#b-configure-your-environment-variables
@@ -42,14 +48,15 @@ $(info Warning: It is not possible to use variables from .env.local.php file)
 endif
 
 #
-# BASE
+# INSTALLATION
+# These variables and commands are for initial setup and can be removed after saving the project.
 #
 
 REPOSITORY = git@github.com:dunglas/symfony-docker.git
 CLONE_DIR  = clone
 
 #
-# OPTIONS
+# DOCKER OPTIONS
 # See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md
 #
 
@@ -84,7 +91,7 @@ UP_ENV += HTTP3_PORT=$(HTTP3_PORT)
 endif
 
 #
-# DOCKER
+# DOCKER COMMANDS
 #
 
 COMPOSE_V2 := $(shell docker compose version 2> /dev/null)
@@ -112,7 +119,7 @@ CONSOLE       = $(PHP) bin/console
 
 .DEFAULT_GOAL = help
 .PHONY: help
-help: ## Print self-documented Makefile
+help: ## Display this help message with available commands
 	@grep -E '(^[.a-zA-Z_-]+[^:]+:.*##.*?$$)|(^#{2})' Makefile | awk 'BEGIN {FS = "## "}; { \
 		split($$1, line, ":"); targets=line[1]; description=$$2; \
 		if (targets == "##") { printf "\033[33m%s\n", ""; } \
@@ -129,8 +136,8 @@ start: up_detached info ## Start the project and show info (up_detached & info a
 .PHONY: stop
 stop: down ## Stop the project (down alias)
 
-PHONY: info
-info: ## Show info
+.PHONY: info
+info: ## Show project info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
 	@printf "* Go on $(G)https://localhost/$(S)\n"
@@ -138,18 +145,20 @@ info: ## Show info
 
 ##
 
+# These targets are for initial setup and can be removed after saving the project.
 .PHONY: generate
-generate: clone build up_detached info ## Generate a fresh Symfony application with the dunglas/symfony-docker configuration
+generate: clone build up_detached permissions info ## Generate a fresh Symfony application with Docker configuration
 
-PHONY: clone
-clone: ## Clone and extract dunglas/symfony-docker at the root
-	@printf "\n$(Y)Clone dunglas/symfony-docker$(S)"
-	@printf "\n$(Y)----------------------------$(S)\n\n"
+# These targets are for initial setup and can be removed after saving the project.
+.PHONY: clone
+clone: ## Clone and extract 'dunglas/symfony-docker' configuration files at the root
+	@printf "\n$(Y)Clone 'dunglas/symfony-docker'$(S)"
+	@printf "\n$(Y)------------------------------$(S)\n\n"
 ifeq ($(wildcard Dockerfile),)
 	@printf "Repository: $(Y)$(REPOSITORY)$(S)\n"
 	git clone $(REPOSITORY) $(CLONE_DIR) --depth 1
-	@printf "\n$(Y)Extract dunglas/symfony-docker at the root$(S)"
-	@printf "\n$(Y)------------------------------------------$(S)\n\n"
+	@printf "\n$(Y)Extract 'dunglas/symfony-docker' at the root$(S)"
+	@printf "\n$(Y)--------------------------------------------$(S)\n\n"
 	mv -vf $(CLONE_DIR)/frankenphp .
 	mv -vf $(CLONE_DIR)/.dockerignore .
 	mv -vf $(CLONE_DIR)/compose.override.yaml .
@@ -157,18 +166,18 @@ ifeq ($(wildcard Dockerfile),)
 	mv -vf $(CLONE_DIR)/compose.yaml .
 	mv -vf $(CLONE_DIR)/Dockerfile .
 	rm -rf $(CLONE_DIR)
-	@printf " $(G)✔$(S) dunglas/symfony-docker cloned and extracted at the root.\n\n"
+	@printf " $(G)✔$(S) 'dunglas/symfony-docker' cloned and extracted at the root.\n\n"
 else
-	@printf " $(R)⨯$(S) dunglas/symfony-docker already cloned and extracted at the root.\n\n"
+	@printf " $(R)⨯$(S) 'dunglas/symfony-docker' configuration already present at the root.\n\n"
 endif
 
-clear_docker: down ## Remove all dunglas/symfony-docker files
-	@printf "\n$(Y)Remove all dunglas/symfony-docker files$(S)"
-	@printf "\n$(Y)---------------------------------------$(S)\n\n"
+clear_docker: down ## Remove all 'dunglas/symfony-docker' configuration files
+	@printf "\n$(Y)Remove all 'dunglas/symfony-docker' files$(S)"
+	@printf "\n$(Y)-----------------------------------------$(S)\n\n"
 	rm -rf frankenphp
 	rm  -f .dockerignore compose.override.yaml compose.prod.yaml compose.yaml Dockerfile
 
-clear_skeleton: down ## Remove all symfony/skeleton files
+clear_skeleton: down ## Remove all Symfony application files (symfony/skeleton)
 	@printf "\n$(Y)Remove all symfony/skeleton files$(S)"
 	@printf "\n$(Y)---------------------------------$(S)\n\n"
 	rm -rf bin config public src var vendor
@@ -178,48 +187,51 @@ clear_skeleton: down ## Remove all symfony/skeleton files
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
 .PHONY: symfony
-symfony sf: ## Run Symfony - $ make symfony [ARG=<arguments>] - Example: $ make symfony ARG=cache:clear
+symfony sf: ## Run Symfony console command - Usage: make symfony ARG="cache:clear"
 	$(CONSOLE) $(ARG)
 
 .PHONY: cc
-cc: ## Clear the cache
+cc: ## Clear the Symfony cache
 	$(CONSOLE) cache:clear
 
 .PHONY: about
-about: ## Display information about the current project
+about: ## Display information about the current Symfony project
 	$(CONSOLE) about
 
 .PHONY: dotenv
-dotenv: ## Lists all dotenv files with variables and values
+dotenv: ## Lists all .env files with variables and values
 	$(CONSOLE) debug:dotenv
 
 .PHONY: dumpenv
-dumpenv: ## Generate .env.local.php
+dumpenv: ## Generate .env.local.php for production
 	$(COMPOSER) dump-env prod
 
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
 
 .PHONY: php
-php: ## Run PHP - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
+php: ## Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
 	$(PHP) $(ARG)
 
-php_sh: ## Connect to the PHP container
+.PHONY: php_sh
+php_sh: ## Connect to the PHP container shell
 	$(CONTAINER_PHP) sh
 
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
 .PHONY: composer
-composer: ## Run composer - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
+composer: ## Run composer command - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
 	$(COMPOSER) $(ARG)
 
-composer_install: ## Install packages using composer
+.PHONY: composer_install
+composer_install: ## Install Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
 	$(COMPOSER) install
 endif
 
-composer_update: ## Update packages using composer
+.PHONY: composer_update
+composer_update: ## Update Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
@@ -232,39 +244,45 @@ endif
 up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans --pull always $(ARG)
 
+.PHONY: up_detached
 up_detached: ARG=--wait -d
 up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
 
 .PHONY: down
-down: ## Stop the containers
+down: ## Stop and remove the containers
 	$(COMPOSE) down --remove-orphans
 
 .PHONY: build
-build: ## Build or rebuild services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
+build: ## Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
 	$(COMPOSE) build $(ARG)
 
 .PHONY: logs
-logs: ## the container’s logs
+logs: ## Display container logs
 	$(COMPOSE) logs -f
 
 .PHONY: config
-config: ## Parse, resolve and render compose file in canonical format
+config: ## Parse, resolve, and render compose file in canonical format
 	$(COMPOSE) config
 
 ## — TROUBLESHOOTING 😵‍️ ———————————————————————————————————————————————————————
 
 .PHONY: permissions
-permissions p: ## Run it if you cannot edit some of the project files on Linux
+permissions p: ## Fix file permissions (primarily for Linux hosts)
+ifeq ($(UNAME_S),Linux)
 	$(COMPOSE) run --rm php chown -R $(USER) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER)$(S) of the project files.\n"
+else
+	@printf " $(Y)Info:$(S) 'make permissions' is typically not needed on $(UNAME_S).\n"
+endif
 
-## — UTILS 🛠️  —————————————————————————————————————————————————————————————————
+## — UTILITIES 🛠️  ————————————-————————————————————————————————————————————————
 
 .PHONY: vars
-vars: ## Show some Makefile variables
+vars: ## Show key Makefile variables
 	@printf "\n$(Y)Vars$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
 	@printf "USER      : $(USER)\n"
+	@printf "UNAME_S   : $(UNAME_S)\n"
 	@printf "APP_ENV   : $(APP_ENV)\n"
 	@printf "REPOSITORY: $(REPOSITORY)\n"
 	@printf "CLONE_DIR : $(CLONE_DIR)\n"
