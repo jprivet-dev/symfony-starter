@@ -62,33 +62,19 @@ CLONE_DIR  = clone
 
 UP_ENV ?=
 
-ifneq ($(XDEBUG_MODE),)
-UP_ENV += XDEBUG_MODE=$(XDEBUG_MODE)
-endif
+define append
+  ifneq ($($1),)
+    UP_ENV += $1=$($1)
+  endif
+endef
 
-ifneq ($(SERVER_NAME),)
-UP_ENV += SERVER_NAME=$(SERVER_NAME)
-endif
-
-ifneq ($(SYMFONY_VERSION),)
-UP_ENV += SYMFONY_VERSION=$(SYMFONY_VERSION)
-endif
-
-ifneq ($(STABILITY),)
-UP_ENV += STABILITY=$(STABILITY)
-endif
-
-ifneq ($(HTTP_PORT),)
-UP_ENV += HTTP_PORT=$(HTTP_PORT)
-endif
-
-ifneq ($(HTTPS_PORT),)
-UP_ENV += HTTPS_PORT=$(HTTPS_PORT)
-endif
-
-ifneq ($(HTTP3_PORT),)
-UP_ENV += HTTP3_PORT=$(HTTP3_PORT)
-endif
+$(eval $(call append,XDEBUG_MODE))
+$(eval $(call append,SERVER_NAME))
+$(eval $(call append,SYMFONY_VERSION))
+$(eval $(call append,STABILITY))
+$(eval $(call append,HTTP_PORT))
+$(eval $(call append,HTTPS_PORT))
+$(eval $(call append,HTTP3_PORT))
 
 #
 # DOCKER COMMANDS
@@ -212,7 +198,6 @@ dumpenv: ## Generate .env.local.php for production
 php: ## Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
 	$(PHP) $(ARG)
 
-.PHONY: php_sh
 php_sh: ## Connect to the PHP container shell
 	$(CONTAINER_PHP) sh
 
@@ -222,7 +207,6 @@ php_sh: ## Connect to the PHP container shell
 composer: ## Run composer command - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
 	$(COMPOSER) $(ARG)
 
-.PHONY: composer_install
 composer_install: ## Install Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
@@ -230,7 +214,6 @@ else
 	$(COMPOSER) install
 endif
 
-.PHONY: composer_update
 composer_update: ## Update Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
@@ -244,7 +227,6 @@ endif
 up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans --pull always $(ARG)
 
-.PHONY: up_detached
 up_detached: ARG=--wait -d
 up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
 
