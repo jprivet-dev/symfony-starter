@@ -101,8 +101,6 @@ sudo service apache2 stop # For Apache on systems using 'service' command
 # sudo systemctl stop apache2 # For Apache on systems using 'systemctl'
 ```
 
------
-
 ## Editing permissions on Linux
 
 When working on Linux, you might encounter permission errors after the initial project setup, preventing you from editing certain files. This usually happens because files created by the Docker container are owned by the `root` user (or a different user ID) within the container, not your host user.
@@ -116,3 +114,19 @@ make permissions
 This command will change the ownership of the project files to your current host user, allowing you to edit them freely.
 
 > See https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md for more details on `dunglas/symfony-docker` troubleshooting.
+
+## "Git is not recognizing my project as a repository" after `make generate`
+
+On Linux systems, you might encounter an issue where Git no longer recognizes your project as a repository, or you see permission errors after running `make generate`. This usually happens because files created inside the Docker containers (like your Symfony application files installed by Composer) are owned by a different user within the container (often `root`). When these files are written to your local filesystem via Docker volumes, they retain these permissions, which can prevent your host user (and thus Git) from properly accessing or modifying them.
+
+This specific problem is solved by the `make permissions` command. This command ensures that all project files are owned by your current user on the host system, allowing Git and other tools to operate without issues.
+
+**Solution:**
+
+If you face this problem, simply run:
+
+```shell
+make permissions
+```
+
+This command automatically adjusts the file ownership to match your host user, resolving any Git-related permission issues. Note that this command is conditional and only executes the ownership change on Linux environments where it's typically needed.
