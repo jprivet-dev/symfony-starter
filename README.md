@@ -2,7 +2,7 @@
 
 ## Presentation
 
-This project provides a streamlined way to quickly set up a new Symfony application with Docker, leveraging the [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) configuration.
+**Generate a fully Dockerized Symfony application in less than a minute!** This project provides a streamlined way to quickly set up a new Symfony application with Docker, leveraging the [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) configuration.
 
 ## Prerequisites
 
