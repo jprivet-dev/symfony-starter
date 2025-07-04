@@ -76,6 +76,12 @@ $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
 
+# Will be ":PORT" if HTTPS_PORT is defined and not 443, otherwise empty.
+HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(HTTPS_PORT)))
+
+# Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
+HTTP_PORT_SUFFIX = $(if $(HTTP_PORT),:$(HTTP_PORT))
+
 #
 # DOCKER COMMANDS
 #
@@ -123,10 +129,12 @@ start: up_detached info ## Start the project and show info (up_detached & info a
 stop: down ## Stop the project (down alias)
 
 .PHONY: info
-info: ## Show project info
+info: ## Show project access info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-	@printf "* Go on $(G)https://localhost/$(S)\n"
+	@printf "* Your application is available at:\n"
+	@printf "  - $(G)https://localhost$(HTTPS_PORT_SUFFIX)/$(S)\n"
+	@printf "  - $(G)http://localhost$(HTTP_PORT_SUFFIX)/$(S)\n"
 	@printf "\n"
 
 ##
