@@ -10,27 +10,44 @@ You can use the same variables from https://github.com/dunglas/symfony-docker/bl
 
 This method allows you to set variables directly when running a `make` command.
 
+* Example for a custom Symfony version:
+
 ```shell
-# Example for a specific PHP version: PHP_VERSION=8.3 make build
 SYMFONY_VERSION=6.4.* make generate
+````
+
+* Example for custom ports:
+
+```shell
+HTTP_PORT=8080 HTTPS_PORT=8443 make generate
+# Or if the app is already generated:
+HTTP_PORT=8080 HTTPS_PORT=8443 make start
 ````
 
 ## Method 2 - Using `.env.local`
 
 For more permanent settings, you can define these variables in your local environment file (`.env.local`).
 
+* Example for a custom Symfony version (only effective during `make generate`):
+
 ```dotenv
 # .env.local
-
 SYMFONY_VERSION=6.4.*
-
-# Example for custom ports:
-# HTTP_PORT=8000
-# HTTPS_PORT=4443
 ```
 
-Then, simply run your `make` command:
+* Example for custom ports:
+
+
+```dotenv
+# .env.local
+HTTP_PORT=8080
+HTTPS_PORT=8443
+```
+
+* Then, simply run your `make` command:
 
 ```shell
 make generate
+# Or if the app is already generated:
+make start
 ```
