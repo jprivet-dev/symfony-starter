@@ -2,7 +2,7 @@
 
 ## Presentation
 
-Generate a fresh Symfony application with the [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) configuration.
+This project provides a streamlined way to quickly set up a new Symfony application with Docker, leveraging the [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) configuration.
 
 ## Prerequisites
 
@@ -10,47 +10,56 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
 
 ## Installation
 
-### 1 - Clone the project
+* **1 - Clone this repository:**
 
-```shell
-git clone git@github.com:jprivet-dev/symfony-starter.git
-cd symfony-starter
-```
+  ```shell
+  git clone git@github.com:jprivet-dev/symfony-starter.git
+  cd symfony-starter
+  ```
 
-### 2 - Generate a fresh Symfony application at the root
+* **2 - Generate a fresh Symfony application at the root:**
 
-```shell
-make generate
-# or
-SYMFONY_VERSION=6.4.* make generate
-```
+  ```shell
+  make generate
+  # or
+  SYMFONY_VERSION=6.4.* make generate
+  ```
+  This will:
+  * Clone `dunglas/symfony-docker` configuration files and extract them to your project root.
+  * Build the necessary Docker images and start the containers.
+  * Generate a fresh Symfony application inside the container.
 
-> what does the `generate` command do?
-> - That clone `git@github.com:dunglas/symfony-docker.git` and extract files at the root.
-> - Build fresh images and start the containers.
-> - Generate a fresh Symfony application at the root.
 
-### 3 - Go on the app
+* **3 - Access your application:**
 
-Open https://localhost/ and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
+  Open `https://localhost/` in your browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
 
-### All in one
+**All in one command:**
 
 ```shell
 git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate
 ```
 
-### Clear all symfony/skeleton files and generate a project again
+## Generate an app in another existing project
+
+* **1 - Copy this `Makefile` at the root** of your existing project (or a new empty directory).
+* **2 - Follow the same "Installation \> Step 2 & 3"** instructions.
+
+## Clear & Regenerate
+
+To remove your existing Symfony application files and generate a new one (e.g., to change the Symfony version):
 
 ```shell
 make clear_skeleton
 
-make up_detached
-# or
-SYMFONY_VERSION=6.4.* make up_detached
+make generate
+# Or with a specific Symfony version:
+SYMFONY_VERSION=6.4.* make generate
 ```
 
-### Then with Makefile...
+*Note: `make clear_skeleton` only removes the Symfony application files, not the Docker configuration.*
+
+## Daily usage
 
 ```shell
 make start # Start the project and show info (up_detached & info alias)
@@ -59,44 +68,35 @@ make stop  # Stop the project (down alias)
 
 > Run `make` to see all shorcuts for the most common tasks.
 
-## Structure
+## Project structure
 
-Before `make generate`:
-
-```
-./
-├── LICENSE
-├── Makefile
-└── README.md
-```
-
-After `make generate`:
+After `make generate`, your project structure will look like this:
 
 ```
 ./
-├──*bin/
-├──*config/
-├──*docs/
-├──*frankenphp/
-├──*public/
-├──*src/
-├──*var/
-├──*vendor/
-├──*compose.override.yaml
-├──*compose.prod.yaml
-├──*composer.json
-├──*composer.lock
-├──*compose.yaml
-├──*Dockerfile
+├── bin/                 (*)
+├── config/              (*)
+├── docs/
+├── frankenphp/          (*)
+├── public/              (*)
+├── src/                 (*)
+├── var/                 (*)
+├── vendor/              (*)
+├── compose.override.yaml(*)
+├── compose.prod.yaml    (*)
+├── composer.json        (*)
+├── composer.lock        (*)
+├── compose.yaml         (*)
+├── Dockerfile           (*)
 ├── LICENSE
 ├── Makefile
 ├── README.md
-└──*symfony.lock 
+└── symfony.lock         (*)
 ```
 
-(*) Fresh Symfony application with a Docker configuration
+**(\*)** Indicates files/directories generated or copied from `dunglas/symfony-docker` or `symfony/skeleton`.
 
-Show structure:
+To visualize your structure (requires `tree` command):
 
 ```shell
 tree -A -L 1 -F --dirsfirst
@@ -104,15 +104,15 @@ tree -A -L 1 -F --dirsfirst
 
 ## Docs
 
-- [Save the generated Symfony application](docs/save.md)
-- [Makefile: use Docker build options](docs/options.md)
-- [Troubleshooting](docs%2Ftroubleshooting.md)
+* [Save the generated Symfony application](docs/save.md)
+* [Makefile: use Docker build options](docs/options.md)
+* [Troubleshooting](docs%2Ftroubleshooting.md)
 
 ## Main resources
 
-- https://symfony.com/doc/current/setup/docker.html
-- https://github.com/dunglas/symfony-docker
-- https://github.com/jprivet-dev/symfony-docker
+* https://symfony.com/doc/current/setup/docker.html
+* https://github.com/dunglas/symfony-docker
+* https://github.com/jprivet-dev/symfony-docker
 
 ## Comments, suggestions?
 
