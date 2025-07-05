@@ -2,7 +2,7 @@
 
 ⬅️ [README](../README.md)
 
-After successfully generating your Symfony application for the first time, it's crucial to "**save**" its state. This prevents it from being regenerated on subsequent container starts and officially makes it part of your project's codebase. This document guides you through the necessary steps.
+After successfully generating your Symfony application for the first time, it's crucial to "**save**" its state. This prevents regeneration on subsequent container starts and officially integrates the application into your codebase.
 
 ## 1 - Remove the installation block from `frankenphp/docker-entrypoint.sh`
 
@@ -22,7 +22,7 @@ Locate and **delete the following lines** from `frankenphp/docker-entrypoint.sh`
 
 ### 2.1 - Remove the `INSTALLATION` block
 
-**Delete the entire `INSTALLATION`** block and its associated variables :
+**Delete the entire `INSTALLATION` block** and its associated variables:
 
 * `SYMFONY_LTS_VERSION`
 * `REPOSITORY`
@@ -30,7 +30,7 @@ Locate and **delete the following lines** from `frankenphp/docker-entrypoint.sh`
 
 ### 2.2 - Remove "installation" targets
 
-The following commands are specific to the one-time project creation process and are no longer needed once your application is set up. **Locate and remove these**:
+These commands are specific to the one-time project creation process. **Locate and remove them**:
 
 * `generate`
 * `generate@lts`
@@ -47,7 +47,7 @@ git add . && git commit -m "Fresh Symfony application saved and setup commands r
 
 ## 4 - Verify the changes (optional)
 
-Restart your containers. The application should start quickly without attempting to re-create the project:
+Restart your containers. The application should start quickly:
 
 ```shell
 make stop
