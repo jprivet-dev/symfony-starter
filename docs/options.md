@@ -13,13 +13,14 @@ This method allows you to set variables directly when running a `make` command.
 * Example for a custom Symfony version:
 
 ```shell
-SYMFONY_VERSION=6.4.* make generate
+SYMFONY_VERSION=6.* make generate
 ````
 
 * Example for custom ports:
 
 ```shell
 HTTP_PORT=8080 HTTPS_PORT=8443 make generate
+
 # Or if the app is already generated:
 HTTP_PORT=8080 HTTPS_PORT=8443 make start
 ````
@@ -48,6 +49,7 @@ HTTPS_PORT=8443
 
 ```shell
 make generate
+
 # Or if the app is already generated:
 make start
 ```

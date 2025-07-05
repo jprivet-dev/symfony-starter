@@ -2,7 +2,9 @@
 
 ## Presentation
 
-**Generate a fully Dockerized Symfony application in less than a minute!** This project provides a streamlined way to quickly set up a new Symfony application with Docker, leveraging the [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) configuration.
+**Generate a fully Dockerized Symfony application in less than a minute!**
+
+This project provides a streamlined way to quickly set up a new Symfony application with Docker, leveraging the [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) configuration.
 
 ## Prerequisites
 
@@ -20,9 +22,14 @@ cd symfony-starter
 ### 2 - Generate a fresh Symfony application at the root
 
 ```shell
+# Stable Release
 make generate
-# or
-SYMFONY_VERSION=6.4.* make generate
+
+# Long-Term Support Release (LTS)
+make generate@lts
+
+# Specific Version
+SYMFONY_VERSION=6.4.3 make generate
 ```
 
 This will:
@@ -59,8 +66,6 @@ make clear_skeleton
 
 # Then regenerate the Symfony app:
 make generate
-# Or with a specific Symfony version:
-SYMFONY_VERSION=6.4.* make generate
 ```
 
 ### `make clear_docker`
