@@ -172,7 +172,13 @@ else
 	@printf " $(R)⨯$(S) 'dunglas/symfony-docker' configuration already present at the root.\n\n"
 endif
 
-clear_all: clear_skeleton clear_docker ## Execute clear_skeleton & clear_docker commands
+clear_all: clear_docker clear_skeleton ## Execute clear_skeleton & clear_docker commands
+
+clear_docker: down ## Remove all 'dunglas/symfony-docker' configuration files
+	@printf "\n$(Y)Remove all 'dunglas/symfony-docker' files$(S)"
+	@printf "\n$(Y)-----------------------------------------$(S)\n\n"
+	rm -rf frankenphp
+	rm  -f .dockerignore compose.override.yaml compose.prod.yaml compose.yaml Dockerfile
 
 clear_skeleton: down ## Remove all Symfony application files (symfony/skeleton)
 	@printf "\n$(Y)Remove all symfony/skeleton files$(S)"
@@ -180,12 +186,6 @@ clear_skeleton: down ## Remove all Symfony application files (symfony/skeleton)
 	rm -rf bin config public src var vendor
 	rm  -f .env .env.dev .gitignore composer.json composer.lock symfony.lock
 	git restore LICENSE
-
-clear_docker: down ## Remove all 'dunglas/symfony-docker' configuration files
-	@printf "\n$(Y)Remove all 'dunglas/symfony-docker' files$(S)"
-	@printf "\n$(Y)-----------------------------------------$(S)\n\n"
-	rm -rf frankenphp
-	rm  -f .dockerignore compose.override.yaml compose.prod.yaml compose.yaml Dockerfile
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
