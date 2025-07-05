@@ -165,12 +165,7 @@ ifeq ($(wildcard Dockerfile),)
 	git clone $(REPOSITORY) $(CLONE_DIR) --depth 1
 	@printf "\n$(Y)Extract 'dunglas/symfony-docker' at the root$(S)"
 	@printf "\n$(Y)--------------------------------------------$(S)\n\n"
-	mv -vf $(CLONE_DIR)/frankenphp .
-	mv -vf $(CLONE_DIR)/.dockerignore .
-	mv -vf $(CLONE_DIR)/compose.override.yaml .
-	mv -vf $(CLONE_DIR)/compose.prod.yaml .
-	mv -vf $(CLONE_DIR)/compose.yaml .
-	mv -vf $(CLONE_DIR)/Dockerfile .
+	rsync -av --exclude =".editorconfig" --exclude =".git" --exclude =".gitattributes" --exclude =".github" --exclude ="docs" $(CLONE_DIR)/ .
 	rm -rf $(CLONE_DIR)
 	@printf " $(G)✔$(S) 'dunglas/symfony-docker' cloned and extracted at the root.\n\n"
 else
