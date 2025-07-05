@@ -23,6 +23,13 @@ USER     = $(USER_ID):$(GROUP_ID)
 UNAME_S := $(shell uname -s)
 
 #
+# SYMFONY
+#
+
+# End of bug fixes: November 2026 - See https://symfony.com/releases
+SYMFONY_LTS_VERSION=6.*
+
+#
 # SYMFONY ENVIRONMENT VARIABLES
 #
 
@@ -141,7 +148,12 @@ info: ## Show project access info
 
 # These targets are for initial setup and can be removed after saving the project.
 .PHONY: generate
-generate: clone build up_detached permissions info ## Generate a fresh Symfony application with Docker configuration
+generate: clone build up_detached permissions info ## Generate a fresh Symfony application with Docker configuration (stable release)
+
+# These targets are for initial setup and can be removed after saving the project.
+.PHONY: generate@lts
+generate@lts: ## Generate a fresh Symfony application with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) generate
 
 # These targets are for initial setup and can be removed after saving the project.
 .PHONY: clone
