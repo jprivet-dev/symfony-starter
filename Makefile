@@ -165,7 +165,7 @@ ifeq ($(wildcard Dockerfile),)
 	git clone $(REPOSITORY) $(CLONE_DIR) --depth 1
 	@printf "\n$(Y)Extract 'dunglas/symfony-docker' at the root$(S)"
 	@printf "\n$(Y)--------------------------------------------$(S)\n\n"
-	rsync -av --exclude =".editorconfig" --exclude =".git" --exclude =".gitattributes" --exclude =".github" --exclude ="docs" $(CLONE_DIR)/ .
+	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
 	rm -rf $(CLONE_DIR)
 	@printf " $(G)✔$(S) 'dunglas/symfony-docker' cloned and extracted at the root.\n\n"
 else
@@ -249,7 +249,7 @@ up_detached: up ## Start the containers (wait for services to be running|healthy
 
 .PHONY: down
 down: ## Stop and remove the containers
-	$(COMPOSE) down --remove-orphans
+	-$(COMPOSE) down --remove-orphans
 
 .PHONY: build
 build: ## Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
