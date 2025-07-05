@@ -117,7 +117,7 @@ tree -A -L 1 -F --dirsfirst
 
 ## Docs
 
-* [Save the generated Symfony application](docs/save.md)
+* [Save your generated Symfony application](docs/save.md)
 * [Makefile: use Docker build options](docs/options.md)
 * [Troubleshooting](docs%2Ftroubleshooting.md)
 
