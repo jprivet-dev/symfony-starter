@@ -23,13 +23,6 @@ USER     = $(USER_ID):$(GROUP_ID)
 UNAME_S := $(shell uname -s)
 
 #
-# SYMFONY
-#
-
-# End of bug fixes: November 2026 - See https://symfony.com/releases
-SYMFONY_LTS_VERSION=6.*
-
-#
 # SYMFONY ENVIRONMENT VARIABLES
 #
 
@@ -59,6 +52,8 @@ endif
 # These variables and commands are for initial setup and can be removed after saving the project.
 #
 
+# End of bug fixes: November 2026 - See https://symfony.com/releases
+SYMFONY_LTS_VERSION=6.*
 REPOSITORY = git@github.com:dunglas/symfony-docker.git
 CLONE_DIR  = clone
 
@@ -146,16 +141,17 @@ info: ## Show project access info
 
 ##
 
-# These targets are for initial setup and can be removed after saving the project.
+#
+# These following targets (generate, generate@lts, clone, clear_all, clear_docker and clear_skeleton) are for initial setup and can be removed after saving the project.
+#
+
 .PHONY: generate
 generate: clone build up_detached permissions info ## Generate a fresh Symfony application with Docker configuration (stable release)
 
-# These targets are for initial setup and can be removed after saving the project.
 .PHONY: generate@lts
 generate@lts: ## Generate a fresh Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) generate
 
-# These targets are for initial setup and can be removed after saving the project.
 .PHONY: clone
 clone: ## Clone and extract 'dunglas/symfony-docker' configuration files at the root
 	@printf "\n$(Y)Clone 'dunglas/symfony-docker'$(S)"
@@ -167,6 +163,7 @@ ifeq ($(wildcard Dockerfile),)
 	@printf "\n$(Y)--------------------------------------------$(S)\n\n"
 	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
 	rm -rf $(CLONE_DIR)
+	git restore LICENSE
 	@printf " $(G)✔$(S) 'dunglas/symfony-docker' cloned and extracted at the root.\n\n"
 else
 	@printf " $(R)⨯$(S) 'dunglas/symfony-docker' configuration already present at the root.\n\n"
