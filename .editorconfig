@@ -14,12 +14,12 @@ trim_trailing_whitespace = true
 indent_size = 4
 
 [{.env*,*.yaml,*.yml}]
-# YAML files typically use 2 spaces for indentation
-indent_size = 2
+# YAML files typically use 4 spaces for indentation in Symfony
+indent_size = 4
 
 [*.js]
 # JavaScript files often use 2 spaces for indentation, or 4 depending on project preference
-indent_size = 2
+indent_size = 4
 
 [*.json]
 # JSON files typically use 2 spaces for indentation
@@ -41,4 +41,4 @@ indent_size = 2
 
 [*.sh]
 # Shell scripts often use 2 spaces for indentation, or 4.
-indent_size = 2
+indent_size = 4
