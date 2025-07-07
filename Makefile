@@ -275,6 +275,10 @@ else
 	@printf " $(Y)Info:$(S) 'make permissions' is typically not needed on $(UNAME_S).\n"
 endif
 
+.PHONY: git_safe_dir
+git_safe_dir: ## Add /app to Git's safe directories within the php container
+	$(COMPOSE) exec php git config --global --add safe.directory /app
+
 ## — UTILITIES 🛠️ ——————————————————————————————————————————————————————————————
 
 .PHONY: vars
