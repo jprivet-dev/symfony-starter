@@ -163,7 +163,9 @@ ifeq ($(wildcard Dockerfile),)
 	@printf "\n$(Y)--------------------------------------------$(S)\n\n"
 	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
 	rm -rf $(CLONE_DIR)
-	git restore LICENSE
+	@if [ -f LICENSE ]; then \
+		git restore LICENSE; \
+	fi
 	@printf " $(G)✔$(S) 'dunglas/symfony-docker' cloned and extracted at the root.\n\n"
 else
 	@printf " $(R)⨯$(S) 'dunglas/symfony-docker' configuration already present at the root.\n\n"
@@ -182,7 +184,9 @@ clear_skeleton: down ## Remove all Symfony application files (symfony/skeleton)
 	@printf "\n$(Y)---------------------------------$(S)\n\n"
 	rm -rf bin config public src var vendor
 	rm  -f .env .env.dev .gitignore composer.json composer.lock symfony.lock
-	git restore LICENSE
+	@if [ -f LICENSE ]; then \
+		git restore LICENSE; \
+	fi
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
