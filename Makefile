@@ -70,6 +70,9 @@ define append
   endif
 endef
 
+HTTP_PORT  ?= 8080
+HTTPS_PORT ?= 8443
+
 $(eval $(call append,XDEBUG_MODE))
 $(eval $(call append,SERVER_NAME))
 $(eval $(call append,SYMFONY_VERSION))
