@@ -70,22 +70,28 @@ define append
   endif
 endef
 
+PROJECT_NAME    ?= $(shell basename $(CURDIR))
+SERVER_NAME     ?= $(PROJECT_NAME).localhost
+IMAGES_PREFIX   ?= $(PROJECT_NAME)-
+
 HTTP_PORT  ?= 8080
 HTTPS_PORT ?= 8443
+HTTP3_PORT ?= $(HTTPS_PORT)
 
 $(eval $(call append,XDEBUG_MODE))
 $(eval $(call append,SERVER_NAME))
+$(eval $(call append,IMAGES_PREFIX))
 $(eval $(call append,SYMFONY_VERSION))
 $(eval $(call append,STABILITY))
 $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
 
-# Will be ":PORT" if HTTPS_PORT is defined and not 443, otherwise empty.
-HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(HTTPS_PORT)))
-
 # Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
 HTTP_PORT_SUFFIX = $(if $(HTTP_PORT),:$(HTTP_PORT))
+
+# Will be ":PORT" if HTTPS_PORT is defined and not 443, otherwise empty.
+HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(HTTPS_PORT)))
 
 #
 # DOCKER COMMANDS
@@ -128,7 +134,7 @@ help: ## Display this help message with available commands
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
 .PHONY: start
-start: up_detached info ## Start the project and show info (up_detached & info alias)
+start: up_detached images info ## Start the project and show info (up_detached & info alias)
 
 .PHONY: stop
 stop: down ## Stop the project (down alias)
@@ -137,9 +143,7 @@ stop: down ## Stop the project (down alias)
 info: ## Show project access info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-	@printf "* Your application is available at:\n"
-	@printf "  - $(G)https://localhost$(HTTPS_PORT_SUFFIX)/$(S)\n"
-	@printf "  - $(G)http://localhost$(HTTP_PORT_SUFFIX)/$(S)\n"
+	@printf "* Your application is available at $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
 	@printf "\n"
 
 ##
@@ -246,7 +250,7 @@ endif
 
 .PHONY: up
 up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
-	$(UP_ENV) $(COMPOSE) up --remove-orphans --pull always $(ARG)
+	$(UP_ENV) $(COMPOSE) up --remove-orphans $(ARG)
 
 up_detached: ARG=--wait -d
 up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
@@ -259,13 +263,23 @@ down: ## Stop and remove the containers
 build: ## Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
 	$(COMPOSE) build $(ARG)
 
+.PHONY: build_force
+build_force: ARG=--no-cache
+build_force: build ## Build or rebuild Docker services (no cache) - $ make build [ARG=<arguments>]
+
 .PHONY: logs
 logs: ## Display container logs
 	$(COMPOSE) logs -f
 
+.PHONY: images
+images: ## List images used by the current containers
+	@printf "\n$(Y)Images used by the current containers$(S)"
+	@printf "\n$(Y)-------------------------------------$(S)\n\n"
+	$(COMPOSE) images | grep -E "REPOSITORY|$(IMAGES_PREFIX)"
+
 .PHONY: config
 config: ## Parse, resolve, and render compose file in canonical format
-	$(COMPOSE) config
+	$(UP_ENV) $(COMPOSE) config
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
