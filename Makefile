@@ -143,7 +143,7 @@ stop: down ## Stop the project (down alias)
 info: ## Show project access info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-	@printf "* Your application is available at $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
+	@printf "* Open $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S) in your browser and accept the auto-generated TLS certificate\n"
 	@printf "\n"
 
 ##
