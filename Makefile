@@ -71,8 +71,8 @@ define append
 endef
 
 PROJECT_NAME    ?= $(shell basename $(CURDIR))
-SERVER_NAME     ?= $(PROJECT_NAME).localhost
-IMAGES_PREFIX   ?= $(PROJECT_NAME)-
+SERVER_NAME      = $(PROJECT_NAME).localhost
+IMAGES_PREFIX    = $(PROJECT_NAME)-
 
 HTTP_PORT  ?= 8080
 HTTPS_PORT ?= 8443
