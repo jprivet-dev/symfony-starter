@@ -38,10 +38,9 @@ This will:
 * Build the necessary Docker images and start the containers.
 * Generate a fresh Symfony application inside the container.
 
-
 ### 3 - Access your application
 
-  Open `https://localhost/` in your browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
+Open `https://symfony-starter.localhost:8443/` in your browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
 
 ### All in one command
 
@@ -51,11 +50,16 @@ git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter &
 
 ## Generate an app in another existing project
 
-* **1 - Copy this `Makefile` at the root** of your existing project (or a new empty directory).
-* **2 - Follow the same "Installation \> Step 2 & 3"** instructions.
+* **Copy this `Makefile` at the root** of your existing project (or a new empty directory).
+* **Follow the same "Installation \> Step 2 & 3"** instructions.
+
+> The Docker PHP image name and URL are dynamic and use your project's directory name:
+> * **Final Docker PHP image:** `my-project-app-php`
+> * **Final locahost URL:** https://my-project.localhost:8443
+> 
+> You can change this name with `PROJECT_NAME` variable. See [Docker build options](docs/options.md).
 
 ## Cleanup commands
-
 
 ### **`make clear_skeleton`**
 
@@ -118,7 +122,7 @@ tree -A -L 1 -F --dirsfirst
 ## Docs
 
 * [Save your generated Symfony application](docs/save.md)
-* [Makefile: use Docker build options](docs/options.md)
+* [Docker build options](docs/options.md)
 * [Troubleshooting](docs%2Ftroubleshooting.md)
 
 ## Main resources

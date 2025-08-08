@@ -130,3 +130,27 @@ make permissions
 ```
 
 This command automatically adjusts the file ownership to match your host user, resolving any Git-related permission issues. Note that this command is conditional and only executes the ownership change on Linux environments where it's typically needed.
+
+## Git "dubious ownership" Error in Docker Container
+
+You might encounter this error when running Git or Composer commands inside your Docker PHP container:
+
+```
+fatal: detected dubious ownership in repository at '/app'
+To add an exception for this directory, call:
+
+        git config --global --add safe.directory /app
+```
+
+**Problem:** Git detects that the `/app` directory inside the container is owned by a different user (e.g., `root`) than the one executing the Git command, which is a security measure.
+
+**Solution:** You need to tell Git within the container that `/app` is a safe directory. We have a Makefile command to do this easily.
+
+**Action:**
+From your host machine's terminal, in your project's root directory, run:
+
+```bash
+make git_safe_dir
+```
+
+This will execute the necessary `git config` command inside your `php` Docker service. After this, you should be able to run Git and Composer commands (like `composer require`) without this error.

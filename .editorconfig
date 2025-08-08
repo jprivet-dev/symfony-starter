@@ -9,36 +9,15 @@ indent_size = 4
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.php]
-# PHP PSR-12 standard recommends 4 spaces
-indent_size = 4
-
-[{.env*,*.yaml,*.yml}]
-# YAML files typically use 4 spaces for indentation in Symfony
-indent_size = 4
-
-[*.js]
-# JavaScript files often use 2 spaces for indentation, or 4 depending on project preference
-indent_size = 4
-
 [*.json]
-# JSON files typically use 2 spaces for indentation
 indent_size = 2
 
 [Makefile]
-# Makefiles must use tabs for indentation
 indent_style = tab
 
 [*.md]
-# Markdown files can vary, but 2 spaces is a common readable choice.
-# Often, specific markdown linters might have their own rules.
 indent_size = 2
-trim_trailing_whitespace = false # Preserve intentional trailing spaces for line breaks (two spaces at end of line)
+trim_trailing_whitespace = false
 
 [*.xml]
-# XML files often use 2 spaces for indentation
 indent_size = 2
-
-[*.sh]
-# Shell scripts often use 2 spaces for indentation, or 4.
-indent_size = 4
