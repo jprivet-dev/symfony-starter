@@ -1,4 +1,4 @@
-# Makefile: use Docker build options
+# Docker build options
 
 ⬅️ [README](../README.md)
 
