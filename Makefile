@@ -86,6 +86,7 @@ $(eval $(call append,STABILITY))
 $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
+$(eval $(call append,CADDY_MERCURE_JWT_SECRET))
 
 # Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
 HTTP_PORT_SUFFIX = $(if $(HTTP_PORT),:$(HTTP_PORT))
@@ -106,7 +107,7 @@ endif
 COMPOSE = docker compose
 
 ifeq ($(APP_ENV),prod)
-COMPOSE = $(COMPOSE) -f compose.yaml -f compose.prod.yaml
+COMPOSE = docker compose -f compose.yaml -f compose.prod.yaml
 endif
 
 CONTAINER_PHP = $(COMPOSE) exec php
@@ -214,7 +215,7 @@ dotenv: ## Lists all .env files with variables and values
 	$(CONSOLE) debug:dotenv
 
 .PHONY: dumpenv
-dumpenv: ## Generate .env.local.php for production
+dumpenv: git_safe_dir ## Generate .env.local.php for production
 	$(COMPOSER) dump-env prod
 
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
@@ -232,19 +233,25 @@ php_sh: ## Connect to the PHP container shell
 composer: ## Run composer command - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
 	$(COMPOSER) $(ARG)
 
-composer_install: ## Install Composer packages
+composer_install: git_safe_dir ## Install Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
 	$(COMPOSER) install
 endif
 
-composer_update: ## Update Composer packages
+composer_update: git_safe_dir ## Update Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
 	$(COMPOSER) update
 endif
+
+composer_update_lock: ## Update only the content hash of composer.lock without updating dependencies
+	$(COMPOSER) update --lock
+
+composer_validate: ## Validate composer.json and composer.lock
+	$(COMPOSER) validate --strict --check-lock
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
