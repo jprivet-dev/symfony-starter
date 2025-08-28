@@ -44,7 +44,7 @@ endif
 
 # See https://symfony.com/doc/current/deployment.html#b-configure-your-environment-variables
 ifneq ($(wildcard .env.local.php),)
-$(info Warning: It is not possible to use variables from .env.local.php file)
+$(info Warning: In this Makefile it is not possible to use variables from .env.local.php file)
 endif
 
 #
@@ -78,6 +78,7 @@ HTTP_PORT  ?= 8080
 HTTPS_PORT ?= 8443
 HTTP3_PORT ?= $(HTTPS_PORT)
 
+$(eval $(call append,APP_ENV))
 $(eval $(call append,XDEBUG_MODE))
 $(eval $(call append,SERVER_NAME))
 $(eval $(call append,IMAGES_PREFIX))
@@ -106,8 +107,13 @@ endif
 
 COMPOSE = docker compose
 
+# In a first step, you can test the application's production behavior in a development environment by setting APP_ENV=prod.
+# To test the full Docker production setup (e.g., optimized images, production-specific configurations), you can also add USE_COMPOSE_PROD_YAML=true.
+# This allows for a smooth transition from testing the code's behavior to testing the full Docker infrastructure.
+ifeq ($(USE_COMPOSE_PROD_YAML),prod)
 ifeq ($(APP_ENV),prod)
 COMPOSE = docker compose -f compose.yaml -f compose.prod.yaml
+endif
 endif
 
 CONTAINER_PHP = $(COMPOSE) exec php
