@@ -22,14 +22,23 @@ cd symfony-starter
 ### 2 - Generate a fresh Symfony application at the root
 
 ```shell
-# Stable Release
+# Minimalist Stable Release
 make generate
 
-# Long-Term Support Release (LTS)
+# Minimalist Long-Term Support Release (LTS)
 make generate@lts
 
-# Specific Version
+# Webapp Stable Release
+make generate@webapp
+
+# Webapp Long-Term Support Release (LTS)
+make generate@webapp_lts
+
+# Specific Minimalist Version
 SYMFONY_VERSION=6.4.3 make generate
+
+# Specific Webapp Version
+SYMFONY_VERSION=6.4.3 make generate@webapp
 ```
 
 This will:
@@ -37,6 +46,7 @@ This will:
 * Clone `dunglas/symfony-docker` configuration files and extract them to your project root.
 * Build the necessary Docker images and start the containers.
 * Generate a fresh Symfony application inside the container.
+* Eventually add extra packages to give you everything you need to build a web application.
 
 ### 3 - Access your application
 
@@ -45,6 +55,7 @@ Open `https://symfony-starter.localhost:8443/` in your browser and [accept the a
 ### All in one command
 
 ```shell
+# Minimalist Stable Release
 git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate
 ```
 
@@ -59,22 +70,16 @@ git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter &
 > 
 > You can change this name with `PROJECT_NAME` variable. See [Docker build options](docs/options.md).
 
-## Cleanup commands
+## Cleanup command
 
-### **`make clear_skeleton`**
-
-Removes all Symfony application files (e.g., `bin/`, `config/`, `src/`, `vendor/`, `composer.json`, `.env`, etc.). This is useful if you want to **regenerate the Symfony app** from scratch, possibly with a different Symfony version.
+Stops all Docker containers, removes all Docker-related configuration files copied from `dunglas/symfony-docker` (e.g., `Dockerfile`, `compose.yaml`, `frankenphp/`), and removes all Symfony application files (e.g., `bin/`, `config/`, `src/`, `vendor/`, `composer.json`, `.env`, etc.) :
 
 ```shell
-make clear_skeleton
+make clear_all
 
-# Then regenerate the Symfony app:
-make generate
+# Then regenerate the Symfony app (lts version for example):
+make generate@lts
 ```
-
-### `make clear_docker`
-
-Stops all Docker containers and **removes all Docker-related configuration files** copied from `dunglas/symfony-docker` (e.g., `Dockerfile`, `compose.yaml`, `frankenphp/`). This effectively resets your project's Docker setup. Use this if you want to start over with the Docker configuration itself.
 
 ## Daily usage
 
@@ -87,7 +92,7 @@ make stop  # Stop the project (down alias)
 
 ## Project structure
 
-After `make generate`, your project structure will look like this:
+After `make generate`, your project structure will look like this (Minimalist Stable Release):
 
 ```
 ./
