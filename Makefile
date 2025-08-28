@@ -138,28 +138,7 @@ help: ## Display this help message with available commands
 	}'
 	@echo
 
-## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
-
-.PHONY: start
-start: up_detached images info ## Start the project and show info (up_detached & info alias)
-
-.PHONY: stop
-stop: down ## Stop the project (down alias)
-
-.PHONY: info
-info: ## Show project access info
-	@printf "\n$(Y)Info$(S)"
-	@printf "\n$(Y)----$(S)\n\n"
-	@printf "* Open $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S) in your browser and accept the auto-generated TLS certificate\n"
-	@printf "\n"
-
-.PHONY: restart
-restart: stop start ## Stop & Start the project and show info (up_detached & info alias)
-
-.PHONY: install
-install: up_detached composer_install images info ## Start the project, install dependencies and show info
-
-##
+## — GENERATION 🔨 ————————————————————————————————————————————————————————————
 
 #
 # These following targets (generate, generate@lts, clone, clear_all, clear_docker and clear_skeleton) are for initial setup and can be removed after saving the project.
@@ -208,6 +187,30 @@ clear_skeleton: down ## Remove all Symfony application files (symfony/skeleton)
 		git restore LICENSE; \
 	fi
 
+## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
+
+.PHONY: start
+start: up_detached images info ## Start the project and show info (up_detached & info alias)
+
+.PHONY: stop
+stop: down ## Stop the project (down alias)
+
+.PHONY: info
+info: ## Show project access info
+	@printf "\n$(Y)Info$(S)"
+	@printf "\n$(Y)----$(S)\n\n"
+	@printf " $(Y)›$(S) Open $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S) in your browser and accept the auto-generated TLS certificate\n"
+	@printf "\n"
+
+.PHONY: restart
+restart: stop start ## Stop & Start the project and show info (up_detached & info alias)
+
+.PHONY: install
+install: up_detached composer_install images info ## Start the project, install dependencies and show info
+
+.PHONY: check
+check: composer_validate ## Check everything before you deliver
+
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
 .PHONY: symfony
@@ -245,14 +248,14 @@ php_sh: ## Connect to the PHP container shell
 composer: ## Run composer command - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
 	$(COMPOSER) $(ARG)
 
-composer_install: git_safe_dir ## Install Composer packages
+composer_install: ## Install Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
 	$(COMPOSER) install
 endif
 
-composer_update: git_safe_dir ## Update Composer packages
+composer_update: ## Update Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
@@ -270,6 +273,7 @@ composer_validate: ## Validate composer.json and composer.lock
 .PHONY: up
 up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans $(ARG)
+	$(MAKE) git_safe_dir
 
 up_detached: ARG=--wait -d
 up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
@@ -300,6 +304,44 @@ images: ## List images used by the current containers
 config: ## Parse, resolve, and render compose file in canonical format
 	$(UP_ENV) $(COMPOSE) config
 
+## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
+
+.PHONY: certificates
+certificates: ## Installs the Caddy TLS certificate to the trust store
+	@printf "\n$(Y)Copying the Caddy certificate to trust store$(S)"
+	@printf "\n$(Y)--------------------------------------------$(S)\n\n"
+	@if [ ! -f /tmp/caddy_root.crt ]; then \
+		$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" > /tmp/caddy_root.crt; \
+	fi
+ifeq ($(UNAME_S),Darwin)
+	@printf " $(Y)› OS: macOS$(S)\n"
+	@sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain /tmp/caddy_root.crt
+	@rm /tmp/caddy_root.crt
+else ifeq ($(UNAME_S),Linux)
+	@printf " $(Y)› OS: Linux$(S)\n"
+	@sudo cp /tmp/caddy_root.crt /usr/local/share/ca-certificates/caddy_root.crt
+	@sudo update-ca-certificates
+	@rm /tmp/caddy_root.crt
+endif
+	@printf " $(G)✔$(S) The Caddy root certificate has been added to the trust store.\n"
+
+certificates_export: ## Exports the Caddy root certificate from the container to the host
+	@$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" > tls/root.crt
+	@printf " $(G)✔$(S) The Caddy root certificate has been exported to $(Y)tls/root.crt$(S).\n"
+	@printf " $(Y)›$(S) You may need to manually import this certificate into your browser's trust store:\n"
+	@printf "    - $(Y)Chrome/Brave:$(S) Go to chrome://settings/certificates and import the file 'tls/root.crt' under 'Authorities'.\n"
+	@printf "    - $(Y)Firefox:$(S) Go to about:preferences#privacy, click 'View Certificates...' and import 'tls/root.crt' under 'Authorities'.\n"
+	@printf "\n"
+
+.PHONY: hosts
+hosts: ## Add the server name to /etc/hosts file
+	@if ! grep -q "$(SERVER_NAME)" /etc/hosts; then \
+		echo "127.0.0.1 $(SERVER_NAME)" | sudo tee -a /etc/hosts > /dev/null; \
+		printf " $(G)✔$(S) \"$(SERVER_NAME)\" added to /etc/hosts.\n"; \
+	else \
+		printf " $(G)✔$(S) \"$(SERVER_NAME)\" already exists in /etc/hosts.\n"; \
+	fi
+
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
 .PHONY: permissions
@@ -308,7 +350,7 @@ ifeq ($(UNAME_S),Linux)
 	$(COMPOSE) run --rm php chown -R $(USER) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER)$(S) of the project files.\n"
 else
-	@printf " $(Y)Info:$(S) 'make permissions' is typically not needed on $(UNAME_S).\n"
+	@printf " $(Y)›$(S) 'make permissions' is typically not needed on $(UNAME_S).\n"
 endif
 
 git_safe_dir: ## Add /app to Git's safe directories within the php container
