@@ -53,9 +53,9 @@ endif
 #
 
 # End of bug fixes: November 2026 - See https://symfony.com/releases
-SYMFONY_LTS_VERSION=6.*
-REPOSITORY = git@github.com:dunglas/symfony-docker.git
-CLONE_DIR  = clone
+SYMFONY_LTS_VERSION = 6.*
+REPOSITORY          = git@github.com:dunglas/symfony-docker.git
+CLONE_DIR           = clone
 
 #
 # DOCKER OPTIONS
@@ -145,11 +145,16 @@ help: ## Display this help message with available commands
 #
 
 .PHONY: generate
-generate: clone build up_detached permissions images info ## Generate a fresh Symfony application with Docker configuration (stable release)
+generate: clone build up_detached permissions images info ## Generate a fresh minimalist Symfony application with Docker configuration (stable release)
 
-.PHONY: generate@lts
-generate@lts: ## Generate a fresh Symfony application with Docker configuration (LTS - long-term support release)
+generate@webapp: generate ## Generate a fresh traditional Symfony web application with Docker configuration (stable release)
+	$(COMPOSER) require webapp
+
+generate@lts: ## Generate a fresh minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) generate
+
+generate@lts_webapp: generate@lts ## Generate a fresh traditional Symfony web application with Docker configuration (LTS - long-term support release)
+	$(COMPOSER) require webapp
 
 .PHONY: clone
 clone: ## Clone and extract 'dunglas/symfony-docker' configuration files at the root
