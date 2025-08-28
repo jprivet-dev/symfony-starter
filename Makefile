@@ -144,12 +144,12 @@ help: ## Display this help message with available commands
 # This complete GENERATION block, with these following targets are for initial setup and can be removed after saving the project.
 #
 
-generate@stable: clone build up_detached permissions images info ## Generate a minimalist Symfony application with Docker configuration (stable release)
+generate: clone build up_detached permissions images info ## Generate a minimalist Symfony application with Docker configuration (stable release)
 
 generate@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) generate@stable
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) generate
 
-generate@webapp_stable: generate@stable webapp info ## Generate a webapp with Docker configuration (stable release)
+generate@webapp: generate webapp info ## Generate a webapp with Docker configuration (stable release)
 
 generate@webapp_lts: generate@lts webapp info ## Generate a webapp with Docker configuration (LTS - long-term support release)
 
