@@ -153,6 +153,12 @@ info: ## Show project access info
 	@printf "* Open $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S) in your browser and accept the auto-generated TLS certificate\n"
 	@printf "\n"
 
+.PHONY: restart
+restart: stop start ## Stop & Start the project and show info (up_detached & info alias)
+
+.PHONY: install
+install: up_detached composer_install images info ## Start the project, install dependencies and show info
+
 ##
 
 #
@@ -160,7 +166,7 @@ info: ## Show project access info
 #
 
 .PHONY: generate
-generate: clone build up_detached permissions info ## Generate a fresh Symfony application with Docker configuration (stable release)
+generate: clone build up_detached permissions images info ## Generate a fresh Symfony application with Docker configuration (stable release)
 
 .PHONY: generate@lts
 generate@lts: ## Generate a fresh Symfony application with Docker configuration (LTS - long-term support release)
