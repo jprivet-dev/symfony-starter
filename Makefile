@@ -141,19 +141,22 @@ help: ## Display this help message with available commands
 ## — GENERATION 🔨 ————————————————————————————————————————————————————————————
 
 #
-# These following targets (generate, generate@lts, clone, clear_all, clear_docker and clear_skeleton) are for initial setup and can be removed after saving the project.
+# This complete GENERATION block, with these following targets are for initial setup and can be removed after saving the project.
 #
 
-.PHONY: generate
-generate: clone build up_detached permissions images info ## Generate a fresh minimalist Symfony application with Docker configuration (stable release)
+generate@stable: clone build up_detached permissions images info ## Generate a minimalist Symfony application with Docker configuration (stable release)
 
-generate@webapp: generate ## Generate a fresh traditional Symfony web application with Docker configuration (stable release)
-	$(COMPOSER) require webapp
+generate@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) generate@stable
 
-generate@lts: ## Generate a fresh minimalist Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) generate
+generate@webapp_stable: generate@stable webapp info ## Generate a webapp with Docker configuration (stable release)
 
-generate@lts_webapp: generate@lts ## Generate a fresh traditional Symfony web application with Docker configuration (LTS - long-term support release)
+generate@webapp_lts: generate@lts webapp info ## Generate a webapp with Docker configuration (LTS - long-term support release)
+
+.PHONY: webapp
+webapp: ## Add extra packages to give you everything you need to build a web application
+	@printf "\n$(Y)Add extra packages to build a web application$(S)"
+	@printf "\n$(Y)---------------------------------------------$(S)\n\n"
 	$(COMPOSER) require webapp
 
 .PHONY: clone
@@ -175,22 +178,8 @@ else
 	@printf " $(R)⨯$(S) 'dunglas/symfony-docker' configuration already present at the root.\n\n"
 endif
 
-clear_all: clear_docker clear_skeleton ## Execute clear_skeleton & clear_docker commands
-
-clear_docker: down ## Remove all 'dunglas/symfony-docker' configuration files
-	@printf "\n$(Y)Remove all 'dunglas/symfony-docker' files$(S)"
-	@printf "\n$(Y)-----------------------------------------$(S)\n\n"
-	rm -rf frankenphp
-	rm  -f .dockerignore compose.override.yaml compose.prod.yaml compose.yaml Dockerfile
-
-clear_skeleton: down ## Remove all Symfony application files (symfony/skeleton)
-	@printf "\n$(Y)Remove all symfony/skeleton files$(S)"
-	@printf "\n$(Y)---------------------------------$(S)\n\n"
-	rm -rf bin config public src var vendor
-	rm  -f .env .env.dev .gitignore composer.json composer.lock symfony.lock
-	@if [ -f LICENSE ]; then \
-		git restore LICENSE; \
-	fi
+clear_all: permissions down ## Remove all 'dunglas/symfony-docker' configuration files and all Symfony application files
+	git reset --hard && git clean -f -d
 
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
