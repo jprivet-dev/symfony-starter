@@ -225,12 +225,13 @@ check: composer_validate ## Check everything before you deliver
 # WEBAPP VERSION
 #
 
+.PHONY: webapp_install
 webapp_install: up_detached composer_install assets images info ## Start the project, install dependencies and show info
 
-.PHONY: check
-webapp_check: composer_validate webapp_tests ## Check everything before you deliver
+.PHONY: webapp_check
+webapp_check: composer_validate webapp_tests validate ## Check everything before you deliver
 
-.PHONY: tests
+.PHONY: webapp_tests
 webapp_tests t: phpunit ## Run all tests
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
@@ -289,6 +290,75 @@ composer_update_lock: ## Update only the content hash of composer.lock without u
 
 composer_validate: ## Validate composer.json and composer.lock
 	$(COMPOSER) validate --strict --check-lock
+
+## — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
+
+db_drop: ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
+	$(CONSOLE) doctrine:database:drop --if-exists --force $(ARG)
+
+db_create: ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
+	$(CONSOLE) doctrine:database:create --if-not-exists $(ARG)
+
+db_clear: db_drop db_create ## Drop and create the database
+
+db_init: db_drop db_create fixtures ## Drop and create the database and add fixtures
+
+##
+
+.PHONY: validate
+validate: ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
+	-$(CONSOLE) doctrine:schema:validate -v $(ARG)
+
+.PHONY: update
+update: ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
+	$(CONSOLE) doctrine:schema:update --dump-sql
+
+update_force: ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
+	$(CONSOLE) doctrine:schema:update --force
+
+##
+
+.PHONY: migration
+migration: ## Create a new migration based on database changes (format the generated SQL)
+	$(CONSOLE) make:migration --formatted -v $(ARG)
+
+.PHONY: migrate
+migrate: ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
+	$(CONSOLE) doctrine:migrations:migrate --no-interaction --all-or-nothing $(ARG)
+
+.PHONY: list
+list: ## Display a list of all available migrations and their status
+	$(CONSOLE) doctrine:migrations:list
+
+.PHONY: execute
+execute: ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
+	$(CONSOLE) doctrine:migrations:execute $(ARG)
+
+.PHONY: generate
+generate: ## Generate a blank migration class
+	$(CONSOLE) doctrine:migrations:generate
+
+##
+
+.PHONY: sql
+sql: ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
+	$(CONSOLE) doctrine:query:sql "$(QUERY)"
+
+# See https://stackoverflow.com/questions/769683/how-to-show-tables-in-postgresql
+sql_tables: QUERY=SELECT * FROM pg_catalog.pg_tables;
+sql_tables: sql ## Show all tables
+
+##
+
+.PHONY: fixtures
+fixtures: ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
+	$(CONSOLE) doctrine:fixtures:load -n $(ARG)
+
+## — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
+
+.PHONY: psql
+psql: ## Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG="-V"
+	$(PSQL) $(ARG)
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
 
