@@ -48,7 +48,7 @@ $(info Warning: In this Makefile it is not possible to use variables from .env.l
 endif
 
 #
-# INSTALLATION
+# GENERATION
 # These variables and commands are for initial setup and can be removed after saving the project.
 #
 
