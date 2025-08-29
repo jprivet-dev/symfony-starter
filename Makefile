@@ -352,15 +352,43 @@ git_safe_dir: ## Add /app to Git's safe directories within the php container
 
 ## — UTILITIES 🛠️ ——————————————————————————————————————————————————————————————
 
+env_files: ## Show env files loaded into this Makefile
+	@printf "\n$(Y)Symfony env files$(S)"
+	@printf "\n$(Y)-----------------$(S)\n\n"
+	@printf "Files loaded into this Makefile (in order of decreasing priority) $(Y)[APP_ENV=$(APP_ENV)]$(S):\n\n"
+ifneq ("$(wildcard .env.$(APP_ENV).local)","")
+	@printf "* $(G)✔$(S) .env.$(APP_ENV).local\n"
+else
+	@printf "* $(R)⨯$(S) .env.$(APP_ENV).local\n"
+endif
+ifneq ("$(wildcard .env.$(APP_ENV))","")
+	@printf "* $(G)✔$(S) .env.$(APP_ENV)\n"
+else
+	@printf "* $(R)⨯$(S) .env.$(APP_ENV)\n"
+endif
+ifneq ("$(wildcard .env.local)","")
+	@printf "* $(G)✔$(S) .env.local\n"
+else
+	@printf "* $(R)⨯$(S) .env.local\n"
+endif
+ifneq ("$(wildcard .env)","")
+	@printf "* $(G)✔$(S) .env\n"
+else
+	@printf "* $(R)⨯$(S) .env\n"
+endif
+
 .PHONY: vars
 vars: ## Show key Makefile variables
 	@printf "\n$(Y)Vars$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-	@printf "USER      : $(USER)\n"
-	@printf "UNAME_S   : $(UNAME_S)\n"
-	@printf "APP_ENV   : $(APP_ENV)\n"
-	@printf "REPOSITORY: $(REPOSITORY)\n"
-	@printf "CLONE_DIR : $(CLONE_DIR)\n"
-	@printf "UP_ENV    : $(UP_ENV)\n"
-	@printf "COMPOSE_V2: $(COMPOSE_V2)\n"
-	@printf "COMPOSE   : $(COMPOSE)\n"
+	@printf "USER         : $(USER)\n"
+	@printf "UNAME_S      : $(UNAME_S)\n"
+	@printf "APP_ENV      : $(APP_ENV)\n"
+	@printf "REPOSITORY   : $(REPOSITORY)\n"
+	@printf "UP_ENV       : $(UP_ENV)\n"
+	@printf "COMPOSE_V2   : $(COMPOSE_V2)\n"
+	@printf "COMPOSE      : $(COMPOSE)\n"
+	@printf "CONTAINER_PHP: $(CONTAINER_PHP)\n"
+	@printf "PHP          : $(PHP)\n"
+	@printf "COMPOSER     : $(COMPOSER)\n"
+	@printf "CONSOLE      : $(CONSOLE)\n"
