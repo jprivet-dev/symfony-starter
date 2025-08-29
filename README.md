@@ -12,14 +12,14 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
 
 ## Installation
 
-### 1 - Clone this repository
+### 1. Clone this repository
 
 ```shell
 git clone git@github.com:jprivet-dev/symfony-starter.git
 cd symfony-starter
 ```
 
-### 2 - Generate a fresh Symfony application at the root
+### 2. Generate a fresh Symfony application at the root
 
 ```shell
 # Minimalist Stable Release
@@ -48,7 +48,7 @@ This will:
 * Generate a fresh Symfony application inside the container.
 * Eventually add extra packages to give you everything you need to build a web application.
 
-### 3 - Access your application
+### 3. Access your application
 
 Open `https://symfony-starter.localhost:8443/` in your browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
 
@@ -127,6 +127,7 @@ tree -A -L 1 -F --dirsfirst
 ## Docs
 
 * [Save your generated Symfony application](docs/save.md)
+* [Validate certificates](docs/certificates.md)
 * [Docker build options](docs/options.md)
 * [Troubleshooting](docs%2Ftroubleshooting.md)
 

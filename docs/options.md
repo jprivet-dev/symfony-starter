@@ -53,3 +53,7 @@ make generate
 # Or if the app is already generated:
 make start
 ```
+
+---
+
+⬅️ [README](../README.md)
