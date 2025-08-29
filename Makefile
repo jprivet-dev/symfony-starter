@@ -178,7 +178,7 @@ else
 	@printf " $(R)⨯$(S) 'dunglas/symfony-docker' configuration already present at the root.\n\n"
 endif
 
-clear_all: permissions down ## Remove all 'dunglas/symfony-docker' configuration files and all Symfony application files
+clear_all: down ## Remove all 'dunglas/symfony-docker' configuration files and all Symfony application files
 	git reset --hard && git clean -f -d
 
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
