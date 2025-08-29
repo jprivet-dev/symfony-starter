@@ -154,3 +154,7 @@ make git_safe_dir
 ```
 
 This will execute the necessary `git config` command inside your `php` Docker service. After this, you should be able to run Git and Composer commands (like `composer require`) without this error.
+
+---
+
+⬅️ [README](../README.md)
