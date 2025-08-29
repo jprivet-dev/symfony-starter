@@ -201,6 +201,9 @@ start: up_detached images info ## Start the project and show info (up_detached &
 .PHONY: stop
 stop: down ## Stop the project (down alias)
 
+.PHONY: restart
+restart: stop start ## Stop & Start the project and show info (up_detached & info alias)
+
 .PHONY: info
 info: ## Show project access info
 	@printf "\n$(Y)Info$(S)"
@@ -208,17 +211,27 @@ info: ## Show project access info
 	@printf " $(Y)›$(S) Open $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S) in your browser and accept the auto-generated TLS certificate\n"
 	@printf "\n"
 
-.PHONY: restart
-restart: stop start ## Stop & Start the project and show info (up_detached & info alias)
+##
+# MINIMALIST VERSION
+#
 
 .PHONY: install
 install: up_detached composer_install images info ## Start the project, install dependencies and show info
 
 .PHONY: check
-check: composer_validate tests ## Check everything before you deliver
+check: composer_validate ## Check everything before you deliver
+
+##
+# WEBAPP VERSION
+#
+
+webapp_install: up_detached composer_install assets images info ## Start the project, install dependencies and show info
+
+.PHONY: check
+webapp_check: composer_validate webapp_tests ## Check everything before you deliver
 
 .PHONY: tests
-tests t: phpunit ## Run all tests
+webapp_tests t: phpunit ## Run all tests
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
@@ -297,6 +310,47 @@ dox: phpunit ## Report test execution progress in TestDox format for all tests
 
 xdebug_version: ## Xdebug version number
 	$(PHP) -r "var_dump(phpversion('xdebug'));"
+
+## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
+
+.PHONY: assets
+assets: ## Generate all assets.
+ifeq ($(APP_ENV),prod)
+	make importmap_install
+else
+	make asset_map_compile
+endif
+
+##
+
+asset_map_clear: ## Clear all assets in the public output directory.
+	$(COMPOSE) run --rm php rm -rf ./public/assets
+
+asset_map_compile: asset_map_clear ## Compile all mapped assets and writes them to the final public output directory.
+	$(CONSOLE) asset-map:compile
+
+asset_map_debug: ## See all of the mapped assets .
+	$(CONSOLE) debug:asset-map --full
+
+##
+
+importmap_audit: ## Check for security vulnerability advisories for dependencies
+	$(CONSOLE) importmap:audit
+
+importmap_install: ## Download all assets that should be downloaded
+	$(CONSOLE) importmap:install
+
+importmap_outdated: ## List outdated JavaScript packages and their latest versions
+	$(CONSOLE) importmap:outdated
+
+importmap_remove: ## Remove JavaScript packages
+	$(CONSOLE) importmap:remove
+
+importmap_require: ## Require JavaScript packages
+	$(CONSOLE) importmap:require $(ARG)
+
+importmap_update: ## Update JavaScript packages to their latest versions
+	$(CONSOLE) importmap:update
 
 ## — TRANSLATION 🇬🇧 ————————————————————————————————————————————————————————————
 
