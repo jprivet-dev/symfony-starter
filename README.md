@@ -129,6 +129,7 @@ tree -A -L 1 -F --dirsfirst
 * [Save your generated Symfony application](docs/save.md)
 * [Validate certificates](docs/certificates.md)
 * [Docker build options](docs/options.md)
+* [Accessing the `var/` directory](docs/var.md)
 * [Troubleshooting](docs%2Ftroubleshooting.md)
 
 ## Main resources
