@@ -298,6 +298,12 @@ dox: phpunit ## Report test execution progress in TestDox format for all tests
 xdebug_version: ## Xdebug version number
 	$(PHP) -r "var_dump(phpversion('xdebug'));"
 
+## — TRANSLATION 🇬🇧 ————————————————————————————————————————————————————————————
+
+.PHONY: extract
+extract: ## Extracts translation strings from templates (fr)
+	$(CONSOLE) translation:extract --sort=asc --format=yaml --force fr
+
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: up
