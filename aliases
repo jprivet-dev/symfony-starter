@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Usage:
+#   . aliases
+# or
+#   source aliases
+
+# (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET
+G='\033[32m'
+R='\033[31m'
+Y='\033[33m'
+S='\033[0m'
+
+function makefile_create() {
+    local name="${1}"
+    local overwritten=""
+
+    if alias "${name}" &>/dev/null; then
+       overwritten=" (already exists and overwritten)"
+    fi
+
+    alias "${name}"="makefile_execute ${name}" &&
+        printf " ${G}✔${S} Create ${G}${name}${S} alias for ${G}make ${name}${S}${overwritten}\n"
+}
+
+function makefile_execute() {
+    local name="${1}"
+    shift
+    make "${name}" ARG="${*}"
+}
+
+function makefile_aliases() {
+    printf "\n${Y}Aliases${S}"
+    printf "\n${Y}-------${S}\n\n"
+
+    for alias_name in "${@}"; do
+        makefile_create "${alias_name}"
+    done
+
+    printf "\nTo remove aliases, simply ${G}close and reopen your terminal${S}, or use ${Y}unalias <alias_name>${S} (e.g., 'unalias foo bar').\n"
+}
+
+makefile_aliases symfony sf php composer
