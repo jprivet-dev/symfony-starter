@@ -57,6 +57,15 @@ Open `https://symfony-starter.localhost:8443/` in your browser and [accept the a
 ```shell
 # Minimalist Stable Release
 git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate
+
+# Minimalist Long-Term Support Release (LTS)
+git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate@lts
+
+# Webapp Stable Release
+git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate@webapp
+
+# Webapp Long-Term Support Release (LTS)
+git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate@webapp_lts
 ```
 
 ## Generate an app in another existing project
