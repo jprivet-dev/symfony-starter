@@ -86,7 +86,7 @@ Stops all Docker containers, removes all Docker-related configuration files copi
 ```shell
 make clear_all
 
-# Then regenerate the Symfony app (lts version for example):
+# Then regenerate the Symfony app (LTS version for example):
 make generate@lts
 ```
 
@@ -135,10 +135,10 @@ tree -A -L 1 -F --dirsfirst
 
 ## Docs
 
-* [Save your generated Symfony application](docs/save.md)
 * [Validate certificates](docs/certificates.md)
-* [Docker build options](docs/options.md)
+* [Save your generated Symfony application](docs/save.md)
 * [Accessing the `var/` directory](docs/var.md)
+* [Docker build options](docs/options.md)
 * [Troubleshooting](docs%2Ftroubleshooting.md)
 
 ## Main resources

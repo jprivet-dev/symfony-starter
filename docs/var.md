@@ -2,6 +2,8 @@
 
 ⬅️ [README](../README.md)
 
+---
+
 The `var/` directory is essential for debugging as it contains cache and log files. By default, this folder is located inside the **Docker** container, making it difficult to access directly from your host machine (IDE, text editor, etc.).
 
 To get direct access to this directory, you need to add a "bind mount" for the `var/` directory and its `log` subdirectory in the `compose.override.yaml` file. This ensures proper two-way synchronization between your host and the container.
