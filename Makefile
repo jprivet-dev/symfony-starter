@@ -161,7 +161,7 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) minimalist
 
 .PHONY: webapp
-webapp: clone build up_detached permissions composer_webapp restart images info ## Generate a webapp with Docker configuration (stable release)
+webapp: clone build up_detached permissions composer_webapp down up_detached images info ## Generate a webapp with Docker configuration (stable release)
 
 webapp@lts: ## Generate a webapp with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) webapp
