@@ -97,7 +97,7 @@ make start # Start the project and show info (up_detached & info alias)
 make stop  # Stop the project (down alias)
 ```
 
-> Run `make` to see all shorcuts for the most common tasks.
+* Run `make` to see all shorcuts for the most common tasks:
 
 <!-- MAKEFILE_COMMANDS_START -->
 
