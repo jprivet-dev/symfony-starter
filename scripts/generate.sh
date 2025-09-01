@@ -13,16 +13,18 @@ S='\033[0m'
 #set -e
 
 function generate_version() {
-    local current=${1}
-    local command=${2}
-    local branch=${3}
+    local current="${1}"
+    local command="${2}"
+    local branch="${3}"
 
     printf "\n${Y}Generate new version${S}"
     printf "\n${Y}--------------------${S}\n\n"
 
-    printf " ${Y}>>>${S} ${command} version\n"
+    printf " ${Y}>${S}\n"
+    printf " ${Y}>${S} ${command} version\n"
+    printf " ${Y}>${S}\n"
 
-    if git rev-parse --verify --quiet "${branch}" >dev/null; then
+    if git rev-parse --verify --quiet "${branch}" >/dev/null; then
         printf " ${R}⨯${S} ${branch} branch already exists. Remove it.\n"
         git branch -D "${branch}"
     fi
