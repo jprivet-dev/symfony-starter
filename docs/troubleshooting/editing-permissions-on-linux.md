@@ -20,6 +20,16 @@ This command will change the ownership of the project files to your current host
 
 > See https://github.com/dunglas/symfony-docker/blob/main/docs/troubleshooting.md for more details on `dunglas/symfony-docker` troubleshooting.
 
+## Alternative solution (when containers are stopped)
+
+If the containers are stopped and their configuration has been removed, you can also fix this by using a `sudo chown` command to reset the permissions:
+
+```shell
+sudo chown -R $(id -u):$(id -g) .
+```
+
+This command recursively changes the ownership of all files and directories in your project to your current user and group. It's a quick solution but should be used with caution.
+
 ---
 
 ⬅️ [Troubleshooting](../troubleshooting.md)
