@@ -5,9 +5,9 @@
 # making this method more reliable and portable across different systems.
 #
 # Usage:
-#   . readme
+#   . readme.sh
 # or
-#   source readme
+#   source readme.sh
 
 # (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET
 G='\033[32m'
