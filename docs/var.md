@@ -12,15 +12,15 @@ To get direct access to this directory, you need to add a "bind mount" for the `
 
 Add `./var:/app/var` and `./var/log:/app/var/log` to the `volumes` section to the `php` service as shown below:
 
-    ```yaml
-    # compose.override.yaml
-    services:
-      php:
-        volumes:
-          - ...
-          - ./var:/app/var
-          - ./var/log:/app/var/log
-    ```
+  ```yaml
+  # compose.override.yaml
+  services:
+    php:
+      volumes:
+        - ...
+        - ./var:/app/var
+        - ./var/log:/app/var/log
+  ```
 
 ## How it works
 
