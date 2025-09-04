@@ -7,21 +7,21 @@
 #   source save.sh
 
 echo "Please choose a project type:"
-echo "1. minimalist"
-echo "2. webapp"
-echo "3. api"
-echo "Enter your choice (1, 2, or 3):"
+echo "[m] minimalist"
+echo "[w] webapp"
+echo "[a] api"
+echo "Enter your choice (m, w, or a):"
 
 read -r CHOICE
 
 case "$CHOICE" in
-1)
+"m")
     TYPE="minimalist"
     ;;
-2)
+"w")
     TYPE="webapp"
     ;;
-3)
+"a")
     TYPE="api"
     ;;
 *)
@@ -71,12 +71,10 @@ echo "Do you want to proceed with the branch creation and save? (y/n)"
 read -r CONFIRMATION
 if [[ ! "$CONFIRMATION" =~ ^[Yy]$ ]]; then
     echo "Action cancelled. No branch was created."
-    sleep 1
-    exit 0
+else
+    git checkout -b "${BRANCH}"
+    git add .
+    git commit -m "Save ${TYPE} project"
+
+    echo "Branch ${BRANCH} has been created."
 fi
-
-git checkout -b "${BRANCH}"
-git add .
-git commit -m "Generated project for ${BRANCH}"
-
-echo "Branch ${BRANCH} has been created."
