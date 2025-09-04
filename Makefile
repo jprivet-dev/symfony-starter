@@ -290,6 +290,9 @@ php: ## Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=
 php_sh: ## Connect to the PHP container shell
 	$(CONTAINER_PHP) sh
 
+php_env: ## Display all environment variables set within the PHP container
+	$(CONTAINER_PHP) env
+
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
 .PHONY: composer

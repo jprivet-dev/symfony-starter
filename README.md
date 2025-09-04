@@ -144,6 +144,7 @@ make stop  # Stop the project (down alias)
 — PHP 🐘 ———————————————————————————————————————————————————————————————————
   php                           Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
   php_sh                        Connect to the PHP container shell
+  php_env                       Display all environment variables set within the PHP container
 
 — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
   composer                      Run composer command - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
