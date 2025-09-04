@@ -216,8 +216,8 @@ info: ## Show project access info
 	@printf " $(Y)›$(S) Open $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S) in your browser and accept the auto-generated TLS certificate\n"
 	@printf "\n"
 
-##
-# MINIMALIST VERSION
+#
+##   MINIMALIST VERSION
 #
 
 .PHONY: install
@@ -226,18 +226,18 @@ install: up_detached composer_install images info ## Start the project, install 
 .PHONY: check
 check: composer_validate ## Check everything before you deliver
 
-##
-# WEBAPP VERSION
+#
+##   WEBAPP VERSION
 #
 
-.PHONY: webapp_install
-webapp_install: up_detached composer_install assets images info ## Start the project, install dependencies and show info
+.PHONY: install
+install: up_detached composer_install assets images info ## Start the project, install dependencies and show info
 
-.PHONY: webapp_check
-webapp_check: composer_validate webapp_tests validate ## Check everything before you deliver
+.PHONY: check
+check: composer_validate tests validate ## Check everything before you deliver
 
-.PHONY: webapp_tests
-webapp_tests t: phpunit ## Run all tests
+.PHONY: tests
+tests t: phpunit ## Run all tests
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
