@@ -109,12 +109,14 @@ make stop  # Stop the project (down alias)
 — GENERATION 🔨 ————————————————————————————————————————————————————————————
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+
   webapp                        Generate a webapp with Docker configuration (stable release)
   webapp@lts                    Generate a webapp with Docker configuration (LTS - long-term support release)
 
-  clone                         Clone and extract 'dunglas/symfony-docker' configuration files at the root
-  composer_webapp               Add extra packages to give you everything you need to build a web application
+  api                           Generate an Api Platform project with Docker configuration (stable release)
+  api@lts                       Generate an Api Platform project with Docker configuration (LTS - long-term support release)
 
+  clone                         Clone and extract 'dunglas/symfony-docker' configuration files at the root
   clear_all                     Remove all 'dunglas/symfony-docker' configuration files and all Symfony application files
 
 — PROJECT 🚀 ———————————————————————————————————————————————————————————————
