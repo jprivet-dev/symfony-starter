@@ -39,4 +39,4 @@ function makefile_aliases() {
     printf "\nTo remove aliases, simply ${G}close and reopen your terminal${S}, or use ${Y}unalias <alias_name>${S} (e.g., 'unalias foo bar').\n"
 }
 
-makefile_aliases symfony sf php composer phpunit
+makefile_aliases symfony sf php composer phpunit command

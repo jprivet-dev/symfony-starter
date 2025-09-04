@@ -128,6 +128,7 @@ endif
 CONTAINER_PHP = $(COMPOSE) exec $(DOCKER_EXEC_ENV) php
 PHP           = $(CONTAINER_PHP) php
 COMPOSER      = $(CONTAINER_PHP) composer
+BASH_COMMAND  = $(CONTAINER_PHP) bash -c
 CONSOLE       = $(PHP) bin/console
 PHPUNIT       = $(PHP) bin/phpunit
 
@@ -431,6 +432,12 @@ importmap_update: ## Update JavaScript packages to their latest versions
 .PHONY: extract
 extract: ## Extracts translation strings from templates (fr)
 	$(CONSOLE) translation:extract --sort=asc --format=yaml --force fr
+
+## — BASH 💻 ——————————————————————————————————————————————————————————————————
+
+.PHONY: command
+command: ## Run a command inside the PHP container - $ make command [ARG=<arguments>]- Example: $ make command ARG="ls -al"
+	$(BASH_COMMAND) "$(ARG)"
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 

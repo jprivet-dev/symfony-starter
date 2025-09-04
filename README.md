@@ -196,6 +196,9 @@ make stop  # Stop the project (down alias)
 — TRANSLATION 🇬🇧 ————————————————————————————————————————————————————————————
   extract                       Extracts translation strings from templates (fr)
 
+— BASH 💻 ——————————————————————————————————————————————————————————————————
+  command                       Run a command inside the PHP container - $ make command [ARG=<arguments>]- Example: $ make command ARG="ls -al"
+
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
   up                            Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
   up_detached                   Start the containers (wait for services to be running|healthy - detached mode)
