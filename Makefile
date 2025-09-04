@@ -155,20 +155,36 @@ help: ## Display this help message with available commands
 # This complete GENERATION block, with these following targets are for initial setup and can be removed after saving the project.
 #
 
+.PHONY: _base
+_base: clone build up_detached permissions # Internal
+
 .PHONY: minimalist
-minimalist: clone build up_detached permissions images info ## Generate a minimalist Symfony application with Docker configuration (stable release)
+minimalist: _base ## Generate a minimalist Symfony application with Docker configuration (stable release)
+	$(MAKE) restart
 
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) minimalist
 
+##
+
 .PHONY: webapp
-webapp: minimalist composer_webapp down up_detached images info ## Generate a webapp with Docker configuration (stable release)
+webapp: _base ## Generate a webapp with Docker configuration (stable release)
+	@printf "\n$(Y)Add extra packages to build a web application$(S)"
+	@printf "\n$(Y)---------------------------------------------$(S)\n\n"
+	$(COMPOSER) require webapp
+	$(MAKE) restart
 
 webapp@lts: ## Generate a webapp with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) webapp
 
+##
+
 .PHONY: api
-api: minimalist composer_api down up_detached images info ## Generate an Api Platform project with Docker configuration (stable release)
+api: _base ## Generate an Api Platform project with Docker configuration (stable release)
+	@printf "\n$(Y)Install the API Platform’s server component$(S)"
+	@printf "\n$(Y)-------------------------------------------$(S)\n\n"
+	$(COMPOSER) require api
+	$(MAKE) restart
 
 .PHONY: api@lts
 api@lts: ## Generate an Api Platform project with Docker configuration (LTS - long-term support release)
@@ -194,18 +210,6 @@ ifeq ($(wildcard Dockerfile),)
 else
 	@printf " $(R)⨯$(S) 'dunglas/symfony-docker' configuration already present at the root.\n\n"
 endif
-
-composer_webapp: ## Add extra packages to build a web application
-	@printf "\n$(Y)Add extra packages to build a web application$(S)"
-	@printf "\n$(Y)---------------------------------------------$(S)\n\n"
-	$(COMPOSER) require webapp
-
-composer_api: ## Install the API Platform’s server component
-	@printf "\n$(Y)Install the API Platform’s server component$(S)"
-	@printf "\n$(Y)-------------------------------------------$(S)\n\n"
-	$(COMPOSER) require api
-
-##
 
 clear_all: down ## Remove all 'dunglas/symfony-docker' configuration files and all Symfony application files
 	git reset --hard && git clean -f -d
