@@ -123,12 +123,14 @@ make stop  # Stop the project (down alias)
   restart                       Stop & Start the project and show info (up_detached & info alias)
   info                          Show project access info
 
+  MINIMALIST VERSION
   install                       Start the project, install dependencies and show info
   check                         Check everything before you deliver
 
-  webapp_install                Start the project, install dependencies and show info
-  webapp_check                  Check everything before you deliver
-  webapp_tests               t  Run all tests
+  WEBAPP VERSION
+  install                       Start the project, install dependencies and show info
+  check                         Check everything before you deliver
+  tests                      t  Run all tests
 
 — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
   symfony                    sf Run Symfony console command - Usage: make symfony ARG="cache:clear"
