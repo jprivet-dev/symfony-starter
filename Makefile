@@ -162,10 +162,17 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) minimalist
 
 .PHONY: webapp
-webapp: clone build up_detached permissions composer_webapp down up_detached images info ## Generate a webapp with Docker configuration (stable release)
+webapp: minimalist composer_webapp down up_detached images info ## Generate a webapp with Docker configuration (stable release)
 
 webapp@lts: ## Generate a webapp with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) webapp
+
+.PHONY: api
+api: minimalist composer_api down up_detached images info ## Generate an Api Platform project with Docker configuration (stable release)
+
+.PHONY: api@lts
+api@lts: ## Generate an Api Platform project with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) api
 
 ##
 
@@ -188,10 +195,15 @@ else
 	@printf " $(R)⨯$(S) 'dunglas/symfony-docker' configuration already present at the root.\n\n"
 endif
 
-composer_webapp: ## Add extra packages to give you everything you need to build a web application
+composer_webapp: ## Add extra packages to build a web application
 	@printf "\n$(Y)Add extra packages to build a web application$(S)"
 	@printf "\n$(Y)---------------------------------------------$(S)\n\n"
 	$(COMPOSER) require webapp
+
+composer_api: ## Install the API Platform’s server component
+	@printf "\n$(Y)Install the API Platform’s server component$(S)"
+	@printf "\n$(Y)-------------------------------------------$(S)\n\n"
+	$(COMPOSER) require api
 
 ##
 
