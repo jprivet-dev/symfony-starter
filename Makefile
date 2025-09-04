@@ -229,7 +229,11 @@ restart: stop start ## Stop & Start the project and show info (up_detached & inf
 info: ## Show project access info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-	@printf " $(Y)›$(S) Open $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S) in your browser and accept the auto-generated TLS certificate\n"
+	@printf " $(Y)›$(S) Open in your browser and accept the auto-generated TLS certificate:\n"
+	@printf "    - $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
+	@if [ -f vendor/api-platform ]; then \
+		printf "    - $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/api$(S)\n"; \
+	fi
 	@printf "\n"
 
 #
