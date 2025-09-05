@@ -466,7 +466,7 @@ command: ## Run a command inside the PHP container - $ make command [ARG=<argume
 
 .PHONY: up
 up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
-	$(UP_ENV) $(COMPOSE) up --wait --remove-orphans $(ARG)
+	$(UP_ENV) $(COMPOSE) up --remove-orphans $(ARG)
 	$(MAKE) git_safe_dir
 
 up_detached: ARG=-d
