@@ -287,11 +287,17 @@ dumpenv: ## Generate .env.local.php for production
 php: ## Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
 	$(PHP) $(ARG)
 
+##
+
 php_sh: ## Connect to the PHP container shell
 	$(CONTAINER_PHP) sh
 
 php_env: ## Display all environment variables set within the PHP container
 	$(CONTAINER_PHP) env
+
+.PHONY: php_command
+php_command: ## Run a command inside the PHP container - $ make php_command [ARG=<arguments>]- Example: $ make php_command ARG="ls -al"
+	$(BASH_COMMAND) "$(ARG)"
 
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
@@ -455,12 +461,6 @@ importmap_update: ## Update JavaScript packages to their latest versions
 .PHONY: extract
 extract: ## Extracts translation strings from templates (fr)
 	$(CONSOLE) translation:extract --sort=asc --format=yaml --force fr
-
-## — BASH 💻 ——————————————————————————————————————————————————————————————————
-
-.PHONY: command
-command: ## Run a command inside the PHP container - $ make command [ARG=<arguments>]- Example: $ make command ARG="ls -al"
-	$(BASH_COMMAND) "$(ARG)"
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 

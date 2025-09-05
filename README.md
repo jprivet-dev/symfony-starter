@@ -143,8 +143,10 @@ make stop  # Stop the project (down alias)
 
 — PHP 🐘 ———————————————————————————————————————————————————————————————————
   php                           Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
+
   php_sh                        Connect to the PHP container shell
   php_env                       Display all environment variables set within the PHP container
+  php_command                   Run a command inside the PHP container - $ make php_command [ARG=<arguments>]- Example: $ make php_command ARG="ls -al"
 
 — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
   composer                      Run composer command - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
@@ -200,9 +202,6 @@ make stop  # Stop the project (down alias)
 
 — TRANSLATION 🇬🇧 ————————————————————————————————————————————————————————————
   extract                       Extracts translation strings from templates (fr)
-
-— BASH 💻 ——————————————————————————————————————————————————————————————————
-  command                       Run a command inside the PHP container - $ make command [ARG=<arguments>]- Example: $ make command ARG="ls -al"
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
   up                            Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
