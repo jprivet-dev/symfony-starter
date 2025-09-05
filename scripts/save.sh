@@ -10,7 +10,7 @@ echo "Please choose a project type:"
 echo "[m] minimalist"
 echo "[w] webapp"
 echo "[a] api"
-echo "Enter your choice (m, w, or a):"
+echo "Enter your choice (m, w, a or indicate an another type):"
 
 read -r CHOICE
 
@@ -25,9 +25,7 @@ case "$CHOICE" in
     TYPE="api"
     ;;
 *)
-    echo "Invalid choice. The script will stop."
-    sleep 1
-    exit 1
+    TYPE=$CHOICE
     ;;
 esac
 
