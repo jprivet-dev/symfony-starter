@@ -284,19 +284,19 @@ dumpenv: ## Generate .env.local.php for production
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
 
 .PHONY: php
-php: ## Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
+php: compose.yaml ## Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
 	$(PHP) $(ARG)
 
 ##
 
-php_sh: ## Connect to the PHP container shell
+php_sh: compose.yaml ## Connect to the PHP container shell
 	$(CONTAINER_PHP) sh
 
-php_env: ## Display all environment variables set within the PHP container
+php_env: compose.yaml ## Display all environment variables set within the PHP container
 	$(CONTAINER_PHP) env
 
 .PHONY: php_command
-php_command: ## Run a command inside the PHP container - $ make php_command [ARG=<arguments>]- Example: $ make php_command ARG="ls -al"
+php_command: compose.yaml ## Run a command inside the PHP container - $ make php_command [ARG=<arguments>]- Example: $ make php_command ARG="ls -al"
 	$(BASH_COMMAND) "$(ARG)"
 
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
@@ -397,7 +397,7 @@ psql: ## Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
 
 .PHONY: phpunit
-phpunit: ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
+phpunit: bin/phpunit ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
 	$(PHPUNIT) $(ARG)
 
 .PHONY: coverage
@@ -465,7 +465,7 @@ extract: bin/console ## Extracts translation strings from templates (fr)
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: up
-up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
+up: compose.yaml ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans $(ARG)
 	$(MAKE) git_safe_dir
 
@@ -473,11 +473,11 @@ up_detached: ARG=-d
 up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
 
 .PHONY: down
-down: ## Stop and remove the containers
+down: compose.yaml ## Stop and remove the containers
 	-$(COMPOSE) down --remove-orphans
 
 .PHONY: build
-build: ## Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
+build: compose.yaml ## Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
 	$(COMPOSE) build $(ARG)
 
 .PHONY: build_force
@@ -485,17 +485,17 @@ build_force: ARG=--no-cache
 build_force: build ## Build or rebuild Docker services (no cache) - $ make build [ARG=<arguments>]
 
 .PHONY: logs
-logs: ## Display container logs
+logs: compose.yaml ## Display container logs
 	$(COMPOSE) logs -f
 
 .PHONY: images
-images: ## List images used by the current containers
+images: compose.yaml ## List images used by the current containers
 	@printf "\n$(Y)Images used by the current containers$(S)"
 	@printf "\n$(Y)-------------------------------------$(S)\n\n"
 	$(COMPOSE) images | grep -E "REPOSITORY|$(IMAGES_PREFIX)"
 
 .PHONY: config
-config: ## Parse, resolve, and render compose file in canonical format
+config: compose.yaml ## Parse, resolve, and render compose file in canonical format
 	$(UP_ENV) $(COMPOSE) config
 
 ## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
@@ -539,7 +539,7 @@ hosts: ## Add the server name to /etc/hosts file
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
 .PHONY: permissions
-permissions p: ## Fix file permissions (primarily for Linux hosts)
+permissions p: compose.yaml ## Fix file permissions (primarily for Linux hosts)
 ifeq ($(UNAME_S),Linux)
 	$(COMPOSE) run --rm php chown -R $(USER) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER)$(S) of the project files.\n"
@@ -547,7 +547,7 @@ else
 	@printf " $(Y)›$(S) 'make permissions' is typically not needed on $(UNAME_S).\n"
 endif
 
-git_safe_dir: ## Add /app to Git's safe directories within the php container
+git_safe_dir: compose.yaml ## Add /app to Git's safe directories within the php container
 	$(COMPOSE) exec php git config --global --add safe.directory /app
 
 ## — UTILITIES 🛠️ ——————————————————————————————————————————————————————————————
