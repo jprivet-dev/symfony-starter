@@ -1,6 +1,6 @@
 # Editing permissions on Linux
 
-⬅️ [Troubleshooting](../troubleshooting.md)
+[⬅️ Troubleshooting](../troubleshooting.md)
 
 ---
 
@@ -32,4 +32,4 @@ This command recursively changes the ownership of all files and directories in y
 
 ---
 
-⬅️ [Troubleshooting](../troubleshooting.md)
+[⬅️ Troubleshooting](../troubleshooting.md)

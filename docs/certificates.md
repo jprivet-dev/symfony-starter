@@ -1,6 +1,6 @@
 # Validate certificates
 
-⬅️ [README](../README.md)
+[⬅️ README](../README.md)
 
 ---
 
@@ -44,4 +44,4 @@ This will create a `tls/root.crt` file. You can then follow these steps to manua
 
 ---
 
-⬅️ [README](../README.md)
+[⬅️ README](../README.md)

@@ -1,6 +1,6 @@
 # Docker build options
 
-⬅️ [README](../README.md)
+[⬅️ README](../README.md)
 
 ---
 
@@ -58,4 +58,4 @@ make start
 
 ---
 
-⬅️ [README](../README.md)
+[⬅️ README](../README.md)

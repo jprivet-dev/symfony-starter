@@ -1,6 +1,6 @@
 # Accessing the `var/` directory
 
-⬅️ [README](../README.md)
+[⬅️ README](../README.md)
 
 ---
 
@@ -28,4 +28,4 @@ The `composer.yaml` file has a line that creates an anonymous volume for `var/`,
 
 ---
 
-⬅️ [README](../README.md)
+[⬅️ README](../README.md)

@@ -1,6 +1,6 @@
 # Git "dubious ownership" Error in Docker Container
 
-⬅️ [Troubleshooting](../troubleshooting.md)
+[⬅️ Troubleshooting](../troubleshooting.md)
 
 ---
 
@@ -29,4 +29,4 @@ This will execute the necessary `git config` command inside your `php` Docker se
 
 ---
 
-⬅️ [Troubleshooting](../troubleshooting.md)
+[⬅️ Troubleshooting](../troubleshooting.md)

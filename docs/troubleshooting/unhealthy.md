@@ -1,6 +1,6 @@
 # Error "container is unhealthy" after `docker compose up`
 
-⬅️ [Troubleshooting](../troubleshooting.md)
+[⬅️ Troubleshooting](../troubleshooting.md)
 
 ---
 
@@ -50,4 +50,4 @@ Following these steps guarantees that you are always starting from a **clean and
 
 ---
 
-⬅️ [Troubleshooting](../troubleshooting.md)
+[⬅️ Troubleshooting](../troubleshooting.md)

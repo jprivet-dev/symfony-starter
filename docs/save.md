@@ -1,6 +1,6 @@
 # Save your generated Symfony application
 
-⬅️ [README](../README.md)
+[⬅️ README](../README.md)
 
 ---
 
@@ -58,4 +58,4 @@ make restart
 
 ---
 
-⬅️ [README](../README.md)
+[⬅️ README](../README.md)

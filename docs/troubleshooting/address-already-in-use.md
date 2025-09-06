@@ -1,6 +1,6 @@
 # Error "address already in use" or "port is already allocated"
 
-⬅️ [Troubleshooting](../troubleshooting.md)
+[⬅️ Troubleshooting](../troubleshooting.md)
 
 ---
 
@@ -103,4 +103,4 @@ sudo service apache2 stop # For Apache on systems using 'service' command
 
 ---
 
-⬅️ [Troubleshooting](../troubleshooting.md)
+[⬅️ Troubleshooting](../troubleshooting.md)
