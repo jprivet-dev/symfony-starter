@@ -327,10 +327,10 @@ composer_validate: composer.json composer.lock ## Check if lock file is up to da
 
 ## — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
 
-db_drop: bin/console ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
+db_drop: vendor/doctrine ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
 	$(CONSOLE) doctrine:database:drop --if-exists --force $(ARG)
 
-db_create: bin/console ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
+db_create: vendor/doctrine ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
 	$(CONSOLE) doctrine:database:create --if-not-exists $(ARG)
 
 db_clear: db_drop db_create ## Drop and create the database
@@ -340,42 +340,42 @@ db_init: db_drop db_create fixtures ## Drop and create the database and add fixt
 ##
 
 .PHONY: validate
-validate: bin/console ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
+validate: vendor/doctrine ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
 	-$(CONSOLE) doctrine:schema:validate -v $(ARG)
 
 .PHONY: update
-update: bin/console ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
+update: vendor/doctrine ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
 	$(CONSOLE) doctrine:schema:update --dump-sql
 
-update_force: bin/console ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
+update_force: vendor/doctrine ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
 	$(CONSOLE) doctrine:schema:update --force
 
 ##
 
 .PHONY: migration
-migration: bin/console ## Create a new migration based on database changes (format the generated SQL)
+migration: vendor/doctrine ## Create a new migration based on database changes (format the generated SQL)
 	$(CONSOLE) make:migration --formatted -v $(ARG)
 
 .PHONY: migrate
-migrate: bin/console ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
+migrate: vendor/doctrine ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
 	$(CONSOLE) doctrine:migrations:migrate --no-interaction --all-or-nothing $(ARG)
 
 .PHONY: list
-list: bin/console ## Display a list of all available migrations and their status
+list: vendor/doctrine ## Display a list of all available migrations and their status
 	$(CONSOLE) doctrine:migrations:list
 
 .PHONY: execute
-execute: bin/console ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
+execute: vendor/doctrine ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
 	$(CONSOLE) doctrine:migrations:execute $(ARG)
 
 .PHONY: generate
-generate: bin/console ## Generate a blank migration class
+generate: vendor/doctrine ## Generate a blank migration class
 	$(CONSOLE) doctrine:migrations:generate
 
 ##
 
 .PHONY: sql
-sql: bin/console ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
+sql: vendor/doctrine ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
 	$(CONSOLE) doctrine:query:sql "$(QUERY)"
 
 # See https://stackoverflow.com/questions/769683/how-to-show-tables-in-postgresql
@@ -385,7 +385,7 @@ sql_tables: sql ## Show all tables
 ##
 
 .PHONY: fixtures
-fixtures: bin/console ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
+fixtures: vendor/doctrine ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
 	$(CONSOLE) doctrine:fixtures:load -n $(ARG)
 
 ## — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
@@ -427,39 +427,39 @@ endif
 
 ##
 
-asset_map_clear: ## Clear all assets in the public output directory.
+asset_map_clear: compose.yaml ## Clear all assets in the public output directory.
 	$(COMPOSE) run --rm php rm -rf ./public/assets
 
-asset_map_compile: bin/console asset_map_clear ## Compile all mapped assets and writes them to the final public output directory.
+asset_map_compile: vendor/symfony/asset-mapper asset_map_clear ## Compile all mapped assets and writes them to the final public output directory.
 	$(CONSOLE) asset-map:compile
 
-asset_map_debug: bin/console ## See all of the mapped assets .
+asset_map_debug: vendor/symfony/asset-mapper ## See all of the mapped assets .
 	$(CONSOLE) debug:asset-map --full
 
 ##
 
-importmap_audit: bin/console ## Check for security vulnerability advisories for dependencies
+importmap_audit: vendor/symfony/asset-mapper ## Check for security vulnerability advisories for dependencies
 	$(CONSOLE) importmap:audit
 
-importmap_install: bin/console ## Download all assets that should be downloaded
+importmap_install: vendor/symfony/asset-mapper ## Download all assets that should be downloaded
 	$(CONSOLE) importmap:install
 
-importmap_outdated: bin/console ## List outdated JavaScript packages and their latest versions
+importmap_outdated: vendor/symfony/asset-mapper ## List outdated JavaScript packages and their latest versions
 	$(CONSOLE) importmap:outdated
 
-importmap_remove: bin/console ## Remove JavaScript packages
+importmap_remove: vendor/symfony/asset-mapper ## Remove JavaScript packages
 	$(CONSOLE) importmap:remove
 
-importmap_require: bin/console ## Require JavaScript packages
+importmap_require: vendor/symfony/asset-mapper ## Require JavaScript packages
 	$(CONSOLE) importmap:require $(ARG)
 
-importmap_update: bin/console ## Update JavaScript packages to their latest versions
+importmap_update: vendor/symfony/asset-mapper ## Update JavaScript packages to their latest versions
 	$(CONSOLE) importmap:update
 
 ## — TRANSLATION 🇬🇧 ————————————————————————————————————————————————————————————
 
 .PHONY: extract
-extract: bin/console ## Extracts translation strings from templates (fr)
+extract: vendor/symfony/translation ## Extracts translation strings from templates (fr)
 	$(CONSOLE) translation:extract --sort=asc --format=yaml --force fr
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
