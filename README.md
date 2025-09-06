@@ -267,6 +267,7 @@ tree -A -L 1 -F --dirsfirst
 
 * [Validate certificates](docs/certificates.md)
 * [Save your generated Symfony application](docs/save.md)
+* [Configure remote PHP interpreter (Docker) with your IDE](docs/remote-php-interpreter.md)
 * [Accessing the `var/` directory](docs/var.md)
 * [Docker build options](docs/options.md)
 * [Troubleshooting](docs%2Ftroubleshooting.md)
