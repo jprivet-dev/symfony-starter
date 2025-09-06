@@ -49,10 +49,16 @@ endif
 
 #
 # GENERATION
-# These variables and commands are for initial setup and can be removed after saving the project.
 #
 
-# End of bug fixes: November 2026 - See https://symfony.com/releases
+# "GENERATION" BLOCK CAN BE REMOVED AFTER SAVING THE PROJECT.
+# These variables and commands are only for initial setup.
+
+# Symfony 6.* is the current long-term support version.
+# Released on          : November 2023
+# End of bug fixes     : November 2026
+# End of security fixes: November 2027
+# See https://symfony.com/releases
 SYMFONY_LTS_VERSION = 6.*
 REPOSITORY          = git@github.com:dunglas/symfony-docker.git
 CLONE_DIR           = clone
@@ -150,9 +156,8 @@ help: ## Display this help message with available commands
 
 ## — GENERATION 🔨 ————————————————————————————————————————————————————————————
 
-#
-# This complete GENERATION block, with these following targets are for initial setup and can be removed after saving the project.
-#
+# "GENERATION" BLOCK CAN BE REMOVED AFTER SAVING THE PROJECT.
+# These following targets are only for initial setup.
 
 .PHONY: _base
 _base: clone build up_detached permissions # Internal
@@ -584,7 +589,6 @@ vars: ## Show key Makefile variables
 	@printf "USER         : $(USER)\n"
 	@printf "UNAME_S      : $(UNAME_S)\n"
 	@printf "APP_ENV      : $(APP_ENV)\n"
-	@printf "REPOSITORY   : $(REPOSITORY)\n"
 	@printf "UP_ENV       : $(UP_ENV)\n"
 	@printf "COMPOSE_V2   : $(COMPOSE_V2)\n"
 	@printf "COMPOSE      : $(COMPOSE)\n"
