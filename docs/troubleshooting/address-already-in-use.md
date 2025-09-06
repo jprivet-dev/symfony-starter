@@ -23,7 +23,7 @@ This method allows you to change the ports your Symfony application uses, which 
 - **Method A: In the command line**
 
 ```shell
-HTTP_PORT=8000 HTTPS_PORT=4443 HTTP3_PORT=4443 make generate
+HTTP_PORT=8000 HTTPS_PORT=4443 HTTP3_PORT=4443 make minimalist
 # or, if the project is already generated:
 HTTP_PORT=8000 HTTPS_PORT=4443 HTTP3_PORT=4443 make up_detached
 ````
@@ -42,7 +42,7 @@ HTTP3_PORT=4443
 Then, run your `make` command:
 
 ```shell
-make generate
+make minimalist
 # or
 make up_detached
 ```

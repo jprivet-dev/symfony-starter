@@ -23,22 +23,22 @@ cd symfony-starter
 
 ```shell
 # Minimalist Stable Release
-make generate
+make minimalist
 
 # Minimalist Long-Term Support Release (LTS)
-make generate@lts
+make minimalist@lts
 
 # Webapp Stable Release
-make generate@webapp
+make webapp
 
 # Webapp Long-Term Support Release (LTS)
-make generate@webapp_lts
+make webapp@lts
 
 # Specific Minimalist Version
-SYMFONY_VERSION=6.4.3 make generate
+SYMFONY_VERSION=6.4.3 make minimalist
 
 # Specific Webapp Version
-SYMFONY_VERSION=6.4.3 make generate@webapp
+SYMFONY_VERSION=6.4.3 make webapp
 ```
 
 This will:
@@ -56,16 +56,16 @@ Open `https://symfony-starter.localhost:8443/` in your browser and [accept the a
 
 ```shell
 # Minimalist Stable Release
-git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate
+git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist
 
 # Minimalist Long-Term Support Release (LTS)
-git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate@lts
+git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist@lts
 
 # Webapp Stable Release
-git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate@webapp
+git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make webapp
 
 # Webapp Long-Term Support Release (LTS)
-git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate@webapp_lts
+git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make webapp@lts
 ```
 
 ## Generate an app in another existing project
@@ -87,7 +87,7 @@ Stops all Docker containers, removes all Docker-related configuration files copi
 make clear_all
 
 # Then regenerate the Symfony app (LTS version for example):
-make generate@lts
+make minimalist@lts
 ```
 
 ## Daily usage
@@ -231,7 +231,7 @@ make stop  # Stop the project (down alias)
 
 ## Project structure
 
-After `make generate`, your project structure will look like this (Minimalist Stable Release):
+After `make minimalist`, your project structure will look like this (Minimalist Stable Release):
 
 ```
 ./

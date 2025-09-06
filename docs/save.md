@@ -34,10 +34,10 @@ Locate and **delete the following lines** from `frankenphp/docker-entrypoint.sh`
 
 These commands are specific to the one-time project creation process. **Locate and remove them**:
 
-* `generate`
-* `generate@lts`
-* `generate@webapp`
-* `generate@webapp_lts`
+* `minimalist`
+* `minimalist@lts`
+* `webapp`
+* `webapp@lts`
 * `webapp`
 * `clone`
 * `clear_all`
