@@ -20,32 +20,17 @@ Locate and **delete the following lines** from `frankenphp/docker-entrypoint.sh`
 	fi
 ```
 
-## 2. Remove GENERATION commands and variables from `Makefile`
+## 2. Remove `GENERATION` blocks from `Makefile`
 
-### 2.1. Remove the GENERATION variables
+To find the items to remove in the `Makefile` file, search for the word `GENERATION`.
 
-**Delete the entire GENERATION block** and its associated variables:
-
-* `SYMFONY_LTS_VERSION`
-* `REPOSITORY`
-* `CLONE_DIR`
-
-### 2.2. Remove GENERATION targets
-
-These commands are specific to the one-time project creation process. **Locate and remove them**:
-
-* `minimalist`
-* `minimalist@lts`
-* `webapp`
-* `webapp@lts`
-* `webapp`
-* `clone`
-* `clear_all`
+* You will find variables that are only used for the initial setup: `SYMFONY_LTS_VERSION`, `REPOSITORY`, etc.
+* You will find targets that are only used for the initial setup: `minimalist`, `webapp`, `api`, etc.
 
 ## 3. Commit all changes
 
 ```shell
-git add . && git commit -m "Fresh Symfony application saved and setup commands removed"
+git add . && git commit -m "Fresh Symfony application saved (setup variables and targets removed)"
 ```
 
 ## 4. Verify the changes (optional)

@@ -52,7 +52,7 @@ endif
 #
 
 # "GENERATION" BLOCK CAN BE REMOVED AFTER SAVING THE PROJECT.
-# These variables and commands are only for initial setup.
+# These variables are only used for the initial setup.
 
 # Symfony 6.* is the current long-term support version.
 # Released on          : November 2023
@@ -157,7 +157,7 @@ help: ## Display this help message with available commands
 ## — GENERATION 🔨 ————————————————————————————————————————————————————————————
 
 # "GENERATION" BLOCK CAN BE REMOVED AFTER SAVING THE PROJECT.
-# These following targets are only for initial setup.
+# These following targets are only used for the initial setup.
 
 .PHONY: _base
 _base: clone build up_detached permissions # Internal
