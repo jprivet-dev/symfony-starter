@@ -170,7 +170,7 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 webapp: _base ## Generate a webapp with Docker configuration (stable release)
 	@printf "\n$(Y)Add extra packages to build a web application$(S)"
 	@printf "\n$(Y)---------------------------------------------$(S)\n\n"
-	$(COMPOSER) require webapp
+	$(MAKE) composer ARG="require webapp"
 	$(MAKE) restart
 
 webapp@lts: ## Generate a webapp with Docker configuration (LTS - long-term support release)
@@ -182,7 +182,7 @@ webapp@lts: ## Generate a webapp with Docker configuration (LTS - long-term supp
 api: _base ## Generate an Api Platform project with Docker configuration (stable release)
 	@printf "\n$(Y)Install the API Platform’s server component$(S)"
 	@printf "\n$(Y)-------------------------------------------$(S)\n\n"
-	$(COMPOSER) require api
+	$(MAKE) composer ARG="require api"
 	$(MAKE) restart
 
 .PHONY: api@lts
@@ -262,24 +262,24 @@ tests t: phpunit ## Run all tests
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
 .PHONY: symfony
-symfony sf: ## Run Symfony console command - $ make symfony [ARG=<arguments>]- Example: $ make symfony ARG=cache:clear
+symfony sf: bin/console ## Run Symfony console command - $ make symfony [ARG=<arguments>]- Example: $ make symfony ARG=cache:clear
 	$(CONSOLE) $(ARG)
 
 .PHONY: cc
-cc: ## Clear the Symfony cache
+cc: bin/console ## Clear the Symfony cache
 	$(CONSOLE) cache:clear
 
 .PHONY: about
-about: ## Display information about the current Symfony project
+about: bin/console ## Display information about the current Symfony project
 	$(CONSOLE) about
 
 .PHONY: dotenv
-dotenv: ## Lists all .env files with variables and values
+dotenv: bin/console ## Lists all .env files with variables and values
 	$(CONSOLE) debug:dotenv
 
 .PHONY: dumpenv
 dumpenv: ## Generate .env.local.php for production
-	$(COMPOSER) dump-env prod
+	$(MAKE) composer ARG="dump-env prod"
 
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
 
@@ -302,35 +302,35 @@ php_command: ## Run a command inside the PHP container - $ make php_command [ARG
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
 .PHONY: composer
-composer: ## Run composer command - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
+composer: composer.json ## Run composer command - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
 	$(COMPOSER) $(ARG)
 
-composer_install: ## Install Composer packages
+composer_install: composer.json ## Install Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
 	$(COMPOSER) install
 endif
 
-composer_update: ## Update Composer packages
+composer_update: composer.json ## Update Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
 	$(COMPOSER) update
 endif
 
-composer_update_lock: ## Update only the content hash of composer.lock without updating dependencies
+composer_update_lock: composer.lock ## Update only the content hash of composer.lock without updating dependencies
 	$(COMPOSER) update --lock
 
-composer_validate: ## Validate composer.json and composer.lock
+composer_validate: composer.json composer.lock ## Check if lock file is up to date (even when config.lock is false)
 	$(COMPOSER) validate --strict --check-lock
 
 ## — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
 
-db_drop: ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
+db_drop: bin/console ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
 	$(CONSOLE) doctrine:database:drop --if-exists --force $(ARG)
 
-db_create: ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
+db_create: bin/console ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
 	$(CONSOLE) doctrine:database:create --if-not-exists $(ARG)
 
 db_clear: db_drop db_create ## Drop and create the database
@@ -340,42 +340,42 @@ db_init: db_drop db_create fixtures ## Drop and create the database and add fixt
 ##
 
 .PHONY: validate
-validate: ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
+validate: bin/console ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
 	-$(CONSOLE) doctrine:schema:validate -v $(ARG)
 
 .PHONY: update
-update: ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
+update: bin/console ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
 	$(CONSOLE) doctrine:schema:update --dump-sql
 
-update_force: ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
+update_force: bin/console ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
 	$(CONSOLE) doctrine:schema:update --force
 
 ##
 
 .PHONY: migration
-migration: ## Create a new migration based on database changes (format the generated SQL)
+migration: bin/console ## Create a new migration based on database changes (format the generated SQL)
 	$(CONSOLE) make:migration --formatted -v $(ARG)
 
 .PHONY: migrate
-migrate: ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
+migrate: bin/console ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
 	$(CONSOLE) doctrine:migrations:migrate --no-interaction --all-or-nothing $(ARG)
 
 .PHONY: list
-list: ## Display a list of all available migrations and their status
+list: bin/console ## Display a list of all available migrations and their status
 	$(CONSOLE) doctrine:migrations:list
 
 .PHONY: execute
-execute: ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
+execute: bin/console ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
 	$(CONSOLE) doctrine:migrations:execute $(ARG)
 
 .PHONY: generate
-generate: ## Generate a blank migration class
+generate: bin/console ## Generate a blank migration class
 	$(CONSOLE) doctrine:migrations:generate
 
 ##
 
 .PHONY: sql
-sql: ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
+sql: bin/console ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
 	$(CONSOLE) doctrine:query:sql "$(QUERY)"
 
 # See https://stackoverflow.com/questions/769683/how-to-show-tables-in-postgresql
@@ -385,7 +385,7 @@ sql_tables: sql ## Show all tables
 ##
 
 .PHONY: fixtures
-fixtures: ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
+fixtures: bin/console ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
 	$(CONSOLE) doctrine:fixtures:load -n $(ARG)
 
 ## — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
@@ -430,36 +430,36 @@ endif
 asset_map_clear: ## Clear all assets in the public output directory.
 	$(COMPOSE) run --rm php rm -rf ./public/assets
 
-asset_map_compile: asset_map_clear ## Compile all mapped assets and writes them to the final public output directory.
+asset_map_compile: bin/console asset_map_clear ## Compile all mapped assets and writes them to the final public output directory.
 	$(CONSOLE) asset-map:compile
 
-asset_map_debug: ## See all of the mapped assets .
+asset_map_debug: bin/console ## See all of the mapped assets .
 	$(CONSOLE) debug:asset-map --full
 
 ##
 
-importmap_audit: ## Check for security vulnerability advisories for dependencies
+importmap_audit: bin/console ## Check for security vulnerability advisories for dependencies
 	$(CONSOLE) importmap:audit
 
-importmap_install: ## Download all assets that should be downloaded
+importmap_install: bin/console ## Download all assets that should be downloaded
 	$(CONSOLE) importmap:install
 
-importmap_outdated: ## List outdated JavaScript packages and their latest versions
+importmap_outdated: bin/console ## List outdated JavaScript packages and their latest versions
 	$(CONSOLE) importmap:outdated
 
-importmap_remove: ## Remove JavaScript packages
+importmap_remove: bin/console ## Remove JavaScript packages
 	$(CONSOLE) importmap:remove
 
-importmap_require: ## Require JavaScript packages
+importmap_require: bin/console ## Require JavaScript packages
 	$(CONSOLE) importmap:require $(ARG)
 
-importmap_update: ## Update JavaScript packages to their latest versions
+importmap_update: bin/console ## Update JavaScript packages to their latest versions
 	$(CONSOLE) importmap:update
 
 ## — TRANSLATION 🇬🇧 ————————————————————————————————————————————————————————————
 
 .PHONY: extract
-extract: ## Extracts translation strings from templates (fr)
+extract: bin/console ## Extracts translation strings from templates (fr)
 	$(CONSOLE) translation:extract --sort=asc --format=yaml --force fr
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
