@@ -79,7 +79,7 @@ define append
   endif
 endef
 
-PROJECT_NAME    ?= $(shell basename $(CURDIR))
+PROJECT_NAME    ?= $(shell basename $(CURDIR) | tr '[:upper:]' '[:lower:]')
 SERVER_NAME      = $(PROJECT_NAME).localhost
 IMAGES_PREFIX    = $(PROJECT_NAME)-
 
