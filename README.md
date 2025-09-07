@@ -125,14 +125,8 @@ make stop  # Stop the project (down alias)
   restart                       Stop & Start the project and show info (up_detached & info alias)
   info                          Show project access info
 
-  MINIMALIST VERSION
   install                       Start the project, install dependencies and show info
   check                         Check everything before you deliver
-
-  WEBAPP VERSION
-  install                       Start the project, install dependencies and show info
-  check                         Check everything before you deliver
-  tests                      t  Run all tests
 
 — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
   symfony                    sf Run Symfony console command - $ make symfony [ARG=<arguments>]- Example: $ make symfony ARG=cache:clear
@@ -187,11 +181,11 @@ make stop  # Stop the project (down alias)
   xdebug_version                Xdebug version number
 
 — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
-  assets                        Generate all assets.
+  assets                        Generate all assets
 
-  asset_map_clear               Clear all assets in the public output directory.
-  asset_map_compile             Compile all mapped assets and writes them to the final public output directory.
-  asset_map_debug               See all of the mapped assets .
+  asset_map_clear               Clear all assets in the public output directory
+  asset_map_compile             Compile all mapped assets and writes them to the final public output directory
+  asset_map_debug               See all of the mapped assets
 
   importmap_audit               Check for security vulnerability advisories for dependencies
   importmap_install             Download all assets that should be downloaded

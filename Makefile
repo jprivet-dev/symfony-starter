@@ -191,7 +191,7 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 webapp: _base ## Generate a webapp with Docker configuration (stable release)
 	@printf "\n$(Y)Add extra packages to build a web application$(S)"
 	@printf "\n$(Y)---------------------------------------------$(S)\n\n"
-	$(MAKE) composer ARG="require webapp"
+	$(COMPOSER) require webapp
 	$(MAKE) restart
 
 webapp@lts: ## Generate a webapp with Docker configuration (LTS - long-term support release)
@@ -203,7 +203,7 @@ webapp@lts: ## Generate a webapp with Docker configuration (LTS - long-term supp
 api: _base ## Generate an Api Platform project with Docker configuration (stable release)
 	@printf "\n$(Y)Install the API Platform’s server component$(S)"
 	@printf "\n$(Y)-------------------------------------------$(S)\n\n"
-	$(MAKE) composer ARG="require api"
+	$(COMPOSER) require api
 	$(MAKE) restart
 
 .PHONY: api@lts
@@ -259,28 +259,43 @@ info: ## Show project access info
 	fi
 	@printf "\n"
 
-#
-##   MINIMALIST VERSION
-#
+
+##
 
 .PHONY: install
-install: up_detached composer_install images info ## Start the project, install dependencies and show info
+install: ## Start the project, install dependencies and show info
+	@printf "\n$(Y)Start the project$(S)"
+	@printf "\n$(Y)-----------------$(S)\n\n"
+	$(MAKE) up_detached
+ifneq ($(HAS_COMPOSER),)
+	@printf "\n$(Y)Install Composer packages$(S)"
+	@printf "\n$(Y)-------------------------$(S)\n\n"
+	$(MAKE) composer_install
+endif
+ifneq ($(HAS_ASSETS),)
+	@printf "\n$(Y)Generate all assets$(S)"
+	@printf "\n$(Y)-------------------$(S)\n\n"
+	$(MAKE) assets
+endif
+	$(MAKE) images info
 
 .PHONY: check
-check: composer_validate ## Check everything before you deliver
-
-#
-##   WEBAPP VERSION
-#
-
-.PHONY: install
-install: up_detached composer_install assets images info ## Start the project, install dependencies and show info
-
-.PHONY: check
-check: composer_validate tests validate ## Check everything before you deliver
-
-.PHONY: tests
-tests t: phpunit ## Run all tests
+check: ## Check everything before you deliver
+ifneq ($(HAS_COMPOSER),)
+	@printf "\n$(Y)Check if lock file is up to date$(S)"
+	@printf "\n$(Y)--------------------------------$(S)\n\n"
+	-$(MAKE) composer_validate
+endif
+ifneq ($(HAS_DOCTRINE),)
+	@printf "\n$(Y)Validate the mapping files$(S)"
+	@printf "\n$(Y)--------------------------$(S)\n\n"
+	-$(MAKE) validate
+endif
+ifneq ($(HAS_PHPUNIT),)
+	@printf "\n$(Y)Run PHPUnit$(S)"
+	@printf "\n$(Y)-----------$(S)\n\n"
+	-$(MAKE) phpunit
+endif
 
 ifeq ($(HAS_SYMFONY),)
 $(warning SYMFONY targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
@@ -306,7 +321,7 @@ dotenv: ## Lists all .env files with variables and values
 
 .PHONY: dumpenv
 dumpenv: ## Generate .env.local.php for production
-	$(MAKE) composer ARG="dump-env prod"
+	$(COMPOSER) dump-env prod
 
 endif
 
@@ -386,7 +401,7 @@ db_init: db_drop db_create fixtures ## Drop and create the database and add fixt
 
 .PHONY: validate
 validate: ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
-	-$(CONSOLE) doctrine:schema:validate -v $(ARG)
+	$(CONSOLE) doctrine:schema:validate -v $(ARG)
 
 .PHONY: update
 update: ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
@@ -475,7 +490,7 @@ else
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 
 .PHONY: assets
-assets: ## Generate all assets.
+assets: ## Generate all assets
 ifeq ($(APP_ENV),prod)
 	make importmap_install
 else
@@ -484,13 +499,13 @@ endif
 
 ##
 
-asset_map_clear: ## Clear all assets in the public output directory.
+asset_map_clear: ## Clear all assets in the public output directory
 	$(COMPOSE) run --rm php rm -rf ./public/assets
 
-asset_map_compile: asset_map_clear ## Compile all mapped assets and writes them to the final public output directory.
+asset_map_compile: asset_map_clear ## Compile all mapped assets and writes them to the final public output directory
 	$(CONSOLE) asset-map:compile
 
-asset_map_debug: ## See all of the mapped assets .
+asset_map_debug: ## See all of the mapped assets
 	$(CONSOLE) debug:asset-map --full
 
 ##
