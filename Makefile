@@ -121,6 +121,12 @@ $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
 
+# Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
+HTTP_PORT_SUFFIX = $(if $(HTTP_PORT),:$(HTTP_PORT))
+
+# Will be ":PORT" if HTTPS_PORT is defined and not 443, otherwise empty.
+HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(HTTPS_PORT)))
+
 #
 # DOCKER COMMANDS
 #
