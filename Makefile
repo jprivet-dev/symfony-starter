@@ -79,6 +79,9 @@ HAS_CERTIFICATES    ?= $(wildcard compose.yaml)
 HAS_TROUBLESHOOTING ?= $(wildcard compose.yaml)
 HAS_EXPERIMENTAL    ?= $(wildcard bin/console)
 
+HAS_PROFILER        ?= $(wildcard vendor/symfony/web-profiler-bundle)
+HAS_API             ?= $(wildcard vendor/api-platform)
+
 #
 # FILES & DIRECTORIES
 #
@@ -118,12 +121,6 @@ $(eval $(call append,STABILITY))
 $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
-
-# Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
-HTTP_PORT_SUFFIX = $(if $(HTTP_PORT),:$(HTTP_PORT))
-
-# Will be ":PORT" if HTTPS_PORT is defined and not 443, otherwise empty.
-HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(HTTPS_PORT)))
 
 #
 # DOCKER COMMANDS
@@ -254,9 +251,12 @@ info: ## Show project access info
 	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
 	@printf " $(Y)›$(S) Go in your favourite browser and accept the auto-generated TLS certificate:\n"
 	@printf "    - $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
-	@if [ -d vendor/api-platform ]; then \
-		printf "    - $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/api$(S)\n"; \
-	fi
+ifneq ($(HAS_API),)
+	@printf "    - $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/api$(S)\n"
+endif
+ifneq ($(HAS_PROFILER),)
+	@printf "    - $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/_profiler$(S)\n"
+endif
 	@printf "\n"
 
 
@@ -309,7 +309,7 @@ symfony sf: ## Run Symfony console command - $ make symfony [ARG=<arguments>]- E
 
 .PHONY: cc
 cc: ## Clear the Symfony cache
-	$(CONSOLE) cache:clear.
+	$(CONSOLE) cache:clear
 
 .PHONY: about
 about: ## Display information about the current Symfony project
@@ -688,8 +688,11 @@ vars: ## Show key Makefile variables
 	@printf "CONTAINER_PHP: $(CONTAINER_PHP)\n"
 	@printf "PHP          : $(PHP)\n"
 	@printf "COMPOSER     : $(COMPOSER)\n"
+	@printf "BASH_COMMAND : $(BASH_COMMAND)\n"
 	@printf "CONSOLE      : $(CONSOLE)\n"
+ifneq ($(HAS_PHPUNIT),)
 	@printf "PHPUNIT      : $(PHPUNIT)\n"
+endif
 
 ifneq ($(HAS_EXPERIMENTAL),true)
 $(warning EXPERIMENTAL targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
