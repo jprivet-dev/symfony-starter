@@ -67,16 +67,10 @@ CLONE_DIR           = clone
 # TARGETS ACTIVATION
 #
 
-HAS_SYMFONY         ?= $(wildcard bin/console)
-HAS_PHP             ?= $(wildcard compose.yaml)
-HAS_COMPOSER        ?= $(wildcard composer.json)
 HAS_DOCTRINE        ?= $(wildcard vendor/doctrine)
 HAS_PHPUNIT         ?= $(wildcard bin/phpunit)
 HAS_ASSETS          ?= $(wildcard vendor/symfony/asset-mapper)
 HAS_TRANSLATION     ?= $(wildcard vendor/symfony/translation)
-HAS_CERTIFICATES    ?= $(wildcard compose.yaml)
-HAS_TROUBLESHOOTING ?= $(wildcard compose.yaml)
-HAS_EXPERIMENTAL    ?= $(wildcard bin/console)
 
 HAS_PROFILER        ?= $(wildcard vendor/symfony/web-profiler-bundle)
 HAS_MAILER          ?= $(wildcard vendor/symfony/mailer)
@@ -277,11 +271,9 @@ install: ## Start the project, install dependencies and show info
 	@printf "\n$(Y)Start the project$(S)"
 	@printf "\n$(Y)-----------------$(S)\n\n"
 	$(MAKE) up_detached
-ifneq ($(HAS_COMPOSER),)
 	@printf "\n$(Y)Install Composer packages$(S)"
 	@printf "\n$(Y)-------------------------$(S)\n\n"
 	$(MAKE) composer_install
-endif
 ifneq ($(HAS_ASSETS),)
 	@printf "\n$(Y)Generate all assets$(S)"
 	@printf "\n$(Y)-------------------$(S)\n\n"
@@ -291,11 +283,9 @@ endif
 
 .PHONY: check
 check: ## Check everything before you deliver
-ifneq ($(HAS_COMPOSER),)
 	@printf "\n$(Y)Check if lock file is up to date$(S)"
 	@printf "\n$(Y)--------------------------------$(S)\n\n"
 	-$(MAKE) composer_validate
-endif
 ifneq ($(HAS_DOCTRINE),)
 	@printf "\n$(Y)Validate the mapping files$(S)"
 	@printf "\n$(Y)--------------------------$(S)\n\n"
@@ -306,10 +296,6 @@ ifneq ($(HAS_PHPUNIT),)
 	@printf "\n$(Y)-----------$(S)\n\n"
 	-$(MAKE) phpunit
 endif
-
-ifeq ($(HAS_SYMFONY),)
-$(warning SYMFONY targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
-else
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
@@ -333,12 +319,6 @@ dotenv: ## Lists all .env files with variables and values
 dumpenv: ## Generate .env.local.php for production
 	$(COMPOSER) dump-env prod
 
-endif
-
-ifeq ($(HAS_PHP),)
-$(warning PHP targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
-else
-
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
 
 .PHONY: php
@@ -356,12 +336,6 @@ php_env: ## Display all environment variables set within the PHP container
 .PHONY: php_command
 php_command: ## Run a command inside the PHP container - $ make php_command [ARG=<arguments>]- Example: $ make php_command ARG="ls -al"
 	$(BASH_COMMAND) "$(ARG)"
-
-endif
-
-ifeq ($(HAS_COMPOSER),)
-$(warning COMPOSER targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
-else
 
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
@@ -388,8 +362,6 @@ composer_update_lock: ## Update only the content hash of composer.lock without u
 
 composer_validate: ## Check if lock file is up to date (even when config.lock is false)
 	$(COMPOSER) validate --strict --check-lock
-
-endif
 
 ifeq ($(HAS_DOCTRINE),)
 $(warning DOCTRINE & SQL targets are not activated! Remove that block or install Doctrine. - $$ make require_doctrine)
@@ -588,10 +560,6 @@ images: ## List images used by the current containers
 config: ## Parse, resolve, and render compose file in canonical format
 	$(UP_ENV) $(COMPOSE) config
 
-ifeq ($(HAS_CERTIFICATES),)
-$(warning CERTIFICATES targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
-else
-
 ## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
 
 .PHONY: certificates
@@ -630,12 +598,6 @@ hosts: ## Add the server name to /etc/hosts file
 		printf " $(G)✔$(S) \"$(SERVER_NAME)\" already exists in /etc/hosts.\n"; \
 	fi
 
-endif
-
-ifeq ($(HAS_TROUBLESHOOTING),)
-$(warning TROUBLESHOOTING targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
-else
-
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
 .PHONY: permissions
@@ -649,8 +611,6 @@ endif
 
 git_safe_dir: ## Add /app to Git's safe directories within the php container
 	$(COMPOSE) exec php git config --global --add safe.directory /app
-
-endif
 
 ## — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
 
@@ -698,10 +658,6 @@ ifneq ($(HAS_PHPUNIT),)
 	@printf "PHPUNIT      : $(PHPUNIT)\n"
 endif
 
-ifneq ($(HAS_EXPERIMENTAL),true)
-$(warning EXPERIMENTAL targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
-else
-
 ## — EXPERIMENTAL 🧪 ——————————————————————————————————————————————————————————
 
 # Related to HAS_DOCTRINE
@@ -733,5 +689,3 @@ require_bootstrap: require_asset_mapper ## Install Bootstrap - https://getbootst
 
 require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
 	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
-
-endif
