@@ -135,7 +135,7 @@ make stop  # Stop the project (down alias)
   tests                      t  Run all tests
 
 — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
-  symfony                    sf Run Symfony console command - Usage: make symfony ARG="cache:clear"
+  symfony                    sf Run Symfony console command - $ make symfony [ARG=<arguments>]- Example: $ make symfony ARG=cache:clear
   cc                            Clear the Symfony cache
   about                         Display information about the current Symfony project
   dotenv                        Lists all .env files with variables and values
@@ -153,7 +153,7 @@ make stop  # Stop the project (down alias)
   composer_install              Install Composer packages
   composer_update               Update Composer packages
   composer_update_lock          Update only the content hash of composer.lock without updating dependencies
-  composer_validate             Validate composer.json and composer.lock
+  composer_validate             Check if lock file is up to date (even when config.lock is false)
 
 — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
   db_drop                       Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
@@ -200,7 +200,7 @@ make stop  # Stop the project (down alias)
   importmap_require             Require JavaScript packages
   importmap_update              Update JavaScript packages to their latest versions
 
-— TRANSLATION 🇬🇧 ————————————————————————————————————————————————————————————
+— TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
   extract                       Extracts translation strings from templates (fr)
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
@@ -222,9 +222,14 @@ make stop  # Stop the project (down alias)
   permissions                p  Fix file permissions (primarily for Linux hosts)
   git_safe_dir                  Add /app to Git's safe directories within the php container
 
-— UTILITIES 🛠️ ——————————————————————————————————————————————————————————————
+— UTILITIES 🛠️ —————————————————————————————————————————————————————————————
   env_files                     Show env files loaded into this Makefile
   vars                          Show key Makefile variables
+
+— EXPERIMENTAL 🧪 ——————————————————————————————————————————————————————————
+  require_profiler              Install the profiler
+  require_asset_mapper          Install AssetMapper
+  require_bootstrap             Install Bootstrap
 ```
 
 <!-- MAKEFILE_COMMANDS_END -->

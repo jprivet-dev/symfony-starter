@@ -77,6 +77,7 @@ HAS_TRANSLATION     := $(wildcard vendor/symfony/translation)
 HAS_DOCKER          := $(wildcard compose.yaml)
 HAS_CERTIFICATES    := $(wildcard compose.yaml)
 HAS_TROUBLESHOOTING := $(wildcard compose.yaml)
+HAS_EXPERIMENTAL    := false
 
 #
 # FILES & DIRECTORIES
@@ -518,7 +519,7 @@ ifeq ($(HAS_TRANSLATION),)
 $(warning TRANSLATION targets are not activated! Remove that block or install Translation.)
 else
 
-## — TRANSLATION 🇬🇧 ————————————————————————————————————————————————————————————
+## — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
 
 .PHONY: extract
 extract: ## Extracts translation strings from templates (fr)
@@ -527,7 +528,7 @@ extract: ## Extracts translation strings from templates (fr)
 endif
 
 ifeq ($(HAS_DOCKER),)
-$(warning DOCKER targets are not activated)
+$(warning DOCKER targets are not activated! Generate the Symfony application.)
 else
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
@@ -632,7 +633,7 @@ git_safe_dir: ## Add /app to Git's safe directories within the php container
 
 endif
 
-## — UTILITIES 🛠️ ——————————————————————————————————————————————————————————————
+## — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
 
 env_files: ## Show env files loaded into this Makefile
 	@printf "\n$(Y)Symfony env files$(S)"
@@ -674,3 +675,20 @@ vars: ## Show key Makefile variables
 	@printf "COMPOSER     : $(COMPOSER)\n"
 	@printf "CONSOLE      : $(CONSOLE)\n"
 	@printf "PHPUNIT      : $(PHPUNIT)\n"
+
+ifneq ($(HAS_EXPERIMENTAL),true)
+$(warning EXPERIMENTAL targets are not activated! Remove that block or set HAS_EXPERIMENTAL=true in your .env.local file.)
+else
+
+## — EXPERIMENTAL 🧪 ——————————————————————————————————————————————————————————
+
+require_profiler: ## Install the profiler
+	$(COMPOSER) require --dev symfony/profiler-pack
+
+require_asset_mapper: ## Install AssetMapper
+	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
+
+require_bootstrap: require_asset_mapper ## Install Bootstrap
+	$(CONSOLE) importmap:require bootstrap
+
+endif
