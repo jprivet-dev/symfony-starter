@@ -77,7 +77,7 @@ HAS_TRANSLATION     ?= $(wildcard vendor/symfony/translation)
 HAS_DOCKER          ?= $(wildcard compose.yaml)
 HAS_CERTIFICATES    ?= $(wildcard compose.yaml)
 HAS_TROUBLESHOOTING ?= $(wildcard compose.yaml)
-HAS_EXPERIMENTAL    ?= false
+HAS_EXPERIMENTAL    ?= $(wildcard bin/console)
 
 #
 # FILES & DIRECTORIES
@@ -283,7 +283,7 @@ check: composer_validate tests validate ## Check everything before you deliver
 tests t: phpunit ## Run all tests
 
 ifeq ($(HAS_SYMFONY),)
-$(warning SYMFONY targets are not activated! Generate the Symfony application.)
+$(warning SYMFONY targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
 else
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
@@ -294,7 +294,7 @@ symfony sf: ## Run Symfony console command - $ make symfony [ARG=<arguments>]- E
 
 .PHONY: cc
 cc: ## Clear the Symfony cache
-	$(CONSOLE) cache:clear
+	$(CONSOLE) cache:clear.
 
 .PHONY: about
 about: ## Display information about the current Symfony project
@@ -311,7 +311,7 @@ dumpenv: ## Generate .env.local.php for production
 endif
 
 ifeq ($(HAS_PHP),)
-$(warning PHP targets are not activated! Generate the Symfony application.)
+$(warning PHP targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
 else
 
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
@@ -335,7 +335,7 @@ php_command: ## Run a command inside the PHP container - $ make php_command [ARG
 endif
 
 ifeq ($(HAS_COMPOSER),)
-$(warning COMPOSER targets are not activated! Generate the Symfony application.)
+$(warning COMPOSER targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
 else
 
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
@@ -367,7 +367,7 @@ composer_validate: ## Check if lock file is up to date (even when config.lock is
 endif
 
 ifeq ($(HAS_DOCTRINE),)
-$(warning DOCTRINE & SQL targets are not activated! Remove that block or install Doctrine.)
+$(warning DOCTRINE & SQL targets are not activated! Remove that block or install Doctrine. - $$ make require_doctrine)
 else
 
 ## — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
@@ -442,7 +442,7 @@ psql: ## Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG
 endif
 
 ifeq ($(HAS_PHPUNIT),)
-$(warning TESTS targets are not activated! Remove that block or install PHPUnit.)
+$(warning TESTS targets are not activated! Remove that block or install PHPUnit. - $$ make require_phpunit)
 else
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
@@ -469,7 +469,7 @@ xdebug_version: ## Xdebug version number
 endif
 
 ifeq ($(HAS_ASSETS),)
-$(warning ASSETS targets are not activated! Remove that block or install AssetMapper.)
+$(warning ASSETS targets are not activated! Remove that block or install AssetMapper. - $$ make require_asset_mapper)
 else
 
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
@@ -516,7 +516,7 @@ importmap_update: ## Update JavaScript packages to their latest versions
 endif
 
 ifeq ($(HAS_TRANSLATION),)
-$(warning TRANSLATION targets are not activated! Remove that block or install Translation.)
+$(warning TRANSLATION targets are not activated! Remove that block or install Translation. - $$ make require_translation)
 else
 
 ## — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
@@ -528,7 +528,7 @@ extract: ## Extracts translation strings from templates (fr)
 endif
 
 ifeq ($(HAS_DOCKER),)
-$(warning DOCKER targets are not activated! Generate the Symfony application.)
+$(warning DOCKER targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
 else
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
@@ -570,7 +570,7 @@ config: ## Parse, resolve, and render compose file in canonical format
 endif
 
 ifeq ($(HAS_CERTIFICATES),)
-$(warning CERTIFICATES targets are not activated! Generate the Symfony application.)
+$(warning CERTIFICATES targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
 else
 
 ## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
@@ -614,7 +614,7 @@ hosts: ## Add the server name to /etc/hosts file
 endif
 
 ifeq ($(HAS_TROUBLESHOOTING),)
-$(warning TROUBLESHOOTING targets are not activated! Generate the Symfony application.)
+$(warning TROUBLESHOOTING targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
 else
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
@@ -677,22 +677,34 @@ vars: ## Show key Makefile variables
 	@printf "PHPUNIT      : $(PHPUNIT)\n"
 
 ifneq ($(HAS_EXPERIMENTAL),true)
-$(warning EXPERIMENTAL targets are not activated! Remove that block or set HAS_EXPERIMENTAL=true in your .env.local file.)
+$(warning EXPERIMENTAL targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
 else
 
 ## — EXPERIMENTAL 🧪 ——————————————————————————————————————————————————————————
+
+# Related to HAS_DOCTRINE
+require_doctrine: ## Install Doctrine - https://symfony.com/doc/current/doctrine.html
+	$(COMPOSER) require symfony/orm-pack
+
+# Related to HAS_PHPUNIT
+require_phpunit: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
+	$(COMPOSER) require --dev symfony/test-pack
+
+# Related to HAS_ASSETS
+require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
+
+# Related to HAS_TRANSLATION
+require_translation: ## Install translation - https://symfony.com/doc/current/translation.html
+	$(COMPOSER) require symfony/translation
+
+##
 
 require_profiler: ## Install the profiler - https://symfony.com/doc/current/profiler.html
 	$(COMPOSER) require --dev symfony/profiler-pack
 
 require_maker_bundle: ## Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
 	$(COMPOSER) require --dev symfony/maker-bundle
-
-require_test: ## Install the test pack - https://symfony.com/doc/current/testing.html
-	$(COMPOSER) require --dev symfony/test-pack
-
-require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
 
 require_bootstrap: require_asset_mapper ## Install Bootstrap - https://getbootstrap.com/
 	$(CONSOLE) importmap:require bootstrap
