@@ -79,6 +79,7 @@ HAS_TROUBLESHOOTING ?= $(wildcard compose.yaml)
 HAS_EXPERIMENTAL    ?= $(wildcard bin/console)
 
 HAS_PROFILER        ?= $(wildcard vendor/symfony/web-profiler-bundle)
+HAS_MAILER          ?= $(wildcard vendor/symfony/mailer)
 HAS_API             ?= $(wildcard vendor/api-platform)
 
 #
@@ -256,12 +257,15 @@ info: ## Show project access info
 	@printf "\n$(Y)----$(S)\n\n"
 	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
 	@printf " $(Y)›$(S) Go in your favourite browser and accept the auto-generated TLS certificate:\n"
-	@printf "    - $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
+	@printf "    - Homepage ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
 ifneq ($(HAS_API),)
-	@printf "    - $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/api$(S)\n"
+	@printf "    - API ............ $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/api$(S)\n"
 endif
 ifneq ($(HAS_PROFILER),)
-	@printf "    - $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/_profiler$(S)\n"
+	@printf "    - Profiler ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/_profiler$(S)\n"
+endif
+ifneq ($(HAS_MAILER),)
+	@printf "    - Mail Catcher ... $(G)http://$(SERVER_NAME):8025/$(S)\n"
 endif
 	@printf "\n"
 
