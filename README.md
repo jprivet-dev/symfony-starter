@@ -227,9 +227,12 @@ make stop  # Stop the project (down alias)
   vars                          Show key Makefile variables
 
 — EXPERIMENTAL 🧪 ——————————————————————————————————————————————————————————
-  require_profiler              Install the profiler
-  require_asset_mapper          Install AssetMapper
-  require_bootstrap             Install Bootstrap
+  require_profiler              Install the profiler - https://symfony.com/doc/current/profiler.html
+  require_maker_bundle          Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+  require_test                  Install the test pack - https://symfony.com/doc/current/testing.html
+  require_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+  require_bootstrap             Install Bootstrap - https://getbootstrap.com/
+  require_stimulus              Install StimulusBundle - https://ux.symfony.com/
 ```
 
 <!-- MAKEFILE_COMMANDS_END -->

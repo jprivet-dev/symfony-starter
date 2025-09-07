@@ -682,13 +682,22 @@ else
 
 ## — EXPERIMENTAL 🧪 ——————————————————————————————————————————————————————————
 
-require_profiler: ## Install the profiler
+require_profiler: ## Install the profiler - https://symfony.com/doc/current/profiler.html
 	$(COMPOSER) require --dev symfony/profiler-pack
 
-require_asset_mapper: ## Install AssetMapper
+require_maker_bundle: ## Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+	$(COMPOSER) require --dev symfony/maker-bundle
+
+require_test: ## Install the test pack - https://symfony.com/doc/current/testing.html
+	$(COMPOSER) require --dev symfony/test-pack
+
+require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
 	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
 
-require_bootstrap: require_asset_mapper ## Install Bootstrap
+require_bootstrap: require_asset_mapper ## Install Bootstrap - https://getbootstrap.com/
 	$(CONSOLE) importmap:require bootstrap
+
+require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
+	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
 
 endif
