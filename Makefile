@@ -187,7 +187,8 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 webapp: _base ## Generate a webapp with Docker configuration (stable release)
 	@printf "\n$(Y)Add extra packages to build a web application$(S)"
 	@printf "\n$(Y)---------------------------------------------$(S)\n\n"
-	$(COMPOSER) require webapp
+	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
+	$(COMPOSER) require symfony/webapp-pack
 	$(MAKE) restart
 
 webapp@lts: ## Generate a webapp with Docker configuration (LTS - long-term support release)
