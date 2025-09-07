@@ -74,7 +74,6 @@ HAS_DOCTRINE        ?= $(wildcard vendor/doctrine)
 HAS_PHPUNIT         ?= $(wildcard bin/phpunit)
 HAS_ASSETS          ?= $(wildcard vendor/symfony/asset-mapper)
 HAS_TRANSLATION     ?= $(wildcard vendor/symfony/translation)
-HAS_DOCKER          ?= $(wildcard compose.yaml)
 HAS_CERTIFICATES    ?= $(wildcard compose.yaml)
 HAS_TROUBLESHOOTING ?= $(wildcard compose.yaml)
 HAS_EXPERIMENTAL    ?= $(wildcard bin/console)
@@ -542,10 +541,6 @@ extract: ## Extracts translation strings from templates (fr)
 
 endif
 
-ifeq ($(HAS_DOCKER),)
-$(warning DOCKER targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
-else
-
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: up
@@ -581,8 +576,6 @@ images: ## List images used by the current containers
 .PHONY: config
 config: ## Parse, resolve, and render compose file in canonical format
 	$(UP_ENV) $(COMPOSE) config
-
-endif
 
 ifeq ($(HAS_CERTIFICATES),)
 $(warning CERTIFICATES targets are not activated! Generate the Symfony application. e.g.: $$ make minimalist)
