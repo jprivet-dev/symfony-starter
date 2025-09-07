@@ -67,17 +67,17 @@ CLONE_DIR           = clone
 # TARGETS ACTIVATION
 #
 
-HAS_SYMFONY         := $(wildcard bin/console)
-HAS_PHP             := $(wildcard compose.yaml)
-HAS_COMPOSER        := $(wildcard composer.json)
-HAS_DOCTRINE        := $(wildcard vendor/doctrine)
-HAS_PHPUNIT         := $(wildcard bin/phpunit)
-HAS_ASSETS          := $(wildcard vendor/symfony/asset-mapper)
-HAS_TRANSLATION     := $(wildcard vendor/symfony/translation)
-HAS_DOCKER          := $(wildcard compose.yaml)
-HAS_CERTIFICATES    := $(wildcard compose.yaml)
-HAS_TROUBLESHOOTING := $(wildcard compose.yaml)
-HAS_EXPERIMENTAL    := false
+HAS_SYMFONY         ?= $(wildcard bin/console)
+HAS_PHP             ?= $(wildcard compose.yaml)
+HAS_COMPOSER        ?= $(wildcard composer.json)
+HAS_DOCTRINE        ?= $(wildcard vendor/doctrine)
+HAS_PHPUNIT         ?= $(wildcard bin/phpunit)
+HAS_ASSETS          ?= $(wildcard vendor/symfony/asset-mapper)
+HAS_TRANSLATION     ?= $(wildcard vendor/symfony/translation)
+HAS_DOCKER          ?= $(wildcard compose.yaml)
+HAS_CERTIFICATES    ?= $(wildcard compose.yaml)
+HAS_TROUBLESHOOTING ?= $(wildcard compose.yaml)
+HAS_EXPERIMENTAL    ?= false
 
 #
 # FILES & DIRECTORIES
