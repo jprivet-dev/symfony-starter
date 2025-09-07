@@ -39,12 +39,12 @@ UNAME_S := $(shell uname -s)
 -include .env.$(APP_ENV).local
 
 ifeq ($(APP_ENV),prod)
-$(info Warning: You are in the PROD environment)
+$(warning You are in the PROD environment)
 endif
 
 # See https://symfony.com/doc/current/deployment.html#b-configure-your-environment-variables
 ifneq ($(wildcard .env.local.php),)
-$(info Warning: In this Makefile it is not possible to use variables from .env.local.php file)
+$(warning In this Makefile it is not possible to use variables from .env.local.php file)
 endif
 
 #
@@ -62,6 +62,21 @@ endif
 SYMFONY_LTS_VERSION = 6.*
 REPOSITORY          = git@github.com:dunglas/symfony-docker.git
 CLONE_DIR           = clone
+
+#
+# TARGETS ACTIVATION
+#
+
+HAS_SYMFONY         := $(wildcard bin/console)
+HAS_PHP             := $(wildcard compose.yaml)
+HAS_COMPOSER        := $(wildcard composer.json)
+HAS_DOCTRINE        := $(wildcard vendor/doctrine)
+HAS_PHPUNIT         := $(wildcard bin/phpunit)
+HAS_ASSETS          := $(wildcard vendor/symfony/asset-mapper)
+HAS_TRANSLATION     := $(wildcard vendor/symfony/translation)
+HAS_DOCKER          := $(wildcard compose.yaml)
+HAS_CERTIFICATES    := $(wildcard compose.yaml)
+HAS_TROUBLESHOOTING := $(wildcard compose.yaml)
 
 #
 # FILES & DIRECTORIES
@@ -266,78 +281,100 @@ check: composer_validate tests validate ## Check everything before you deliver
 .PHONY: tests
 tests t: phpunit ## Run all tests
 
+ifeq ($(HAS_SYMFONY),)
+$(warning SYMFONY targets are not activated! Generate the Symfony application.)
+else
+
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
 .PHONY: symfony
-symfony sf: bin/console ## Run Symfony console command - $ make symfony [ARG=<arguments>]- Example: $ make symfony ARG=cache:clear
+symfony sf: ## Run Symfony console command - $ make symfony [ARG=<arguments>]- Example: $ make symfony ARG=cache:clear
 	$(CONSOLE) $(ARG)
 
 .PHONY: cc
-cc: bin/console ## Clear the Symfony cache
+cc: ## Clear the Symfony cache
 	$(CONSOLE) cache:clear
 
 .PHONY: about
-about: bin/console ## Display information about the current Symfony project
+about: ## Display information about the current Symfony project
 	$(CONSOLE) about
 
 .PHONY: dotenv
-dotenv: bin/console ## Lists all .env files with variables and values
+dotenv: ## Lists all .env files with variables and values
 	$(CONSOLE) debug:dotenv
 
 .PHONY: dumpenv
 dumpenv: ## Generate .env.local.php for production
 	$(MAKE) composer ARG="dump-env prod"
 
+endif
+
+ifeq ($(HAS_PHP),)
+$(warning PHP targets are not activated! Generate the Symfony application.)
+else
+
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
 
 .PHONY: php
-php: compose.yaml ## Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
+php: ## Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
 	$(PHP) $(ARG)
 
 ##
 
-php_sh: compose.yaml ## Connect to the PHP container shell
+php_sh: ## Connect to the PHP container shell
 	$(CONTAINER_PHP) sh
 
-php_env: compose.yaml ## Display all environment variables set within the PHP container
+php_env: ## Display all environment variables set within the PHP container
 	$(CONTAINER_PHP) env
 
 .PHONY: php_command
-php_command: compose.yaml ## Run a command inside the PHP container - $ make php_command [ARG=<arguments>]- Example: $ make php_command ARG="ls -al"
+php_command: ## Run a command inside the PHP container - $ make php_command [ARG=<arguments>]- Example: $ make php_command ARG="ls -al"
 	$(BASH_COMMAND) "$(ARG)"
+
+endif
+
+ifeq ($(HAS_COMPOSER),)
+$(warning COMPOSER targets are not activated! Generate the Symfony application.)
+else
 
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
 .PHONY: composer
-composer: composer.json ## Run composer command - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
+composer: ## Run composer command - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
 	$(COMPOSER) $(ARG)
 
-composer_install: composer.json ## Install Composer packages
+composer_install: ## Install Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
 	$(COMPOSER) install
 endif
 
-composer_update: composer.json ## Update Composer packages
+composer_update: ## Update Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
 	$(COMPOSER) update
 endif
 
-composer_update_lock: composer.lock ## Update only the content hash of composer.lock without updating dependencies
+composer_update_lock: ## Update only the content hash of composer.lock without updating dependencies
 	$(COMPOSER) update --lock
 
-composer_validate: composer.json composer.lock ## Check if lock file is up to date (even when config.lock is false)
+composer_validate: ## Check if lock file is up to date (even when config.lock is false)
 	$(COMPOSER) validate --strict --check-lock
+
+endif
+
+ifeq ($(HAS_DOCTRINE),)
+$(warning DOCTRINE & SQL targets are not activated! Remove that block or install Doctrine.)
+else
 
 ## — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
 
-db_drop: vendor/doctrine ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
+db_drop: ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
 	$(CONSOLE) doctrine:database:drop --if-exists --force $(ARG)
 
-db_create: vendor/doctrine ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
+db_create: ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
 	$(CONSOLE) doctrine:database:create --if-not-exists $(ARG)
 
 db_clear: db_drop db_create ## Drop and create the database
@@ -347,42 +384,42 @@ db_init: db_drop db_create fixtures ## Drop and create the database and add fixt
 ##
 
 .PHONY: validate
-validate: vendor/doctrine ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
+validate: ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
 	-$(CONSOLE) doctrine:schema:validate -v $(ARG)
 
 .PHONY: update
-update: vendor/doctrine ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
+update: ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
 	$(CONSOLE) doctrine:schema:update --dump-sql
 
-update_force: vendor/doctrine ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
+update_force: ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
 	$(CONSOLE) doctrine:schema:update --force
 
 ##
 
 .PHONY: migration
-migration: vendor/doctrine ## Create a new migration based on database changes (format the generated SQL)
+migration: ## Create a new migration based on database changes (format the generated SQL)
 	$(CONSOLE) make:migration --formatted -v $(ARG)
 
 .PHONY: migrate
-migrate: vendor/doctrine ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
+migrate: ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
 	$(CONSOLE) doctrine:migrations:migrate --no-interaction --all-or-nothing $(ARG)
 
 .PHONY: list
-list: vendor/doctrine ## Display a list of all available migrations and their status
+list: ## Display a list of all available migrations and their status
 	$(CONSOLE) doctrine:migrations:list
 
 .PHONY: execute
-execute: vendor/doctrine ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
+execute: ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
 	$(CONSOLE) doctrine:migrations:execute $(ARG)
 
 .PHONY: generate
-generate: vendor/doctrine ## Generate a blank migration class
+generate: ## Generate a blank migration class
 	$(CONSOLE) doctrine:migrations:generate
 
 ##
 
 .PHONY: sql
-sql: vendor/doctrine ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
+sql: ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
 	$(CONSOLE) doctrine:query:sql "$(QUERY)"
 
 # See https://stackoverflow.com/questions/769683/how-to-show-tables-in-postgresql
@@ -392,7 +429,7 @@ sql_tables: sql ## Show all tables
 ##
 
 .PHONY: fixtures
-fixtures: vendor/doctrine ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
+fixtures: ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
 	$(CONSOLE) doctrine:fixtures:load -n $(ARG)
 
 ## — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
@@ -401,10 +438,16 @@ fixtures: vendor/doctrine ## Load fixtures (CAUTION! by default the load command
 psql: ## Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG="-V"
 	$(PSQL) $(ARG)
 
+endif
+
+ifeq ($(HAS_PHPUNIT),)
+$(warning TESTS targets are not activated! Remove that block or install PHPUnit.)
+else
+
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
 
 .PHONY: phpunit
-phpunit: bin/phpunit ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
+phpunit: ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
 	$(PHPUNIT) $(ARG)
 
 .PHONY: coverage
@@ -422,6 +465,12 @@ dox: phpunit ## Report test execution progress in TestDox format for all tests
 xdebug_version: ## Xdebug version number
 	$(PHP) -r "var_dump(phpversion('xdebug'));"
 
+endif
+
+ifeq ($(HAS_ASSETS),)
+$(warning ASSETS targets are not activated! Remove that block or install AssetMapper.)
+else
+
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 
 .PHONY: assets
@@ -434,45 +483,57 @@ endif
 
 ##
 
-asset_map_clear: compose.yaml ## Clear all assets in the public output directory.
+asset_map_clear: ## Clear all assets in the public output directory.
 	$(COMPOSE) run --rm php rm -rf ./public/assets
 
-asset_map_compile: vendor/symfony/asset-mapper asset_map_clear ## Compile all mapped assets and writes them to the final public output directory.
+asset_map_compile: asset_map_clear ## Compile all mapped assets and writes them to the final public output directory.
 	$(CONSOLE) asset-map:compile
 
-asset_map_debug: vendor/symfony/asset-mapper ## See all of the mapped assets .
+asset_map_debug: ## See all of the mapped assets .
 	$(CONSOLE) debug:asset-map --full
 
 ##
 
-importmap_audit: vendor/symfony/asset-mapper ## Check for security vulnerability advisories for dependencies
+importmap_audit: ## Check for security vulnerability advisories for dependencies
 	$(CONSOLE) importmap:audit
 
-importmap_install: vendor/symfony/asset-mapper ## Download all assets that should be downloaded
+importmap_install: ## Download all assets that should be downloaded
 	$(CONSOLE) importmap:install
 
-importmap_outdated: vendor/symfony/asset-mapper ## List outdated JavaScript packages and their latest versions
+importmap_outdated: ## List outdated JavaScript packages and their latest versions
 	$(CONSOLE) importmap:outdated
 
-importmap_remove: vendor/symfony/asset-mapper ## Remove JavaScript packages
+importmap_remove: ## Remove JavaScript packages
 	$(CONSOLE) importmap:remove
 
-importmap_require: vendor/symfony/asset-mapper ## Require JavaScript packages
+importmap_require: ## Require JavaScript packages
 	$(CONSOLE) importmap:require $(ARG)
 
-importmap_update: vendor/symfony/asset-mapper ## Update JavaScript packages to their latest versions
+importmap_update: ## Update JavaScript packages to their latest versions
 	$(CONSOLE) importmap:update
+
+endif
+
+ifeq ($(HAS_TRANSLATION),)
+$(warning TRANSLATION targets are not activated! Remove that block or install Translation.)
+else
 
 ## — TRANSLATION 🇬🇧 ————————————————————————————————————————————————————————————
 
 .PHONY: extract
-extract: vendor/symfony/translation ## Extracts translation strings from templates (fr)
+extract: ## Extracts translation strings from templates (fr)
 	$(CONSOLE) translation:extract --sort=asc --format=yaml --force fr
+
+endif
+
+ifeq ($(HAS_DOCKER),)
+$(warning DOCKER targets are not activated)
+else
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: up
-up: compose.yaml ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
+up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans $(ARG)
 	$(MAKE) git_safe_dir
 
@@ -480,11 +541,11 @@ up_detached: ARG=-d
 up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
 
 .PHONY: down
-down: compose.yaml ## Stop and remove the containers
+down: ## Stop and remove the containers
 	-$(COMPOSE) down --remove-orphans
 
 .PHONY: build
-build: compose.yaml ## Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
+build: ## Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
 	$(COMPOSE) build $(ARG)
 
 .PHONY: build_force
@@ -492,18 +553,24 @@ build_force: ARG=--no-cache
 build_force: build ## Build or rebuild Docker services (no cache) - $ make build [ARG=<arguments>]
 
 .PHONY: logs
-logs: compose.yaml ## Display container logs
+logs: ## Display container logs
 	$(COMPOSE) logs -f
 
 .PHONY: images
-images: compose.yaml ## List images used by the current containers
+images: ## List images used by the current containers
 	@printf "\n$(Y)Images used by the current containers$(S)"
 	@printf "\n$(Y)-------------------------------------$(S)\n\n"
 	$(COMPOSE) images | grep -E "REPOSITORY|$(IMAGES_PREFIX)"
 
 .PHONY: config
-config: compose.yaml ## Parse, resolve, and render compose file in canonical format
+config: ## Parse, resolve, and render compose file in canonical format
 	$(UP_ENV) $(COMPOSE) config
+
+endif
+
+ifeq ($(HAS_CERTIFICATES),)
+$(warning CERTIFICATES targets are not activated! Generate the Symfony application.)
+else
 
 ## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
 
@@ -543,10 +610,16 @@ hosts: ## Add the server name to /etc/hosts file
 		printf " $(G)✔$(S) \"$(SERVER_NAME)\" already exists in /etc/hosts.\n"; \
 	fi
 
+endif
+
+ifeq ($(HAS_TROUBLESHOOTING),)
+$(warning TROUBLESHOOTING targets are not activated! Generate the Symfony application.)
+else
+
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
 .PHONY: permissions
-permissions p: compose.yaml ## Fix file permissions (primarily for Linux hosts)
+permissions p: ## Fix file permissions (primarily for Linux hosts)
 ifeq ($(UNAME_S),Linux)
 	$(COMPOSE) run --rm php chown -R $(USER) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER)$(S) of the project files.\n"
@@ -554,8 +627,10 @@ else
 	@printf " $(Y)›$(S) 'make permissions' is typically not needed on $(UNAME_S).\n"
 endif
 
-git_safe_dir: compose.yaml ## Add /app to Git's safe directories within the php container
+git_safe_dir: ## Add /app to Git's safe directories within the php container
 	$(COMPOSE) exec php git config --global --add safe.directory /app
+
+endif
 
 ## — UTILITIES 🛠️ ——————————————————————————————————————————————————————————————
 
@@ -563,22 +638,22 @@ env_files: ## Show env files loaded into this Makefile
 	@printf "\n$(Y)Symfony env files$(S)"
 	@printf "\n$(Y)-----------------$(S)\n\n"
 	@printf "Files loaded into this Makefile (in order of decreasing priority) $(Y)[APP_ENV=$(APP_ENV)]$(S):\n\n"
-ifneq ("$(wildcard .env.$(APP_ENV).local)","")
+ifneq ("$(wildcard .env.$(APP_ENV).local)",)
 	@printf "* $(G)✔$(S) .env.$(APP_ENV).local\n"
 else
 	@printf "* $(R)⨯$(S) .env.$(APP_ENV).local\n"
 endif
-ifneq ("$(wildcard .env.$(APP_ENV))","")
+ifneq ("$(wildcard .env.$(APP_ENV))",)
 	@printf "* $(G)✔$(S) .env.$(APP_ENV)\n"
 else
 	@printf "* $(R)⨯$(S) .env.$(APP_ENV)\n"
 endif
-ifneq ("$(wildcard .env.local)","")
+ifneq ("$(wildcard .env.local)",)
 	@printf "* $(G)✔$(S) .env.local\n"
 else
 	@printf "* $(R)⨯$(S) .env.local\n"
 endif
-ifneq ("$(wildcard .env)","")
+ifneq ("$(wildcard .env)",)
 	@printf "* $(G)✔$(S) .env\n"
 else
 	@printf "* $(R)⨯$(S) .env\n"
