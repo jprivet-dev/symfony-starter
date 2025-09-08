@@ -174,7 +174,7 @@ help: ## Display this help message with available commands
 # These following targets are only used for the initial setup.
 
 .PHONY: minimalist
-minimalist: clone build up_detached permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
+minimalist: clone_symfony_docker build up_detached permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(MAKE) restart
 
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
@@ -182,26 +182,25 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 
 ##
 
-.PHONY: clone
-clone: ## Clone and extract 'dunglas/symfony-docker' configuration files at the root
-	@printf "\n$(Y)Clone 'dunglas/symfony-docker'$(S)"
-	@printf "\n$(Y)------------------------------$(S)\n\n"
-ifeq ($(wildcard Dockerfile),)
+clone_symfony_docker: ## Clone and extract https://github.com/dunglas/symfony-docker configuration files at the root
+	@printf "\n$(Y)Clone https://github.com/dunglas/symfony-docker$(S)"
+	@printf "\n$(Y)-----------------------------------------------$(S)\n\n"
+ifeq ($(HAS_DOCKERFILE),)
 	@printf "Repository: $(Y)$(REPOSITORY)$(S)\n"
 	git clone $(REPOSITORY) $(CLONE_DIR) --depth 1
-	@printf "\n$(Y)Extract 'dunglas/symfony-docker' at the root$(S)"
-	@printf "\n$(Y)--------------------------------------------$(S)\n\n"
+	@printf "\n$(Y)Extract https://github.com/dunglas/symfony-docker at the root$(S)"
+	@printf "\n$(Y)-------------------------------------------------------------$(S)\n\n"
 	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
 	rm -rf $(CLONE_DIR)
 	@if [ -f LICENSE ]; then \
 		git restore LICENSE; \
 	fi
-	@printf " $(G)✔$(S) 'dunglas/symfony-docker' cloned and extracted at the root.\n\n"
+	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker cloned and extracted at the root.\n\n"
 else
-	@printf " $(R)⨯$(S) 'dunglas/symfony-docker' configuration already present at the root.\n\n"
+	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker configuration already present at the root.\n\n"
 endif
 
-clear_all: ## Remove all 'dunglas/symfony-docker' configuration files and all Symfony application files
+clear_all: ## Remove all fresh Symfony application files
 ifneq ($(HAS_DOCKERFILE),)
 	$(MAKE) permissions down
 endif
