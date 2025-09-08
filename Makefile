@@ -67,6 +67,7 @@ CLONE_DIR           = clone
 # TARGETS ACTIVATION
 #
 
+HAS_DOCKERFILE      ?= $(wildcard Dockerfile)
 HAS_DOCTRINE        ?= $(wildcard vendor/doctrine)
 HAS_PHPUNIT         ?= $(wildcard bin/phpunit)
 HAS_ASSETS          ?= $(wildcard vendor/symfony/asset-mapper)
@@ -217,7 +218,9 @@ else
 endif
 
 clear_all: ## Remove all 'dunglas/symfony-docker' configuration files and all Symfony application files
-	-docker compose down
+ifneq ($(HAS_DOCKERFILE),)
+	$(MAKE) permissions down
+endif
 	git reset --hard
 	git clean -f -d
 
