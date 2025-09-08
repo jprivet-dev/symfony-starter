@@ -28,17 +28,8 @@ make minimalist
 # Minimalist Long-Term Support Release (LTS)
 make minimalist@lts
 
-# Webapp Stable Release
-make webapp
-
-# Webapp Long-Term Support Release (LTS)
-make webapp@lts
-
 # Specific Minimalist Version
 SYMFONY_VERSION=6.4.3 make minimalist
-
-# Specific Webapp Version
-SYMFONY_VERSION=6.4.3 make webapp
 ```
 
 This will:
@@ -60,12 +51,6 @@ git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter &
 
 # Minimalist Long-Term Support Release (LTS)
 git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist@lts
-
-# Webapp Stable Release
-git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make webapp
-
-# Webapp Long-Term Support Release (LTS)
-git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make webapp@lts
 ```
 
 ## Generate an app in another existing project
@@ -86,7 +71,7 @@ Stops all Docker containers, removes all Docker-related configuration files copi
 ```shell
 make clear_all
 
-# Then regenerate the Symfony app (LTS version for example):
+# Then regenerate the Symfony app (LTS version for example)
 make minimalist@lts
 ```
 

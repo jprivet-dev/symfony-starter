@@ -27,7 +27,7 @@ Locate and **delete the following lines** from `frankenphp/docker-entrypoint.sh`
 To find the items to remove in the `Makefile` file, search for the word `GENERATION`.
 
 * You will find variables that are only used for the initial setup: `SYMFONY_LTS_VERSION`, `REPOSITORY`, etc.
-* You will find targets that are only used for the initial setup: `minimalist`, `webapp`, `api`, etc.
+* You will find targets that are only used for the initial setup: `minimalist`, `install_webapp`, `install_api`, etc.
 
 ## 3. Commit all changes
 
