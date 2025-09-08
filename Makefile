@@ -204,7 +204,7 @@ endif
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
 	@printf "\n$(Y)Clone https://github.com/symfony/demo$(S)"
 	@printf "\n$(Y)-------------------------------------$(S)\n\n"
-ifeq ($(HAS_DOCKERFILE),)
+ifeq ($(wildcard .env.local.demo),)
 	@printf "Repository: $(Y)$(REPOSITORY_SYMFONY_DEMO)$(S)\n"
 	git clone $(REPOSITORY_SYMFONY_DEMO) $(CLONE_DIR) --depth 1
 	@printf "\n$(Y)Extract https://github.com/symfony/demo at the root$(S)"
