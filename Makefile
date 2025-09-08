@@ -39,12 +39,12 @@ UNAME_S := $(shell uname -s)
 -include .env.$(APP_ENV).local
 
 ifeq ($(APP_ENV),prod)
-$(warning WARNING: You are in the PROD environment)
+$(warning [WARNING] You are in the PROD environment)
 endif
 
 # See https://symfony.com/doc/current/deployment.html#b-configure-your-environment-variables
 ifneq ($(wildcard .env.local.php),)
-$(warning WARNING: In this Makefile it is not possible to use variables from .env.local.php file)
+$(warning [WARNING] In this Makefile it is not possible to use variables from .env.local.php file)
 endif
 
 #
@@ -129,7 +129,7 @@ HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(H
 COMPOSE_V2 := $(shell docker compose version 2> /dev/null)
 
 ifndef COMPOSE_V2
-$(error ERROR: Docker Compose CLI plugin is required but is not available on your system)
+$(error [ERROR] Docker Compose CLI plugin is required but is not available on your system)
 endif
 
 COMPOSE = docker compose
@@ -223,20 +223,16 @@ clear_all: ## Remove all 'dunglas/symfony-docker' configuration files and all Sy
 
 ##   COMPLETE INSTALLATION
 
-# Related to HAS_DOCTRINE
 install_doctrine: ## Install Doctrine - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) restart
 
-# Related to HAS_PHPUNIT
 install_phpunit: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
 	$(COMPOSER) require --dev symfony/test-pack
 
-# Related to HAS_ASSETS
 install_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
 	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
 
-# Related to HAS_TRANSLATION
 install_translation: ## Install translation - https://symfony.com/doc/current/translation.html
 	$(COMPOSER) require symfony/translation
 
@@ -279,6 +275,18 @@ restart: stop start ## Stop & Start the project and show info (up_detached & inf
 info: ## Show project access info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
+ifeq ($(HAS_DOCTRINE),)
+	@printf " $(R)⨯$(S) $(Y)DOCTRINE & SQL 💽$(S) commands can not be used in that Makefile! Remove that block or install Doctrine with $(G)make install_doctrine$(S)\n"
+endif
+ifeq ($(HAS_PHPUNIT),)
+	@printf " $(R)⨯$(S) $(Y)TESTS ✅$(S) commands can not be used in that Makefile! Remove that block or install PHPUnit with $(G)make install_phpunit$(S)\n"
+endif
+ifeq ($(HAS_ASSETS),)
+	@printf " $(R)⨯$(S) $(Y)ASSETS 🎨‍$(S) commands can not be used in that Makefile! Remove that block or install AssetMapper with $(G)make install_asset_mapper$(S)\n"
+endif
+ifeq ($(HAS_TRANSLATION),)
+	@printf " $(R)⨯$(S) $(Y)TRANSLATION 🇬🇧$(S) commands can not be used in that Makefile! Remove that block or install Translation with $(G)make install_translation$(S)\n"
+endif
 	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
 	@printf " $(Y)›$(S) Go in your favourite browser and accept the auto-generated TLS certificate:\n"
 	@printf "    - Homepage ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
@@ -292,7 +300,6 @@ ifneq ($(HAS_MAILER),)
 	@printf "    - Mail Catcher ... $(G)http://$(SERVER_NAME):8025/$(S)\n"
 endif
 	@printf "\n"
-
 
 ##
 
@@ -399,10 +406,6 @@ composer_update_lock: ## Update only the content hash of composer.lock without u
 composer_validate: ## Check if lock file is up to date (even when config.lock is false)
 	$(COMPOSER) validate --strict --check-lock
 
-ifeq ($(HAS_DOCTRINE),)
-$(warning WARNING: DOCTRINE & SQL commands are not activated! Remove that block or install Doctrine. - $$ make install_doctrine)
-else
-
 ## — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
 
 db_drop: ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
@@ -472,12 +475,6 @@ fixtures: ## Load fixtures (CAUTION! by default the load command purges the data
 psql: ## Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG="-V"
 	$(PSQL) $(ARG)
 
-endif
-
-ifeq ($(HAS_PHPUNIT),)
-$(warning WARNING: TESTS commands are not activated! Remove that block or install PHPUnit. - $$ make install_phpunit)
-else
-
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
 
 .PHONY: phpunit
@@ -498,12 +495,6 @@ dox: phpunit ## Report test execution progress in TestDox format for all tests
 
 xdebug_version: ## Xdebug version number
 	$(PHP) -r "var_dump(phpversion('xdebug'));"
-
-endif
-
-ifeq ($(HAS_ASSETS),)
-$(warning WARNING: ASSETS commands are not activated! Remove that block or install AssetMapper. - $$ make install_asset_mapper)
-else
 
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 
@@ -546,19 +537,11 @@ importmap_require: ## Require JavaScript packages
 importmap_update: ## Update JavaScript packages to their latest versions
 	$(CONSOLE) importmap:update
 
-endif
-
-ifeq ($(HAS_TRANSLATION),)
-$(warning WARNING: TRANSLATION commands are not activated! Remove that block or install Translation. - $$ make install_translation)
-else
-
 ## — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
 
 .PHONY: extract
 extract: ## Extracts translation strings from templates (fr)
 	$(CONSOLE) translation:extract --sort=asc --format=yaml --force fr
-
-endif
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
