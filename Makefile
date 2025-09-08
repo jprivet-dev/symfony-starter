@@ -39,12 +39,12 @@ UNAME_S := $(shell uname -s)
 -include .env.$(APP_ENV).local
 
 ifeq ($(APP_ENV),prod)
-$(warning You are in the PROD environment)
+$(warning WARNING: You are in the PROD environment)
 endif
 
 # See https://symfony.com/doc/current/deployment.html#b-configure-your-environment-variables
 ifneq ($(wildcard .env.local.php),)
-$(warning In this Makefile it is not possible to use variables from .env.local.php file)
+$(warning WARNING: In this Makefile it is not possible to use variables from .env.local.php file)
 endif
 
 #
@@ -129,7 +129,7 @@ HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(H
 COMPOSE_V2 := $(shell docker compose version 2> /dev/null)
 
 ifndef COMPOSE_V2
-$(error Docker Compose CLI plugin is required but is not available on your system)
+$(error ERROR: Docker Compose CLI plugin is required but is not available on your system)
 endif
 
 COMPOSE = docker compose
@@ -394,7 +394,7 @@ composer_validate: ## Check if lock file is up to date (even when config.lock is
 	$(COMPOSER) validate --strict --check-lock
 
 ifeq ($(HAS_DOCTRINE),)
-$(warning DOCTRINE & SQL targets are not activated! Remove that block or install Doctrine. - $$ make install_doctrine)
+$(warning WARNING: DOCTRINE & SQL commands are not activated! Remove that block or install Doctrine. - $$ make install_doctrine)
 else
 
 ## — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
@@ -469,7 +469,7 @@ psql: ## Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG
 endif
 
 ifeq ($(HAS_PHPUNIT),)
-$(warning TESTS targets are not activated! Remove that block or install PHPUnit. - $$ make install_phpunit)
+$(warning WARNING: TESTS commands are not activated! Remove that block or install PHPUnit. - $$ make install_phpunit)
 else
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
@@ -496,7 +496,7 @@ xdebug_version: ## Xdebug version number
 endif
 
 ifeq ($(HAS_ASSETS),)
-$(warning ASSETS targets are not activated! Remove that block or install AssetMapper. - $$ make install_asset_mapper)
+$(warning WARNING: ASSETS commands are not activated! Remove that block or install AssetMapper. - $$ make install_asset_mapper)
 else
 
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
@@ -543,7 +543,7 @@ importmap_update: ## Update JavaScript packages to their latest versions
 endif
 
 ifeq ($(HAS_TRANSLATION),)
-$(warning TRANSLATION targets are not activated! Remove that block or install Translation. - $$ make install_translation)
+$(warning WARNING: TRANSLATION commands are not activated! Remove that block or install Translation. - $$ make install_translation)
 else
 
 ## — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
