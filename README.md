@@ -82,7 +82,7 @@ make start # Start the project and show info (up_detached & info alias)
 make stop  # Stop the project (down alias)
 ```
 
-> Run `make` to [Discover all available commands for the most common tasks](docs/makefile.md).
+> Run `make` to [discover all commands](docs/makefile.md).
 
 ## Project structure
 
@@ -124,6 +124,7 @@ tree -A -L 1 -F --dirsfirst
 * [Save your generated Symfony application](docs/save.md)
 * [Accessing the `var/` directory](docs/var.md)
 * [Docker build options](docs/options.md)
+* [Makefile - Discover all commands](docs/makefile.md)
 * [Configure a remote PHP interpreter (Docker)](docs/remote-php-interpreter.md)
 * [PostgreSQL](docs/postgre.md)
 * [Testing](docs/testing.md)

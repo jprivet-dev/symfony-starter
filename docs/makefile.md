@@ -1,10 +1,8 @@
-# Makefile
+# Makefile - Discover all commands
 
 [⬅️ README](../README.md)
 
 ---
-
-## Discover all available commands for the most common tasks
 
 > Run `make` to see all
 
