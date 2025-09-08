@@ -12,10 +12,16 @@ S='\033[0m'
 
 function makefile_create() {
     local name="${1}"
+    local path="${2}"
     local overwritten=""
 
+    if [ ! -f "${path}" ] && [ ! -d "${path}" ]; then
+        printf " ${R}⨯${S} Skipping ${Y}${name}${S} alias for ${Y}make ${name}${S} (file or directory ${Y}${path}${S} not found)\n"
+        return 1
+    fi
+
     if alias "${name}" &>/dev/null; then
-       overwritten=" (already exists and overwritten)"
+        overwritten=" (alias already exists and overwritten)"
     fi
 
     alias "${name}"="makefile_execute ${name}" &&
@@ -32,11 +38,17 @@ function makefile_aliases() {
     printf "\n${Y}Aliases${S}"
     printf "\n${Y}-------${S}\n\n"
 
-    for alias_name in "${@}"; do
-        makefile_create "${alias_name}"
+    for entry in "${@}"; do
+        IFS=':' read -r alias_name check_path <<< "${entry}"
+        if [ -z "${check_path}" ]; then
+            check_path="."
+        fi
+
+        makefile_create "${alias_name}" "${check_path}"
     done
 
     printf "\nTo remove aliases, simply ${G}close and reopen your terminal${S}, or use ${Y}unalias <alias_name>${S} (e.g., 'unalias foo bar').\n"
 }
 
-makefile_aliases symfony sf php composer phpunit
+# Add alias with its file/directory to check
+makefile_aliases symfony:bin/console sf:bin/console php:compose.yaml composer:composer.json phpunit:bin/phpunit
