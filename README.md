@@ -276,6 +276,7 @@ tree -A -L 1 -F --dirsfirst
 * [Configure a remote PHP interpreter (Docker)](docs/remote-php-interpreter.md)
 * [Accessing the `var/` directory](docs/var.md)
 * [Docker build options](docs/options.md)
+* [Testing](docs/testing.md)
 * [Quality](docs/quality.md)
 * [Troubleshooting](docs%2Ftroubleshooting.md)
 
