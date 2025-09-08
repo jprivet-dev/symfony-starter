@@ -5,9 +5,9 @@
 # making this method more reliable and portable across different systems.
 #
 # Usage:
-#   . readme.sh
+#   . scripts/makefile.sh
 # or
-#   source readme.sh
+#   source scripts/makefile.sh
 
 # (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET
 G='\033[32m'
@@ -18,17 +18,17 @@ S='\033[0m'
 # Define markers and files
 START_MARKER="<!-- MAKEFILE_COMMANDS_START -->"
 END_MARKER="<!-- MAKEFILE_COMMANDS_END -->"
-README_FILE="README.md"
-TEMP_FILE="temp_readme.md"
+DOCS_MAKEFILE="docs/makefile.md"
+TEMP_MAKEFILE="docs/makefile_readme.md"
 
 # Check if markers are present
-if ! grep -q "${START_MARKER}" "${README_FILE}"; then
-    printf " ${R}⨯${S} Error: The start marker '${START_MARKER}' was not found in '${README_FILE}'.\n"
+if ! grep -q "${START_MARKER}" "${DOCS_MAKEFILE}"; then
+    printf " ${R}⨯${S} Error: The start marker '${START_MARKER}' was not found in '${DOCS_MAKEFILE}'.\n"
     exit 1
 fi
 
-if ! grep -q "${END_MARKER}" "${README_FILE}"; then
-    printf " ${R}⨯${S} Error: The end marker '${END_MARKER}' was not found in '${README_FILE}'.\n"
+if ! grep -q "${END_MARKER}" "${DOCS_MAKEFILE}"; then
+    printf " ${R}⨯${S} Error: The end marker '${END_MARKER}' was not found in '${DOCS_MAKEFILE}'.\n"
     exit 1
 fi
 
@@ -41,34 +41,34 @@ if [ -z "$MAKEFILE_HELP" ]; then
 fi
 
 # Use a temporary file for the new README content
-touch "${TEMP_FILE}"
+touch "${TEMP_MAKEFILE}"
 
 # Process the README line by line
 BLOCK_FOUND=0
 while IFS= read -r line; do
     if [[ "${line}" == "${START_MARKER}" ]]; then
         BLOCK_FOUND=1
-        echo "${line}" >> "${TEMP_FILE}"
-        echo "" >> "${TEMP_FILE}"
-        echo '```' >> "${TEMP_FILE}"
-        echo "$MAKEFILE_HELP" >> "${TEMP_FILE}"
-        echo '```' >> "${TEMP_FILE}"
-        echo "" >> "${TEMP_FILE}"
+        echo "${line}" >> "${TEMP_MAKEFILE}"
+        echo "" >> "${TEMP_MAKEFILE}"
+        echo '```' >> "${TEMP_MAKEFILE}"
+        echo "$MAKEFILE_HELP" >> "${TEMP_MAKEFILE}"
+        echo '```' >> "${TEMP_MAKEFILE}"
+        echo "" >> "${TEMP_MAKEFILE}"
         continue
     fi
 
     if [[ "${line}" == "${END_MARKER}" ]]; then
         BLOCK_FOUND=0
-        echo "${line}" >> "${TEMP_FILE}"
+        echo "${line}" >> "${TEMP_MAKEFILE}"
         continue
     fi
 
     if [[ "$BLOCK_FOUND" -eq 0 ]]; then
-        echo "${line}" >> "${TEMP_FILE}"
+        echo "${line}" >> "${TEMP_MAKEFILE}"
     fi
-done < "${README_FILE}"
+done < "${DOCS_MAKEFILE}"
 
 # Replace the original file with the new one
-mv "${TEMP_FILE}" "${README_FILE}"
+mv "${TEMP_MAKEFILE}" "${DOCS_MAKEFILE}"
 
 printf " ${G}✔${S} README.md has been updated successfully with Makefile commands.\n"
