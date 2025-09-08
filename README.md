@@ -110,7 +110,8 @@ make stop  # Stop the project (down alias)
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 
-  clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker configuration files at the root
+  clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
+  clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
   clear_all                     Remove all fresh Symfony application files
 
   COMPLETE INSTALLATION

@@ -59,9 +59,10 @@ endif
 # End of bug fixes     : November 2026
 # End of security fixes: November 2027
 # See https://symfony.com/releases
-SYMFONY_LTS_VERSION = 6.*
-REPOSITORY          = git@github.com:dunglas/symfony-docker.git
-CLONE_DIR           = clone
+SYMFONY_LTS_VERSION       = 6.*
+REPOSITORY_SYMFONY_DOCKER = git@github.com:dunglas/symfony-docker.git
+REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
+CLONE_DIR                 = clone
 
 #
 # TARGETS ACTIVATION
@@ -182,12 +183,12 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 
 ##
 
-clone_symfony_docker: ## Clone and extract https://github.com/dunglas/symfony-docker configuration files at the root
+clone_symfony_docker: ## Clone and extract https://github.com/dunglas/symfony-docker files at the root
 	@printf "\n$(Y)Clone https://github.com/dunglas/symfony-docker$(S)"
 	@printf "\n$(Y)-----------------------------------------------$(S)\n\n"
 ifeq ($(HAS_DOCKERFILE),)
-	@printf "Repository: $(Y)$(REPOSITORY)$(S)\n"
-	git clone $(REPOSITORY) $(CLONE_DIR) --depth 1
+	@printf "Repository: $(Y)$(REPOSITORY_SYMFONY_DOCKER)$(S)\n"
+	git clone $(REPOSITORY_SYMFONY_DOCKER) $(CLONE_DIR) --depth 1
 	@printf "\n$(Y)Extract https://github.com/dunglas/symfony-docker at the root$(S)"
 	@printf "\n$(Y)-------------------------------------------------------------$(S)\n\n"
 	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
@@ -197,7 +198,25 @@ ifeq ($(HAS_DOCKERFILE),)
 	fi
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker cloned and extracted at the root.\n\n"
 else
-	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker configuration already present at the root.\n\n"
+	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
+endif
+
+clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
+	@printf "\n$(Y)Clone https://github.com/symfony/demo$(S)"
+	@printf "\n$(Y)-------------------------------------$(S)\n\n"
+ifeq ($(HAS_DOCKERFILE),)
+	@printf "Repository: $(Y)$(REPOSITORY_SYMFONY_DEMO)$(S)\n"
+	git clone $(REPOSITORY_SYMFONY_DEMO) $(CLONE_DIR) --depth 1
+	@printf "\n$(Y)Extract https://github.com/symfony/demo at the root$(S)"
+	@printf "\n$(Y)---------------------------------------------------$(S)\n\n"
+	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
+	rm -rf $(CLONE_DIR)
+	@if [ -f LICENSE ]; then \
+		git restore LICENSE; \
+	fi
+	@printf " $(G)✔$(S) https://github.com/symfony/demo cloned and extracted at the root.\n\n"
+else
+	@printf " $(G)✔$(S) https://github.com/symfony/demo files already present at the root.\n\n"
 endif
 
 clear_all: ## Remove all fresh Symfony application files
