@@ -4,6 +4,8 @@
 
 ---
 
+## About
+
 This document explains how to pass specific **Docker build options**, such as the Symfony version or PHP extensions, to your project using the `Makefile`. These options are directly sourced from the `dunglas/symfony-docker` configuration.
 
 You can use the same variables from https://github.com/dunglas/symfony-docker/blob/main/docs/options.md#docker-build-options with the `Makefile`. For example, you can set `SYMFONY_VERSION`, `XDEBUG_MODE`, `SERVER_NAME`, and other variables.

@@ -1,12 +1,14 @@
-# Configure remote PHP interpreter (Docker) with your IDE
+# Configure a remote PHP interpreter (Docker)
 
 [⬅️ README](../README.md)
 
 ---
 
+## About
+
 You can access a PHP interpreter installed in a Docker container. This is the main configuration to be made before any others.
 
-## PhpStorm
+## Configure PhpStorm
 
 * Go on **Settings (Ctrl+Alt+S) > PHP**.
   * In the **PHP** section, click on `…`, next to the **CLI Interpreter** list.

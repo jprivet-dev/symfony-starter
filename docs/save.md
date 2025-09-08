@@ -4,6 +4,8 @@
 
 ---
 
+## About
+
 After successfully generating your Symfony application for the first time, it's crucial to "**save**" its state. This prevents regeneration on subsequent container starts and officially integrates the application into your codebase.
 
 ## 1. Remove the installation block from `frankenphp/docker-entrypoint.sh`
