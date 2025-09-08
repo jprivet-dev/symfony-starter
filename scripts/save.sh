@@ -10,6 +10,7 @@ echo "Please choose a project type:"
 echo "[m] minimalist"
 echo "[w] webapp"
 echo "[a] api"
+echo "[e] easy-admin"
 echo "Enter your choice (m, w, a or indicate an another type):"
 
 read -r CHOICE
@@ -24,6 +25,9 @@ case "$CHOICE" in
 "a")
     TYPE="api"
     ;;
+"e")
+    TYPE="easy-admin"
+    ;;
 *)
     TYPE=$CHOICE
     ;;
@@ -37,7 +41,7 @@ SYMFONY_VERSION=$(docker compose exec -T php php bin/console -V | grep -oE '[0-9
 API_PLATFORM_VERSION=""
 
 # Check if the project uses Api Platform
-if [ "$TYPE" = "api" ] || [ "$TYPE" = "webapp" ]; then
+if [ "$TYPE" = "api" ]; then
     # Check if composer.lock exists
     if [ ! -f "composer.lock" ]; then
         echo "Error: composer.lock file not found."
