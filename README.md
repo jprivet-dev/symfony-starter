@@ -113,11 +113,22 @@ make stop  # Stop the project (down alias)
   webapp                        Generate a webapp with Docker configuration (stable release)
   webapp@lts                    Generate a webapp with Docker configuration (LTS - long-term support release)
 
-  api                           Generate an Api Platform project with Docker configuration (stable release)
-  api@lts                       Generate an Api Platform project with Docker configuration (LTS - long-term support release)
-
   clone                         Clone and extract 'dunglas/symfony-docker' configuration files at the root
   clear_all                     Remove all 'dunglas/symfony-docker' configuration files and all Symfony application files
+
+  COMPLETE INSTALLATION - EXPERIMENTAL 🧪
+  install_doctrine              Install Doctrine - https://symfony.com/doc/current/doctrine.html
+  install_phpunit               Install PHPUnit - https://symfony.com/doc/current/testing.html
+  install_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+  install_translation           Install translation - https://symfony.com/doc/current/translation.html
+
+  install_profiler              Install the profiler - https://symfony.com/doc/current/profiler.html
+  install_maker_bundle          Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+  install_bootstrap             Install Bootstrap - https://getbootstrap.com/
+  install_stimulus              Install StimulusBundle - https://ux.symfony.com/
+
+  install_api                   Install API Platform - https://api-platform.com/docs/symfony/
+  install_easy_admin            Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 
 — PROJECT 🚀 ———————————————————————————————————————————————————————————————
   start                         Start the project and show info (up_detached & info alias)
@@ -219,17 +230,6 @@ make stop  # Stop the project (down alias)
 — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
   env_files                     Show env files loaded into this Makefile
   vars                          Show key Makefile variables
-
-— EXPERIMENTAL 🧪 ——————————————————————————————————————————————————————————
-  require_doctrine              Install Doctrine - https://symfony.com/doc/current/doctrine.html
-  require_phpunit               Install PHPUnit - https://symfony.com/doc/current/testing.html
-  require_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-  require_translation           Install translation - https://symfony.com/doc/current/translation.html
-
-  require_profiler              Install the profiler - https://symfony.com/doc/current/profiler.html
-  require_maker_bundle          Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
-  require_bootstrap             Install Bootstrap - https://getbootstrap.com/
-  require_stimulus              Install StimulusBundle - https://ux.symfony.com/
 ```
 
 <!-- MAKEFILE_COMMANDS_END -->

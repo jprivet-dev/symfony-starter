@@ -197,19 +197,6 @@ webapp@lts: ## Generate a webapp with Docker configuration (LTS - long-term supp
 
 ##
 
-.PHONY: api
-api: _base ## Generate an Api Platform project with Docker configuration (stable release)
-	@printf "\n$(Y)Install the API Platform’s server component$(S)"
-	@printf "\n$(Y)-------------------------------------------$(S)\n\n"
-	$(COMPOSER) require api
-	$(MAKE) restart
-
-.PHONY: api@lts
-api@lts: ## Generate an Api Platform project with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) api
-
-##
-
 .PHONY: clone
 clone: ## Clone and extract 'dunglas/symfony-docker' configuration files at the root
 	@printf "\n$(Y)Clone 'dunglas/symfony-docker'$(S)"
@@ -233,6 +220,49 @@ clear_all: ## Remove all 'dunglas/symfony-docker' configuration files and all Sy
 	-docker compose down
 	git reset --hard
 	git clean -f -d
+
+##   COMPLETE INSTALLATION - EXPERIMENTAL 🧪
+
+# Related to HAS_DOCTRINE
+install_doctrine: ## Install Doctrine - https://symfony.com/doc/current/doctrine.html
+	$(COMPOSER) require symfony/orm-pack
+	$(MAKE) restart
+
+# Related to HAS_PHPUNIT
+install_phpunit: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
+	$(COMPOSER) require --dev symfony/test-pack
+
+# Related to HAS_ASSETS
+install_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
+
+# Related to HAS_TRANSLATION
+install_translation: ## Install translation - https://symfony.com/doc/current/translation.html
+	$(COMPOSER) require symfony/translation
+
+##
+
+install_profiler: ## Install the profiler - https://symfony.com/doc/current/profiler.html
+	$(COMPOSER) require --dev symfony/profiler-pack
+
+install_maker_bundle: ## Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+	$(COMPOSER) require --dev symfony/maker-bundle
+
+install_bootstrap: install_asset_mapper ## Install Bootstrap - https://getbootstrap.com/
+	$(CONSOLE) importmap:require bootstrap
+
+install_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
+	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
+
+##
+
+install_api: ## Install API Platform - https://api-platform.com/docs/symfony/
+	$(COMPOSER) require api
+	$(MAKE) restart
+
+install_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
+	$(COMPOSER) require easycorp/easyadmin-bundle
+	$(MAKE) restart
 
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
@@ -364,7 +394,7 @@ composer_validate: ## Check if lock file is up to date (even when config.lock is
 	$(COMPOSER) validate --strict --check-lock
 
 ifeq ($(HAS_DOCTRINE),)
-$(warning DOCTRINE & SQL targets are not activated! Remove that block or install Doctrine. - $$ make require_doctrine)
+$(warning DOCTRINE & SQL targets are not activated! Remove that block or install Doctrine. - $$ make install_doctrine)
 else
 
 ## — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
@@ -439,7 +469,7 @@ psql: ## Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG
 endif
 
 ifeq ($(HAS_PHPUNIT),)
-$(warning TESTS targets are not activated! Remove that block or install PHPUnit. - $$ make require_phpunit)
+$(warning TESTS targets are not activated! Remove that block or install PHPUnit. - $$ make install_phpunit)
 else
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
@@ -466,7 +496,7 @@ xdebug_version: ## Xdebug version number
 endif
 
 ifeq ($(HAS_ASSETS),)
-$(warning ASSETS targets are not activated! Remove that block or install AssetMapper. - $$ make require_asset_mapper)
+$(warning ASSETS targets are not activated! Remove that block or install AssetMapper. - $$ make install_asset_mapper)
 else
 
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
@@ -513,7 +543,7 @@ importmap_update: ## Update JavaScript packages to their latest versions
 endif
 
 ifeq ($(HAS_TRANSLATION),)
-$(warning TRANSLATION targets are not activated! Remove that block or install Translation. - $$ make require_translation)
+$(warning TRANSLATION targets are not activated! Remove that block or install Translation. - $$ make install_translation)
 else
 
 ## — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
@@ -657,35 +687,3 @@ vars: ## Show key Makefile variables
 ifneq ($(HAS_PHPUNIT),)
 	@printf "PHPUNIT      : $(PHPUNIT)\n"
 endif
-
-## — EXPERIMENTAL 🧪 ——————————————————————————————————————————————————————————
-
-# Related to HAS_DOCTRINE
-require_doctrine: ## Install Doctrine - https://symfony.com/doc/current/doctrine.html
-	$(COMPOSER) require symfony/orm-pack
-
-# Related to HAS_PHPUNIT
-require_phpunit: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
-	$(COMPOSER) require --dev symfony/test-pack
-
-# Related to HAS_ASSETS
-require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
-
-# Related to HAS_TRANSLATION
-require_translation: ## Install translation - https://symfony.com/doc/current/translation.html
-	$(COMPOSER) require symfony/translation
-
-##
-
-require_profiler: ## Install the profiler - https://symfony.com/doc/current/profiler.html
-	$(COMPOSER) require --dev symfony/profiler-pack
-
-require_maker_bundle: ## Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
-	$(COMPOSER) require --dev symfony/maker-bundle
-
-require_bootstrap: require_asset_mapper ## Install Bootstrap - https://getbootstrap.com/
-	$(CONSOLE) importmap:require bootstrap
-
-require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
-	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
