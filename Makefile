@@ -221,7 +221,7 @@ clear_all: ## Remove all 'dunglas/symfony-docker' configuration files and all Sy
 	git reset --hard
 	git clean -f -d
 
-##   COMPLETE INSTALLATION - EXPERIMENTAL 🧪
+##   COMPLETE INSTALLATION
 
 # Related to HAS_DOCTRINE
 install_doctrine: ## Install Doctrine - https://symfony.com/doc/current/doctrine.html

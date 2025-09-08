@@ -116,7 +116,7 @@ make stop  # Stop the project (down alias)
   clone                         Clone and extract 'dunglas/symfony-docker' configuration files at the root
   clear_all                     Remove all 'dunglas/symfony-docker' configuration files and all Symfony application files
 
-  COMPLETE INSTALLATION - EXPERIMENTAL 🧪
+  COMPLETE INSTALLATION
   install_doctrine              Install Doctrine - https://symfony.com/doc/current/doctrine.html
   install_phpunit               Install PHPUnit - https://symfony.com/doc/current/testing.html
   install_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
