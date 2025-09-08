@@ -143,6 +143,8 @@ make stop  # Stop the project (down alias)
   symfony                    sf Run Symfony console command - $ make symfony [ARG=<arguments>]- Example: $ make symfony ARG=cache:clear
   cc                            Clear the Symfony cache
   about                         Display information about the current Symfony project
+  routes                        Display current routes with assigned controllers and aliases
+
   dotenv                        Lists all .env files with variables and values
   dumpenv                       Generate .env.local.php for production
 

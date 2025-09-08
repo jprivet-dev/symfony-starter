@@ -341,6 +341,12 @@ cc: ## Clear the Symfony cache
 about: ## Display information about the current Symfony project
 	$(CONSOLE) about
 
+.PHONY: routes
+routes: ## Display current routes with assigned controllers and aliases
+	$(CONSOLE) debug:route --show-controllers --show-aliases
+
+##
+
 .PHONY: dotenv
 dotenv: ## Lists all .env files with variables and values
 	$(CONSOLE) debug:dotenv
