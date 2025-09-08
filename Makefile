@@ -173,28 +173,12 @@ help: ## Display this help message with available commands
 # "GENERATION" BLOCK CAN BE REMOVED AFTER SAVING THE PROJECT.
 # These following targets are only used for the initial setup.
 
-.PHONY: _base
-_base: clone build up_detached permissions # Internal
-
 .PHONY: minimalist
-minimalist: _base ## Generate a minimalist Symfony application with Docker configuration (stable release)
+minimalist: clone build up_detached permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(MAKE) restart
 
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) minimalist
-
-##
-
-.PHONY: webapp
-webapp: _base ## Generate a webapp with Docker configuration (stable release)
-	@printf "\n$(Y)Add extra packages to build a web application$(S)"
-	@printf "\n$(Y)---------------------------------------------$(S)\n\n"
-	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
-	$(COMPOSER) require symfony/webapp-pack
-	$(MAKE) restart
-
-webapp@lts: ## Generate a webapp with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) webapp
 
 ##
 
@@ -254,6 +238,11 @@ install_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
 	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
 
 ##
+
+install_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
+	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
+	$(COMPOSER) require symfony/webapp-pack
+	$(MAKE) restart
 
 install_api: ## Install API Platform - https://api-platform.com/docs/symfony/
 	$(COMPOSER) require api

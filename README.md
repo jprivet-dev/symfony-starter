@@ -110,9 +110,6 @@ make stop  # Stop the project (down alias)
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 
-  webapp                        Generate a webapp with Docker configuration (stable release)
-  webapp@lts                    Generate a webapp with Docker configuration (LTS - long-term support release)
-
   clone                         Clone and extract 'dunglas/symfony-docker' configuration files at the root
   clear_all                     Remove all 'dunglas/symfony-docker' configuration files and all Symfony application files
 
@@ -127,6 +124,7 @@ make stop  # Stop the project (down alias)
   install_bootstrap             Install Bootstrap - https://getbootstrap.com/
   install_stimulus              Install StimulusBundle - https://ux.symfony.com/
 
+  install_webapp                Install a web application - https://symfony.com/doc/current/setup.html
   install_api                   Install API Platform - https://api-platform.com/docs/symfony/
   install_easy_admin            Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 
