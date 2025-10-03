@@ -315,32 +315,20 @@ endif
 
 .PHONY: install
 install: ## Start the project, install dependencies and show info
-	@printf "\n$(Y)Start the project$(S)"
-	@printf "\n$(Y)-----------------$(S)\n\n"
 	$(MAKE) up_detached
-	@printf "\n$(Y)Install Composer packages$(S)"
-	@printf "\n$(Y)-------------------------$(S)\n\n"
 	$(MAKE) composer_install
 ifneq ($(HAS_ASSETS),)
-	@printf "\n$(Y)Generate all assets$(S)"
-	@printf "\n$(Y)-------------------$(S)\n\n"
 	$(MAKE) assets
 endif
 	$(MAKE) images info
 
 .PHONY: check
 check: ## Check everything before you deliver
-	@printf "\n$(Y)Check if lock file is up to date$(S)"
-	@printf "\n$(Y)--------------------------------$(S)\n\n"
 	-$(MAKE) composer_validate
 ifneq ($(HAS_DOCTRINE),)
-	@printf "\n$(Y)Validate the mapping files$(S)"
-	@printf "\n$(Y)--------------------------$(S)\n\n"
 	-$(MAKE) validate
 endif
 ifneq ($(HAS_PHPUNIT),)
-	@printf "\n$(Y)Run PHPUnit$(S)"
-	@printf "\n$(Y)-----------$(S)\n\n"
 	-$(MAKE) phpunit
 endif
 
