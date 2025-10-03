@@ -69,7 +69,7 @@ git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter &
 [Create on GitHub your empty project ](https://github.com/new)(without a `README.md` file), and after :
 
 ```shell
-git clone git@github.com:jprivet-dev/symfony-starter.git --depth 1 my-project
+git clone git@github.com:jprivet-dev/symfony-starter.git my-project
 cd my-project
 
 git remote set-url origin git@github.com:my-github/my-project.git
