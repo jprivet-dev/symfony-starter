@@ -71,4 +71,4 @@ done < "${DOCS_MAKEFILE}"
 # Replace the original file with the new one
 mv "${TEMP_MAKEFILE}" "${DOCS_MAKEFILE}"
 
-printf " ${G}✔${S} README.md has been updated successfully with Makefile commands.\n"
+printf " ${G}✔${S} \"${DOCS_MAKEFILE}\" has been updated successfully with Makefile commands.\n"
