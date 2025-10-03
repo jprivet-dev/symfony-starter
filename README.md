@@ -64,6 +64,19 @@ git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter &
 > 
 > You can change this name with `PROJECT_NAME` variable. See [Docker build options](docs/options.md).
 
+## Clone and rename the project
+
+[Create on GitHub your empty project ](https://github.com/new)(without a `README.md` file), and after :
+
+```shell
+git clone git@github.com:jprivet-dev/symfony-starter.git --depth 1 my-project
+cd my-project
+
+git remote set-url origin git@github.com:my-github/my-project.git
+git branch -M main
+git push -u origin main
+```
+
 ## Cleanup command
 
 Stops all Docker containers, removes all Docker-related configuration files copied from `dunglas/symfony-docker` (e.g., `Dockerfile`, `compose.yaml`, `frankenphp/`), and removes all Symfony application files (e.g., `bin/`, `config/`, `src/`, `vendor/`, `composer.json`, `.env`, etc.) :
