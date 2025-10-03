@@ -1,6 +1,10 @@
 # Docker build options
 
-⬅️ [README](../README.md)
+[⬅️ README](../README.md)
+
+---
+
+## About
 
 This document explains how to pass specific **Docker build options**, such as the Symfony version or PHP extensions, to your project using the `Makefile`. These options are directly sourced from the `dunglas/symfony-docker` configuration.
 
@@ -13,13 +17,13 @@ This method allows you to set variables directly when running a `make` command.
 * Example for a custom Symfony version:
 
 ```shell
-SYMFONY_VERSION=6.* make generate
+SYMFONY_VERSION=6.* make minimalist
 ````
 
 * Example for custom ports:
 
 ```shell
-HTTP_PORT=8080 HTTPS_PORT=8443 make generate
+HTTP_PORT=8080 HTTPS_PORT=8443 make minimalist
 
 # Or if the app is already generated:
 HTTP_PORT=8080 HTTPS_PORT=8443 make start
@@ -29,7 +33,7 @@ HTTP_PORT=8080 HTTPS_PORT=8443 make start
 
 For more permanent settings, you can define these variables in your local environment file (`.env.local`).
 
-* Example for a custom Symfony version (only effective during `make generate`):
+* Example for a custom Symfony version (only effective during `make minimalist`):
 
 ```dotenv
 # .env.local
@@ -48,8 +52,12 @@ HTTPS_PORT=8443
 * Then, simply run your `make` command:
 
 ```shell
-make generate
+make minimalist
 
 # Or if the app is already generated:
 make start
 ```
+
+---
+
+[⬅️ README](../README.md)

@@ -12,24 +12,24 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
 
 ## Installation
 
-### 1 - Clone this repository
+### 1. Clone this repository
 
 ```shell
 git clone git@github.com:jprivet-dev/symfony-starter.git
 cd symfony-starter
 ```
 
-### 2 - Generate a fresh Symfony application at the root
+### 2. Generate a fresh Symfony application at the root
 
 ```shell
-# Stable Release
-make generate
+# Minimalist Stable Release
+make minimalist
 
-# Long-Term Support Release (LTS)
-make generate@lts
+# Minimalist Long-Term Support Release (LTS)
+make minimalist@lts
 
-# Specific Version
-SYMFONY_VERSION=6.4.3 make generate
+# Specific Minimalist Version
+SYMFONY_VERSION=6.4.3 make minimalist
 ```
 
 This will:
@@ -37,15 +37,20 @@ This will:
 * Clone `dunglas/symfony-docker` configuration files and extract them to your project root.
 * Build the necessary Docker images and start the containers.
 * Generate a fresh Symfony application inside the container.
+* Eventually add extra packages to give you everything you need to build a web application.
 
-### 3 - Access your application
+### 3. Access your application
 
 Open `https://symfony-starter.localhost:8443/` in your browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
 
 ### All in one command
 
 ```shell
-git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make generate
+# Minimalist Stable Release
+git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist
+
+# Minimalist Long-Term Support Release (LTS)
+git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist@lts
 ```
 
 ## Generate an app in another existing project
@@ -59,22 +64,29 @@ git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter &
 > 
 > You can change this name with `PROJECT_NAME` variable. See [Docker build options](docs/options.md).
 
-## Cleanup commands
+## Clone and rename the project
 
-### **`make clear_skeleton`**
-
-Removes all Symfony application files (e.g., `bin/`, `config/`, `src/`, `vendor/`, `composer.json`, `.env`, etc.). This is useful if you want to **regenerate the Symfony app** from scratch, possibly with a different Symfony version.
+[Create on GitHub your empty project ](https://github.com/new)(without a `README.md` file), and after :
 
 ```shell
-make clear_skeleton
+git clone git@github.com:jprivet-dev/symfony-starter.git --depth 1 my-project
+cd my-project
 
-# Then regenerate the Symfony app:
-make generate
+git remote set-url origin git@github.com:my-github/my-project.git
+git branch -M main
+git push -u origin main
 ```
 
-### `make clear_docker`
+## Cleanup command
 
-Stops all Docker containers and **removes all Docker-related configuration files** copied from `dunglas/symfony-docker` (e.g., `Dockerfile`, `compose.yaml`, `frankenphp/`). This effectively resets your project's Docker setup. Use this if you want to start over with the Docker configuration itself.
+Stops all Docker containers, removes all Docker-related configuration files copied from `dunglas/symfony-docker` (e.g., `Dockerfile`, `compose.yaml`, `frankenphp/`), and removes all Symfony application files (e.g., `bin/`, `config/`, `src/`, `vendor/`, `composer.json`, `.env`, etc.) :
+
+```shell
+make clear_all
+
+# Then regenerate the Symfony app (LTS version for example)
+make minimalist@lts
+```
 
 ## Daily usage
 
@@ -83,11 +95,11 @@ make start # Start the project and show info (up_detached & info alias)
 make stop  # Stop the project (down alias)
 ```
 
-> Run `make` to see all shorcuts for the most common tasks.
+> Run `make` to [discover all commands](docs/makefile.md).
 
 ## Project structure
 
-After `make generate`, your project structure will look like this:
+After `make minimalist`, your project structure will look like this (Minimalist Stable Release):
 
 ```
 ./
@@ -121,8 +133,15 @@ tree -A -L 1 -F --dirsfirst
 
 ## Docs
 
+* [Validate certificates](docs/certificates.md)
 * [Save your generated Symfony application](docs/save.md)
+* [Accessing the `var/` directory](docs/var.md)
 * [Docker build options](docs/options.md)
+* [Makefile - Discover all commands](docs/makefile.md)
+* [Configure a remote PHP interpreter (Docker)](docs/remote-php-interpreter.md)
+* [PostgreSQL](docs/postgre.md)
+* [Testing](docs/testing.md)
+* [Quality](docs/quality.md)
 * [Troubleshooting](docs%2Ftroubleshooting.md)
 
 ## Main resources

@@ -39,23 +39,53 @@ UNAME_S := $(shell uname -s)
 -include .env.$(APP_ENV).local
 
 ifeq ($(APP_ENV),prod)
-$(info Warning: You are in the PROD environment)
+$(warning [WARNING] You are in the PROD environment)
 endif
 
 # See https://symfony.com/doc/current/deployment.html#b-configure-your-environment-variables
 ifneq ($(wildcard .env.local.php),)
-$(info Warning: It is not possible to use variables from .env.local.php file)
+$(warning [WARNING] In this Makefile it is not possible to use variables from .env.local.php file)
 endif
 
 #
-# INSTALLATION
-# These variables and commands are for initial setup and can be removed after saving the project.
+# GENERATION
 #
 
-# End of bug fixes: November 2026 - See https://symfony.com/releases
-SYMFONY_LTS_VERSION=6.*
-REPOSITORY = git@github.com:dunglas/symfony-docker.git
-CLONE_DIR  = clone
+# "GENERATION" BLOCK CAN BE REMOVED AFTER SAVING THE PROJECT.
+# These variables are only used for the initial setup.
+
+# Symfony 6.* is the current long-term support version.
+# Released on          : November 2023
+# End of bug fixes     : November 2026
+# End of security fixes: November 2027
+# See https://symfony.com/releases
+SYMFONY_LTS_VERSION       = 6.*
+REPOSITORY_SYMFONY_DOCKER = git@github.com:dunglas/symfony-docker.git
+REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
+CLONE_DIR                 = clone
+
+#
+# TARGETS ACTIVATION
+#
+
+HAS_DOCKERFILE      ?= $(wildcard Dockerfile)
+HAS_DOCTRINE        ?= $(wildcard vendor/doctrine)
+HAS_PHPUNIT         ?= $(wildcard bin/phpunit)
+HAS_ASSETS          ?= $(wildcard vendor/symfony/asset-mapper)
+HAS_TRANSLATION     ?= $(wildcard vendor/symfony/translation)
+
+HAS_PROFILER        ?= $(wildcard vendor/symfony/web-profiler-bundle)
+HAS_MAILER          ?= $(wildcard vendor/symfony/mailer)
+HAS_API             ?= $(wildcard vendor/api-platform)
+
+#
+# FILES & DIRECTORIES
+#
+
+PWD            = $(shell pwd)
+NOW           := $(shell date +%Y%m%d-%H%M%S-%3N)
+COVERAGE_DIR   = build/coverage-$(NOW)
+COVERAGE_INDEX = $(PWD)/$(COVERAGE_DIR)/index.html
 
 #
 # DOCKER OPTIONS
@@ -70,7 +100,7 @@ define append
   endif
 endef
 
-PROJECT_NAME    ?= $(shell basename $(CURDIR))
+PROJECT_NAME    ?= $(shell basename $(CURDIR) | tr '[:upper:]' '[:lower:]')
 SERVER_NAME      = $(PROJECT_NAME).localhost
 IMAGES_PREFIX    = $(PROJECT_NAME)-
 
@@ -78,6 +108,7 @@ HTTP_PORT  ?= 8080
 HTTPS_PORT ?= 8443
 HTTP3_PORT ?= $(HTTPS_PORT)
 
+$(eval $(call append,APP_ENV))
 $(eval $(call append,XDEBUG_MODE))
 $(eval $(call append,SERVER_NAME))
 $(eval $(call append,IMAGES_PREFIX))
@@ -100,19 +131,26 @@ HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(H
 COMPOSE_V2 := $(shell docker compose version 2> /dev/null)
 
 ifndef COMPOSE_V2
-$(error Docker Compose CLI plugin is required but is not available on your system)
+$(error [ERROR] Docker Compose CLI plugin is required but is not available on your system)
 endif
 
 COMPOSE = docker compose
 
+# In a first step, you can test the application's production behavior in a development environment by setting APP_ENV=prod.
+# To test the full Docker production setup (e.g., optimized images, production-specific configurations), you can also add USE_COMPOSE_PROD_YAML=true.
+# This allows for a smooth transition from testing the code's behavior to testing the full Docker infrastructure.
+ifeq ($(USE_COMPOSE_PROD_YAML),prod)
 ifeq ($(APP_ENV),prod)
-COMPOSE = $(COMPOSE) -f compose.yaml -f compose.prod.yaml
+COMPOSE = docker compose -f compose.yaml -f compose.prod.yaml
+endif
 endif
 
-CONTAINER_PHP = $(COMPOSE) exec php
+CONTAINER_PHP = $(COMPOSE) exec $(DOCKER_EXEC_ENV) php
 PHP           = $(CONTAINER_PHP) php
 COMPOSER      = $(CONTAINER_PHP) composer
+BASH_COMMAND  = $(CONTAINER_PHP) bash -c
 CONSOLE       = $(PHP) bin/console
+PHPUNIT       = $(PHP) bin/phpunit
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
 
@@ -131,6 +169,107 @@ help: ## Display this help message with available commands
 	}'
 	@echo
 
+## — GENERATION 🔨 ————————————————————————————————————————————————————————————
+
+# "GENERATION" BLOCK CAN BE REMOVED AFTER SAVING THE PROJECT.
+# These following targets are only used for the initial setup.
+
+.PHONY: minimalist
+minimalist: clone_symfony_docker build up_detached permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
+	$(MAKE) restart
+
+minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) minimalist
+
+##
+
+clone_symfony_docker: ## Clone and extract https://github.com/dunglas/symfony-docker files at the root
+	@printf "\n$(Y)Clone https://github.com/dunglas/symfony-docker$(S)"
+	@printf "\n$(Y)-----------------------------------------------$(S)\n\n"
+ifeq ($(HAS_DOCKERFILE),)
+	@printf "Repository: $(Y)$(REPOSITORY_SYMFONY_DOCKER)$(S)\n"
+	git clone $(REPOSITORY_SYMFONY_DOCKER) $(CLONE_DIR) --depth 1
+	@printf "\n$(Y)Extract https://github.com/dunglas/symfony-docker at the root$(S)"
+	@printf "\n$(Y)-------------------------------------------------------------$(S)\n\n"
+	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
+	rm -rf $(CLONE_DIR)
+	@if [ -f LICENSE ]; then \
+		git restore LICENSE; \
+	fi
+	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker cloned and extracted at the root.\n\n"
+else
+	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
+endif
+
+clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
+	@printf "\n$(Y)Clone https://github.com/symfony/demo$(S)"
+	@printf "\n$(Y)-------------------------------------$(S)\n\n"
+ifeq ($(wildcard .env.local.demo),)
+	@printf "Repository: $(Y)$(REPOSITORY_SYMFONY_DEMO)$(S)\n"
+	git clone $(REPOSITORY_SYMFONY_DEMO) $(CLONE_DIR) --depth 1
+	@printf "\n$(Y)Extract https://github.com/symfony/demo at the root$(S)"
+	@printf "\n$(Y)---------------------------------------------------$(S)\n\n"
+	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
+	rm -rf $(CLONE_DIR)
+	@if [ -f LICENSE ]; then \
+		git restore LICENSE; \
+	fi
+	@printf " $(G)✔$(S) https://github.com/symfony/demo cloned and extracted at the root.\n\n"
+else
+	@printf " $(G)✔$(S) https://github.com/symfony/demo files already present at the root.\n\n"
+endif
+
+clear_all: ## Remove all fresh Symfony application files
+ifneq ($(HAS_DOCKERFILE),)
+	$(MAKE) permissions down
+endif
+	git reset --hard
+	git clean -f -d
+
+##   COMPLETE INSTALLATION
+
+install_doctrine: ## Install Doctrine - https://symfony.com/doc/current/doctrine.html
+	$(COMPOSER) require symfony/orm-pack
+	$(MAKE) restart
+
+install_phpunit: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
+	$(COMPOSER) require --dev symfony/test-pack
+
+install_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
+
+install_translation: ## Install translation - https://symfony.com/doc/current/translation.html
+	$(COMPOSER) require symfony/translation
+
+##
+
+install_profiler: ## Install the profiler - https://symfony.com/doc/current/profiler.html
+	$(COMPOSER) require --dev symfony/profiler-pack
+
+install_maker_bundle: ## Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+	$(COMPOSER) require --dev symfony/maker-bundle
+
+install_bootstrap: install_asset_mapper ## Install Bootstrap - https://getbootstrap.com/
+	$(CONSOLE) importmap:require bootstrap
+
+install_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
+	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
+
+##
+
+install_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
+	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
+	$(COMPOSER) require symfony/webapp-pack
+	$(MAKE) restart
+
+install_api: ## Install API Platform - https://api-platform.com/docs/symfony/
+	$(COMPOSER) require api
+	$(MAKE) restart
+
+install_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
+	$(COMPOSER) require easycorp/easyadmin-bundle
+	$(MAKE) restart
+
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
 .PHONY: start
@@ -139,66 +278,64 @@ start: up_detached images info ## Start the project and show info (up_detached &
 .PHONY: stop
 stop: down ## Stop the project (down alias)
 
+.PHONY: restart
+restart: stop start ## Stop & Start the project and show info (up_detached & info alias)
+
 .PHONY: info
 info: ## Show project access info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-	@printf "* Open $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S) in your browser and accept the auto-generated TLS certificate\n"
+ifeq ($(HAS_DOCTRINE),)
+	@printf " $(R)⨯$(S) $(Y)DOCTRINE & SQL 💽$(S) commands can not be used in that Makefile! Remove that block or install Doctrine with $(G)make install_doctrine$(S)\n"
+endif
+ifeq ($(HAS_PHPUNIT),)
+	@printf " $(R)⨯$(S) $(Y)TESTS ✅$(S) commands can not be used in that Makefile! Remove that block or install PHPUnit with $(G)make install_phpunit$(S)\n"
+endif
+ifeq ($(HAS_ASSETS),)
+	@printf " $(R)⨯$(S) $(Y)ASSETS 🎨‍$(S) commands can not be used in that Makefile! Remove that block or install AssetMapper with $(G)make install_asset_mapper$(S)\n"
+endif
+ifeq ($(HAS_TRANSLATION),)
+	@printf " $(R)⨯$(S) $(Y)TRANSLATION 🇬🇧$(S) commands can not be used in that Makefile! Remove that block or install Translation with $(G)make install_translation$(S)\n"
+endif
+	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
+	@printf " $(Y)›$(S) Go in your favourite browser and accept the auto-generated TLS certificate:\n"
+	@printf "    - Homepage ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
+ifneq ($(HAS_API),)
+	@printf "    - API ............ $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/api$(S)\n"
+endif
+ifneq ($(HAS_PROFILER),)
+	@printf "    - Profiler ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/_profiler$(S)\n"
+endif
+ifneq ($(HAS_MAILER),)
+	@printf "    - Mail Catcher ... $(G)http://$(SERVER_NAME):8025/$(S)\n"
+endif
 	@printf "\n"
 
 ##
 
-#
-# These following targets (generate, generate@lts, clone, clear_all, clear_docker and clear_skeleton) are for initial setup and can be removed after saving the project.
-#
-
-.PHONY: generate
-generate: clone build up_detached permissions info ## Generate a fresh Symfony application with Docker configuration (stable release)
-
-.PHONY: generate@lts
-generate@lts: ## Generate a fresh Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) generate
-
-.PHONY: clone
-clone: ## Clone and extract 'dunglas/symfony-docker' configuration files at the root
-	@printf "\n$(Y)Clone 'dunglas/symfony-docker'$(S)"
-	@printf "\n$(Y)------------------------------$(S)\n\n"
-ifeq ($(wildcard Dockerfile),)
-	@printf "Repository: $(Y)$(REPOSITORY)$(S)\n"
-	git clone $(REPOSITORY) $(CLONE_DIR) --depth 1
-	@printf "\n$(Y)Extract 'dunglas/symfony-docker' at the root$(S)"
-	@printf "\n$(Y)--------------------------------------------$(S)\n\n"
-	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
-	rm -rf $(CLONE_DIR)
-	@if [ -f LICENSE ]; then \
-		git restore LICENSE; \
-	fi
-	@printf " $(G)✔$(S) 'dunglas/symfony-docker' cloned and extracted at the root.\n\n"
-else
-	@printf " $(R)⨯$(S) 'dunglas/symfony-docker' configuration already present at the root.\n\n"
+.PHONY: install
+install: ## Start the project, install dependencies and show info
+	$(MAKE) up_detached
+	$(MAKE) composer_install
+ifneq ($(HAS_ASSETS),)
+	$(MAKE) assets
 endif
+	$(MAKE) images info
 
-clear_all: clear_docker clear_skeleton ## Execute clear_skeleton & clear_docker commands
-
-clear_docker: down ## Remove all 'dunglas/symfony-docker' configuration files
-	@printf "\n$(Y)Remove all 'dunglas/symfony-docker' files$(S)"
-	@printf "\n$(Y)-----------------------------------------$(S)\n\n"
-	rm -rf frankenphp
-	rm  -f .dockerignore compose.override.yaml compose.prod.yaml compose.yaml Dockerfile
-
-clear_skeleton: down ## Remove all Symfony application files (symfony/skeleton)
-	@printf "\n$(Y)Remove all symfony/skeleton files$(S)"
-	@printf "\n$(Y)---------------------------------$(S)\n\n"
-	rm -rf bin config public src var vendor
-	rm  -f .env .env.dev .gitignore composer.json composer.lock symfony.lock
-	@if [ -f LICENSE ]; then \
-		git restore LICENSE; \
-	fi
+.PHONY: check
+check: ## Check everything before you deliver
+	-$(MAKE) composer_validate
+ifneq ($(HAS_DOCTRINE),)
+	-$(MAKE) validate
+endif
+ifneq ($(HAS_PHPUNIT),)
+	-$(MAKE) phpunit
+endif
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
 .PHONY: symfony
-symfony sf: ## Run Symfony console command - Usage: make symfony ARG="cache:clear"
+symfony sf: ## Run Symfony console command - $ make symfony [ARG=<arguments>]- Example: $ make symfony ARG=cache:clear
 	$(CONSOLE) $(ARG)
 
 .PHONY: cc
@@ -208,6 +345,12 @@ cc: ## Clear the Symfony cache
 .PHONY: about
 about: ## Display information about the current Symfony project
 	$(CONSOLE) about
+
+.PHONY: routes
+routes: ## Display current routes with assigned controllers and aliases
+	$(CONSOLE) debug:route --show-controllers --show-aliases
+
+##
 
 .PHONY: dotenv
 dotenv: ## Lists all .env files with variables and values
@@ -223,8 +366,17 @@ dumpenv: ## Generate .env.local.php for production
 php: ## Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
 	$(PHP) $(ARG)
 
+##
+
 php_sh: ## Connect to the PHP container shell
 	$(CONTAINER_PHP) sh
+
+php_env: ## Display all environment variables set within the PHP container
+	$(CONTAINER_PHP) env
+
+.PHONY: php_command
+php_command: ## Run a command inside the PHP container - $ make php_command [ARG=<arguments>]- Example: $ make php_command ARG="ls -al"
+	$(BASH_COMMAND) "$(ARG)"
 
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
@@ -246,13 +398,157 @@ else
 	$(COMPOSER) update
 endif
 
+composer_update_lock: ## Update only the content hash of composer.lock without updating dependencies
+	$(COMPOSER) update --lock
+
+composer_validate: ## Check if lock file is up to date (even when config.lock is false)
+	$(COMPOSER) validate --strict --check-lock
+
+## — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
+
+db_drop: ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
+	$(CONSOLE) doctrine:database:drop --if-exists --force $(ARG)
+
+db_create: ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
+	$(CONSOLE) doctrine:database:create --if-not-exists $(ARG)
+
+db_clear: db_drop db_create ## Drop and create the database
+
+db_init: db_drop db_create fixtures ## Drop and create the database and add fixtures
+
+##
+
+.PHONY: validate
+validate: ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
+	$(CONSOLE) doctrine:schema:validate -v $(ARG)
+
+.PHONY: update
+update: ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
+	$(CONSOLE) doctrine:schema:update --dump-sql
+
+update_force: ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
+	$(CONSOLE) doctrine:schema:update --force
+
+##
+
+.PHONY: migration
+migration: ## Create a new migration based on database changes (format the generated SQL)
+	$(CONSOLE) make:migration --formatted -v $(ARG)
+
+.PHONY: migrate
+migrate: ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
+	$(CONSOLE) doctrine:migrations:migrate --no-interaction --all-or-nothing $(ARG)
+
+.PHONY: list
+list: ## Display a list of all available migrations and their status
+	$(CONSOLE) doctrine:migrations:list
+
+.PHONY: execute
+execute: ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
+	$(CONSOLE) doctrine:migrations:execute $(ARG)
+
+.PHONY: generate
+generate: ## Generate a blank migration class
+	$(CONSOLE) doctrine:migrations:generate
+
+##
+
+.PHONY: sql
+sql: ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
+	$(CONSOLE) doctrine:query:sql "$(QUERY)"
+
+# See https://stackoverflow.com/questions/769683/how-to-show-tables-in-postgresql
+sql_tables: QUERY=SELECT * FROM pg_catalog.pg_tables;
+sql_tables: sql ## Show all tables
+
+##
+
+.PHONY: fixtures
+fixtures: ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
+	$(CONSOLE) doctrine:fixtures:load -n $(ARG)
+
+## — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
+
+.PHONY: psql
+psql: ## Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG="-V"
+	$(PSQL) $(ARG)
+
+## — TESTS ✅ —————————————————————————————————————————————————————————————————
+
+.PHONY: phpunit
+phpunit: ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
+	$(PHPUNIT) $(ARG)
+
+.PHONY: coverage
+coverage: DOCKER_EXEC_ENV=-e XDEBUG_MODE=coverage
+coverage: ARG=--coverage-html $(COVERAGE_DIR)
+coverage: phpunit ## Generate code coverage report in HTML format for all tests
+	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(COVERAGE_INDEX)$(S)\n"
+
+.PHONY: dox
+dox: ARG=--testdox
+dox: phpunit ## Report test execution progress in TestDox format for all tests
+
+##
+
+xdebug_version: ## Xdebug version number
+	$(PHP) -r "var_dump(phpversion('xdebug'));"
+
+## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
+
+.PHONY: assets
+assets: ## Generate all assets
+ifeq ($(APP_ENV),prod)
+	make importmap_install
+else
+	make asset_map_compile
+endif
+
+##
+
+asset_map_clear: ## Clear all assets in the public output directory
+	$(COMPOSE) run --rm php rm -rf ./public/assets
+
+asset_map_compile: asset_map_clear ## Compile all mapped assets and writes them to the final public output directory
+	$(CONSOLE) asset-map:compile
+
+asset_map_debug: ## See all of the mapped assets
+	$(CONSOLE) debug:asset-map --full
+
+##
+
+importmap_audit: ## Check for security vulnerability advisories for dependencies
+	$(CONSOLE) importmap:audit
+
+importmap_install: ## Download all assets that should be downloaded
+	$(CONSOLE) importmap:install
+
+importmap_outdated: ## List outdated JavaScript packages and their latest versions
+	$(CONSOLE) importmap:outdated
+
+importmap_remove: ## Remove JavaScript packages
+	$(CONSOLE) importmap:remove
+
+importmap_require: ## Require JavaScript packages
+	$(CONSOLE) importmap:require $(ARG)
+
+importmap_update: ## Update JavaScript packages to their latest versions
+	$(CONSOLE) importmap:update
+
+## — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
+
+.PHONY: extract
+extract: ## Extracts translation strings from templates (fr)
+	$(CONSOLE) translation:extract --sort=asc --format=yaml --force fr
+
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: up
 up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans $(ARG)
+	$(MAKE) git_safe_dir
 
-up_detached: ARG=--wait -d
+up_detached: ARG=-d
 up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
 
 .PHONY: down
@@ -281,6 +577,44 @@ images: ## List images used by the current containers
 config: ## Parse, resolve, and render compose file in canonical format
 	$(UP_ENV) $(COMPOSE) config
 
+## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
+
+.PHONY: certificates
+certificates: ## Installs the Caddy TLS certificate to the trust store
+	@printf "\n$(Y)Copying the Caddy certificate to trust store$(S)"
+	@printf "\n$(Y)--------------------------------------------$(S)\n\n"
+	@if [ ! -f /tmp/caddy_root.crt ]; then \
+		$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" > /tmp/caddy_root.crt; \
+	fi
+ifeq ($(UNAME_S),Darwin)
+	@printf " $(Y)› OS: macOS$(S)\n"
+	@sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain /tmp/caddy_root.crt
+	@rm /tmp/caddy_root.crt
+else ifeq ($(UNAME_S),Linux)
+	@printf " $(Y)› OS: Linux$(S)\n"
+	@sudo cp /tmp/caddy_root.crt /usr/local/share/ca-certificates/caddy_root.crt
+	@sudo update-ca-certificates
+	@rm /tmp/caddy_root.crt
+endif
+	@printf " $(G)✔$(S) The Caddy root certificate has been added to the trust store.\n"
+
+certificates_export: ## Exports the Caddy root certificate from the container to the host
+	@$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" > tls/root.crt
+	@printf " $(G)✔$(S) The Caddy root certificate has been exported to $(Y)tls/root.crt$(S).\n"
+	@printf " $(Y)›$(S) You may need to manually import this certificate into your browser's trust store:\n"
+	@printf "    - $(Y)Chrome/Brave:$(S) Go to chrome://settings/certificates and import the file 'tls/root.crt' under 'Authorities'.\n"
+	@printf "    - $(Y)Firefox:$(S) Go to about:preferences#privacy, click 'View Certificates...' and import 'tls/root.crt' under 'Authorities'.\n"
+	@printf "\n"
+
+.PHONY: hosts
+hosts: ## Add the server name to /etc/hosts file
+	@if ! grep -q "$(SERVER_NAME)" /etc/hosts; then \
+		echo "127.0.0.1 $(SERVER_NAME)" | sudo tee -a /etc/hosts > /dev/null; \
+		printf " $(G)✔$(S) \"$(SERVER_NAME)\" added to /etc/hosts.\n"; \
+	else \
+		printf " $(G)✔$(S) \"$(SERVER_NAME)\" already exists in /etc/hosts.\n"; \
+	fi
+
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
 .PHONY: permissions
@@ -289,23 +623,54 @@ ifeq ($(UNAME_S),Linux)
 	$(COMPOSE) run --rm php chown -R $(USER) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER)$(S) of the project files.\n"
 else
-	@printf " $(Y)Info:$(S) 'make permissions' is typically not needed on $(UNAME_S).\n"
+	@printf " $(Y)›$(S) 'make permissions' is typically not needed on $(UNAME_S).\n"
 endif
 
 git_safe_dir: ## Add /app to Git's safe directories within the php container
 	$(COMPOSE) exec php git config --global --add safe.directory /app
 
-## — UTILITIES 🛠️ ——————————————————————————————————————————————————————————————
+## — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
+
+env_files: ## Show env files loaded into this Makefile
+	@printf "\n$(Y)Symfony env files$(S)"
+	@printf "\n$(Y)-----------------$(S)\n\n"
+	@printf "Files loaded into this Makefile (in order of decreasing priority) $(Y)[APP_ENV=$(APP_ENV)]$(S):\n\n"
+ifneq ("$(wildcard .env.$(APP_ENV).local)",)
+	@printf "* $(G)✔$(S) .env.$(APP_ENV).local\n"
+else
+	@printf "* $(R)⨯$(S) .env.$(APP_ENV).local\n"
+endif
+ifneq ("$(wildcard .env.$(APP_ENV))",)
+	@printf "* $(G)✔$(S) .env.$(APP_ENV)\n"
+else
+	@printf "* $(R)⨯$(S) .env.$(APP_ENV)\n"
+endif
+ifneq ("$(wildcard .env.local)",)
+	@printf "* $(G)✔$(S) .env.local\n"
+else
+	@printf "* $(R)⨯$(S) .env.local\n"
+endif
+ifneq ("$(wildcard .env)",)
+	@printf "* $(G)✔$(S) .env\n"
+else
+	@printf "* $(R)⨯$(S) .env\n"
+endif
 
 .PHONY: vars
 vars: ## Show key Makefile variables
 	@printf "\n$(Y)Vars$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-	@printf "USER      : $(USER)\n"
-	@printf "UNAME_S   : $(UNAME_S)\n"
-	@printf "APP_ENV   : $(APP_ENV)\n"
-	@printf "REPOSITORY: $(REPOSITORY)\n"
-	@printf "CLONE_DIR : $(CLONE_DIR)\n"
-	@printf "UP_ENV    : $(UP_ENV)\n"
-	@printf "COMPOSE_V2: $(COMPOSE_V2)\n"
-	@printf "COMPOSE   : $(COMPOSE)\n"
+	@printf "USER         : $(USER)\n"
+	@printf "UNAME_S      : $(UNAME_S)\n"
+	@printf "APP_ENV      : $(APP_ENV)\n"
+	@printf "UP_ENV       : $(UP_ENV)\n"
+	@printf "COMPOSE_V2   : $(COMPOSE_V2)\n"
+	@printf "COMPOSE      : $(COMPOSE)\n"
+	@printf "CONTAINER_PHP: $(CONTAINER_PHP)\n"
+	@printf "PHP          : $(PHP)\n"
+	@printf "COMPOSER     : $(COMPOSER)\n"
+	@printf "BASH_COMMAND : $(BASH_COMMAND)\n"
+	@printf "CONSOLE      : $(CONSOLE)\n"
+ifneq ($(HAS_PHPUNIT),)
+	@printf "PHPUNIT      : $(PHPUNIT)\n"
+endif

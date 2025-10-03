@@ -1,10 +1,14 @@
 # Save your generated Symfony application
 
-⬅️ [README](../README.md)
+[⬅️ README](../README.md)
+
+---
+
+## About
 
 After successfully generating your Symfony application for the first time, it's crucial to "**save**" its state. This prevents regeneration on subsequent container starts and officially integrates the application into your codebase.
 
-## 1 - Remove the installation block from `frankenphp/docker-entrypoint.sh`
+## 1. Remove the installation block from `frankenphp/docker-entrypoint.sh`
 
 Locate and **delete the following lines** from `frankenphp/docker-entrypoint.sh`:
 
@@ -18,38 +22,27 @@ Locate and **delete the following lines** from `frankenphp/docker-entrypoint.sh`
 	fi
 ```
 
-## 2 - Remove initial setup commands and variables from `Makefile`
+## 2. Remove `GENERATION` blocks from `Makefile`
 
-### 2.1 - Remove the `INSTALLATION` block
+To find the items to remove in the `Makefile` file, search for the word `GENERATION`.
 
-**Delete the entire `INSTALLATION` block** and its associated variables:
+* You will find variables that are only used for the initial setup: `SYMFONY_LTS_VERSION`, `REPOSITORY`, etc.
+* You will find targets that are only used for the initial setup: `minimalist`, `install_webapp`, `install_api`, etc.
 
-* `SYMFONY_LTS_VERSION`
-* `REPOSITORY`
-* `CLONE_DIR`
-
-### 2.2 - Remove "installation" targets
-
-These commands are specific to the one-time project creation process. **Locate and remove them**:
-
-* `generate`
-* `generate@lts`
-* `clone`
-* `clear_all`
-* `clear_docker`
-* `clear_skeleton`
-
-## 3 - Commit all changes
+## 3. Commit all changes
 
 ```shell
-git add . && git commit -m "Fresh Symfony application saved and setup commands removed"
+git add . && git commit -m "Fresh Symfony application saved (setup variables and targets removed)"
 ```
 
-## 4 - Verify the changes (optional)
+## 4. Verify the changes (optional)
 
 Restart your containers. The application should start quickly:
 
 ```shell
-make stop
-make start
+make restart
 ```
+
+---
+
+[⬅️ README](../README.md)
