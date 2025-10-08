@@ -1,4 +1,4 @@
-# Editing permissions on Linux
+# Linux - Editing permissions
 
 [⬅️ Troubleshooting](../troubleshooting.md)
 

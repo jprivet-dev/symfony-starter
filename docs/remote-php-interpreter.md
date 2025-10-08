@@ -1,4 +1,4 @@
-# Configure a remote PHP interpreter (Docker)
+# PhpStorm : configure a remote PHP interpreter (Docker)
 
 [⬅️ README](../README.md)
 

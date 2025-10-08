@@ -1,4 +1,4 @@
-# Git "dubious ownership" Error in Docker Container
+# Docker and Git - "detected dubious ownership in repository"
 
 [⬅️ Troubleshooting](../troubleshooting.md)
 

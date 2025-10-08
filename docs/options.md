@@ -42,7 +42,6 @@ SYMFONY_VERSION=6.4.*
 
 * Example for custom ports:
 
-
 ```dotenv
 # .env.local
 HTTP_PORT=8080

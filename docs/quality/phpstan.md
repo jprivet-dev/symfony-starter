@@ -42,8 +42,8 @@ composer require --dev phpstan/phpstan-phpunit
 * Expand the **PHPStan** area and switch `ON` the tool.
 * In **Configuration**, choose `symfony-starter-app-php:latest`.
 * In **Options** area:
-    * Level: `8`.
-    * Configuration file: choose the `phpstan.dist.neon` file of this repository.
+  * Level: `8`.
+  * Configuration file: choose the `phpstan.dist.neon` file of this repository.
 * In the **Settings** dialog, click on `OK` or `Apply` to validate all.
 
 ### !!! TROUBLESHOOTING !!!

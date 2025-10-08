@@ -1,4 +1,4 @@
-# Error "container is unhealthy" after `docker compose up`
+# Docker - "container is unhealthy" after `docker compose up`
 
 [⬅️ Troubleshooting](../troubleshooting.md)
 
