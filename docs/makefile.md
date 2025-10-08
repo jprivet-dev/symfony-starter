@@ -75,7 +75,7 @@
   db_init                       Drop and create the database and add fixtures
 
   validate                      Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
-  update                        Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
+  update_dump                   Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
   update_force                  Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
 
   migration                     Create a new migration based on database changes (format the generated SQL)
