@@ -74,12 +74,13 @@ HAS_DOCKERFILE  ?= $(wildcard Dockerfile)
 HAS_DOCTRINE    ?= $(wildcard vendor/doctrine)
 HAS_MAILER      ?= $(wildcard vendor/symfony/mailer)
 HAS_PHPCSFIXER  ?= $(wildcard vendor/bin/php-cs-fixer)
-HAS_PHPSTAN     ?= $(wildcard vendor/bin/phpstan)
 HAS_PHPMD       ?= $(wildcard vendor/bin/phpmd)
-HAS_PHPUNIT     ?= $(wildcard bin/phpunit)
 HAS_PHPMETRICS  ?= $(wildcard vendor/bin/phpmetrics)
+HAS_PHPSTAN     ?= $(wildcard vendor/bin/phpstan)
+HAS_PHPUNIT     ?= $(wildcard bin/phpunit)
 HAS_PROFILER    ?= $(wildcard vendor/symfony/web-profiler-bundle)
 HAS_TRANSLATION ?= $(wildcard vendor/symfony/translation)
+HAS_TWIGCSFIXER ?= $(wildcard vendor/bin/twig-cs-fixer)
 
 #
 # FILES & DIRECTORIES
@@ -87,15 +88,16 @@ HAS_TRANSLATION ?= $(wildcard vendor/symfony/translation)
 
 PWD               = $(shell pwd)
 NOW              := $(shell date +%Y%m%d-%H%M%S-%3N)
+DIRECTORY_SRC     = src
+DIRECTORY_TPL     = templates
+DIRECTORY_TESTS   = tests
 COVERAGE_DIR      = build/coverage-$(NOW)
 COVERAGE_INDEX    = $(PWD)/$(COVERAGE_DIR)/index.html
-PHPSTAN_SRC       = src tests
 PHPSTAN_CONFIG    = phpstan.dist.neon
 PHPSTAN_BASELINE  = phpstan-baseline.php
 PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
-PHPMD_SRC         = src,tests
-PHPMETRICS_REPORT = build/phpmetrics-$(NOW)
-PHPMETRICS_SRC    = src
+PHPMETRICS_DIR    = build/phpmetrics-$(NOW)
+PHPMETRICS_INDEX  = $(PWD)/$(PHPMETRICS_DIR)/index.html
 
 #
 # DOCKER OPTIONS
@@ -167,6 +169,7 @@ PHPUNIT       = $(PHP) bin/phpunit
 PHPCSFIXER    = $(PHP) vendor/bin/php-cs-fixer
 PHPSTAN       = $(PHP) vendor/bin/phpstan
 PHPMD         = $(PHP) vendor/bin/phpmd
+TWIGCSFIXER   = $(PHP) vendor/bin/twig-cs-fixer
 PHPMETRICS    = $(PHP) vendor/bin/phpmetrics
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
@@ -287,6 +290,9 @@ require_phpstan: ## Install PHPStan - https://phpstan.org/
 require_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
 	$(COMPOSER) require --dev phpmd/phpmd
 
+require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
+	$(COMPOSER) require --dev vincentlanglet/twig-cs-fixer
+
 require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website/
 	$(COMPOSER) require --dev phpmetrics/phpmetrics
 
@@ -334,6 +340,9 @@ ifeq ($(HAS_PHPSTAN),)
 endif
 ifeq ($(HAS_PHPMD),)
 	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHP Mess Detector$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHP Mess Detector$(S) with $(G)make require_phpmd$(S)\n"
+endif
+ifeq ($(HAS_TWIGCSFIXER),)
+	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / Twig CS Fixer$(S) commands can not be used in that Makefile! Remove that block or install $(Y)Twig CS Fixer$(S) with $(G)make require_twigcsfixer$(S)\n"
 endif
 ifeq ($(HAS_PHPMETRICS),)
 	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHPMetrics$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHPMetrics$(S) with $(G)make require_phpmetrics$(S)\n"
@@ -559,10 +568,10 @@ phpstan: ## Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $ make php
 	$(PHPSTAN) $(ARG)
 
 phpstan_lint: ## Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
-	$(PHPSTAN) analyse $(PHPSTAN_SRC) -c $(PHPSTAN_CONFIG) $(ARG)
+	$(PHPSTAN) analyse $(DIRECTORY_SRC) $(DIRECTORY_TESTS) -c $(PHPSTAN_CONFIG) $(ARG)
 
 phpstan_baseline: ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
-	$(PHPSTAN) analyse $(PHPSTAN_SRC) -c $(PHPSTAN_CONFIG) $(ARG) --generate-baseline $(PHPSTAN_BASELINE)
+	$(PHPSTAN) analyse $(DIRECTORY_SRC) $(DIRECTORY_TESTS) -c $(PHPSTAN_CONFIG) $(ARG) --generate-baseline $(PHPSTAN_BASELINE)
 
 ##
 
@@ -570,21 +579,34 @@ phpstan_baseline: ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<a
 phpmd: ## Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
 	$(PHPMD) $(ARG)
 
-phpmd_lint: ARG=$(PHPMD_SRC) ansi cleancode,codesize,design,naming,unusedcode
+phpmd_lint: ARG=$(DIRECTORY_SRC),$(DIRECTORY_TESTS) ansi cleancode,codesize,design,naming,unusedcode
 phpmd_lint: phpmd ## Run PHP Mess Detector with all rules
 
 ##
 
+.PHONY: twigcsfixer
+twigcsfixer: ## Run Twig CS Fixer - $ make twigcsfixer [ARG=<arguments>] - Example: $ make twigcsfixer ARG="lint /path/to/code"
+	$(TWIGCSFIXER) $(ARG)
+
+twigcsfixer_lint: ## Check Twig style
+	$(TWIGCSFIXER) lint $(DIRECTORY_TPL)
+
+twigcsfixer_fix: ## Fix Twig style
+	$(TWIGCSFIXER) lint --fix $(DIRECTORY_TPL)
+
+##
+
 .PHONY: lint
-lint: phpcsfixer_lint phpstan_lint phpmd_lint ## Run all linters
+lint: phpcsfixer_lint phpstan_lint phpmd_lint twigcsfixer_lint ## Run all linters
 
 .PHONY: fix
-fix: phpcsfixer_fix ## Fix with all linters
+fix: phpcsfixer_fix twigcsfixer_fix ## Fix with all linters
 
 ##
 
 phpmetrics_report: ## Run PHPMetrics and generate detailled report
-	$(PHPMETRICS) --report-html=$(PHPMETRICS_REPORT) $(PHPMETRICS_SRC)
+	$(PHPMETRICS) --report-html=$(PHPMETRICS_DIR) $(DIRECTORY_SRC)
+	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(PHPMETRICS_INDEX)$(S)\n"
 
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 

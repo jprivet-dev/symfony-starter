@@ -35,6 +35,7 @@ COMPLETE INSTALLATION
   require_phpcsfixer            Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
   require_phpstan               Install PHPStan - https://phpstan.org/
   require_phpmd                 Install PHP Mess Detector - https://phpmd.org/
+  require_twigcsfixer           Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
   require_phpmetrics            Install PHPMetrics - https://phpmetrics.github.io/website/
 
   require_webapp                Install a web application - https://symfony.com/doc/current/setup.html
@@ -115,6 +116,10 @@ COMPLETE INSTALLATION
 
   phpmd                         Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
   phpmd_lint                    Run PHP Mess Detector with all rules
+
+  twigcsfixer                   Run Twig CS Fixer - $ make twigcsfixer [ARG=<arguments>] - Example: $ make twigcsfixer ARG="lint /path/to/code"
+  twigcsfixer_lint              Check Twig style
+  twigcsfixer_fix               Fix Twig style
 
   lint                          Run all linters
   fix                           Fix with all linters
