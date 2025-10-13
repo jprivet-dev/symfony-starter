@@ -68,24 +68,29 @@ CLONE_DIR                 = clone
 # TARGETS ACTIVATION
 #
 
-HAS_DOCKERFILE      ?= $(wildcard Dockerfile)
-HAS_DOCTRINE        ?= $(wildcard vendor/doctrine)
-HAS_PHPUNIT         ?= $(wildcard bin/phpunit)
-HAS_ASSETS          ?= $(wildcard vendor/symfony/asset-mapper)
-HAS_TRANSLATION     ?= $(wildcard vendor/symfony/translation)
-
-HAS_PROFILER        ?= $(wildcard vendor/symfony/web-profiler-bundle)
-HAS_MAILER          ?= $(wildcard vendor/symfony/mailer)
-HAS_API             ?= $(wildcard vendor/api-platform)
+HAS_API         ?= $(wildcard vendor/api-platform)
+HAS_ASSETS      ?= $(wildcard vendor/symfony/asset-mapper)
+HAS_DOCKERFILE  ?= $(wildcard Dockerfile)
+HAS_DOCTRINE    ?= $(wildcard vendor/doctrine)
+HAS_MAILER      ?= $(wildcard vendor/symfony/mailer)
+HAS_PHPCSFIXER  ?= $(wildcard vendor/bin/php-cs-fixer)
+HAS_PHPSTAN     ?= $(wildcard vendor/bin/phpstan)
+HAS_PHPUNIT     ?= $(wildcard bin/phpunit)
+HAS_PROFILER    ?= $(wildcard vendor/symfony/web-profiler-bundle)
+HAS_TRANSLATION ?= $(wildcard vendor/symfony/translation)
 
 #
 # FILES & DIRECTORIES
 #
 
-PWD            = $(shell pwd)
-NOW           := $(shell date +%Y%m%d-%H%M%S-%3N)
-COVERAGE_DIR   = build/coverage-$(NOW)
-COVERAGE_INDEX = $(PWD)/$(COVERAGE_DIR)/index.html
+PWD               = $(shell pwd)
+NOW              := $(shell date +%Y%m%d-%H%M%S-%3N)
+COVERAGE_DIR      = build/coverage-$(NOW)
+COVERAGE_INDEX    = $(PWD)/$(COVERAGE_DIR)/index.html
+PHPSTAN_DIRS      = src tests
+PHPSTAN_CONFIG    = phpstan.dist.neon
+PHPSTAN_BASELINE  = phpstan-baseline.php
+PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
 
 #
 # DOCKER OPTIONS
@@ -154,6 +159,8 @@ COMPOSER      = $(CONTAINER_PHP) composer
 BASH_COMMAND  = $(CONTAINER_PHP) bash -c
 CONSOLE       = $(PHP) bin/console
 PHPUNIT       = $(PHP) bin/phpunit
+PHPCSFIXER    = $(PHP) vendor/bin/php-cs-fixer
+PHPSTAN       = $(PHP) vendor/bin/phpstan
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
 
@@ -229,7 +236,7 @@ endif
 	git reset --hard
 	git clean -f -d
 
-##   COMPLETE INSTALLATION
+## COMPLETE INSTALLATION
 
 install_doctrine: ## Install Doctrine - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
@@ -257,6 +264,18 @@ install_bootstrap: install_asset_mapper ## Install Bootstrap - https://getbootst
 
 install_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
 	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
+
+##
+
+install_phpcsfixer: ## Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
+	$(COMPOSER) require --dev friendsofphp/php-cs-fixer
+
+install_phpstan: ## Install PHPStan - https://phpstan.org/
+	$(COMPOSER) require --dev \
+		phpstan/phpstan \
+		phpstan/phpstan-symfony \
+		phpstan/phpstan-doctrine \
+		phpstan/phpstan-phpunit
 
 ##
 
@@ -289,16 +308,22 @@ info: ## Show project access info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
 ifeq ($(HAS_DOCTRINE),)
-	@printf " $(R)⨯$(S) $(Y)DOCTRINE & SQL 💽$(S) commands can not be used in that Makefile! Remove that block or install Doctrine with $(G)make install_doctrine$(S)\n"
+	@printf " $(R)⨯$(S) $(Y)DOCTRINE & SQL 💽$(S) commands can not be used in that Makefile! Remove that block or install $(Y)Doctrine$(S) with $(G)make install_doctrine$(S)\n"
 endif
 ifeq ($(HAS_PHPUNIT),)
-	@printf " $(R)⨯$(S) $(Y)TESTS ✅$(S) commands can not be used in that Makefile! Remove that block or install PHPUnit with $(G)make install_phpunit$(S)\n"
+	@printf " $(R)⨯$(S) $(Y)TESTS ✅$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHPUnit$(S) with $(G)make install_phpunit$(S)\n"
+endif
+ifeq ($(HAS_PHPCSFIXER),)
+	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHP CS Fixer$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHP CS Fixer$(S) with $(G)make install_phpcsfixer$(S)\n"
+endif
+ifeq ($(HAS_PHPSTAN),)
+	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHPStan$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHPStan$(S) with $(G)make install_phpstan$(S)\n"
 endif
 ifeq ($(HAS_ASSETS),)
-	@printf " $(R)⨯$(S) $(Y)ASSETS 🎨‍$(S) commands can not be used in that Makefile! Remove that block or install AssetMapper with $(G)make install_asset_mapper$(S)\n"
+	@printf " $(R)⨯$(S) $(Y)ASSETS 🎨‍$(S) commands can not be used in that Makefile! Remove that block or install $(Y)AssetMapper$(S) with $(G)make install_asset_mapper$(S)\n"
 endif
 ifeq ($(HAS_TRANSLATION),)
-	@printf " $(R)⨯$(S) $(Y)TRANSLATION 🇬🇧$(S) commands can not be used in that Makefile! Remove that block or install Translation with $(G)make install_translation$(S)\n"
+	@printf " $(R)⨯$(S) $(Y)TRANSLATION 🇬🇧$(S) commands can not be used in that Makefile! Remove that block or install $(Y)Translation$(S) with $(G)make install_translation$(S)\n"
 endif
 	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
 	@printf " $(Y)›$(S) Go in your favourite browser and accept the auto-generated TLS certificate:\n"
@@ -496,6 +521,38 @@ dox: phpunit ## Report test execution progress in TestDox format for all tests
 xdebug_version: ## Xdebug version number
 	$(PHP) -r "var_dump(phpversion('xdebug'));"
 
+## — QUALITY ✅ ———————————————————————————————————————————————————————————————
+
+.PHONY: phpcsfixer
+phpcsfixer: ## Run PHP CS Fixer - $ make phpcsfixer [ARG=<arguments>] - Example: $ make phpcsfixer ARG=list
+	$(PHPCSFIXER) $(ARG)
+
+phpcsfixer_check: ## Check code style
+	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) check -v
+
+phpcsfixer_fix: ## Fix code style
+	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) fix
+
+##
+
+.PHONY: phpstan
+phpstan: ## Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $ make phpstan ARG="src tests"
+	$(PHPSTAN) $(ARG)
+
+phpstan_analyse: ## Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
+	$(PHPSTAN) analyse $(PHPSTAN_DIRS) -c $(PHPSTAN_CONFIG) $(ARG)
+
+phpstan_baseline: ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
+	$(PHPSTAN) analyse $(PHPSTAN_DIRS) -c $(PHPSTAN_CONFIG) $(ARG) --generate-baseline $(PHPSTAN_BASELINE)
+
+##
+
+.PHONY: lint
+lint: phpcsfixer_check phpstan_analyse ## Run all linters
+
+.PHONY: fix
+fix: phpcsfixer_fix ## Fix with all linters
+
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 
 .PHONY: assets
@@ -674,6 +731,3 @@ vars: ## Show key Makefile variables
 	@printf "COMPOSER     : $(COMPOSER)\n"
 	@printf "BASH_COMMAND : $(BASH_COMMAND)\n"
 	@printf "CONSOLE      : $(CONSOLE)\n"
-ifneq ($(HAS_PHPUNIT),)
-	@printf "PHPUNIT      : $(PHPUNIT)\n"
-endif
