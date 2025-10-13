@@ -68,19 +68,21 @@ CLONE_DIR                 = clone
 # TARGETS ACTIVATION
 #
 
-HAS_API         ?= $(wildcard vendor/api-platform)
-HAS_ASSETS      ?= $(wildcard vendor/symfony/asset-mapper)
-HAS_DOCKERFILE  ?= $(wildcard Dockerfile)
-HAS_DOCTRINE    ?= $(wildcard vendor/doctrine)
-HAS_MAILER      ?= $(wildcard vendor/symfony/mailer)
-HAS_PHPCSFIXER  ?= $(wildcard vendor/bin/php-cs-fixer)
-HAS_PHPMD       ?= $(wildcard vendor/bin/phpmd)
-HAS_PHPMETRICS  ?= $(wildcard vendor/bin/phpmetrics)
-HAS_PHPSTAN     ?= $(wildcard vendor/bin/phpstan)
-HAS_PHPUNIT     ?= $(wildcard bin/phpunit)
-HAS_PROFILER    ?= $(wildcard vendor/symfony/web-profiler-bundle)
-HAS_TRANSLATION ?= $(wildcard vendor/symfony/translation)
-HAS_TWIGCSFIXER ?= $(wildcard vendor/bin/twig-cs-fixer)
+COMPOSER_JSON      = composer.json
+BIN_CONSOLE        = bin/console
+BIN_PHPUNIT        = bin/phpunit
+DOCKERFILE         = Dockerfile
+VENDOR_API         = vendor/api-platform
+VENDOR_ASSETS      = vendor/symfony/asset-mapper
+VENDOR_DOCTRINE    = vendor/doctrine
+VENDOR_MAILER      = vendor/symfony/mailer
+VENDOR_PHPCSFIXER  = vendor/bin/php-cs-fixer
+VENDOR_PHPMD       = vendor/bin/phpmd
+VENDOR_PHPMETRICS  = vendor/bin/phpmetrics
+VENDOR_PHPSTAN     = vendor/bin/phpstan
+VENDOR_PROFILER    = vendor/symfony/web-profiler-bundle
+VENDOR_TRANSLATION = vendor/symfony/translation
+VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 
 #
 # FILES & DIRECTORIES
@@ -164,13 +166,13 @@ CONTAINER_PHP = $(COMPOSE) exec $(DOCKER_EXEC_ENV) php
 PHP           = $(CONTAINER_PHP) php
 COMPOSER      = $(CONTAINER_PHP) composer
 BASH_COMMAND  = $(CONTAINER_PHP) bash -c
-CONSOLE       = $(PHP) bin/console
-PHPUNIT       = $(PHP) bin/phpunit
-PHPCSFIXER    = $(PHP) vendor/bin/php-cs-fixer
-PHPSTAN       = $(PHP) vendor/bin/phpstan
-PHPMD         = $(PHP) vendor/bin/phpmd
-TWIGCSFIXER   = $(PHP) vendor/bin/twig-cs-fixer
-PHPMETRICS    = $(PHP) vendor/bin/phpmetrics
+CONSOLE       = $(PHP) $(BIN_CONSOLE)
+PHPUNIT       = $(PHP) $(BIN_PHPUNIT)
+PHPCSFIXER    = $(PHP) $(VENDOR_PHPCSFIXER)
+PHPSTAN       = $(PHP) $(VENDOR_PHPSTAN)
+PHPMD         = $(PHP) $(VENDOR_PHPMD)
+TWIGCSFIXER   = $(PHP) $(VENDOR_TWIGCSFIXER)
+PHPMETRICS    = $(PHP) $(VENDOR_PHPMETRICS)
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
 
@@ -206,7 +208,7 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 clone_symfony_docker: ## Clone and extract https://github.com/dunglas/symfony-docker files at the root
 	@printf "\n$(Y)Clone https://github.com/dunglas/symfony-docker$(S)"
 	@printf "\n$(Y)-----------------------------------------------$(S)\n\n"
-ifeq ($(HAS_DOCKERFILE),)
+ifeq ($(wildcard $(DOCKERFILE)),)
 	@printf "Repository: $(Y)$(REPOSITORY_SYMFONY_DOCKER)$(S)\n"
 	git clone $(REPOSITORY_SYMFONY_DOCKER) $(CLONE_DIR) --depth 1
 	@printf "\n$(Y)Extract https://github.com/dunglas/symfony-docker at the root$(S)"
@@ -240,9 +242,7 @@ else
 endif
 
 clear_all: ## Remove all fresh Symfony application files
-ifneq ($(HAS_DOCKERFILE),)
-	$(MAKE) permissions down
-endif
+	-$(MAKE) permissions down
 	git reset --hard
 	git clean -f -d
 
@@ -326,43 +326,43 @@ restart: stop start ## Stop & Start the project and show info (up_detached & inf
 info: ## Show project access info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-ifeq ($(HAS_DOCTRINE),)
+ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
 	@printf " $(R)⨯$(S) $(Y)DOCTRINE & SQL 💽$(S) commands can not be used in that Makefile! Remove that block or install $(Y)Doctrine$(S) with $(G)make require_doctrine$(S)\n"
 endif
-ifeq ($(HAS_PHPUNIT),)
+ifeq ($(wildcard $(BIN_PHPUNIT)),)
 	@printf " $(R)⨯$(S) $(Y)TESTS ✅$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHPUnit$(S) with $(G)make require_phpunit$(S)\n"
 endif
-ifeq ($(HAS_PHPCSFIXER),)
+ifeq ($(wildcard $(VENDOR_PHPCSFIXER)),)
 	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHP CS Fixer$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHP CS Fixer$(S) with $(G)make require_phpcsfixer$(S)\n"
 endif
-ifeq ($(HAS_PHPSTAN),)
+ifeq ($(wildcard $(VENDOR_PHPSTAN)),)
 	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHPStan$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHPStan$(S) with $(G)make require_phpstan$(S)\n"
 endif
-ifeq ($(HAS_PHPMD),)
+ifeq ($(wildcard $(VENDOR_PHPMD)),)
 	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHP Mess Detector$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHP Mess Detector$(S) with $(G)make require_phpmd$(S)\n"
 endif
-ifeq ($(HAS_TWIGCSFIXER),)
+ifeq ($(wildcard $(VENDOR_TWIGCSFIXER)),)
 	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / Twig CS Fixer$(S) commands can not be used in that Makefile! Remove that block or install $(Y)Twig CS Fixer$(S) with $(G)make require_twigcsfixer$(S)\n"
 endif
-ifeq ($(HAS_PHPMETRICS),)
+ifeq ($(wildcard $(VENDOR_PHPMETRICS)),)
 	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHPMetrics$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHPMetrics$(S) with $(G)make require_phpmetrics$(S)\n"
 endif
-ifeq ($(HAS_ASSETS),)
+ifeq ($(wildcard $(VENDOR_ASSETS)),)
 	@printf " $(R)⨯$(S) $(Y)ASSETS 🎨‍$(S) commands can not be used in that Makefile! Remove that block or install $(Y)AssetMapper$(S) with $(G)make require_asset_mapper$(S)\n"
 endif
-ifeq ($(HAS_TRANSLATION),)
+ifeq ($(wildcard $(VENDOR_TRANSLATION)),)
 	@printf " $(R)⨯$(S) $(Y)TRANSLATION 🇬🇧$(S) commands can not be used in that Makefile! Remove that block or install $(Y)Translation$(S) with $(G)make require_translation$(S)\n"
 endif
 	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
 	@printf " $(Y)›$(S) Go in your favourite browser and accept the auto-generated TLS certificate:\n"
 	@printf "    - Homepage ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
-ifneq ($(HAS_API),)
+ifneq ($(wildcard $(VENDOR_API)),)
 	@printf "    - API ............ $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/api$(S)\n"
 endif
-ifneq ($(HAS_PROFILER),)
+ifneq ($(wildcard $(VENDOR_PROFILER)),)
 	@printf "    - Profiler ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/_profiler$(S)\n"
 endif
-ifneq ($(HAS_MAILER),)
+ifneq ($(wildcard $(VENDOR_MAILER)),)
 	@printf "    - Mail Catcher ... $(G)http://$(SERVER_NAME):8025/$(S)\n"
 endif
 	@printf "\n"
@@ -370,23 +370,10 @@ endif
 ##
 
 .PHONY: install
-install: ## Start the project, install dependencies and show info
-	$(MAKE) up_detached
-	$(MAKE) composer_install
-ifneq ($(HAS_ASSETS),)
-	$(MAKE) assets
-endif
-	$(MAKE) images info
+install: up_detached composer_install assets images info ## Start the project, install dependencies and show info
 
 .PHONY: check
-check: ## Check everything before you deliver
-	-$(MAKE) composer_validate
-ifneq ($(HAS_DOCTRINE),)
-	-$(MAKE) validate
-endif
-ifneq ($(HAS_PHPUNIT),)
-	-$(MAKE) phpunit
-endif
+check: composer_validate validate phpunit ## Check everything before you deliver
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
@@ -462,10 +449,10 @@ composer_validate: ## Check if lock file is up to date (even when config.lock is
 
 ## — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
 
-db_drop: ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
+db_drop: $(VENDOR_DOCTRINE) ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
 	$(CONSOLE) doctrine:database:drop --if-exists --force $(ARG)
 
-db_create: ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
+db_create: $(VENDOR_DOCTRINE) ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
 	$(CONSOLE) doctrine:database:create --if-not-exists $(ARG)
 
 db_create_force: db_drop db_create ## Drop and create the database
@@ -475,41 +462,41 @@ db_init: db_drop db_create fixtures ## Drop and create the database and add fixt
 ##
 
 .PHONY: validate
-validate: ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
+validate: $(VENDOR_DOCTRINE) ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
 	$(CONSOLE) doctrine:schema:validate -v $(ARG)
 
-update_dump: ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
+update_dump: $(VENDOR_DOCTRINE) ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
 	$(CONSOLE) doctrine:schema:update --dump-sql
 
-update_force: ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
+update_force: $(VENDOR_DOCTRINE) ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
 	$(CONSOLE) doctrine:schema:update --force
 
 ##
 
 .PHONY: migration
-migration: ## Create a new migration based on database changes (format the generated SQL)
+migration: $(VENDOR_DOCTRINE) ## Create a new migration based on database changes (format the generated SQL)
 	$(CONSOLE) make:migration --formatted -v $(ARG)
 
 .PHONY: migrate
-migrate: ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
+migrate: $(VENDOR_DOCTRINE) ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
 	$(CONSOLE) doctrine:migrations:migrate --no-interaction --all-or-nothing $(ARG)
 
 .PHONY: list
-list: ## Display a list of all available migrations and their status
+list: $(VENDOR_DOCTRINE) ## Display a list of all available migrations and their status
 	$(CONSOLE) doctrine:migrations:list
 
 .PHONY: execute
-execute: ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
+execute: $(VENDOR_DOCTRINE) ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
 	$(CONSOLE) doctrine:migrations:execute $(ARG)
 
 .PHONY: generate
-generate: ## Generate a blank migration class
+generate: $(VENDOR_DOCTRINE) ## Generate a blank migration class
 	$(CONSOLE) doctrine:migrations:generate
 
 ##
 
 .PHONY: sql
-sql: ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
+sql: $(VENDOR_DOCTRINE) ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
 	$(CONSOLE) doctrine:query:sql "$(QUERY)"
 
 # See https://stackoverflow.com/questions/769683/how-to-show-tables-in-postgresql
@@ -519,7 +506,7 @@ sql_tables: sql ## Show all tables
 ##
 
 .PHONY: fixtures
-fixtures: ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
+fixtures: $(VENDOR_DOCTRINE) ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
 	$(CONSOLE) doctrine:fixtures:load -n $(ARG)
 
 ## — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
@@ -531,7 +518,7 @@ psql: ## Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
 
 .PHONY: phpunit
-phpunit: ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
+phpunit: $(BIN_PHPUNIT) ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
 	$(PHPUNIT) $(ARG)
 
 .PHONY: coverage
@@ -552,31 +539,31 @@ xdebug_version: ## Xdebug version number
 ## — QUALITY ✅ ———————————————————————————————————————————————————————————————
 
 .PHONY: phpcsfixer
-phpcsfixer: ## Run PHP CS Fixer - $ make phpcsfixer [ARG=<arguments>] - Example: $ make phpcsfixer ARG=list
+phpcsfixer: $(VENDOR_PHPCSFIXER) ## Run PHP CS Fixer - $ make phpcsfixer [ARG=<arguments>] - Example: $ make phpcsfixer ARG=list
 	$(PHPCSFIXER) $(ARG)
 
-phpcsfixer_lint: ## Check code style
+phpcsfixer_lint: $(VENDOR_PHPCSFIXER) ## Check code style
 	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) check -v
 
-phpcsfixer_fix: ## Fix code style
+phpcsfixer_fix: $(VENDOR_PHPCSFIXER) ## Fix code style
 	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) fix
 
 ##
 
 .PHONY: phpstan
-phpstan: ## Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $ make phpstan ARG="src tests"
+phpstan: $(VENDOR_PHPSTAN) ## Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $ make phpstan ARG="src tests"
 	$(PHPSTAN) $(ARG)
 
-phpstan_lint: ## Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
+phpstan_lint: $(VENDOR_PHPSTAN) ## Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
 	$(PHPSTAN) analyse $(DIRECTORY_SRC) $(DIRECTORY_TESTS) -c $(PHPSTAN_CONFIG) $(ARG)
 
-phpstan_baseline: ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
+phpstan_baseline: $(VENDOR_PHPSTAN) ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
 	$(PHPSTAN) analyse $(DIRECTORY_SRC) $(DIRECTORY_TESTS) -c $(PHPSTAN_CONFIG) $(ARG) --generate-baseline $(PHPSTAN_BASELINE)
 
 ##
 
 .PHONY: phpmd
-phpmd: ## Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
+phpmd: $(VENDOR_PHPMD) ## Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
 	$(PHPMD) $(ARG)
 
 phpmd_lint: ARG=$(DIRECTORY_SRC),$(DIRECTORY_TESTS) ansi cleancode,codesize,design,naming,unusedcode
@@ -585,13 +572,13 @@ phpmd_lint: phpmd ## Run PHP Mess Detector with all rules
 ##
 
 .PHONY: twigcsfixer
-twigcsfixer: ## Run Twig CS Fixer - $ make twigcsfixer [ARG=<arguments>] - Example: $ make twigcsfixer ARG="lint /path/to/code"
+twigcsfixer: $(VENDOR_TWIGCSFIXER) ## Run Twig CS Fixer - $ make twigcsfixer [ARG=<arguments>] - Example: $ make twigcsfixer ARG="lint /path/to/code"
 	$(TWIGCSFIXER) $(ARG)
 
-twigcsfixer_lint: ## Check Twig style
+twigcsfixer_lint: $(VENDOR_TWIGCSFIXER) ## Check Twig style
 	$(TWIGCSFIXER) lint $(DIRECTORY_TPL)
 
-twigcsfixer_fix: ## Fix Twig style
+twigcsfixer_fix: $(VENDOR_TWIGCSFIXER) ## Fix Twig style
 	$(TWIGCSFIXER) lint --fix $(DIRECTORY_TPL)
 
 ##
@@ -604,14 +591,14 @@ fix: phpcsfixer_fix twigcsfixer_fix ## Fix with all linters
 
 ##
 
-phpmetrics_report: ## Run PHPMetrics and generate detailled report
+phpmetrics_report: $(VENDOR_PHPMETRICS) ## Run PHPMetrics and generate detailled report
 	$(PHPMETRICS) --report-html=$(PHPMETRICS_DIR) $(DIRECTORY_SRC)
 	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(PHPMETRICS_INDEX)$(S)\n"
 
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 
 .PHONY: assets
-assets: ## Generate all assets
+assets: $(VENDOR_ASSETS) ## Generate all assets
 ifeq ($(APP_ENV),prod)
 	make importmap_install
 else
@@ -620,39 +607,39 @@ endif
 
 ##
 
-asset_map_clear: ## Clear all assets in the public output directory
+asset_map_clear: $(VENDOR_ASSETS) ## Clear all assets in the public output directory
 	$(COMPOSE) run --rm php rm -rf ./public/assets
 
 asset_map_compile: asset_map_clear ## Compile all mapped assets and writes them to the final public output directory
 	$(CONSOLE) asset-map:compile
 
-asset_map_debug: ## See all of the mapped assets
+asset_map_debug: $(VENDOR_ASSETS) ## See all of the mapped assets
 	$(CONSOLE) debug:asset-map --full
 
 ##
 
-importmap_audit: ## Check for security vulnerability advisories for dependencies
+importmap_audit: $(VENDOR_ASSETS) ## Check for security vulnerability advisories for dependencies
 	$(CONSOLE) importmap:audit
 
-importmap_install: ## Download all assets that should be downloaded
+importmap_install: $(VENDOR_ASSETS) ## Download all assets that should be downloaded
 	$(CONSOLE) importmap:install
 
-importmap_outdated: ## List outdated JavaScript packages and their latest versions
+importmap_outdated: $(VENDOR_ASSETS) ## List outdated JavaScript packages and their latest versions
 	$(CONSOLE) importmap:outdated
 
-importmap_remove: ## Remove JavaScript packages
+importmap_remove: $(VENDOR_ASSETS) ## Remove JavaScript packages
 	$(CONSOLE) importmap:remove
 
-importmap_require: ## Require JavaScript packages
+importmap_require: $(VENDOR_ASSETS) ## Require JavaScript packages
 	$(CONSOLE) importmap:require $(ARG)
 
-importmap_update: ## Update JavaScript packages to their latest versions
+importmap_update: $(VENDOR_ASSETS) ## Update JavaScript packages to their latest versions
 	$(CONSOLE) importmap:update
 
 ## — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
 
 .PHONY: extract
-extract: ## Extracts translation strings from templates (fr)
+extract: $(VENDOR_TRANSLATION) ## Extracts translation strings from templates (fr)
 	$(CONSOLE) translation:extract --sort=asc --format=yaml --force fr
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
@@ -732,7 +719,7 @@ hosts: ## Add the server name to /etc/hosts file
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
 .PHONY: permissions
-permissions p: ## Fix file permissions (primarily for Linux hosts)
+permissions p: $(DOCKERFILE) ## Fix file permissions (primarily for Linux hosts)
 ifeq ($(UNAME_S),Linux)
 	$(COMPOSE) run --rm php chown -R $(USER) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER)$(S) of the project files.\n"
