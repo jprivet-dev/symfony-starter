@@ -20,6 +20,7 @@ composer require --dev phpmetrics/phpmetrics:2.8.1 --with-all-dependencies
 
 ## Resources
 
+* https://phpmetrics.github.io/website/
 * https://phpmetrics.org/
 * https://github.com/phpmetrics/PhpMetrics
 * https://packagist.org/packages/phpmetrics/phpmetrics

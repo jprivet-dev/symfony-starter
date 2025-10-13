@@ -35,6 +35,7 @@ COMPLETE INSTALLATION
   require_phpcsfixer            Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
   require_phpstan               Install PHPStan - https://phpstan.org/
   require_phpmd                 Install PHP Mess Detector - https://phpmd.org/
+  require_phpmetrics            Install PHPMetrics - https://phpmetrics.github.io/website/
 
   require_webapp                Install a web application - https://symfony.com/doc/current/setup.html
   require_api                   Install API Platform - https://api-platform.com/docs/symfony/
@@ -117,6 +118,8 @@ COMPLETE INSTALLATION
 
   lint                          Run all linters
   fix                           Fix with all linters
+
+  phpmetrics_report             Run PHPMetrics and generate detailled report
 
 — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
   assets                        Generate all assets

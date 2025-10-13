@@ -75,7 +75,9 @@ HAS_DOCTRINE    ?= $(wildcard vendor/doctrine)
 HAS_MAILER      ?= $(wildcard vendor/symfony/mailer)
 HAS_PHPCSFIXER  ?= $(wildcard vendor/bin/php-cs-fixer)
 HAS_PHPSTAN     ?= $(wildcard vendor/bin/phpstan)
+HAS_PHPMD       ?= $(wildcard vendor/bin/phpmd)
 HAS_PHPUNIT     ?= $(wildcard bin/phpunit)
+HAS_PHPMETRICS  ?= $(wildcard vendor/bin/phpmetrics)
 HAS_PROFILER    ?= $(wildcard vendor/symfony/web-profiler-bundle)
 HAS_TRANSLATION ?= $(wildcard vendor/symfony/translation)
 
@@ -91,7 +93,9 @@ PHPSTAN_SRC       = src tests
 PHPSTAN_CONFIG    = phpstan.dist.neon
 PHPSTAN_BASELINE  = phpstan-baseline.php
 PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
-PHPMD_SRC         = src
+PHPMD_SRC         = src,tests
+PHPMETRICS_REPORT = build/phpmetrics-$(NOW)
+PHPMETRICS_SRC    = src
 
 #
 # DOCKER OPTIONS
@@ -163,6 +167,7 @@ PHPUNIT       = $(PHP) bin/phpunit
 PHPCSFIXER    = $(PHP) vendor/bin/php-cs-fixer
 PHPSTAN       = $(PHP) vendor/bin/phpstan
 PHPMD         = $(PHP) vendor/bin/phpmd
+PHPMETRICS    = $(PHP) vendor/bin/phpmetrics
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
 
@@ -282,6 +287,9 @@ require_phpstan: ## Install PHPStan - https://phpstan.org/
 require_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
 	$(COMPOSER) require --dev phpmd/phpmd
 
+require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website/
+	$(COMPOSER) require --dev phpmetrics/phpmetrics
+
 ##
 
 require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
@@ -323,6 +331,12 @@ ifeq ($(HAS_PHPCSFIXER),)
 endif
 ifeq ($(HAS_PHPSTAN),)
 	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHPStan$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHPStan$(S) with $(G)make require_phpstan$(S)\n"
+endif
+ifeq ($(HAS_PHPMD),)
+	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHP Mess Detector$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHP Mess Detector$(S) with $(G)make require_phpmd$(S)\n"
+endif
+ifeq ($(HAS_PHPMETRICS),)
+	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHPMetrics$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHPMetrics$(S) with $(G)make require_phpmetrics$(S)\n"
 endif
 ifeq ($(HAS_ASSETS),)
 	@printf " $(R)⨯$(S) $(Y)ASSETS 🎨‍$(S) commands can not be used in that Makefile! Remove that block or install $(Y)AssetMapper$(S) with $(G)make require_asset_mapper$(S)\n"
@@ -566,6 +580,11 @@ lint: phpcsfixer_lint phpstan_lint phpmd_lint ## Run all linters
 
 .PHONY: fix
 fix: phpcsfixer_fix ## Fix with all linters
+
+##
+
+phpmetrics_report: ## Run PHPMetrics and generate detailled report
+	$(PHPMETRICS) --report-html=$(PHPMETRICS_REPORT) $(PHPMETRICS_SRC)
 
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 
