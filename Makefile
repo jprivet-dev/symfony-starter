@@ -415,7 +415,7 @@ db_drop: ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ ma
 db_create: ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
 	$(CONSOLE) doctrine:database:create --if-not-exists $(ARG)
 
-db_clear: db_drop db_create ## Drop and create the database
+db_create_force: db_drop db_create ## Drop and create the database
 
 db_init: db_drop db_create fixtures ## Drop and create the database and add fixtures
 
