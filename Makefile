@@ -422,8 +422,7 @@ db_init: db_drop db_create fixtures ## Drop and create the database and add fixt
 validate: ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
 	$(CONSOLE) doctrine:schema:validate -v $(ARG)
 
-.PHONY: update
-update: ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
+update_dump: ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
 	$(CONSOLE) doctrine:schema:update --dump-sql
 
 update_force: ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
