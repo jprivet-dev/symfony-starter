@@ -87,10 +87,11 @@ PWD               = $(shell pwd)
 NOW              := $(shell date +%Y%m%d-%H%M%S-%3N)
 COVERAGE_DIR      = build/coverage-$(NOW)
 COVERAGE_INDEX    = $(PWD)/$(COVERAGE_DIR)/index.html
-PHPSTAN_DIRS      = src tests
+PHPSTAN_SRC       = src tests
 PHPSTAN_CONFIG    = phpstan.dist.neon
 PHPSTAN_BASELINE  = phpstan-baseline.php
 PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
+PHPMD_SRC         = src
 
 #
 # DOCKER OPTIONS
@@ -161,6 +162,7 @@ CONSOLE       = $(PHP) bin/console
 PHPUNIT       = $(PHP) bin/phpunit
 PHPCSFIXER    = $(PHP) vendor/bin/php-cs-fixer
 PHPSTAN       = $(PHP) vendor/bin/phpstan
+PHPMD         = $(PHP) vendor/bin/phpmd
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
 
@@ -276,6 +278,9 @@ install_phpstan: ## Install PHPStan - https://phpstan.org/
 		phpstan/phpstan-symfony \
 		phpstan/phpstan-doctrine \
 		phpstan/phpstan-phpunit
+
+install_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
+	$(COMPOSER) require --dev phpmd/phpmd
 
 ##
 
@@ -527,7 +532,7 @@ xdebug_version: ## Xdebug version number
 phpcsfixer: ## Run PHP CS Fixer - $ make phpcsfixer [ARG=<arguments>] - Example: $ make phpcsfixer ARG=list
 	$(PHPCSFIXER) $(ARG)
 
-phpcsfixer_check: ## Check code style
+phpcsfixer_lint: ## Check code style
 	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) check -v
 
 phpcsfixer_fix: ## Fix code style
@@ -539,16 +544,25 @@ phpcsfixer_fix: ## Fix code style
 phpstan: ## Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $ make phpstan ARG="src tests"
 	$(PHPSTAN) $(ARG)
 
-phpstan_analyse: ## Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
-	$(PHPSTAN) analyse $(PHPSTAN_DIRS) -c $(PHPSTAN_CONFIG) $(ARG)
+phpstan_lint: ## Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
+	$(PHPSTAN) analyse $(PHPSTAN_SRC) -c $(PHPSTAN_CONFIG) $(ARG)
 
 phpstan_baseline: ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
-	$(PHPSTAN) analyse $(PHPSTAN_DIRS) -c $(PHPSTAN_CONFIG) $(ARG) --generate-baseline $(PHPSTAN_BASELINE)
+	$(PHPSTAN) analyse $(PHPSTAN_SRC) -c $(PHPSTAN_CONFIG) $(ARG) --generate-baseline $(PHPSTAN_BASELINE)
+
+##
+
+.PHONY: phpmd
+phpmd: ## Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
+	$(PHPMD) $(ARG)
+
+phpmd_lint: ARG=$(PHPMD_SRC) ansi cleancode,codesize,design,naming,unusedcode
+phpmd_lint: phpmd ## Run PHP Mess Detector with all rules
 
 ##
 
 .PHONY: lint
-lint: phpcsfixer_check phpstan_analyse ## Run all linters
+lint: phpcsfixer_lint phpstan_lint phpmd_lint ## Run all linters
 
 .PHONY: fix
 fix: phpcsfixer_fix ## Fix with all linters
