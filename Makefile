@@ -240,60 +240,60 @@ endif
 
 ## COMPLETE INSTALLATION
 
-install_doctrine: ## Install Doctrine - https://symfony.com/doc/current/doctrine.html
+require_doctrine: ## Install Doctrine - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) restart
 
-install_phpunit: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
+require_phpunit: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
 	$(COMPOSER) require --dev symfony/test-pack
 
-install_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
 	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
 
-install_translation: ## Install translation - https://symfony.com/doc/current/translation.html
+require_translation: ## Install translation - https://symfony.com/doc/current/translation.html
 	$(COMPOSER) require symfony/translation
 
 ##
 
-install_profiler: ## Install the profiler - https://symfony.com/doc/current/profiler.html
+require_profiler: ## Install the profiler - https://symfony.com/doc/current/profiler.html
 	$(COMPOSER) require --dev symfony/profiler-pack
 
-install_maker_bundle: ## Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+require_maker_bundle: ## Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
 	$(COMPOSER) require --dev symfony/maker-bundle
 
-install_bootstrap: install_asset_mapper ## Install Bootstrap - https://getbootstrap.com/
+require_bootstrap: require_asset_mapper ## Install Bootstrap - https://getbootstrap.com/
 	$(CONSOLE) importmap:require bootstrap
 
-install_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
+require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
 	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
 
 ##
 
-install_phpcsfixer: ## Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
+require_phpcsfixer: ## Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
 	$(COMPOSER) require --dev friendsofphp/php-cs-fixer
 
-install_phpstan: ## Install PHPStan - https://phpstan.org/
+require_phpstan: ## Install PHPStan - https://phpstan.org/
 	$(COMPOSER) require --dev \
 		phpstan/phpstan \
 		phpstan/phpstan-symfony \
 		phpstan/phpstan-doctrine \
 		phpstan/phpstan-phpunit
 
-install_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
+require_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
 	$(COMPOSER) require --dev phpmd/phpmd
 
 ##
 
-install_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
+require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
 	$(COMPOSER) require symfony/webapp-pack
 	$(MAKE) restart
 
-install_api: ## Install API Platform - https://api-platform.com/docs/symfony/
+require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
 	$(COMPOSER) require api
 	$(MAKE) restart
 
-install_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
+require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 	$(COMPOSER) require easycorp/easyadmin-bundle
 	$(MAKE) restart
 
@@ -313,22 +313,22 @@ info: ## Show project access info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
 ifeq ($(HAS_DOCTRINE),)
-	@printf " $(R)⨯$(S) $(Y)DOCTRINE & SQL 💽$(S) commands can not be used in that Makefile! Remove that block or install $(Y)Doctrine$(S) with $(G)make install_doctrine$(S)\n"
+	@printf " $(R)⨯$(S) $(Y)DOCTRINE & SQL 💽$(S) commands can not be used in that Makefile! Remove that block or install $(Y)Doctrine$(S) with $(G)make require_doctrine$(S)\n"
 endif
 ifeq ($(HAS_PHPUNIT),)
-	@printf " $(R)⨯$(S) $(Y)TESTS ✅$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHPUnit$(S) with $(G)make install_phpunit$(S)\n"
+	@printf " $(R)⨯$(S) $(Y)TESTS ✅$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHPUnit$(S) with $(G)make require_phpunit$(S)\n"
 endif
 ifeq ($(HAS_PHPCSFIXER),)
-	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHP CS Fixer$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHP CS Fixer$(S) with $(G)make install_phpcsfixer$(S)\n"
+	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHP CS Fixer$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHP CS Fixer$(S) with $(G)make require_phpcsfixer$(S)\n"
 endif
 ifeq ($(HAS_PHPSTAN),)
-	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHPStan$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHPStan$(S) with $(G)make install_phpstan$(S)\n"
+	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHPStan$(S) commands can not be used in that Makefile! Remove that block or install $(Y)PHPStan$(S) with $(G)make require_phpstan$(S)\n"
 endif
 ifeq ($(HAS_ASSETS),)
-	@printf " $(R)⨯$(S) $(Y)ASSETS 🎨‍$(S) commands can not be used in that Makefile! Remove that block or install $(Y)AssetMapper$(S) with $(G)make install_asset_mapper$(S)\n"
+	@printf " $(R)⨯$(S) $(Y)ASSETS 🎨‍$(S) commands can not be used in that Makefile! Remove that block or install $(Y)AssetMapper$(S) with $(G)make require_asset_mapper$(S)\n"
 endif
 ifeq ($(HAS_TRANSLATION),)
-	@printf " $(R)⨯$(S) $(Y)TRANSLATION 🇬🇧$(S) commands can not be used in that Makefile! Remove that block or install $(Y)Translation$(S) with $(G)make install_translation$(S)\n"
+	@printf " $(R)⨯$(S) $(Y)TRANSLATION 🇬🇧$(S) commands can not be used in that Makefile! Remove that block or install $(Y)Translation$(S) with $(G)make require_translation$(S)\n"
 endif
 	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
 	@printf " $(Y)›$(S) Go in your favourite browser and accept the auto-generated TLS certificate:\n"

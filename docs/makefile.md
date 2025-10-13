@@ -21,20 +21,24 @@
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
   clear_all                     Remove all fresh Symfony application files
 
-  COMPLETE INSTALLATION
-  install_doctrine              Install Doctrine - https://symfony.com/doc/current/doctrine.html
-  install_phpunit               Install PHPUnit - https://symfony.com/doc/current/testing.html
-  install_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-  install_translation           Install translation - https://symfony.com/doc/current/translation.html
+COMPLETE INSTALLATION
+  require_doctrine              Install Doctrine - https://symfony.com/doc/current/doctrine.html
+  require_phpunit               Install PHPUnit - https://symfony.com/doc/current/testing.html
+  require_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+  require_translation           Install translation - https://symfony.com/doc/current/translation.html
 
-  install_profiler              Install the profiler - https://symfony.com/doc/current/profiler.html
-  install_maker_bundle          Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
-  install_bootstrap             Install Bootstrap - https://getbootstrap.com/
-  install_stimulus              Install StimulusBundle - https://ux.symfony.com/
+  require_profiler              Install the profiler - https://symfony.com/doc/current/profiler.html
+  require_maker_bundle          Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+  require_bootstrap             Install Bootstrap - https://getbootstrap.com/
+  require_stimulus              Install StimulusBundle - https://ux.symfony.com/
 
-  install_webapp                Install a web application - https://symfony.com/doc/current/setup.html
-  install_api                   Install API Platform - https://api-platform.com/docs/symfony/
-  install_easy_admin            Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
+  require_phpcsfixer            Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
+  require_phpstan               Install PHPStan - https://phpstan.org/
+  require_phpmd                 Install PHP Mess Detector - https://phpmd.org/
+
+  require_webapp                Install a web application - https://symfony.com/doc/current/setup.html
+  require_api                   Install API Platform - https://api-platform.com/docs/symfony/
+  require_easy_admin            Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 
 — PROJECT 🚀 ———————————————————————————————————————————————————————————————
   start                         Start the project and show info (up_detached & info alias)
@@ -98,6 +102,21 @@
   dox                           Report test execution progress in TestDox format for all tests
 
   xdebug_version                Xdebug version number
+
+— QUALITY ✅ ———————————————————————————————————————————————————————————————
+  phpcsfixer                    Run PHP CS Fixer - $ make phpcsfixer [ARG=<arguments>] - Example: $ make phpcsfixer ARG=list
+  phpcsfixer_lint               Check code style
+  phpcsfixer_fix                Fix code style
+
+  phpstan                       Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $ make phpstan ARG="src tests"
+  phpstan_lint                  Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
+  phpstan_baseline              Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
+
+  phpmd                         Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
+  phpmd_lint                    Run PHP Mess Detector with all rules
+
+  lint                          Run all linters
+  fix                           Fix with all linters
 
 — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
   assets                        Generate all assets
