@@ -40,7 +40,7 @@ services:
   ###> doctrine/doctrine-bundle ###
   database:
     ports:
-      - "5432:5432" # Correct mapping: Host port 5432 -> Container port 5432
+      - "${DATABASE_PORT:-5432}:5432" # Correct mapping: Host port 5432 -> Container port 5432
   ###< doctrine/doctrine-bundle ###
 ```
 
