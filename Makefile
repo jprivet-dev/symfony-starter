@@ -135,6 +135,7 @@ $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
 $(eval $(call append,DATABASE_PORT))
+$(eval $(call append,DATABASE_URL))
 
 # Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
 HTTP_PORT_SUFFIX = $(if $(HTTP_PORT),:$(HTTP_PORT))
@@ -344,7 +345,11 @@ endif
 ##
 
 .PHONY: install
-install: up_detached composer_install assets images info ## Start the project, install dependencies and show info
+install: up_detached ## Start the project, install dependencies and show info
+	$(MAKE) composer_install
+	-$(MAKE) assets
+	$(MAKE) images
+	$(MAKE) info
 
 .PHONY: check
 check: composer_validate validate phpunit ## Check everything before you deliver
@@ -553,10 +558,10 @@ phpstan: _phpstan ## Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $
 	$(PHPSTAN) $(ARG)
 
 phpstan_lint: _phpstan ## Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
-	$(PHPSTAN) analyse $(SRC) $(TESTS) -c $(PHPSTAN_CONFIG) $(ARG)
+	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(ARG)
 
 phpstan_baseline: _phpstan ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
-	$(PHPSTAN) analyse $(SRC) $(TESTS) -c $(PHPSTAN_CONFIG) $(ARG) --generate-baseline $(PHPSTAN_BASELINE)
+	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(ARG) --generate-baseline $(PHPSTAN_BASELINE)
 
 ##
 
@@ -594,10 +599,16 @@ twigcsfixer_fix: _twigcsfixer ## Fix Twig style
 ##
 
 .PHONY: lint
-lint: phpcsfixer_lint phpstan_lint phpmd_lint twigcsfixer_lint ## Run all linters
+lint: ## Run all linters
+	-$(MAKE) phpcsfixer_lint
+	-$(MAKE) phpstan_lint
+	-$(MAKE) phpmd_lint
+	-$(MAKE) twigcsfixer_lint
 
 .PHONY: fix
-fix: phpcsfixer_fix twigcsfixer_fix ## Fix with all linters
+fix: ## Fix with all linters
+	-$(MAKE) phpcsfixer_fix
+	-$(MAKE) twigcsfixer_fix
 
 ##
 
