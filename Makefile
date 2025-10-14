@@ -68,9 +68,10 @@ CLONE_DIR                 = clone
 # FILES & DIRECTORIES
 #
 
-DIRECTORY_SRC     = src
-DIRECTORY_TPL     = templates
-DIRECTORY_TESTS   = tests
+PWD       = $(shell pwd)
+SRC       = src
+TEMPLATES = templates
+TESTS     = tests
 
 BIN_CONSOLE        = bin/console
 BIN_PHPUNIT        = bin/phpunit
@@ -92,9 +93,7 @@ VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 # COMPONENTS CONFIG
 #
 
-PWD               = $(shell pwd)
 NOW              := $(shell date +%Y%m%d-%H%M%S-%3N)
-
 COVERAGE_DIR      = build/coverage-$(NOW)
 COVERAGE_INDEX    = $(PWD)/$(COVERAGE_DIR)/index.html
 PHPSTAN_CONFIG    = phpstan.dist.neon
@@ -510,15 +509,15 @@ phpunit: _phpunit ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $
 
 .PHONY: coverage
 coverage: DOCKER_EXEC_ENV=-e XDEBUG_MODE=coverage
-coverage: ARG=--coverage-html $(COVERAGE_DIR)
-coverage: _phpunit phpunit ## Generate code coverage report in HTML format for all tests
+coverage: _phpunit ## Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
+	$(PHPUNIT) --coverage-html $(COVERAGE_DIR) $(ARG)
 	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(COVERAGE_INDEX)$(S)\n"
 
 .PHONY: dox
-dox: ARG=--testdox
-dox: _phpunit phpunit ## Report test execution progress in TestDox format for all tests
+dox: _phpunit ## Report test execution progress in TestDox format - $ make dox [ARG=<arguments>] - Example: $ make dox ARG="tests/myTest.php"
+	$(PHPUNIT) --testdox $(ARG)
 
-##
+#
 
 xdebug_version: ## Xdebug version number
 	$(PHP) -r "var_dump(phpversion('xdebug'));"
@@ -554,10 +553,10 @@ phpstan: _phpstan ## Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $
 	$(PHPSTAN) $(ARG)
 
 phpstan_lint: _phpstan ## Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
-	$(PHPSTAN) analyse $(DIRECTORY_SRC) $(DIRECTORY_TESTS) -c $(PHPSTAN_CONFIG) $(ARG)
+	$(PHPSTAN) analyse $(SRC) $(TESTS) -c $(PHPSTAN_CONFIG) $(ARG)
 
 phpstan_baseline: _phpstan ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
-	$(PHPSTAN) analyse $(DIRECTORY_SRC) $(DIRECTORY_TESTS) -c $(PHPSTAN_CONFIG) $(ARG) --generate-baseline $(PHPSTAN_BASELINE)
+	$(PHPSTAN) analyse $(SRC) $(TESTS) -c $(PHPSTAN_CONFIG) $(ARG) --generate-baseline $(PHPSTAN_BASELINE)
 
 ##
 
@@ -571,7 +570,7 @@ endif
 phpmd: _phpmd ## Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
 	$(PHPMD) $(ARG)
 
-phpmd_lint: ARG=$(DIRECTORY_SRC),$(DIRECTORY_TESTS) ansi cleancode,codesize,design,naming,unusedcode
+phpmd_lint: ARG=$(SRC),$(TESTS) ansi cleancode,codesize,design,naming,unusedcode
 phpmd_lint: phpmd ## Run PHP Mess Detector with all rules
 
 ##
@@ -587,10 +586,10 @@ twigcsfixer: _twigcsfixer ## Run Twig CS Fixer - $ make twigcsfixer [ARG=<argume
 	$(TWIGCSFIXER) $(ARG)
 
 twigcsfixer_lint: _twigcsfixer ## Check Twig style
-	$(TWIGCSFIXER) lint $(DIRECTORY_TPL)
+	$(TWIGCSFIXER) lint $(TEMPLATES)
 
 twigcsfixer_fix: _twigcsfixer ## Fix Twig style
-	$(TWIGCSFIXER) lint --fix $(DIRECTORY_TPL)
+	$(TWIGCSFIXER) lint --fix $(TEMPLATES)
 
 ##
 
@@ -609,7 +608,7 @@ ifeq ($(wildcard $(VENDOR_PHPMETRICS)),)
 endif
 
 phpmetrics_report: _phpmetrics ## Run PHPMetrics and generate detailled report
-	$(PHPMETRICS) --report-html=$(PHPMETRICS_DIR) $(DIRECTORY_SRC)
+	$(PHPMETRICS) --report-html=$(PHPMETRICS_DIR) $(SRC)
 	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(PHPMETRICS_INDEX)$(S)\n"
 
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
