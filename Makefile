@@ -65,12 +65,16 @@ REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
 CLONE_DIR                 = clone
 
 #
-# TARGETS ACTIVATION
+# FILES & DIRECTORIES
 #
 
-COMPOSER_JSON      = composer.json
+DIRECTORY_SRC     = src
+DIRECTORY_TPL     = templates
+DIRECTORY_TESTS   = tests
+
 BIN_CONSOLE        = bin/console
 BIN_PHPUNIT        = bin/phpunit
+COMPOSER_JSON      = composer.json
 DOCKERFILE         = Dockerfile
 VENDOR_API         = vendor/api-platform
 VENDOR_ASSETS      = vendor/symfony/asset-mapper
@@ -85,14 +89,12 @@ VENDOR_TRANSLATION = vendor/symfony/translation
 VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 
 #
-# FILES & DIRECTORIES
+# COMPONENTS CONFIG
 #
 
 PWD               = $(shell pwd)
 NOW              := $(shell date +%Y%m%d-%H%M%S-%3N)
-DIRECTORY_SRC     = src
-DIRECTORY_TPL     = templates
-DIRECTORY_TESTS   = tests
+
 COVERAGE_DIR      = build/coverage-$(NOW)
 COVERAGE_INDEX    = $(PWD)/$(COVERAGE_DIR)/index.html
 PHPSTAN_CONFIG    = phpstan.dist.neon
