@@ -134,8 +134,11 @@ $(eval $(call append,STABILITY))
 $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
-$(eval $(call append,DATABASE_PORT))
-$(eval $(call append,DATABASE_URL))
+
+ifneq ($(DATABASE_URL),)
+	$(eval $(call append,DATABASE_URL))
+	$(eval $(call append,DATABASE_PORT))
+endif
 
 # Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
 HTTP_PORT_SUFFIX = $(if $(HTTP_PORT),:$(HTTP_PORT))
