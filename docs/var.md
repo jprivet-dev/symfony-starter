@@ -24,6 +24,12 @@ services:
       - ./var/log:/app/var/log
 ```
 
+You can apply the above changes with the following patch:
+
+```shell
+git apply patch/compose.override.yaml.patch
+```
+
 ## How it works
 
 The `composer.yaml` file has a line that creates an anonymous volume for `var/`, which can cause conflicts with the host machine. By explicitly adding these bind mounts, you are instructing **Docker** to create a direct and persistent link to the folders on your host. This workaround ensures that you can reliably see all your cache and log files, regardless of the container's internal configuration.
