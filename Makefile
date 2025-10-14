@@ -520,7 +520,7 @@ psql: ## Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
 
 .PHONY: phpunit
-phpunit: $(BIN_PHPUNIT) ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
+phpunit: ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
 	$(PHPUNIT) $(ARG)
 
 .PHONY: coverage
@@ -565,7 +565,7 @@ phpstan_baseline: ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<a
 ##
 
 .PHONY: phpmd
-phpmd: $(VENDOR_PHPMD) ## Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
+phpmd: ## Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
 	$(PHPMD) $(ARG)
 
 phpmd_lint: ARG=$(DIRECTORY_SRC),$(DIRECTORY_TESTS) ansi cleancode,codesize,design,naming,unusedcode
@@ -574,13 +574,13 @@ phpmd_lint: phpmd ## Run PHP Mess Detector with all rules
 ##
 
 .PHONY: twigcsfixer
-twigcsfixer: $(VENDOR_TWIGCSFIXER) ## Run Twig CS Fixer - $ make twigcsfixer [ARG=<arguments>] - Example: $ make twigcsfixer ARG="lint /path/to/code"
+twigcsfixer: ## Run Twig CS Fixer - $ make twigcsfixer [ARG=<arguments>] - Example: $ make twigcsfixer ARG="lint /path/to/code"
 	$(TWIGCSFIXER) $(ARG)
 
-twigcsfixer_lint: $(VENDOR_TWIGCSFIXER) ## Check Twig style
+twigcsfixer_lint: ## Check Twig style
 	$(TWIGCSFIXER) lint $(DIRECTORY_TPL)
 
-twigcsfixer_fix: $(VENDOR_TWIGCSFIXER) ## Fix Twig style
+twigcsfixer_fix: ## Fix Twig style
 	$(TWIGCSFIXER) lint --fix $(DIRECTORY_TPL)
 
 ##
