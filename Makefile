@@ -738,22 +738,22 @@ env_files: ## Show env files loaded into this Makefile
 	@printf "\n$(Y)Symfony env files$(S)"
 	@printf "\n$(Y)-----------------$(S)\n\n"
 	@printf "Files loaded into this Makefile (in order of decreasing priority) $(Y)[APP_ENV=$(APP_ENV)]$(S):\n\n"
-ifneq ("$(wildcard .env.$(APP_ENV).local)",)
+ifneq ($(wildcard .env.$(APP_ENV).local),)
 	@printf "* $(G)✔$(S) .env.$(APP_ENV).local\n"
 else
 	@printf "* $(R)⨯$(S) .env.$(APP_ENV).local\n"
 endif
-ifneq ("$(wildcard .env.$(APP_ENV))",)
+ifneq ($(wildcard .env.$(APP_ENV)),)
 	@printf "* $(G)✔$(S) .env.$(APP_ENV)\n"
 else
 	@printf "* $(R)⨯$(S) .env.$(APP_ENV)\n"
 endif
-ifneq ("$(wildcard .env.local)",)
+ifneq ($(wildcard .env.local),)
 	@printf "* $(G)✔$(S) .env.local\n"
 else
 	@printf "* $(R)⨯$(S) .env.local\n"
 endif
-ifneq ("$(wildcard .env)",)
+ifneq ($(wildcard .env),)
 	@printf "* $(G)✔$(S) .env\n"
 else
 	@printf "* $(R)⨯$(S) .env\n"
