@@ -676,7 +676,7 @@ extract: _translation ## Extracts translation strings from templates (fr)
 .PHONY: up
 up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans $(ARG)
-	$(MAKE) git_safe_dir
+	$(MAKE) safe
 
 up_detached: ARG=-d
 up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
@@ -756,7 +756,8 @@ else
 	@printf " $(Y)›$(S) 'make permissions' is typically not needed on $(UNAME_S).\n"
 endif
 
-git_safe_dir: ## Add /app to Git's safe directories within the php container
+.PHONY: safe
+safe: ## Add /app to Git's safe directories within the php container
 	$(COMPOSE) exec php git config --global --add safe.directory /app
 
 ## — UTILITIES 🛠️ —————————————————————————————————————————————————————————————

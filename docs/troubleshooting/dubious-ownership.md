@@ -22,7 +22,7 @@ Git detects that the `/app` directory inside the container is owned by a differe
 You need to tell Git within the container that `/app` is a safe directory:
 
 ```bash
-make git_safe_dir
+make safe
 ```
 
 This will execute the necessary `git config` command inside your `php` Docker service. After this, you should be able to run Git and Composer commands (like `composer require`) without this error.

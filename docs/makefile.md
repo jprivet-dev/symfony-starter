@@ -160,7 +160,7 @@ COMPLETE INSTALLATION
 
 — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
   permissions                p  Fix file permissions (primarily for Linux hosts)
-  git_safe_dir                  Add /app to Git's safe directories within the php container
+  safe                          Add /app to Git's safe directories within the php container
 
 — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
   env_files                     Show env files loaded into this Makefile
