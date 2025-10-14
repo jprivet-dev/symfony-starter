@@ -150,7 +150,7 @@ HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(H
 COMPOSE_V2 := $(shell docker compose version 2> /dev/null)
 
 ifndef COMPOSE_V2
-$(error [ERROR] Docker Compose CLI plugin is required but is not available on your system)
+$(warning [WARNING] Docker Compose CLI plugin is required but is not available on your system)
 endif
 
 COMPOSE = docker compose
