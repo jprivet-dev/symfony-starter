@@ -451,10 +451,10 @@ composer_validate: ## Check if lock file is up to date (even when config.lock is
 
 ## — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
 
-db_drop: $(VENDOR_DOCTRINE) ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
+db_drop: ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
 	$(CONSOLE) doctrine:database:drop --if-exists --force $(ARG)
 
-db_create: $(VENDOR_DOCTRINE) ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
+db_create: ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
 	$(CONSOLE) doctrine:database:create --if-not-exists $(ARG)
 
 db_create_force: db_drop db_create ## Drop and create the database
@@ -464,41 +464,41 @@ db_init: db_drop db_create fixtures ## Drop and create the database and add fixt
 ##
 
 .PHONY: validate
-validate: $(VENDOR_DOCTRINE) ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
+validate: ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
 	$(CONSOLE) doctrine:schema:validate -v $(ARG)
 
-update_dump: $(VENDOR_DOCTRINE) ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
+update_dump: ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
 	$(CONSOLE) doctrine:schema:update --dump-sql
 
-update_force: $(VENDOR_DOCTRINE) ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
+update_force: ## Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
 	$(CONSOLE) doctrine:schema:update --force
 
 ##
 
 .PHONY: migration
-migration: $(VENDOR_DOCTRINE) ## Create a new migration based on database changes (format the generated SQL)
+migration: ## Create a new migration based on database changes (format the generated SQL)
 	$(CONSOLE) make:migration --formatted -v $(ARG)
 
 .PHONY: migrate
-migrate: $(VENDOR_DOCTRINE) ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
+migrate: ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
 	$(CONSOLE) doctrine:migrations:migrate --no-interaction --all-or-nothing $(ARG)
 
 .PHONY: list
-list: $(VENDOR_DOCTRINE) ## Display a list of all available migrations and their status
+list: ## Display a list of all available migrations and their status
 	$(CONSOLE) doctrine:migrations:list
 
 .PHONY: execute
-execute: $(VENDOR_DOCTRINE) ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
+execute: ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
 	$(CONSOLE) doctrine:migrations:execute $(ARG)
 
 .PHONY: generate
-generate: $(VENDOR_DOCTRINE) ## Generate a blank migration class
+generate: ## Generate a blank migration class
 	$(CONSOLE) doctrine:migrations:generate
 
 ##
 
 .PHONY: sql
-sql: $(VENDOR_DOCTRINE) ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
+sql: ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
 	$(CONSOLE) doctrine:query:sql "$(QUERY)"
 
 # See https://stackoverflow.com/questions/769683/how-to-show-tables-in-postgresql
@@ -508,7 +508,7 @@ sql_tables: sql ## Show all tables
 ##
 
 .PHONY: fixtures
-fixtures: $(VENDOR_DOCTRINE) ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
+fixtures: ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
 	$(CONSOLE) doctrine:fixtures:load -n $(ARG)
 
 ## — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
@@ -541,25 +541,25 @@ xdebug_version: ## Xdebug version number
 ## — QUALITY ✅ ———————————————————————————————————————————————————————————————
 
 .PHONY: phpcsfixer
-phpcsfixer: $(VENDOR_PHPCSFIXER) ## Run PHP CS Fixer - $ make phpcsfixer [ARG=<arguments>] - Example: $ make phpcsfixer ARG=list
+phpcsfixer: ## Run PHP CS Fixer - $ make phpcsfixer [ARG=<arguments>] - Example: $ make phpcsfixer ARG=list
 	$(PHPCSFIXER) $(ARG)
 
-phpcsfixer_lint: $(VENDOR_PHPCSFIXER) ## Check code style
+phpcsfixer_lint: ## Check code style
 	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) check -v
 
-phpcsfixer_fix: $(VENDOR_PHPCSFIXER) ## Fix code style
+phpcsfixer_fix: ## Fix code style
 	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) fix
 
 ##
 
 .PHONY: phpstan
-phpstan: $(VENDOR_PHPSTAN) ## Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $ make phpstan ARG="src tests"
+phpstan: ## Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $ make phpstan ARG="src tests"
 	$(PHPSTAN) $(ARG)
 
-phpstan_lint: $(VENDOR_PHPSTAN) ## Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
+phpstan_lint: ## Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
 	$(PHPSTAN) analyse $(DIRECTORY_SRC) $(DIRECTORY_TESTS) -c $(PHPSTAN_CONFIG) $(ARG)
 
-phpstan_baseline: $(VENDOR_PHPSTAN) ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
+phpstan_baseline: ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
 	$(PHPSTAN) analyse $(DIRECTORY_SRC) $(DIRECTORY_TESTS) -c $(PHPSTAN_CONFIG) $(ARG) --generate-baseline $(PHPSTAN_BASELINE)
 
 ##
@@ -593,14 +593,14 @@ fix: phpcsfixer_fix twigcsfixer_fix ## Fix with all linters
 
 ##
 
-phpmetrics_report: $(VENDOR_PHPMETRICS) ## Run PHPMetrics and generate detailled report
+phpmetrics_report: ## Run PHPMetrics and generate detailled report
 	$(PHPMETRICS) --report-html=$(PHPMETRICS_DIR) $(DIRECTORY_SRC)
 	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(PHPMETRICS_INDEX)$(S)\n"
 
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 
 .PHONY: assets
-assets: $(VENDOR_ASSETS) ## Generate all assets
+assets: ## Generate all assets
 ifeq ($(APP_ENV),prod)
 	make importmap_install
 else
@@ -609,39 +609,39 @@ endif
 
 ##
 
-asset_map_clear: $(VENDOR_ASSETS) ## Clear all assets in the public output directory
+asset_map_clear: ## Clear all assets in the public output directory
 	$(COMPOSE) run --rm php rm -rf ./public/assets
 
 asset_map_compile: asset_map_clear ## Compile all mapped assets and writes them to the final public output directory
 	$(CONSOLE) asset-map:compile
 
-asset_map_debug: $(VENDOR_ASSETS) ## See all of the mapped assets
+asset_map_debug: ## See all of the mapped assets
 	$(CONSOLE) debug:asset-map --full
 
 ##
 
-importmap_audit: $(VENDOR_ASSETS) ## Check for security vulnerability advisories for dependencies
+importmap_audit: ## Check for security vulnerability advisories for dependencies
 	$(CONSOLE) importmap:audit
 
-importmap_install: $(VENDOR_ASSETS) ## Download all assets that should be downloaded
+importmap_install: ## Download all assets that should be downloaded
 	$(CONSOLE) importmap:install
 
-importmap_outdated: $(VENDOR_ASSETS) ## List outdated JavaScript packages and their latest versions
+importmap_outdated: ## List outdated JavaScript packages and their latest versions
 	$(CONSOLE) importmap:outdated
 
-importmap_remove: $(VENDOR_ASSETS) ## Remove JavaScript packages
+importmap_remove: ## Remove JavaScript packages
 	$(CONSOLE) importmap:remove
 
-importmap_require: $(VENDOR_ASSETS) ## Require JavaScript packages
+importmap_require: ## Require JavaScript packages
 	$(CONSOLE) importmap:require $(ARG)
 
-importmap_update: $(VENDOR_ASSETS) ## Update JavaScript packages to their latest versions
+importmap_update: ## Update JavaScript packages to their latest versions
 	$(CONSOLE) importmap:update
 
 ## — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
 
 .PHONY: extract
-extract: $(VENDOR_TRANSLATION) ## Extracts translation strings from templates (fr)
+extract: ## Extracts translation strings from templates (fr)
 	$(CONSOLE) translation:extract --sort=asc --format=yaml --force fr
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
@@ -721,7 +721,7 @@ hosts: ## Add the server name to /etc/hosts file
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
 .PHONY: permissions
-permissions p: $(DOCKERFILE) ## Fix file permissions (primarily for Linux hosts)
+permissions p: ## Fix file permissions (primarily for Linux hosts)
 ifeq ($(UNAME_S),Linux)
 	$(COMPOSE) run --rm php chown -R $(USER) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER)$(S) of the project files.\n"
