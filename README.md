@@ -143,7 +143,7 @@ tree -A -L 1 -F --dirsfirst
 * [PhpStorm - Connect it to the running PostgreSQL container](docs/postgre.md)
 * [Symfony - Save your generated application](docs/save.md)
 * [Symfony and Docker - Use build options](docs/options.md)
-* [Troubleshooting](docs%2Ftroubleshooting.md)
+* [Troubleshooting](docs/troubleshooting.md)
 
 ## Main links
 
