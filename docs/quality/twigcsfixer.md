@@ -18,7 +18,7 @@ composer require --dev vincentlanglet/twig-cs-fixer
 
 TODO
 
-## Resources
+## Links
 
 * https://github.com/VincentLanglet/Twig-CS-Fixer
 

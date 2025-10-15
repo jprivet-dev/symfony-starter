@@ -57,7 +57,7 @@ services:
 4. Click **Test Connection** to confirm the setup. You should see a **Succeeded** message.
 5. Click `OK` or `Apply` to validate the connection.
 
-## Resources
+## Links
 
 * https://www.postgresql.org/
 * https://aws.amazon.com/fr/rds/postgresql/what-is-postgresql

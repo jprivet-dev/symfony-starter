@@ -69,7 +69,7 @@ analyse [-c|--configuration CONFIGURATION] [-l|--level LEVEL] [--no-progress] [-
 
 Looking for a solution...
 
-## Resources
+## Links
 
 * https://phpstan.org/
 * https://packagist.org/packages/phpstan/phpstan-doctrine

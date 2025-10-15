@@ -76,7 +76,7 @@ Solution - Exclude the `MissingImport` rule in `phpmd.xml`:
     * Default configuration file: `/app/phpunit.xml.dist`.
   * Click on `OK` or `Apply` to validate all.
 
-## Resources
+## Links
 
 * https://phpmd.org/
 * https://github.com/phpmd/phpmd

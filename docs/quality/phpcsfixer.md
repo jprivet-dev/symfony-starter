@@ -27,7 +27,7 @@ composer require --dev friendsofphp/php-cs-fixer
   * Choose `PHP CS Fixer`.
 * In the **Settings** dialog, click on `OK` or `Apply` to validate all.
 
-## Resources
+## Links
 
 * https://cs.symfony.com/
 * https://github.com/PHP-CS-Fixer/PHP-CS-Fixer

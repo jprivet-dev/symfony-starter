@@ -52,7 +52,7 @@ You can access a PHP interpreter installed in a Docker container. This is the ma
 
   * In the **Settings** dialog, click on `OK` or `Apply` to validate all.
 
-## Resources
+## Links
 
 * https://www.jetbrains.com/help/phpstorm/configuring-remote-interpreters.html
 

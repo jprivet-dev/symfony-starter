@@ -145,7 +145,7 @@ tree -A -L 1 -F --dirsfirst
 * [Quality](docs/quality.md)
 * [Troubleshooting](docs%2Ftroubleshooting.md)
 
-## Main resources
+## Main links
 
 * https://symfony.com/doc/current/setup/docker.html
 * https://github.com/dunglas/symfony-docker
