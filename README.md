@@ -133,6 +133,7 @@ tree -A -L 1 -F --dirsfirst
 
 ## Docs
 
+* [ADR](docs/adr.md)
 * [Validate certificates](docs/certificates.md)
 * [Save your generated Symfony application](docs/save.md)
 * [Accessing the `var/` directory](docs/var.md)
