@@ -107,14 +107,6 @@ PHPMETRICS_INDEX  = $(PWD)/$(PHPMETRICS_DIR)/index.html
 # See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md
 #
 
-UP_ENV ?=
-
-define append
-  ifneq ($($1),)
-    UP_ENV += $1=$($1)
-  endif
-endef
-
 PROJECT_NAME  ?= $(shell basename $(CURDIR) | tr '[:upper:]' '[:lower:]')
 SERVER_NAME    = $(PROJECT_NAME).localhost
 IMAGES_PREFIX  = $(PROJECT_NAME)-
@@ -124,6 +116,19 @@ HTTP_PORT     ?= $(shell echo $$((8080 + $(PORT_OFFSET))))
 HTTPS_PORT    ?= $(shell echo $$((8443 + $(PORT_OFFSET))))
 HTTP3_PORT    ?= $(HTTPS_PORT)
 DATABASE_PORT ?= $(shell echo $$((5432 + $(PORT_OFFSET))))
+
+# Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
+HTTP_PORT_SUFFIX  = $(if $(HTTP_PORT),:$(HTTP_PORT))
+# Will be ":PORT" if HTTPS_PORT is defined and not 443, otherwise empty.
+HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(HTTPS_PORT)))
+
+UP_ENV ?=
+
+define append
+  ifneq ($($1),)
+    UP_ENV += $1=$($1)
+  endif
+endef
 
 $(eval $(call append,APP_ENV))
 $(eval $(call append,XDEBUG_MODE))
@@ -139,12 +144,6 @@ ifneq ($(DATABASE_URL),)
 $(eval $(call append,DATABASE_URL))
 $(eval $(call append,DATABASE_PORT))
 endif
-
-# Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
-HTTP_PORT_SUFFIX = $(if $(HTTP_PORT),:$(HTTP_PORT))
-
-# Will be ":PORT" if HTTPS_PORT is defined and not 443, otherwise empty.
-HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(HTTPS_PORT)))
 
 #
 # DOCKER COMMANDS
