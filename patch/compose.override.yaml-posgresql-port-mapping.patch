@@ -1,0 +1,13 @@
+diff --git a/compose.override.yaml b/compose.override.yaml
+index 8b79fe5..6461dd6 100644
+--- a/compose.override.yaml
++++ b/compose.override.yaml
+@@ -28,7 +28,7 @@ services:
+ ###> doctrine/doctrine-bundle ###
+   database:
+     ports:
+-      - "5432"
++      - "${DATABASE_PORT:-5432}:5432"
+ ###< doctrine/doctrine-bundle ###
+ 
+ ###> symfony/mailer ###
