@@ -1,4 +1,4 @@
-# Save your generated Symfony application
+# Symfony - Save your generated application
 
 [⬅️ README](../README.md)
 

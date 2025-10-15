@@ -1,4 +1,4 @@
-# Quality
+# PHP - Quality
 
 [⬅️ README](../README.md)
 

@@ -1,4 +1,4 @@
-# Docker build options
+# Symfony and Docker - Use build options
 
 [⬅️ README](../README.md)
 

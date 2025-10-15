@@ -1,4 +1,4 @@
-# Accessing the `var/` directory
+# Compose - Accessing the `var/` directory
 
 [⬅️ README](../README.md)
 

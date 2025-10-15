@@ -134,15 +134,15 @@ tree -A -L 1 -F --dirsfirst
 ## Docs
 
 * [ADR](docs/adr.md)
-* [Validate certificates](docs/certificates.md)
-* [Save your generated Symfony application](docs/save.md)
-* [Accessing the `var/` directory](docs/var.md)
-* [Docker build options](docs/options.md)
+* [Caddy - Validate certificates](docs/certificates.md)
+* [Compose - Accessing the `var/` directory](docs/var.md)
 * [Makefile - Discover all commands](docs/makefile.md)
-* [PhpStorm : configure a remote PHP interpreter (Docker)](docs/remote-php-interpreter.md)
-* [PhpStorm : connect it to the running PostgreSQL container](docs/postgre.md)
-* [Testing](docs/testing.md)
-* [Quality](docs/quality.md)
+* [PHP - Quality](docs/quality.md)
+* [PHP - Testing](docs/testing.md)
+* [PhpStorm - Configure a remote PHP interpreter (Docker)](docs/remote-php-interpreter.md)
+* [PhpStorm - Connect it to the running PostgreSQL container](docs/postgre.md)
+* [Symfony - Save your generated application](docs/save.md)
+* [Symfony and Docker - Use build options](docs/options.md)
 * [Troubleshooting](docs%2Ftroubleshooting.md)
 
 ## Main links

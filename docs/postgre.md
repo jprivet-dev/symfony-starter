@@ -1,4 +1,4 @@
-# PhpStorm : connect it to the running PostgreSQL container
+# PhpStorm - Connect it to the running PostgreSQL container
 
 [⬅️ README](../README.md)
 
