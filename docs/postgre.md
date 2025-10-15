@@ -44,6 +44,12 @@ services:
   ###< doctrine/doctrine-bundle ###
 ```
 
+You can apply the above changes with the following patch:
+
+```shell
+git apply patch/compose.override.yaml-posgresql-port-mapping.patch
+```
+
 ## Connect PhpStorm
 
 1. Open the **Database** tool window (`View > Tool Windows > Database`).
