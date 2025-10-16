@@ -100,9 +100,10 @@ COMPLETE INSTALLATION
 
 — TESTS ✅ —————————————————————————————————————————————————————————————————
   phpunit                       Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
-  coverage                      Generate code coverage report in HTML format for all tests
-  dox                           Report test execution progress in TestDox format for all tests
-
+  coverage                      Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
+  dox                           Report test execution progress in TestDox format - $ make dox [ARG=<arguments>] - Example: $ make dox ARG="tests/myTest.php"
+  dox@text                      Report test execution progress in TestDox format and export it in text file
+  dox@html                      Report test execution progress in TestDox format and export it in HTML file
   xdebug_version                Xdebug version number
 
 — QUALITY ✅ ———————————————————————————————————————————————————————————————
