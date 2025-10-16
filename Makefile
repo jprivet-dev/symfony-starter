@@ -94,12 +94,13 @@ VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 #
 
 NOW              := $(shell date +%Y%m%d-%H%M%S-%3N)
-COVERAGE_DIR      = build/coverage-$(NOW)
+BUILD_DIR         = build
+COVERAGE_DIR      = $(BUILD_DIR)/coverage-$(NOW)
 COVERAGE_INDEX    = $(PWD)/$(COVERAGE_DIR)/index.html
 PHPSTAN_CONFIG    = phpstan.dist.neon
 PHPSTAN_BASELINE  = phpstan-baseline.php
 PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
-PHPMETRICS_DIR    = build/phpmetrics-$(NOW)
+PHPMETRICS_DIR    = $(BUILD_DIR)/phpmetrics-$(NOW)
 PHPMETRICS_INDEX  = $(PWD)/$(PHPMETRICS_DIR)/index.html
 
 #
@@ -166,17 +167,21 @@ COMPOSE = docker compose -f compose.yaml -f compose.prod.yaml
 endif
 endif
 
-CONTAINER_PHP = $(COMPOSE) exec $(DOCKER_EXEC_ENV) php
-PHP           = $(CONTAINER_PHP) php
-COMPOSER      = $(CONTAINER_PHP) composer
-BASH_COMMAND  = $(CONTAINER_PHP) bash -c
-CONSOLE       = $(PHP) $(BIN_CONSOLE)
-PHPUNIT       = $(PHP) $(BIN_PHPUNIT)
-PHPCSFIXER    = $(PHP) $(VENDOR_PHPCSFIXER)
-PHPSTAN       = $(PHP) $(VENDOR_PHPSTAN)
-PHPMD         = $(PHP) $(VENDOR_PHPMD)
-TWIGCSFIXER   = $(PHP) $(VENDOR_TWIGCSFIXER)
-PHPMETRICS    = $(PHP) $(VENDOR_PHPMETRICS)
+CONTAINER_PHP          = $(COMPOSE) exec $(DOCKER_EXEC_ENV) php
+CONTAINER_PHP_COVERAGE = $(COMPOSE) exec -e XDEBUG_MODE=coverage $(DOCKER_EXEC_ENV) php
+
+PHP              = $(CONTAINER_PHP) php
+COMPOSER         = $(CONTAINER_PHP) composer
+BASH_COMMAND     = $(CONTAINER_PHP) bash -c
+CONSOLE          = $(CONTAINER_PHP) $(BIN_CONSOLE)
+PHPUNIT          = $(CONTAINER_PHP) $(BIN_PHPUNIT)
+PHPUNIT_COVERAGE = $(CONTAINER_PHP_COVERAGE) $(BIN_PHPUNIT)
+
+PHPCSFIXER       = $(PHP) $(VENDOR_PHPCSFIXER)
+PHPSTAN          = $(PHP) $(VENDOR_PHPSTAN)
+PHPMD            = $(PHP) $(VENDOR_PHPMD)
+TWIGCSFIXER      = $(PHP) $(VENDOR_TWIGCSFIXER)
+PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
 
@@ -515,9 +520,8 @@ phpunit: _phpunit ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $
 	$(PHPUNIT) $(ARG)
 
 .PHONY: coverage
-coverage: DOCKER_EXEC_ENV=-e XDEBUG_MODE=coverage
 coverage: _phpunit ## Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
-	$(PHPUNIT) --coverage-html $(COVERAGE_DIR) $(ARG)
+	-$(PHPUNIT_COVERAGE) --coverage-html $(COVERAGE_DIR) $(ARG)
 	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(COVERAGE_INDEX)$(S)\n"
 
 .PHONY: dox
