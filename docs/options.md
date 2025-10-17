@@ -1,4 +1,4 @@
-# Docker build options
+# Symfony and Docker - Use build options
 
 [⬅️ README](../README.md)
 
@@ -41,7 +41,6 @@ SYMFONY_VERSION=6.4.*
 ```
 
 * Example for custom ports:
-
 
 ```dotenv
 # .env.local

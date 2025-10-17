@@ -1,4 +1,4 @@
-# Validate certificates
+# Caddy - Validate certificates
 
 [⬅️ README](../README.md)
 

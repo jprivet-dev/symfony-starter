@@ -67,16 +67,16 @@ Solution - Exclude the `MissingImport` rule in `phpmd.xml`:
 * In the **PHPUnit by Remote Interpreter** dialog, select `Interpreter: php`.
 * Click on `OK`.
 * In the **Settings** dialog:
-    * CLI interpreter: `symfony-starter-app-php:latest`.
-    * In **PHPUnit library** area:
-        * Choose **Use Composer autoloader**.
-        * Path to script: `/app/vendor/autoload.php`.
-        * PHPUnit version is indicated.
-    * In **Test Runner** area:
-        * Default configuration file: `/app/phpunit.xml.dist`.
-    * Click on `OK` or `Apply` to validate all.
+  * CLI interpreter: `symfony-starter-app-php:latest`.
+  * In **PHPUnit library** area:
+    * Choose **Use Composer autoloader**.
+    * Path to script: `/app/vendor/autoload.php`.
+    * PHPUnit version is indicated.
+  * In **Test Runner** area:
+    * Default configuration file: `/app/phpunit.xml.dist`.
+  * Click on `OK` or `Apply` to validate all.
 
-## Resources
+## Links
 
 * https://phpmd.org/
 * https://github.com/phpmd/phpmd

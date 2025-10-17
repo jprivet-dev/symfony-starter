@@ -21,20 +21,26 @@
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
   clear_all                     Remove all fresh Symfony application files
 
-  COMPLETE INSTALLATION
-  install_doctrine              Install Doctrine - https://symfony.com/doc/current/doctrine.html
-  install_phpunit               Install PHPUnit - https://symfony.com/doc/current/testing.html
-  install_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-  install_translation           Install translation - https://symfony.com/doc/current/translation.html
+COMPLETE INSTALLATION
+  require_doctrine              Install Doctrine - https://symfony.com/doc/current/doctrine.html
+  require_phpunit               Install PHPUnit - https://symfony.com/doc/current/testing.html
+  require_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+  require_translation           Install translation - https://symfony.com/doc/current/translation.html
 
-  install_profiler              Install the profiler - https://symfony.com/doc/current/profiler.html
-  install_maker_bundle          Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
-  install_bootstrap             Install Bootstrap - https://getbootstrap.com/
-  install_stimulus              Install StimulusBundle - https://ux.symfony.com/
+  require_profiler              Install the profiler - https://symfony.com/doc/current/profiler.html
+  require_maker_bundle          Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+  require_bootstrap             Install Bootstrap - https://getbootstrap.com/
+  require_stimulus              Install StimulusBundle - https://ux.symfony.com/
 
-  install_webapp                Install a web application - https://symfony.com/doc/current/setup.html
-  install_api                   Install API Platform - https://api-platform.com/docs/symfony/
-  install_easy_admin            Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
+  require_phpcsfixer            Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
+  require_phpstan               Install PHPStan - https://phpstan.org/
+  require_phpmd                 Install PHP Mess Detector - https://phpmd.org/
+  require_twigcsfixer           Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
+  require_phpmetrics            Install PHPMetrics - https://phpmetrics.github.io/website/
+
+  require_webapp                Install a web application - https://symfony.com/doc/current/setup.html
+  require_api                   Install API Platform - https://api-platform.com/docs/symfony/
+  require_easy_admin            Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 
 — PROJECT 🚀 ———————————————————————————————————————————————————————————————
   start                         Start the project and show info (up_detached & info alias)
@@ -71,11 +77,11 @@
 — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
   db_drop                       Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
   db_create                     Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
-  db_clear                      Drop and create the database
+  db_create_force               Drop and create the database
   db_init                       Drop and create the database and add fixtures
 
   validate                      Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
-  update                        Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
+  update_dump                   Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
   update_force                  Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
 
   migration                     Create a new migration based on database changes (format the generated SQL)
@@ -94,10 +100,32 @@
 
 — TESTS ✅ —————————————————————————————————————————————————————————————————
   phpunit                       Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
-  coverage                      Generate code coverage report in HTML format for all tests
-  dox                           Report test execution progress in TestDox format for all tests
-
+  coverage                      Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
+  dox                           Report test execution progress in TestDox format - $ make dox [ARG=<arguments>] - Example: $ make dox ARG="tests/myTest.php"
+  dox@text                      Report test execution progress in TestDox format and export it in text file
+  dox@html                      Report test execution progress in TestDox format and export it in HTML file
   xdebug_version                Xdebug version number
+
+— QUALITY ✅ ———————————————————————————————————————————————————————————————
+  phpcsfixer                    Run PHP CS Fixer - $ make phpcsfixer [ARG=<arguments>] - Example: $ make phpcsfixer ARG=list
+  phpcsfixer_lint               Check code style
+  phpcsfixer_fix                Fix code style
+
+  phpstan                       Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $ make phpstan ARG="src tests"
+  phpstan_lint                  Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
+  phpstan_baseline              Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
+
+  phpmd                         Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
+  phpmd_lint                    Run PHP Mess Detector with all rules
+
+  twigcsfixer                   Run Twig CS Fixer - $ make twigcsfixer [ARG=<arguments>] - Example: $ make twigcsfixer ARG="lint /path/to/code"
+  twigcsfixer_lint              Check Twig style
+  twigcsfixer_fix               Fix Twig style
+
+  lint                          Run all linters
+  fix                           Fix with all linters
+
+  phpmetrics_report             Run PHPMetrics and generate detailled report
 
 — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
   assets                        Generate all assets
@@ -133,7 +161,7 @@
 
 — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
   permissions                p  Fix file permissions (primarily for Linux hosts)
-  git_safe_dir                  Add /app to Git's safe directories within the php container
+  safe                          Add /app to Git's safe directories within the php container
 
 — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
   env_files                     Show env files loaded into this Makefile

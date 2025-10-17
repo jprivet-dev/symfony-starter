@@ -18,8 +18,9 @@ I need to force the version with the following command :
 composer require --dev phpmetrics/phpmetrics:2.8.1 --with-all-dependencies
 ```
 
-## Resources
+## Links
 
+* https://phpmetrics.github.io/website/
 * https://phpmetrics.org/
 * https://github.com/phpmetrics/PhpMetrics
 * https://packagist.org/packages/phpmetrics/phpmetrics

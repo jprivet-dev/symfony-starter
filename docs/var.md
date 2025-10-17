@@ -1,4 +1,4 @@
-# Accessing the `var/` directory
+# Compose - Accessing the `var/` directory
 
 [⬅️ README](../README.md)
 
@@ -14,15 +14,21 @@ To get direct access to this directory, you need to add a "bind mount" for the `
 
 Add `./var:/app/var` and `./var/log:/app/var/log` to the `volumes` section to the `php` service as shown below:
 
-  ```yaml
-  # compose.override.yaml
-  services:
-    php:
-      volumes:
-        - ...
-        - ./var:/app/var
-        - ./var/log:/app/var/log
-  ```
+```yaml
+# compose.override.yaml
+services:
+  php:
+    volumes:
+      - ...
+      - ./var:/app/var
+      - ./var/log:/app/var/log
+```
+
+You can apply the above changes with the following patch:
+
+```shell
+git apply patch/compose.override.yaml-accessing-the-var-directory.patch
+```
 
 ## How it works
 

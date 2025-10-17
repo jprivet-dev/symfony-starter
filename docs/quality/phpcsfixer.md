@@ -20,14 +20,14 @@ composer require --dev friendsofphp/php-cs-fixer
 
 * Go on **Settings (Ctrl+Alt+S) > PHP > Quality Tools**.
 * Expand the **PHP CS Fixer** area:
-    * Switch `ON` the tool.
-    * In **Configuration**, choose `symfony-starter-app-php:latest`.
-    * In **Options > Ruleset**, choose the `.php-cs-fixer.dist.php` file of this repository.
+  * Switch `ON` the tool.
+  * In **Configuration**, choose `symfony-starter-app-php:latest`.
+  * In **Options > Ruleset**, choose the `.php-cs-fixer.dist.php` file of this repository.
 * In **External formatters** area:
-    * Choose `PHP CS Fixer`.
+  * Choose `PHP CS Fixer`.
 * In the **Settings** dialog, click on `OK` or `Apply` to validate all.
 
-## Resources
+## Links
 
 * https://cs.symfony.com/
 * https://github.com/PHP-CS-Fixer/PHP-CS-Fixer

@@ -74,7 +74,7 @@ class SmokeTest extends WebTestCase
 }
 ```
 
-## Resources
+## Links
 
 * https://symfony.com/doc/current/testing.html
 * https://symfonycasts.com/screencast/phpunit-integration/integration-test

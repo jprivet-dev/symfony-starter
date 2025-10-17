@@ -69,7 +69,7 @@ git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter &
 [Create on GitHub your empty project ](https://github.com/new)(without a `README.md` file), and after :
 
 ```shell
-git clone git@github.com:jprivet-dev/symfony-starter.git --depth 1 my-project
+git clone git@github.com:jprivet-dev/symfony-starter.git my-project
 cd my-project
 
 git remote set-url origin git@github.com:my-github/my-project.git
@@ -133,18 +133,19 @@ tree -A -L 1 -F --dirsfirst
 
 ## Docs
 
-* [Validate certificates](docs/certificates.md)
-* [Save your generated Symfony application](docs/save.md)
-* [Accessing the `var/` directory](docs/var.md)
-* [Docker build options](docs/options.md)
+* [ADR](docs/adr.md)
+* [Caddy - Validate certificates](docs/certificates.md)
+* [Compose - Accessing the `var/` directory](docs/var.md)
 * [Makefile - Discover all commands](docs/makefile.md)
-* [Configure a remote PHP interpreter (Docker)](docs/remote-php-interpreter.md)
-* [PostgreSQL](docs/postgre.md)
-* [Testing](docs/testing.md)
-* [Quality](docs/quality.md)
-* [Troubleshooting](docs%2Ftroubleshooting.md)
+* [PHP - Quality](docs/quality.md)
+* [PHP - Testing](docs/testing.md)
+* [PhpStorm - Configure a remote PHP interpreter (Docker)](docs/remote-php-interpreter.md)
+* [PhpStorm - Connect it to the running PostgreSQL container](docs/postgre.md)
+* [Symfony - Save your generated application](docs/save.md)
+* [Symfony and Docker - Use build options](docs/options.md)
+* [Troubleshooting](docs/troubleshooting.md)
 
-## Main resources
+## Main links
 
 * https://symfony.com/doc/current/setup/docker.html
 * https://github.com/dunglas/symfony-docker

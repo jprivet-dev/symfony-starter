@@ -10,28 +10,34 @@ PHPStan scans your whole codebase and looks for both obvious & tricky bugs.
 
 ## Installation
 
-PHPStan - PHP Static Analysis Tool:
-
-```
+```shell
+# PHPStan - PHP Static Analysis Tool
 composer require --dev phpstan/phpstan
-```
 
-PHPStan Symfony Framework extensions and rules:
-
-```
+# PHPStan Symfony Framework extensions and rules
 composer require --dev phpstan/phpstan-symfony
-```
 
-Doctrine extensions for PHPStan:
-
-```
+# Doctrine extensions for PHPStan
 composer require --dev phpstan/phpstan-doctrine
-```
 
-PHPStan PHPUnit extensions and rules:
-
-```
+# PHPStan PHPUnit extensions and rules
 composer require --dev phpstan/phpstan-phpunit
+```
+
+## Expected final configuration
+
+```yaml
+# phpstan.dist.neon
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+
+parameters:
+    level: 6
+    paths:
+        - src/
+        - tests/
 ```
 
 ## Configure PhpStorm
@@ -42,8 +48,8 @@ composer require --dev phpstan/phpstan-phpunit
 * Expand the **PHPStan** area and switch `ON` the tool.
 * In **Configuration**, choose `symfony-starter-app-php:latest`.
 * In **Options** area:
-    * Level: `8`.
-    * Configuration file: choose the `phpstan.dist.neon` file of this repository.
+  * Level: `8`.
+  * Configuration file: choose the `phpstan.dist.neon` file of this repository.
 * In the **Settings** dialog, click on `OK` or `Apply` to validate all.
 
 ### !!! TROUBLESHOOTING !!!
@@ -63,7 +69,7 @@ analyse [-c|--configuration CONFIGURATION] [-l|--level LEVEL] [--no-progress] [-
 
 Looking for a solution...
 
-## Resources
+## Links
 
 * https://phpstan.org/
 * https://packagist.org/packages/phpstan/phpstan-doctrine

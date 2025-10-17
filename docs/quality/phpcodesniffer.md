@@ -13,7 +13,7 @@ PHP_CodeSniffer is a set of two PHP scripts:
 
 > ❌ **PHP_CodeSniffer** is not used in this project. **PHP CS Fixer** is used instead.
 
-## Resources
+## Links
 
 * https://github.com/PHPCSStandards/PHP_CodeSniffer/
 
