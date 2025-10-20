@@ -360,6 +360,7 @@ install: up_detached ## Start the project, install dependencies and show info
 	$(MAKE) composer_install
 	-$(MAKE) assets
 	$(MAKE) images
+	$(MAKE) git_hooks_on
 	$(MAKE) info
 
 .PHONY: check
@@ -780,6 +781,16 @@ hosts: ## Add the server name to /etc/hosts file
 	else \
 		printf " $(G)✔$(S) \"$(SERVER_NAME)\" already exists in /etc/hosts.\n"; \
 	fi
+
+## — GIT 🐙 ———————————————————————————————————————————————————————————————————
+
+git_hooks_on: ## Use the hooks directory of this project
+	git config core.hooksPath hooks/
+
+git_hooks_off: ## Use the default hooks directory of Git
+	git config --unset core.hooksPath
+
+git_pre_push: check@stop_on_failure ## Actions on pre-push
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
