@@ -363,7 +363,13 @@ install: up_detached ## Start the project, install dependencies and show info
 	$(MAKE) info
 
 .PHONY: check
-check: composer_validate validate phpunit ## Check everything before you deliver
+check: ## Check everything before you deliver
+	-$(MAKE) composer_validate
+	-$(MAKE) validate
+	-$(MAKE) lint
+	-$(MAKE) phpunit
+
+check@stop_on_failure: composer_validate validate lint@stop_on_failure phpunit
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
@@ -622,6 +628,8 @@ lint: ## Run all linters
 	-$(MAKE) phpstan_lint
 	-$(MAKE) phpmd_lint
 	-$(MAKE) twigcsfixer_lint
+
+lint@stop_on_failure: phpcsfixer_lint phpstan_lint phpmd_lint twigcsfixer_lint ## Run all linters
 
 .PHONY: fix
 fix: ## Fix with all linters
