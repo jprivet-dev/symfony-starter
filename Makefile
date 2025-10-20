@@ -171,8 +171,16 @@ COMPOSE = docker compose -f compose.yaml -f compose.prod.yaml
 endif
 endif
 
-CONTAINER_PHP          = $(COMPOSE) exec $(DOCKER_EXEC_ENV) php
-CONTAINER_PHP_COVERAGE = $(COMPOSE) exec -e XDEBUG_MODE=coverage $(DOCKER_EXEC_ENV) php
+# -T : avoid "the input device is not a TTY" error - Example: $ NO_TTY=true make my_command
+NO_TTY ?= false
+ifeq ($(NO_TTY), true)
+EXEC = $(COMPOSE) exec -T
+else
+EXEC = $(COMPOSE) exec
+endif
+
+CONTAINER_PHP          = $(EXEC) $(DOCKER_EXEC_ENV) php
+CONTAINER_PHP_COVERAGE = $(EXEC) -e XDEBUG_MODE=coverage $(DOCKER_EXEC_ENV) php
 
 PHP              = $(CONTAINER_PHP) php
 COMPOSER         = $(CONTAINER_PHP) composer
