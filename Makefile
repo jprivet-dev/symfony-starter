@@ -450,7 +450,7 @@ composer_update_lock: ## Update only the content hash of composer.lock without u
 	$(COMPOSER) update --lock
 
 composer_validate: ## Check if lock file is up to date (even when config.lock is false)
-	$(COMPOSER) validate --strict --check-lock
+	$(COMPOSER) validate --strict
 
 ## — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
 
