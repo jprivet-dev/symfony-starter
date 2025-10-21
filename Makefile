@@ -191,7 +191,7 @@ PHPUNIT_COVERAGE = $(CONTAINER_PHP_COVERAGE) $(BIN_PHPUNIT)
 
 PHPCSFIXER       = $(PHP) $(VENDOR_PHPCSFIXER)
 PHPSTAN          = $(PHP) $(VENDOR_PHPSTAN)
-PHPMD            = $(PHP) $(VENDOR_PHPMD)
+PHPMD            = $(PHP) -d error_reporting="E_ALL & ~E_DEPRECATED" $(VENDOR_PHPMD)
 TWIGCSFIXER      = $(PHP) $(VENDOR_TWIGCSFIXER)
 PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 
@@ -378,7 +378,7 @@ check: ## Check everything before you deliver
 	-$(MAKE) lint
 	-$(MAKE) phpunit
 
-check@stop_on_failure: composer_validate validate lint@stop_on_failure phpunit
+check@stop_on_failure: composer_validate validate lint phpunit
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
@@ -573,7 +573,9 @@ phpcsfixer: _phpcsfixer ## Run PHP CS Fixer - $ make phpcsfixer [ARG=<arguments>
 	$(PHPCSFIXER) $(ARG)
 
 phpcsfixer_lint: _phpcsfixer ## Check code style
-	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) check -v
+	@printf "\n$(Y)PHP CS Fixer [LINT]$(S)"
+	@printf "\n$(Y)-------------------$(S)\n\n"
+	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) check
 
 phpcsfixer_fix: _phpcsfixer ## Fix code style
 	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) fix
@@ -591,6 +593,8 @@ phpstan: _phpstan ## Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $
 	$(PHPSTAN) $(ARG)
 
 phpstan_lint: _phpstan ## Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
+	@printf "\n$(Y)PHPStan [LINT]$(S)"
+	@printf "\n$(Y)--------------$(S)\n\n"
 	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(ARG)
 
 phpstan_baseline: _phpstan ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
@@ -608,8 +612,10 @@ endif
 phpmd: _phpmd ## Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
 	$(PHPMD) $(ARG)
 
-phpmd_lint: ARG=$(SRC),$(TESTS) ansi cleancode,codesize,design,naming,unusedcode
-phpmd_lint: phpmd ## Run PHP Mess Detector with all rules
+phpmd_lint: ## Run PHP Mess Detector with all rules
+	@printf "\n$(Y)PHP Mess Detector [LINT]$(S)"
+	@printf "\n$(Y)------------------------$(S)\n\n"
+	$(PHPMD) $(SRC),$(TESTS) ansi cleancode,codesize,controversial,design,naming,unusedcode $(ARG)
 
 ##
 
@@ -624,6 +630,8 @@ twigcsfixer: _twigcsfixer ## Run Twig CS Fixer - $ make twigcsfixer [ARG=<argume
 	$(TWIGCSFIXER) $(ARG)
 
 twigcsfixer_lint: _twigcsfixer ## Check Twig style
+	@printf "\n$(Y)Twig CS Fixer [LINT]$(S)"
+	@printf "\n$(Y)--------------------$(S)\n\n"
 	$(TWIGCSFIXER) lint $(TEMPLATES)
 
 twigcsfixer_fix: _twigcsfixer ## Fix Twig style
@@ -632,13 +640,7 @@ twigcsfixer_fix: _twigcsfixer ## Fix Twig style
 ##
 
 .PHONY: lint
-lint: ## Run all linters
-	-$(MAKE) phpcsfixer_lint
-	-$(MAKE) phpstan_lint
-	-$(MAKE) phpmd_lint
-	-$(MAKE) twigcsfixer_lint
-
-lint@stop_on_failure: phpcsfixer_lint phpstan_lint phpmd_lint twigcsfixer_lint ## Run all linters
+lint: phpcsfixer_lint phpstan_lint phpmd_lint twigcsfixer_lint ## Run all linters (stop on failure)
 
 .PHONY: fix
 fix: ## Fix with all linters
