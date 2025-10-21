@@ -368,7 +368,7 @@ install: up_detached ## Start the project, install dependencies and show info
 	$(MAKE) composer_install
 	-$(MAKE) assets
 	$(MAKE) images
-	$(MAKE) git_hooks_on
+	$(MAKE) git_hooks_install
 	$(MAKE) info
 
 .PHONY: check
@@ -792,13 +792,22 @@ hosts: ## Add the server name to /etc/hosts file
 
 ## — GIT 🐙 ———————————————————————————————————————————————————————————————————
 
+git_hooks_install: ## Install Git hooks if GIT_HOOKS_INSTALL=1 is set
+ifeq ($(GIT_HOOKS_INSTALL),1)
+	@printf " $(G)✔$(S) GIT_HOOKS_INSTALL=1 $(Y)›$(S) Enable Git hooks.\n"
+	$(MAKE) git_hooks_on
+else
+	@printf " $(R)⨯$(S) GIT_HOOKS_INSTALL=0 $(Y)›$(S) Disable Git hooks.\n"
+	$(MAKE) git_hooks_off
+endif
+
 git_hooks_on: ## Use the hooks directory of this project
 	git config core.hooksPath hooks/
 
 git_hooks_off: ## Use the default hooks directory of Git
 	git config --unset core.hooksPath
 
-git_pre_push: check@stop_on_failure ## Actions on pre-push
+git_pre_push: check@stop_on_failure ## Actions on Git pre-push
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
