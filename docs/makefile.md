@@ -122,7 +122,7 @@ COMPLETE INSTALLATION
   twigcsfixer_lint              Check Twig style
   twigcsfixer_fix               Fix Twig style
 
-  lint                          Run all linters
+  lint                          Run all linters (stop on failure)
   fix                           Fix with all linters
 
   phpmetrics_report             Run PHPMetrics and generate detailled report
@@ -158,6 +158,12 @@ COMPLETE INSTALLATION
   certificates                  Installs the Caddy TLS certificate to the trust store
   certificates_export           Exports the Caddy root certificate from the container to the host
   hosts                         Add the server name to /etc/hosts file
+
+— GIT 🐙 ———————————————————————————————————————————————————————————————————
+  git_hooks_install             Install Git hooks if GIT_HOOKS_INSTALL=1 is set
+  git_hooks_on                  Use the hooks directory of this project
+  git_hooks_off                 Use the default hooks directory of Git
+  git_pre_push                  Actions on Git pre-push
 
 — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
   permissions                p  Fix file permissions (primarily for Linux hosts)
