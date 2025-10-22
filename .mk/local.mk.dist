@@ -1,0 +1,17 @@
+#
+# EXTENDS THE MAIN MAKEFILE WITH YOUR OWN LOCAL MAKEFILE
+#
+# - To activate it, copy ".mk/local.mk.dist" to ".mk/local.mk".
+# - This file ".mk/local.mk" extends the main Makefile.
+# - This file ".mk/local.mk" is IGNORED by Git.
+# - DO NOT use your local commands in the main Makefile.
+# - Use here only commands specific to your local setup.
+# - Use here all commands and variables from the main Makefile.
+# - Your commands are ONLY available when APP_ENV=dev.
+# - Your commands are NOT visible when running "make help".
+# - If a command is very useful, suggest it and integrate it into the main Makefile.
+#
+
+.PHONY: my_command
+my_command: ## Description of my_command
+	@printf " $(G)✔$(S) My own command $(G)my_command$(S) is available and use the main Makefile variables - $(Y)[APP_ENV=$(APP_ENV)]$(S)\n"

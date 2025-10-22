@@ -195,6 +195,14 @@ PHPMD            = $(PHP) -d error_reporting="E_ALL & ~E_DEPRECATED" $(VENDOR_PH
 TWIGCSFIXER      = $(PHP) $(VENDOR_TWIGCSFIXER)
 PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 
+#
+# EXTENDS THE MAIN MAKEFILE WITH YOUR OWN LOCAL MAKEFILE
+#
+
+ifeq ($(APP_ENV),dev)
+-include .mk/local.mk
+endif
+
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
 
 # Print self-documented Makefile:
