@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
-# Usage:
+# Usage
+#
+#   # Enable
 #   $ git config core.hooksPath hooks/
+#
+#   # Disable
+#   $ git config --unset core.hooksPath
 
 # (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET
 G="\033[32m"
