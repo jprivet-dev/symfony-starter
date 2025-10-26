@@ -27,7 +27,7 @@ services:
 You can apply the above changes with the following patch:
 
 ```shell
-git apply patch/compose.override.yaml-accessing-the-var-directory.patch
+git apply .patch/compose.override.yaml-accessing-the-var-directory.patch
 ```
 
 ## How it works

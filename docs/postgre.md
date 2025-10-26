@@ -47,7 +47,7 @@ services:
 You can apply the above changes with the following patch:
 
 ```shell
-git apply patch/compose.override.yaml-posgresql-port-mapping.patch
+git apply .patch/compose.override.yaml-posgresql-port-mapping.patch
 ```
 
 ## Connect PhpStorm
