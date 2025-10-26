@@ -13,7 +13,7 @@
 — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
   help                          Display this help message with available commands
 
-— GENERATION 🔨 ————————————————————————————————————————————————————————————
+— GENERATION 🔨 (CAN BE REMOVED AFTER SAVING THE PROJECT) ——————————————————
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 
@@ -51,6 +51,16 @@ COMPLETE INSTALLATION
   install                       Start the project, install dependencies and show info
   check                         Check everything before you deliver
 
+— DOCKER 🐳 ————————————————————————————————————————————————————————————————
+  up                            Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
+  up_detached                   Start the containers (wait for services to be running|healthy - detached mode)
+  down                          Stop and remove the containers
+  build                         Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
+  build_force                   Build or rebuild Docker services (no cache) - $ make build [ARG=<arguments>]
+  logs                          Display container logs
+  images                        List images used by the current containers
+  config                        Parse, resolve, and render compose file in canonical format
+
 — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
   symfony                    sf Run Symfony console command - $ make symfony [ARG=<arguments>]- Example: $ make symfony ARG=cache:clear
   cc                            Clear the Symfony cache
@@ -77,8 +87,7 @@ COMPLETE INSTALLATION
 — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
   db_drop                       Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
   db_create                     Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
-  db_create_force               Drop and create the database
-  db_init                       Drop and create the database and add fixtures
+  db_init                       Drop and create the database and migrate
 
   validate                      Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
   update_dump                   Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
@@ -144,25 +153,14 @@ COMPLETE INSTALLATION
 — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
   extract                       Extracts translation strings from templates (fr)
 
-— DOCKER 🐳 ————————————————————————————————————————————————————————————————
-  up                            Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
-  up_detached                   Start the containers (wait for services to be running|healthy - detached mode)
-  down                          Stop and remove the containers
-  build                         Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
-  build_force                   Build or rebuild Docker services (no cache) - $ make build [ARG=<arguments>]
-  logs                          Display container logs
-  images                        List images used by the current containers
-  config                        Parse, resolve, and render compose file in canonical format
-
 — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
   certificates                  Installs the Caddy TLS certificate to the trust store
   certificates_export           Exports the Caddy root certificate from the container to the host
   hosts                         Add the server name to /etc/hosts file
 
 — GIT 🐙 ———————————————————————————————————————————————————————————————————
-  git_hooks_install             Install Git hooks if GIT_HOOKS_INSTALL=1 is set
-  git_hooks_on                  Use the hooks directory of this project
-  git_hooks_off                 Use the default hooks directory of Git
+  git_hooks_on                  Enable the project's hooks directory
+  git_hooks_off                 Disable the project's hooks directory
   git_pre_push                  Actions on Git pre-push
 
 — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————

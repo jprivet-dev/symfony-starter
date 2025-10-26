@@ -219,7 +219,7 @@ help: ## Display this help message with available commands
 	}'
 	@echo
 
-## — GENERATION 🔨 ————————————————————————————————————————————————————————————
+## — GENERATION 🔨 (CAN BE REMOVED AFTER SAVING THE PROJECT) ——————————————————
 
 # "GENERATION" BLOCK CAN BE REMOVED AFTER SAVING THE PROJECT.
 # These following targets are only used for the initial setup.
@@ -375,7 +375,7 @@ install: up_detached ## Start the project, install dependencies and show info
 	$(MAKE) composer_install
 	-$(MAKE) assets
 	$(MAKE) images
-	$(MAKE) git_hooks_install
+	#$(MAKE) git_hooks_on
 	$(MAKE) info
 
 .PHONY: check
@@ -386,6 +386,42 @@ check: ## Check everything before you deliver
 	-$(MAKE) phpunit
 
 check@stop_on_failure: composer_validate validate lint phpunit
+
+## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
+
+.PHONY: up
+up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
+	$(UP_ENV) $(COMPOSE) up --remove-orphans $(ARG)
+	$(MAKE) safe
+
+up_detached: ARG=-d
+up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
+
+.PHONY: down
+down: ## Stop and remove the containers
+	-$(COMPOSE) down --remove-orphans
+
+.PHONY: build
+build: ## Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
+	$(COMPOSE) build $(ARG)
+
+.PHONY: build_force
+build_force: ARG=--no-cache
+build_force: build ## Build or rebuild Docker services (no cache) - $ make build [ARG=<arguments>]
+
+.PHONY: logs
+logs: ## Display container logs
+	$(COMPOSE) logs -f
+
+.PHONY: images
+images: ## List images used by the current containers
+	@printf "\n$(Y)Images used by the current containers$(S)"
+	@printf "\n$(Y)-------------------------------------$(S)\n\n"
+	$(COMPOSE) images | grep -E "REPOSITORY|$(IMAGES_PREFIX)"
+
+.PHONY: config
+config: ## Parse, resolve, and render compose file in canonical format
+	$(UP_ENV) $(COMPOSE) config
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
@@ -723,42 +759,6 @@ endif
 extract: _translation ## Extracts translation strings from templates (fr)
 	$(CONSOLE) translation:extract --sort=asc --format=yaml --force fr
 
-## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
-
-.PHONY: up
-up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
-	$(UP_ENV) $(COMPOSE) up --remove-orphans $(ARG)
-	$(MAKE) safe
-
-up_detached: ARG=-d
-up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
-
-.PHONY: down
-down: ## Stop and remove the containers
-	-$(COMPOSE) down --remove-orphans
-
-.PHONY: build
-build: ## Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
-	$(COMPOSE) build $(ARG)
-
-.PHONY: build_force
-build_force: ARG=--no-cache
-build_force: build ## Build or rebuild Docker services (no cache) - $ make build [ARG=<arguments>]
-
-.PHONY: logs
-logs: ## Display container logs
-	$(COMPOSE) logs -f
-
-.PHONY: images
-images: ## List images used by the current containers
-	@printf "\n$(Y)Images used by the current containers$(S)"
-	@printf "\n$(Y)-------------------------------------$(S)\n\n"
-	$(COMPOSE) images | grep -E "REPOSITORY|$(IMAGES_PREFIX)"
-
-.PHONY: config
-config: ## Parse, resolve, and render compose file in canonical format
-	$(UP_ENV) $(COMPOSE) config
-
 ## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
 
 .PHONY: certificates
@@ -799,22 +799,15 @@ hosts: ## Add the server name to /etc/hosts file
 
 ## — GIT 🐙 ———————————————————————————————————————————————————————————————————
 
-git_hooks_install: ## Install Git hooks if GIT_HOOKS_INSTALL=1 is set
-ifeq ($(GIT_HOOKS_INSTALL),1)
-	@printf " $(G)✔$(S) GIT_HOOKS_INSTALL=1 $(Y)›$(S) Enable Git hooks.\n"
-	$(MAKE) git_hooks_on
-else
-	@printf " $(R)⨯$(S) GIT_HOOKS_INSTALL=0 $(Y)›$(S) Disable Git hooks.\n"
-	$(MAKE) git_hooks_off
-endif
-
-git_hooks_on: ## Use the hooks directory of this project
+git_hooks_on: ## Enable the project's hooks directory
 	git config core.hooksPath hooks/
+	@printf " $(G)✔$(S) Git hooks enabled.\n"
 
-git_hooks_off: ## Use the default hooks directory of Git
+git_hooks_off: ## Disable the project's hooks directory
 	git config --unset core.hooksPath
+	@printf " $(R)⨯$(S) Git hooks disabled.\n"
 
-git_pre_push: check@stop_on_failure ## Actions on Git pre-push
+git_pre_push: check@stop_on_failure git_hooks_on ## Actions on Git pre-push
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 

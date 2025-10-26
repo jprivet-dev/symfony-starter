@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Usage:
+#   $ git config core.hooksPath hooks/
+
+# (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET
+G="\033[32m"
+R="\033[31m"
+Y="\033[33m"
+S="\033[0m"
+
+TITLE="GIT HOOK PRE-PUSH"
+printf "${Y}>\n> ${TITLE}\n>\n${S}"
+
+make git_pre_push NO_TTY=true
+
+if [ $? -eq 0 ]; then
+  printf "${G}>\n> ${TITLE}: Everything is OK\n>\n${S}"
+  exit 0
+fi
+
+printf "${R}>\n> ${TITLE}: Something is wrong\n>\n${S}"
+exit 1
