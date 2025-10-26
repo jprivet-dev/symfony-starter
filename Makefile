@@ -116,11 +116,10 @@ PROJECT_NAME  ?= $(shell basename $(CURDIR) | tr '[:upper:]' '[:lower:]')
 SERVER_NAME    = $(PROJECT_NAME).localhost
 IMAGES_PREFIX  = $(PROJECT_NAME)-
 
-PORT_OFFSET   ?= 0
-HTTP_PORT     ?= $(shell echo $$((8080 + $(PORT_OFFSET))))
-HTTPS_PORT    ?= $(shell echo $$((8443 + $(PORT_OFFSET))))
+HTTP_PORT     ?= 8080
+HTTPS_PORT    ?= 8443
 HTTP3_PORT    ?= $(HTTPS_PORT)
-DATABASE_PORT ?= $(shell echo $$((5432 + $(PORT_OFFSET))))
+DATABASE_PORT ?= 5432
 
 # Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
 HTTP_PORT_SUFFIX  = $(if $(HTTP_PORT),:$(HTTP_PORT))
@@ -474,9 +473,7 @@ db_drop: _doctrine ## Drop the database - $ make db_drop [ARG=<arguments>] - Exa
 db_create: _doctrine ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
 	$(CONSOLE) doctrine:database:create --if-not-exists $(ARG)
 
-db_create_force: _doctrine db_drop db_create ## Drop and create the database
-
-db_init: _doctrine db_drop db_create fixtures ## Drop and create the database and add fixtures
+db_init: _doctrine db_drop db_create migrate ## Drop and create the database and migrate
 
 ##
 
@@ -868,7 +865,6 @@ vars: ## Show key Makefile variables
 	@printf "USER         : $(USER)\n"
 	@printf "UNAME_S      : $(UNAME_S)\n"
 	@printf "APP_ENV      : $(APP_ENV)\n"
-	@printf "PORT_OFFSET  : $(PORT_OFFSET)\n"
 	@printf "UP_ENV       : $(UP_ENV)\n"
 	@printf "COMPOSE_V2   : $(COMPOSE_V2)\n"
 	@printf "COMPOSE      : $(COMPOSE)\n"
