@@ -675,9 +675,9 @@ endif
 .PHONY: assets
 assets: _assets ## Generate all assets
 ifeq ($(APP_ENV),prod)
-	make importmap_install
+	$(MAKE) importmap_install
 else
-	make asset_map_compile
+	$(MAKE) asset_map_compile
 endif
 
 ##
