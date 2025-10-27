@@ -73,7 +73,7 @@ COMPLETE INSTALLATION
 — PHP 🐘 ———————————————————————————————————————————————————————————————————
   php                           Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
 
-  php_sh                        Connect to the PHP container shell
+  php_sh                     sh Connect to the PHP container shell
   php_env                       Display all environment variables set within the PHP container
   php_command                   Run a command inside the PHP container - $ make php_command [ARG=<arguments>]- Example: $ make php_command ARG="ls -al"
 
