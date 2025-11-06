@@ -69,6 +69,8 @@ CLONE_DIR                 = clone
 #
 
 PWD       = $(shell pwd)
+LOCAL_MK  = .mk/local.mk
+
 SRC       = src
 TEMPLATES = templates
 TESTS     = tests
@@ -199,7 +201,7 @@ PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 #
 
 ifeq ($(APP_ENV),dev)
--include .mk/local.mk
+-include $(LOCAL_MK)
 endif
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
@@ -354,7 +356,7 @@ restart: stop start ## Stop & Start the project and show info (up_detached & inf
 info: ## Show project access info
 	@printf "\n$(Y)Info$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-	@printf " $(Y)›$(S) Copy $(Y).mk/local.mk.dist$(S) to $(G).mk/local.mk$(S) to extend the Makefile with your own commands.\n"
+	@printf " $(Y)›$(S) Copy $(Y)$(LOCAL_MK).dist$(S) to $(G)$(LOCAL_MK)$(S) to extend the Makefile with your own commands.\n"
 	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
 	@printf " $(Y)›$(S) Go in your favourite browser and accept the auto-generated TLS certificate:\n"
 	@printf "    - Homepage ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
