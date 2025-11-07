@@ -7,7 +7,7 @@ index 8b79fe5..6461dd6 100644
    database:
      ports:
 -      - "5432"
-+      - "${DATABASE_PORT:-5432}:5432"
++      - "5432:5432"
  ###< doctrine/doctrine-bundle ###
- 
+
  ###> symfony/mailer ###
