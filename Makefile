@@ -97,18 +97,17 @@ VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 # COMPONENTS CONFIG
 #
 
-NOW              := $(shell date +%Y%m%d-%H%M%S-%3N)
-BUILD_DIR         = build
-BUILD_DUMPS_DIR   = $(BUILD_DIR)/dumps
-BUILD_TLS_DIR     = $(BUILD_DIR)/tls
-BUILD_DOX_DIR     = $(BUILD_DIR)/dox
-COVERAGE_DIR      = $(BUILD_DIR)/coverage-$(NOW)
-COVERAGE_INDEX    = $(PWD)/$(COVERAGE_DIR)/index.html
-PHPSTAN_CONFIG    = phpstan.dist.neon
-PHPSTAN_BASELINE  = phpstan-baseline.php
-PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
-PHPMETRICS_DIR    = $(BUILD_DIR)/phpmetrics-$(NOW)
-PHPMETRICS_INDEX  = $(PWD)/$(PHPMETRICS_DIR)/index.html
+NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
+BUILD_DIR          = build
+BUILD_DUMPS_DIR    = $(BUILD_DIR)/dumps
+BUILD_TLS_DIR      = $(BUILD_DIR)/tls
+BUILD_DOX_DIR      = $(BUILD_DIR)/dox
+BUILD_COVERAGE_DIR = $(BUILD_DIR)/coverage
+PHPSTAN_CONFIG     = phpstan.dist.neon
+PHPSTAN_BASELINE   = phpstan-baseline.php
+PHPCSFIXER_CONFIG  = .php-cs-fixer.dist.php
+PHPMETRICS_DIR     = $(BUILD_DIR)/phpmetrics-$(NOW)
+PHPMETRICS_INDEX   = $(PWD)/$(PHPMETRICS_DIR)/index.html
 
 #
 # POSTGRES OPTIONS
@@ -630,10 +629,14 @@ endif
 phpunit: _phpunit ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
 	$(PHPUNIT) $(ARG)
 
+$(BUILD_DOX_DIR): # INTERNAL - Create coverage directory
+	mkdir -p $(BUILD_DOX_DIR)
+
 .PHONY: coverage
-coverage: _phpunit ## Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
-	-$(PHPUNIT_COVERAGE) --coverage-html $(COVERAGE_DIR) $(ARG)
-	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(COVERAGE_INDEX)$(S)\n"
+coverage: DIR = $(BUILD_COVERAGE_DIR)/coverage-$(NOW)
+coverage: _phpunit $(BUILD_DOX_DIR) ## Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
+	-$(PHPUNIT_COVERAGE) --coverage-html $(DIR) $(ARG)
+	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
 
 $(BUILD_DOX_DIR): # INTERNAL - Create dox directory
 	mkdir -p $(BUILD_DOX_DIR)
