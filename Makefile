@@ -100,6 +100,7 @@ VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 NOW              := $(shell date +%Y%m%d-%H%M%S-%3N)
 BUILD_DIR         = build
 BUILD_DUMPS_DIR   = $(BUILD_DIR)/dumps
+BUILD_TLS_DIR     = $(BUILD_DIR)/tls
 COVERAGE_DIR      = $(BUILD_DIR)/coverage-$(NOW)
 COVERAGE_INDEX    = $(PWD)/$(COVERAGE_DIR)/index.html
 TESTDOX_TEXT      = $(BUILD_DIR)/testdox-$(NOW).txt
@@ -602,7 +603,7 @@ tables: ## Show all tables
 
 ##
 
-$(BUILD_DUMPS_DIR): # INTERNAL - create dump directory
+$(BUILD_DUMPS_DIR): # INTERNAL - Create dump directory
 	mkdir -p $(BUILD_DUMPS_DIR)
 
 .PHONY: dump
@@ -833,12 +834,16 @@ else ifeq ($(UNAME_S),Linux)
 endif
 	@printf " $(G)✔$(S) The Caddy root certificate has been added to the trust store.\n"
 
-certificates_export: ## Exports the Caddy root certificate from the container to the host
-	@$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" > tls/root.crt
-	@printf " $(G)✔$(S) The Caddy root certificate has been exported to $(Y)tls/root.crt$(S).\n"
+$(BUILD_TLS_DIR): # INTERNAL - Create tls directory
+	mkdir -p $(BUILD_TLS_DIR)
+
+certificates_export: FILE=$(BUILD_TLS_DIR)/root.crt
+certificates_export: $(BUILD_TLS_DIR) ## Exports the Caddy root certificate from the container to the host
+	@$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" > $(FILE)
+	@printf " $(G)✔$(S) The Caddy root certificate has been exported to $(Y)$(FILE)$(S).\n"
 	@printf " $(Y)›$(S) You may need to manually import this certificate into your browser's trust store:\n"
-	@printf "    - $(Y)Chrome/Brave:$(S) Go to chrome://settings/certificates and import the file 'tls/root.crt' under 'Authorities'.\n"
-	@printf "    - $(Y)Firefox:$(S) Go to about:preferences#privacy, click 'View Certificates...' and import 'tls/root.crt' under 'Authorities'.\n"
+	@printf "    - $(Y)Chrome/Brave:$(S) Go to chrome://settings/certificates and import the file '$(FILE)' under 'Authorities'.\n"
+	@printf "    - $(Y)Firefox:$(S) Go to about:preferences#privacy, click 'View Certificates...' and import '$(FILE)' under 'Authorities'.\n"
 	@printf "\n"
 
 .PHONY: hosts
