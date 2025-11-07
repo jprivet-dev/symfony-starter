@@ -59,7 +59,9 @@ endif
 # End of bug fixes     : November 2026
 # End of security fixes: November 2027
 # See https://symfony.com/releases
-SYMFONY_LTS_VERSION       = 6.*
+SYMFONY_LTS_VERSION       = 6
+SYMFONY_STABLE_VERSION    = 7
+SYMFONY_DEV_VERSION       = 8
 REPOSITORY_SYMFONY_DOCKER = git@github.com:dunglas/symfony-docker.git
 REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
 CLONE_DIR                 = clone
@@ -71,9 +73,10 @@ CLONE_DIR                 = clone
 PWD       = $(shell pwd)
 LOCAL_MK  = .mk/local.mk
 
-SRC       = src
-TEMPLATES = templates
-TESTS     = tests
+SRC        = src
+TEMPLATES  = templates
+TESTS      = tests
+BUILD_DUMP = build/dump
 
 BIN_CONSOLE        = bin/console
 BIN_PHPUNIT        = bin/phpunit
@@ -231,7 +234,10 @@ minimalist: clone_symfony_docker build up_detached permissions ## Generate a min
 	$(MAKE) restart
 
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION) $(MAKE) minimalist
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
+
+minimalist@dev: ## Generate a minimalist Symfony application with Docker configuration (under development release)
+	SYMFONY_VERSION=$(SYMFONY_DEV_VERSION).* $(MAKE) minimalist
 
 ##
 
