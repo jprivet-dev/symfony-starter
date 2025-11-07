@@ -101,12 +101,9 @@ NOW              := $(shell date +%Y%m%d-%H%M%S-%3N)
 BUILD_DIR         = build
 BUILD_DUMPS_DIR   = $(BUILD_DIR)/dumps
 BUILD_TLS_DIR     = $(BUILD_DIR)/tls
+BUILD_DOX_DIR     = $(BUILD_DIR)/dox
 COVERAGE_DIR      = $(BUILD_DIR)/coverage-$(NOW)
 COVERAGE_INDEX    = $(PWD)/$(COVERAGE_DIR)/index.html
-TESTDOX_TEXT      = $(BUILD_DIR)/testdox-$(NOW).txt
-TESTDOX_TEXT_PATH = $(PWD)/$(TESTDOX_TEXT)
-TESTDOX_HTML      = $(BUILD_DIR)/testdox-$(NOW).html
-TESTDOX_HTML_PATH = $(PWD)/$(TESTDOX_HTML)
 PHPSTAN_CONFIG    = phpstan.dist.neon
 PHPSTAN_BASELINE  = phpstan-baseline.php
 PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
@@ -638,17 +635,22 @@ coverage: _phpunit ## Generate code coverage report in HTML format - $ make cove
 	-$(PHPUNIT_COVERAGE) --coverage-html $(COVERAGE_DIR) $(ARG)
 	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(COVERAGE_INDEX)$(S)\n"
 
+$(BUILD_DOX_DIR): # INTERNAL - Create dox directory
+	mkdir -p $(BUILD_DOX_DIR)
+
 .PHONY: dox
 dox: _phpunit ## Report test execution progress in TestDox format - $ make dox [ARG=<arguments>] - Example: $ make dox ARG="tests/myTest.php"
 	$(PHPUNIT) --testdox $(ARG)
 
-dox@text: _phpunit ## Report test execution progress in TestDox format and export it in text file
-	-$(PHPUNIT) --testdox-text $(TESTDOX_TEXT) $(ARG)
-	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(TESTDOX_TEXT_PATH)$(S)\n"
+dox@text: FILE = $(BUILD_DOX_DIR)/testdox-$(NOW).txt
+dox@text: _phpunit $(BUILD_DOX_DIR) ## Report test execution progress in TestDox format and export it in text file
+	-$(PHPUNIT) --testdox-text $(FILE) $(ARG)
+	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(PWD)/$(FILE)$(S)\n"
 
-dox@html: _phpunit ## Report test execution progress in TestDox format and export it in HTML file
-	-$(PHPUNIT) --testdox-html $(TESTDOX_HTML) $(ARG)
-	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(TESTDOX_HTML_PATH)$(S)\n"
+dox@html: FILE = $(BUILD_DOX_DIR)/testdox-$(NOW).html
+dox@html: _phpunit $(BUILD_DOX_DIR) ## Report test execution progress in TestDox format and export it in HTML file
+	-$(PHPUNIT) --testdox-html $(FILE) $(ARG)
+	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(PWD)/$(FILE)$(S)\n"
 
 #
 
