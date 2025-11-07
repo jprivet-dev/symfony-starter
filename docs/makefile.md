@@ -16,6 +16,7 @@
 — GENERATION 🔨 (CAN BE REMOVED AFTER SAVING THE PROJECT) ——————————————————
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+  minimalist@dev                Generate a minimalist Symfony application with Docker configuration (under development release)
 
   clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
@@ -100,12 +101,16 @@ COMPLETE INSTALLATION
   generate                      Generate a blank migration class
 
   sql                           Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
-  sql_tables                    Show all tables
-
-  fixtures                      Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
+  fixtures                      Load fixtures (CAUTION! The load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
 
 — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
   psql                          Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG="-V"
+  psql_sh                       Open a shell on the PostgreSQL container
+  tables                        Show all tables
+
+  dump                          Create a SQL dump
+  dump_gz                       Create a compressed SQL dump (gzip)
+  restore                       Restore a dump (CAUTION! The command purges the database) - $ make restore [FILE=<file>] - Example: $ make restore FILE="build/dumps/dump.sql"
 
 — TESTS ✅ —————————————————————————————————————————————————————————————————
   phpunit                       Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"

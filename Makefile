@@ -76,7 +76,6 @@ LOCAL_MK  = .mk/local.mk
 SRC        = src
 TEMPLATES  = templates
 TESTS      = tests
-BUILD_DUMP = build/dump
 
 BIN_CONSOLE        = bin/console
 BIN_PHPUNIT        = bin/phpunit
@@ -100,6 +99,7 @@ VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 
 NOW              := $(shell date +%Y%m%d-%H%M%S-%3N)
 BUILD_DIR         = build
+BUILD_DUMPS_DIR   = $(BUILD_DIR)/dumps
 COVERAGE_DIR      = $(BUILD_DIR)/coverage-$(NOW)
 COVERAGE_INDEX    = $(PWD)/$(COVERAGE_DIR)/index.html
 TESTDOX_TEXT      = $(BUILD_DIR)/testdox-$(NOW).txt
@@ -113,6 +113,11 @@ PHPMETRICS_DIR    = $(BUILD_DIR)/phpmetrics-$(NOW)
 PHPMETRICS_INDEX  = $(PWD)/$(PHPMETRICS_DIR)/index.html
 
 #
+# POSTGRES OPTIONS
+#
+
+
+#
 # DOCKER OPTIONS
 # See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md
 #
@@ -121,10 +126,19 @@ PROJECT_NAME  ?= $(shell basename $(CURDIR) | tr '[:upper:]' '[:lower:]')
 SERVER_NAME    = $(PROJECT_NAME).localhost
 IMAGES_PREFIX  = $(PROJECT_NAME)-
 
+# See services.php.ports in compose.yaml
 HTTP_PORT     ?= 8080
 HTTPS_PORT    ?= 8443
 HTTP3_PORT    ?= $(HTTPS_PORT)
-DATABASE_PORT ?= 5432
+
+# See services.php.environment.DATABASE_URL in compose.yaml
+POSTGRES_USER     ?= app
+POSTGRES_PASSWORD ?= !ChangeMe!
+POSTGRES_HOST     ?= database
+#POSTGRES_PORT    ?= 5432
+POSTGRES_DB       ?= app
+POSTGRES_VERSION  ?= 15
+POSTGRES_CHARSET  ?= utf8
 
 # Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
 HTTP_PORT_SUFFIX  = $(if $(HTTP_PORT),:$(HTTP_PORT))
@@ -150,8 +164,12 @@ $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
 
 ifneq ($(DATABASE_URL),)
-$(eval $(call append,DATABASE_URL))
-$(eval $(call append,DATABASE_PORT))
+$(eval $(call append,POSTGRES_USER))
+$(eval $(call append,POSTGRES_PASSWORD))
+$(eval $(call append,POSTGRES_HOST))
+$(eval $(call append,POSTGRES_DB))
+$(eval $(call append,POSTGRES_VERSION))
+$(eval $(call append,POSTGRES_CHARSET))
 endif
 
 #
@@ -175,6 +193,8 @@ COMPOSE = docker compose -f compose.yaml -f compose.prod.yaml
 endif
 endif
 
+EXEC_NO_TTY = $(COMPOSE) exec -T
+
 # -T : avoid "the input device is not a TTY" error - Example: $ NO_TTY=true make my_command
 NO_TTY ?= false
 ifeq ($(NO_TTY), true)
@@ -182,6 +202,9 @@ EXEC = $(COMPOSE) exec -T
 else
 EXEC = $(COMPOSE) exec
 endif
+
+CONTAINER_DATABASE        = $(EXEC) database
+CONTAINER_DATABASE_NO_TTY = $(EXEC_NO_TTY) database
 
 CONTAINER_PHP          = $(EXEC) $(DOCKER_EXEC_ENV) php
 CONTAINER_PHP_COVERAGE = $(EXEC) -e XDEBUG_MODE=coverage $(DOCKER_EXEC_ENV) php
@@ -560,21 +583,42 @@ generate: _doctrine ## Generate a blank migration class
 sql: _doctrine ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
 	$(CONSOLE) doctrine:query:sql "$(QUERY)"
 
-# See https://stackoverflow.com/questions/769683/how-to-show-tables-in-postgresql
-sql_tables: QUERY=SELECT * FROM pg_catalog.pg_tables;
-sql_tables: sql ## Show all tables
-
-##
-
 .PHONY: fixtures
-fixtures: _doctrine ## Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
+fixtures: _doctrine ## Load fixtures (CAUTION! The load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
 	$(CONSOLE) doctrine:fixtures:load -n $(ARG)
 
 ## — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
 
 .PHONY: psql
 psql: ## Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG="-V"
-	$(PSQL) $(ARG)
+	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB) $(ARG)
+
+psql_sh: ## Open a shell on the PostgreSQL container
+	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB)
+
+.PHONY: tables
+tables: ## Show all tables
+	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB) -c "\dt"
+
+##
+
+$(BUILD_DUMPS_DIR): # INTERNAL - create dump directory
+	mkdir -p $(BUILD_DUMPS_DIR)
+
+.PHONY: dump
+dump: FILE=$(BUILD_DUMPS_DIR)/dump-$(NOW).sql
+dump: _doctrine $(BUILD_DUMPS_DIR) ## Create a SQL dump
+	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) > $(FILE)
+	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
+
+dump_gz: FILE=$(BUILD_DUMPS_DIR)/dump-$(NOW).gz
+dump_gz: _doctrine $(BUILD_DUMPS_DIR) ## Create a compressed SQL dump (gzip)
+	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) | gzip > $(FILE)
+	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
+
+.PHONY: restore
+restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the database) - $ make restore [FILE=<file>] - Example: $ make restore FILE="build/dumps/dump.sql"
+	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) < $(FILE)
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
 
