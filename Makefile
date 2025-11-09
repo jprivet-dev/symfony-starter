@@ -99,10 +99,11 @@ VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 
 NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
 BUILD_DIR          = build
-BUILD_DUMPS_DIR    = $(BUILD_DIR)/dumps
-BUILD_TLS_DIR      = $(BUILD_DIR)/tls
-BUILD_DOX_DIR      = $(BUILD_DIR)/dox
 BUILD_COVERAGE_DIR = $(BUILD_DIR)/coverage
+BUILD_DOX_DIR      = $(BUILD_DIR)/dox
+BUILD_DUMPS_DIR    = $(BUILD_DIR)/dumps
+BUILD_PHPUNIT_DIR  = $(BUILD_DIR)/phpunit
+BUILD_TLS_DIR      = $(BUILD_DIR)/tls
 PHPSTAN_CONFIG     = phpstan.dist.neon
 PHPSTAN_BASELINE   = phpstan-baseline.php
 PHPCSFIXER_CONFIG  = .php-cs-fixer.dist.php
@@ -610,7 +611,7 @@ dump: _doctrine $(BUILD_DUMPS_DIR) ## Create a SQL dump
 
 dump_gz: FILE=$(BUILD_DUMPS_DIR)/dump-$(NOW).gz
 dump_gz: _doctrine $(BUILD_DUMPS_DIR) ## Create a compressed SQL dump (gzip)
-	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) | gzip > $(FILE)
+	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) | gzip >$(FILE)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
 .PHONY: restore
@@ -618,6 +619,15 @@ restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the da
 	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) < $(FILE)
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
+
+$(BUILD_COVERAGE_DIR): # INTERNAL - Create coverage directory
+	mkdir -p $(BUILD_COVERAGE_DIR)
+
+$(BUILD_DOX_DIR): # INTERNAL - Create dox directory
+	mkdir -p $(BUILD_DOX_DIR)
+
+$(BUILD_PHPUNIT_DIR): # INTERNAL - Create phpunit directory
+	mkdir -p $(BUILD_PHPUNIT_DIR)
 
 _phpunit:
 ifeq ($(wildcard $(BIN_PHPUNIT)),)
@@ -629,17 +639,16 @@ endif
 phpunit: _phpunit ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
 	$(PHPUNIT) $(ARG)
 
-$(BUILD_DOX_DIR): # INTERNAL - Create coverage directory
-	mkdir -p $(BUILD_DOX_DIR)
+phpunit_log: FILE = $(BUILD_PHPUNIT_DIR)/phpunit-$(NOW).log
+phpunit_log: _phpunit $(BUILD_PHPUNIT_DIR) ## Exporting PHPUnit terminal output to a log file
+	-$(MAKE) phpunit >$(FILE)
+	@printf " $(G)✔$(S) Successful export of the PHPUnit terminal output to the file $(Y)$(PWD)/$(FILE)$(S)\n"
 
 .PHONY: coverage
 coverage: DIR = $(BUILD_COVERAGE_DIR)/coverage-$(NOW)
 coverage: _phpunit $(BUILD_DOX_DIR) ## Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
 	-$(PHPUNIT_COVERAGE) --coverage-html $(DIR) $(ARG)
 	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
-
-$(BUILD_DOX_DIR): # INTERNAL - Create dox directory
-	mkdir -p $(BUILD_DOX_DIR)
 
 .PHONY: dox
 dox: _phpunit ## Report test execution progress in TestDox format - $ make dox [ARG=<arguments>] - Example: $ make dox ARG="tests/myTest.php"
@@ -820,6 +829,9 @@ extract: _translation ## Extracts translation strings from templates (fr)
 
 ## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
 
+$(BUILD_TLS_DIR): # INTERNAL - Create tls directory
+	mkdir -p $(BUILD_TLS_DIR)
+
 .PHONY: certificates
 certificates: ## Installs the Caddy TLS certificate to the trust store
 	@printf "\n$(Y)Copying the Caddy certificate to trust store$(S)"
@@ -838,9 +850,6 @@ else ifeq ($(UNAME_S),Linux)
 	@rm /tmp/caddy_root.crt
 endif
 	@printf " $(G)✔$(S) The Caddy root certificate has been added to the trust store.\n"
-
-$(BUILD_TLS_DIR): # INTERNAL - Create tls directory
-	mkdir -p $(BUILD_TLS_DIR)
 
 certificates_export: FILE=$(BUILD_TLS_DIR)/root.crt
 certificates_export: $(BUILD_TLS_DIR) ## Exports the Caddy root certificate from the container to the host

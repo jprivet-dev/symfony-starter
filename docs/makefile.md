@@ -114,6 +114,7 @@ COMPLETE INSTALLATION
 
 — TESTS ✅ —————————————————————————————————————————————————————————————————
   phpunit                       Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
+  phpunit_log                   Exporting PHPUnit terminal output to a log file
   coverage                      Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
   dox                           Report test execution progress in TestDox format - $ make dox [ARG=<arguments>] - Example: $ make dox ARG="tests/myTest.php"
   dox@text                      Report test execution progress in TestDox format and export it in text file
