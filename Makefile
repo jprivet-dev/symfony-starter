@@ -70,13 +70,13 @@ CLONE_DIR                 = clone
 # FILES & DIRECTORIES
 #
 
-PWD       = $(shell pwd)
-LOCAL_MK  = .mk/local.mk
-
 SRC        = src
 TEMPLATES  = templates
 TESTS      = tests
 
+NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
+PWD                = $(shell pwd)
+LOCAL_MK           = .mk/local.mk
 BIN_CONSOLE        = bin/console
 BIN_PHPUNIT        = bin/phpunit
 COMPOSER_JSON      = composer.json
@@ -97,7 +97,6 @@ VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 # COMPONENTS CONFIG
 #
 
-NOW              := $(shell date +%Y%m%d-%H%M%S-%3N)
 BUILD             = build
 BUILD_COVERAGE    = $(BUILD)/coverage
 BUILD_DOX         = $(BUILD)/dox
@@ -105,9 +104,9 @@ BUILD_DUMPS       = $(BUILD)/dumps
 BUILD_PHPMETRICS  = $(BUILD)/phpmetrics
 BUILD_PHPUNIT     = $(BUILD)/phpunit
 BUILD_TLS         = $(BUILD)/tls
-PHPSTAN_CONFIG    = phpstan.dist.neon
-PHPSTAN_BASELINE  = phpstan-baseline.php
 PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
+PHPSTAN_BASELINE  = phpstan-baseline.php
+PHPSTAN_CONFIG    = phpstan.dist.neon
 
 #
 # DOCKER OPTIONS
