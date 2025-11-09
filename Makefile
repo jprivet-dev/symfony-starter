@@ -378,7 +378,7 @@ info: ## Show project access info
 	@printf "\n$(Y)----$(S)\n\n"
 	@printf " $(Y)›$(S) Copy $(Y)$(LOCAL_MK).dist$(S) to $(G)$(LOCAL_MK)$(S) to extend the Makefile with your own commands.\n"
 	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
-	@printf " $(Y)›$(S) Go in your favourite browser and accept the auto-generated TLS certificate:\n"
+	@printf " $(Y)›$(S) Access to the application (accept the auto-generated TLS certificate):\n"
 	@printf "    - Homepage ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
 ifneq ($(wildcard $(VENDOR_API)),)
 	@printf "    - API ............ $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/api$(S)\n"
@@ -599,7 +599,7 @@ $(BUILD_DUMPS): # INTERNAL - Create dump directory if it does not exist
 .PHONY: dump
 dump: FILE=$(BUILD_DUMPS)/dump-$(NOW).sql
 dump: _doctrine $(BUILD_DUMPS) ## Create a SQL dump
-	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) > $(FILE)
+	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) >$(FILE)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
 dump_gz: FILE=$(BUILD_DUMPS)/dump-$(NOW).gz
@@ -609,7 +609,7 @@ dump_gz: _doctrine $(BUILD_DUMPS) ## Create a compressed SQL dump (gzip)
 
 .PHONY: restore
 restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the database) - $ make restore [FILE=<file>] - Example: $ make restore FILE="build/dumps/dump.sql"
-	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) < $(FILE)
+	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) <$(FILE)
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
 
@@ -834,7 +834,7 @@ certificates: ## Installs the Caddy TLS certificate to the trust store
 	@printf "\n$(Y)Copying the Caddy certificate to trust store$(S)"
 	@printf "\n$(Y)--------------------------------------------$(S)\n\n"
 	@if [ ! -f /tmp/caddy_root.crt ]; then \
-		$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" > /tmp/caddy_root.crt; \
+		$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" >/tmp/caddy_root.crt; \
 	fi
 ifeq ($(UNAME_S),Darwin)
 	@printf " $(Y)› OS: macOS$(S)\n"
@@ -850,7 +850,7 @@ endif
 
 certificates_export: FILE=$(BUILD_TLS)/root.crt
 certificates_export: $(BUILD_TLS) ## Exports the Caddy root certificate from the container to the host
-	@$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" > $(FILE)
+	@$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" >$(FILE)
 	@printf " $(G)✔$(S) The Caddy root certificate has been exported to $(Y)$(FILE)$(S).\n"
 	@printf " $(Y)›$(S) You may need to manually import this certificate into your browser's trust store:\n"
 	@printf "    - $(Y)Chrome/Brave:$(S) Go to chrome://settings/certificates and import the file '$(FILE)' under 'Authorities'.\n"
@@ -860,7 +860,7 @@ certificates_export: $(BUILD_TLS) ## Exports the Caddy root certificate from the
 .PHONY: hosts
 hosts: ## Add the server name to /etc/hosts file
 	@if ! grep -q "$(SERVER_NAME)" /etc/hosts; then \
-		echo "127.0.0.1 $(SERVER_NAME)" | sudo tee -a /etc/hosts > /dev/null; \
+		echo "127.0.0.1 $(SERVER_NAME)" | sudo tee -a /etc/hosts >/dev/null; \
 		printf " $(G)✔$(S) \"$(SERVER_NAME)\" added to /etc/hosts.\n"; \
 	else \
 		printf " $(G)✔$(S) \"$(SERVER_NAME)\" already exists in /etc/hosts.\n"; \
