@@ -97,17 +97,17 @@ VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 # COMPONENTS CONFIG
 #
 
-NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
-BUILD_DIR          = build
-BUILD_COVERAGE_DIR = $(BUILD_DIR)/coverage
-BUILD_DOX_DIR      = $(BUILD_DIR)/dox
-BUILD_DUMPS_DIR    = $(BUILD_DIR)/dumps
-BUILD_PHPMETRICS_DIR = $(BUILD_DIR)/phpmetrics
-BUILD_PHPUNIT_DIR  = $(BUILD_DIR)/phpunit
-BUILD_TLS_DIR      = $(BUILD_DIR)/tls
-PHPSTAN_CONFIG     = phpstan.dist.neon
-PHPSTAN_BASELINE   = phpstan-baseline.php
-PHPCSFIXER_CONFIG  = .php-cs-fixer.dist.php
+NOW              := $(shell date +%Y%m%d-%H%M%S-%3N)
+BUILD             = build
+BUILD_COVERAGE    = $(BUILD)/coverage
+BUILD_DOX         = $(BUILD)/dox
+BUILD_DUMPS       = $(BUILD)/dumps
+BUILD_PHPMETRICS  = $(BUILD)/phpmetrics
+BUILD_PHPUNIT     = $(BUILD)/phpunit
+BUILD_TLS         = $(BUILD)/tls
+PHPSTAN_CONFIG    = phpstan.dist.neon
+PHPSTAN_BASELINE  = phpstan-baseline.php
+PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
 
 #
 # DOCKER OPTIONS
@@ -594,17 +594,17 @@ tables: ## Show all tables
 
 ##
 
-$(BUILD_DUMPS_DIR): # INTERNAL - Create dump directory if it does not exist
-	mkdir -p $(BUILD_DUMPS_DIR)
+$(BUILD_DUMPS): # INTERNAL - Create dump directory if it does not exist
+	mkdir -p $(BUILD_DUMPS)
 
 .PHONY: dump
-dump: FILE=$(BUILD_DUMPS_DIR)/dump-$(NOW).sql
-dump: _doctrine $(BUILD_DUMPS_DIR) ## Create a SQL dump
+dump: FILE=$(BUILD_DUMPS)/dump-$(NOW).sql
+dump: _doctrine $(BUILD_DUMPS) ## Create a SQL dump
 	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) > $(FILE)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
-dump_gz: FILE=$(BUILD_DUMPS_DIR)/dump-$(NOW).gz
-dump_gz: _doctrine $(BUILD_DUMPS_DIR) ## Create a compressed SQL dump (gzip)
+dump_gz: FILE=$(BUILD_DUMPS)/dump-$(NOW).gz
+dump_gz: _doctrine $(BUILD_DUMPS) ## Create a compressed SQL dump (gzip)
 	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) | gzip >$(FILE)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
@@ -614,14 +614,14 @@ restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the da
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
 
-$(BUILD_COVERAGE_DIR): # INTERNAL - Create coverage directory if it does not exist
-	mkdir -p $(BUILD_COVERAGE_DIR)
+$(BUILD_COVERAGE): # INTERNAL - Create coverage directory if it does not exist
+	mkdir -p $(BUILD_COVERAGE)
 
-$(BUILD_DOX_DIR): # INTERNAL - Create dox directory if it does not exist
-	mkdir -p $(BUILD_DOX_DIR)
+$(BUILD_DOX): # INTERNAL - Create dox directory if it does not exist
+	mkdir -p $(BUILD_DOX)
 
-$(BUILD_PHPUNIT_DIR): # INTERNAL - Create phpunit directory if it does not exist
-	mkdir -p $(BUILD_PHPUNIT_DIR)
+$(BUILD_PHPUNIT): # INTERNAL - Create phpunit directory if it does not exist
+	mkdir -p $(BUILD_PHPUNIT)
 
 _phpunit:
 ifeq ($(wildcard $(BIN_PHPUNIT)),)
@@ -633,14 +633,14 @@ endif
 phpunit: _phpunit ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
 	$(PHPUNIT) $(ARG)
 
-phpunit_log: FILE = $(BUILD_PHPUNIT_DIR)/phpunit-$(NOW).log
-phpunit_log: _phpunit $(BUILD_PHPUNIT_DIR) ## Exporting PHPUnit terminal output to a log file
+phpunit_log: FILE = $(BUILD_PHPUNIT)/phpunit-$(NOW).log
+phpunit_log: _phpunit $(BUILD_PHPUNIT) ## Exporting PHPUnit terminal output to a log file
 	-$(MAKE) phpunit >$(FILE)
 	@printf " $(G)✔$(S) PHPUnit terminal output is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
 .PHONY: coverage
-coverage: DIR = $(BUILD_COVERAGE_DIR)/coverage-$(NOW)
-coverage: _phpunit $(BUILD_DOX_DIR) ## Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
+coverage: DIR = $(BUILD_COVERAGE)/coverage-$(NOW)
+coverage: _phpunit $(BUILD_DOX) ## Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
 	-$(PHPUNIT_COVERAGE) --coverage-html $(DIR) $(ARG)
 	@printf " $(G)✔$(S) Coverage is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
 
@@ -648,13 +648,13 @@ coverage: _phpunit $(BUILD_DOX_DIR) ## Generate code coverage report in HTML for
 dox: _phpunit ## Report test execution progress in TestDox format - $ make dox [ARG=<arguments>] - Example: $ make dox ARG="tests/myTest.php"
 	$(PHPUNIT) --testdox $(ARG)
 
-dox_text: FILE = $(BUILD_DOX_DIR)/testdox-$(NOW).txt
-dox_text: _phpunit $(BUILD_DOX_DIR) ## Report test execution progress in TestDox format and export it in text file
+dox_text: FILE = $(BUILD_DOX)/testdox-$(NOW).txt
+dox_text: _phpunit $(BUILD_DOX) ## Report test execution progress in TestDox format and export it in text file
 	-$(PHPUNIT) --testdox-text $(FILE) $(ARG)
 	@printf " $(G)✔$(S) TestDox report is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
-dox_html: FILE = $(BUILD_DOX_DIR)/testdox-$(NOW).html
-dox_html: _phpunit $(BUILD_DOX_DIR) ## Report test execution progress in TestDox format and export it in HTML file
+dox_html: FILE = $(BUILD_DOX)/testdox-$(NOW).html
+dox_html: _phpunit $(BUILD_DOX) ## Report test execution progress in TestDox format and export it in HTML file
 	-$(PHPUNIT) --testdox-html $(FILE) $(ARG)
 	@printf " $(G)✔$(S) TestDox report is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
@@ -752,8 +752,8 @@ fix: ## Fix with all linters
 
 ##
 
-$(BUILD_PHPMETRICS_DIR): # INTERNAL - Create phpmetrics directory if it does not exist
-	mkdir -p $(BUILD_PHPMETRICS_DIR)
+$(BUILD_PHPMETRICS): # INTERNAL - Create phpmetrics directory if it does not exist
+	mkdir -p $(BUILD_PHPMETRICS)
 
 _phpmetrics:
 ifeq ($(wildcard $(VENDOR_PHPMETRICS)),)
@@ -761,7 +761,7 @@ ifeq ($(wildcard $(VENDOR_PHPMETRICS)),)
 	@exit 1
 endif
 
-phpmetrics_report: DIR = $(BUILD_PHPMETRICS_DIR)/phpmetrics-$(NOW)
+phpmetrics_report: DIR = $(BUILD_PHPMETRICS)/phpmetrics-$(NOW)
 phpmetrics_report: _phpmetrics ## Run PHPMetrics and generate detailed report
 	$(PHPMETRICS) --report-html=$(DIR) $(SRC)
 	@printf " $(G)✔$(S) PHPMetrics report is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
@@ -827,8 +827,8 @@ extract: _translation ## Extracts translation strings from templates (fr)
 
 ## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
 
-$(BUILD_TLS_DIR): # INTERNAL - Create tls directory if it does not exist
-	mkdir -p $(BUILD_TLS_DIR)
+$(BUILD_TLS): # INTERNAL - Create tls directory if it does not exist
+	mkdir -p $(BUILD_TLS)
 
 .PHONY: certificates
 certificates: ## Installs the Caddy TLS certificate to the trust store
@@ -849,8 +849,8 @@ else ifeq ($(UNAME_S),Linux)
 endif
 	@printf " $(G)✔$(S) The Caddy root certificate has been added to the trust store.\n"
 
-certificates_export: FILE=$(BUILD_TLS_DIR)/root.crt
-certificates_export: $(BUILD_TLS_DIR) ## Exports the Caddy root certificate from the container to the host
+certificates_export: FILE=$(BUILD_TLS)/root.crt
+certificates_export: $(BUILD_TLS) ## Exports the Caddy root certificate from the container to the host
 	@$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" > $(FILE)
 	@printf " $(G)✔$(S) The Caddy root certificate has been exported to $(Y)$(FILE)$(S).\n"
 	@printf " $(Y)›$(S) You may need to manually import this certificate into your browser's trust store:\n"
