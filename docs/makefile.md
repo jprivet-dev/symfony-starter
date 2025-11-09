@@ -117,8 +117,8 @@ COMPLETE INSTALLATION
   phpunit_log                   Exporting PHPUnit terminal output to a log file
   coverage                      Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
   dox                           Report test execution progress in TestDox format - $ make dox [ARG=<arguments>] - Example: $ make dox ARG="tests/myTest.php"
-  dox@text                      Report test execution progress in TestDox format and export it in text file
-  dox@html                      Report test execution progress in TestDox format and export it in HTML file
+  dox_text                      Report test execution progress in TestDox format and export it in text file
+  dox_html                      Report test execution progress in TestDox format and export it in HTML file
   xdebug_version                Xdebug version number
 
 — QUALITY ✅ ———————————————————————————————————————————————————————————————
@@ -140,7 +140,7 @@ COMPLETE INSTALLATION
   lint                          Run all linters (stop on failure)
   fix                           Fix with all linters
 
-  phpmetrics_report             Run PHPMetrics and generate detailled report
+  phpmetrics_report             Run PHPMetrics and generate detailed report
 
 — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
   assets                        Generate all assets

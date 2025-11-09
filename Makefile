@@ -102,18 +102,12 @@ BUILD_DIR          = build
 BUILD_COVERAGE_DIR = $(BUILD_DIR)/coverage
 BUILD_DOX_DIR      = $(BUILD_DIR)/dox
 BUILD_DUMPS_DIR    = $(BUILD_DIR)/dumps
+BUILD_PHPMETRICS_DIR = $(BUILD_DIR)/phpmetrics
 BUILD_PHPUNIT_DIR  = $(BUILD_DIR)/phpunit
 BUILD_TLS_DIR      = $(BUILD_DIR)/tls
 PHPSTAN_CONFIG     = phpstan.dist.neon
 PHPSTAN_BASELINE   = phpstan-baseline.php
 PHPCSFIXER_CONFIG  = .php-cs-fixer.dist.php
-PHPMETRICS_DIR     = $(BUILD_DIR)/phpmetrics-$(NOW)
-PHPMETRICS_INDEX   = $(PWD)/$(PHPMETRICS_DIR)/index.html
-
-#
-# POSTGRES OPTIONS
-#
-
 
 #
 # DOCKER OPTIONS
@@ -600,7 +594,7 @@ tables: ## Show all tables
 
 ##
 
-$(BUILD_DUMPS_DIR): # INTERNAL - Create dump directory
+$(BUILD_DUMPS_DIR): # INTERNAL - Create dump directory if it does not exist
 	mkdir -p $(BUILD_DUMPS_DIR)
 
 .PHONY: dump
@@ -620,13 +614,13 @@ restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the da
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
 
-$(BUILD_COVERAGE_DIR): # INTERNAL - Create coverage directory
+$(BUILD_COVERAGE_DIR): # INTERNAL - Create coverage directory if it does not exist
 	mkdir -p $(BUILD_COVERAGE_DIR)
 
-$(BUILD_DOX_DIR): # INTERNAL - Create dox directory
+$(BUILD_DOX_DIR): # INTERNAL - Create dox directory if it does not exist
 	mkdir -p $(BUILD_DOX_DIR)
 
-$(BUILD_PHPUNIT_DIR): # INTERNAL - Create phpunit directory
+$(BUILD_PHPUNIT_DIR): # INTERNAL - Create phpunit directory if it does not exist
 	mkdir -p $(BUILD_PHPUNIT_DIR)
 
 _phpunit:
@@ -642,27 +636,27 @@ phpunit: _phpunit ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $
 phpunit_log: FILE = $(BUILD_PHPUNIT_DIR)/phpunit-$(NOW).log
 phpunit_log: _phpunit $(BUILD_PHPUNIT_DIR) ## Exporting PHPUnit terminal output to a log file
 	-$(MAKE) phpunit >$(FILE)
-	@printf " $(G)✔$(S) Successful export of the PHPUnit terminal output to the file $(Y)$(PWD)/$(FILE)$(S)\n"
+	@printf " $(G)✔$(S) PHPUnit terminal output is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
 .PHONY: coverage
 coverage: DIR = $(BUILD_COVERAGE_DIR)/coverage-$(NOW)
 coverage: _phpunit $(BUILD_DOX_DIR) ## Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
 	-$(PHPUNIT_COVERAGE) --coverage-html $(DIR) $(ARG)
-	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
+	@printf " $(G)✔$(S) Coverage is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
 
 .PHONY: dox
 dox: _phpunit ## Report test execution progress in TestDox format - $ make dox [ARG=<arguments>] - Example: $ make dox ARG="tests/myTest.php"
 	$(PHPUNIT) --testdox $(ARG)
 
-dox@text: FILE = $(BUILD_DOX_DIR)/testdox-$(NOW).txt
-dox@text: _phpunit $(BUILD_DOX_DIR) ## Report test execution progress in TestDox format and export it in text file
+dox_text: FILE = $(BUILD_DOX_DIR)/testdox-$(NOW).txt
+dox_text: _phpunit $(BUILD_DOX_DIR) ## Report test execution progress in TestDox format and export it in text file
 	-$(PHPUNIT) --testdox-text $(FILE) $(ARG)
-	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(PWD)/$(FILE)$(S)\n"
+	@printf " $(G)✔$(S) TestDox report is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
-dox@html: FILE = $(BUILD_DOX_DIR)/testdox-$(NOW).html
-dox@html: _phpunit $(BUILD_DOX_DIR) ## Report test execution progress in TestDox format and export it in HTML file
+dox_html: FILE = $(BUILD_DOX_DIR)/testdox-$(NOW).html
+dox_html: _phpunit $(BUILD_DOX_DIR) ## Report test execution progress in TestDox format and export it in HTML file
 	-$(PHPUNIT) --testdox-html $(FILE) $(ARG)
-	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(PWD)/$(FILE)$(S)\n"
+	@printf " $(G)✔$(S) TestDox report is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
 #
 
@@ -758,15 +752,19 @@ fix: ## Fix with all linters
 
 ##
 
+$(BUILD_PHPMETRICS_DIR): # INTERNAL - Create phpmetrics directory if it does not exist
+	mkdir -p $(BUILD_PHPMETRICS_DIR)
+
 _phpmetrics:
 ifeq ($(wildcard $(VENDOR_PHPMETRICS)),)
 	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHPMetrics$(S): remove that block or install $(Y)PHPMetrics$(S) with $(G)make require_phpmetrics$(S)\n"
 	@exit 1
 endif
 
-phpmetrics_report: _phpmetrics ## Run PHPMetrics and generate detailled report
-	$(PHPMETRICS) --report-html=$(PHPMETRICS_DIR) $(SRC)
-	@printf " $(G)✔$(S) Open in your favorite browser the file $(Y)$(PHPMETRICS_INDEX)$(S)\n"
+phpmetrics_report: DIR = $(BUILD_PHPMETRICS_DIR)/phpmetrics-$(NOW)
+phpmetrics_report: _phpmetrics ## Run PHPMetrics and generate detailed report
+	$(PHPMETRICS) --report-html=$(DIR) $(SRC)
+	@printf " $(G)✔$(S) PHPMetrics report is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
 
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 
@@ -829,7 +827,7 @@ extract: _translation ## Extracts translation strings from templates (fr)
 
 ## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
 
-$(BUILD_TLS_DIR): # INTERNAL - Create tls directory
+$(BUILD_TLS_DIR): # INTERNAL - Create tls directory if it does not exist
 	mkdir -p $(BUILD_TLS_DIR)
 
 .PHONY: certificates
