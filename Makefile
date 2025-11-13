@@ -593,17 +593,16 @@ tables: ## Show all tables
 
 ##
 
-$(BUILD_DUMPS): # INTERNAL - Create dump directory if it does not exist
-	mkdir -p $(BUILD_DUMPS)
-
 .PHONY: dump
 dump: FILE=$(BUILD_DUMPS)/dump-$(NOW).sql
-dump: _doctrine $(BUILD_DUMPS) ## Create a SQL dump
+dump: _doctrine ## Create a SQL dump
+	mkdir -p $(BUILD_DUMPS)
 	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) >$(FILE)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
 dump_gz: FILE=$(BUILD_DUMPS)/dump-$(NOW).gz
-dump_gz: _doctrine $(BUILD_DUMPS) ## Create a compressed SQL dump (gzip)
+dump_gz: _doctrine ## Create a compressed SQL dump (gzip)
+	mkdir -p $(BUILD_DUMPS)
 	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) | gzip >$(FILE)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
@@ -612,15 +611,6 @@ restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the da
 	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) <$(FILE)
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
-
-$(BUILD_COVERAGE): # INTERNAL - Create coverage directory if it does not exist
-	mkdir -p $(BUILD_COVERAGE)
-
-$(BUILD_DOX): # INTERNAL - Create dox directory if it does not exist
-	mkdir -p $(BUILD_DOX)
-
-$(BUILD_PHPUNIT): # INTERNAL - Create phpunit directory if it does not exist
-	mkdir -p $(BUILD_PHPUNIT)
 
 _phpunit:
 ifeq ($(wildcard $(BIN_PHPUNIT)),)
@@ -633,13 +623,15 @@ phpunit: _phpunit ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $
 	$(PHPUNIT) $(ARG)
 
 phpunit_log: FILE = $(BUILD_PHPUNIT)/phpunit-$(NOW).log
-phpunit_log: _phpunit $(BUILD_PHPUNIT) ## Exporting PHPUnit terminal output to a log file
+phpunit_log: _phpunit ## Exporting PHPUnit terminal output to a log file
+	mkdir -p $(BUILD_PHPUNIT)
 	-$(MAKE) phpunit >$(FILE)
 	@printf " $(G)✔$(S) PHPUnit terminal output is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
 .PHONY: coverage
 coverage: DIR = $(BUILD_COVERAGE)/coverage-$(NOW)
-coverage: _phpunit $(BUILD_DOX) ## Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
+coverage: _phpunit ## Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
+	mkdir -p $(BUILD_COVERAGE)
 	-$(PHPUNIT_COVERAGE) --coverage-html $(DIR) $(ARG)
 	@printf " $(G)✔$(S) Coverage is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
 
@@ -648,7 +640,8 @@ dox: _phpunit ## Report test execution progress in TestDox format - $ make dox [
 	$(PHPUNIT) --testdox $(ARG)
 
 dox_text: FILE = $(BUILD_DOX)/testdox-$(NOW).txt
-dox_text: _phpunit $(BUILD_DOX) ## Report test execution progress in TestDox format and export it in text file
+dox_text: _phpunit ## Report test execution progress in TestDox format and export it in text file
+	mkdir -p $(BUILD_DOX)
 	-$(PHPUNIT) --testdox-text $(FILE) $(ARG)
 	@printf " $(G)✔$(S) TestDox report is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
@@ -751,9 +744,6 @@ fix: ## Fix with all linters
 
 ##
 
-$(BUILD_PHPMETRICS): # INTERNAL - Create phpmetrics directory if it does not exist
-	mkdir -p $(BUILD_PHPMETRICS)
-
 _phpmetrics:
 ifeq ($(wildcard $(VENDOR_PHPMETRICS)),)
 	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHPMetrics$(S): remove that block or install $(Y)PHPMetrics$(S) with $(G)make require_phpmetrics$(S)\n"
@@ -762,6 +752,7 @@ endif
 
 phpmetrics_report: DIR = $(BUILD_PHPMETRICS)/phpmetrics-$(NOW)
 phpmetrics_report: _phpmetrics ## Run PHPMetrics and generate detailed report
+	mkdir -p $(BUILD_PHPMETRICS)
 	$(PHPMETRICS) --report-html=$(DIR) $(SRC)
 	@printf " $(G)✔$(S) PHPMetrics report is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
 
@@ -826,9 +817,6 @@ extract: _translation ## Extracts translation strings from templates (fr)
 
 ## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
 
-$(BUILD_TLS): # INTERNAL - Create tls directory if it does not exist
-	mkdir -p $(BUILD_TLS)
-
 .PHONY: certificates
 certificates: ## Installs the Caddy TLS certificate to the trust store
 	@printf "\n$(Y)Copying the Caddy certificate to trust store$(S)"
@@ -849,7 +837,8 @@ endif
 	@printf " $(G)✔$(S) The Caddy root certificate has been added to the trust store.\n"
 
 certificates_export: FILE=$(BUILD_TLS)/root.crt
-certificates_export: $(BUILD_TLS) ## Exports the Caddy root certificate from the container to the host
+certificates_export: ## Exports the Caddy root certificate from the container to the host
+	mkdir -p $(BUILD_TLS)
 	@$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" >$(FILE)
 	@printf " $(G)✔$(S) The Caddy root certificate has been exported to $(Y)$(FILE)$(S).\n"
 	@printf " $(Y)›$(S) You may need to manually import this certificate into your browser's trust store:\n"
