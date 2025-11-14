@@ -70,9 +70,9 @@ CLONE_DIR                 = clone
 # FILES & DIRECTORIES
 #
 
-SRC        = src
-TEMPLATES  = templates
-TESTS      = tests
+SRC       = src
+TEMPLATES = templates
+TESTS     = tests
 
 NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
 PWD                = $(shell pwd)
