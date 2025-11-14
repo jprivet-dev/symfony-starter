@@ -408,7 +408,7 @@ check: ## Check everything before you deliver
 	-$(MAKE) lint
 	-$(MAKE) phpunit
 
-check_stop_on_failure: composer_validate validate lint phpunit
+check_stop_on_failure: composer_validate validate lint phpunit ## Check everything before you deliver (stop on failure)
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
@@ -708,7 +708,7 @@ endif
 phpmd: _phpmd ## Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
 	$(PHPMD) $(ARG)
 
-phpmd_lint: ## Run PHP Mess Detector with all rules
+phpmd_lint: _phpmd ## Run PHP Mess Detector with all rules
 	@printf "\n$(Y)PHP Mess Detector [LINT]$(S)"
 	@printf "\n$(Y)------------------------$(S)\n\n"
 	$(PHPMD) $(SRC),$(TESTS) ansi cleancode,codesize,controversial,design,naming,unusedcode $(ARG)

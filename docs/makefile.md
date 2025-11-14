@@ -51,6 +51,7 @@ COMPLETE INSTALLATION
 
   install                       Start the project, install dependencies and show info
   check                         Check everything before you deliver
+  check_stop_on_failure         Check everything before you deliver (stop on failure)
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
   up                            Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
