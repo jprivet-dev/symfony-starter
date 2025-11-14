@@ -247,10 +247,10 @@ help: ## Display this help message with available commands
 minimalist: clone_symfony_docker build up_detached permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(MAKE) restart
 
-minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
 
-minimalist@dev: ## Generate a minimalist Symfony application with Docker configuration (under development release)
+minimalist_dev: ## Generate a minimalist Symfony application with Docker configuration (under development release)
 	SYMFONY_VERSION=$(SYMFONY_DEV_VERSION).* $(MAKE) minimalist
 
 ##
@@ -408,7 +408,7 @@ check: ## Check everything before you deliver
 	-$(MAKE) lint
 	-$(MAKE) phpunit
 
-check@stop_on_failure: composer_validate validate lint phpunit
+check_stop_on_failure: composer_validate validate lint phpunit
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
@@ -866,7 +866,7 @@ git_hooks_off: ## Disable the project's hooks directory
 	git config --unset core.hooksPath
 	@printf " $(R)⨯$(S) Git hooks disabled.\n"
 
-git_pre_push: check@stop_on_failure git_hooks_on ## Actions on Git pre-push
+git_pre_push: check_stop_on_failure git_hooks_on ## Actions on Git pre-push
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 

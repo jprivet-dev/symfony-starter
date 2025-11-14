@@ -26,7 +26,7 @@ cd symfony-starter
 make minimalist
 
 # Minimalist Long-Term Support Release (LTS)
-make minimalist@lts
+make minimalist_lts
 
 # Specific Minimalist Version
 SYMFONY_VERSION=6.4.3 make minimalist
@@ -50,7 +50,7 @@ Open `https://symfony-starter.localhost:8443/` in your browser and [accept the a
 git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist
 
 # Minimalist Long-Term Support Release (LTS)
-git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist@lts
+git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist_lts
 ```
 
 ## Generate an app in another existing project
@@ -85,7 +85,7 @@ Stops all Docker containers, removes all Docker-related configuration files copi
 make clear_all
 
 # Then regenerate the Symfony app (LTS version for example)
-make minimalist@lts
+make minimalist_lts
 ```
 
 ## Daily usage
