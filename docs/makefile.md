@@ -110,7 +110,7 @@ COMPLETE INSTALLATION
 
   dump                          Create a SQL dump
   dump_gz                       Create a compressed SQL dump (gzip)
-  restore                       Restore a dump (CAUTION! The command purges the database) - $ make restore [FILE=<file>] - Example: $ make restore FILE="build/dumps/dump.sql"
+  restore                       Restore a dump (CAUTION! The command purges the database) - $ make restore FILE=<file> - Example: $ make restore FILE="build/dumps/dump.sql"
 
 — TESTS ✅ —————————————————————————————————————————————————————————————————
   phpunit                       Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"

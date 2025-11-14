@@ -184,21 +184,21 @@ COMPOSE = docker compose -f compose.yaml -f compose.prod.yaml
 endif
 endif
 
+EXEC        = $(COMPOSE) exec
 EXEC_NO_TTY = $(COMPOSE) exec -T
 
-# -T : avoid "the input device is not a TTY" error - Example: $ NO_TTY=true make my_command
-NO_TTY ?= false
-ifeq ($(NO_TTY), true)
-EXEC = $(COMPOSE) exec -T
-else
-EXEC = $(COMPOSE) exec
+# -T : avoid "the input device is not a TTY" error - Example: $ FORCE_NO_TTY=true make my_command
+FORCE_NO_TTY ?= false
+ifeq ($(FORCE_NO_TTY), true)
+EXEC = $(EXEC_NO_TTY)
 endif
 
 CONTAINER_DATABASE        = $(EXEC) database
 CONTAINER_DATABASE_NO_TTY = $(EXEC_NO_TTY) database
 
-CONTAINER_PHP          = $(EXEC) $(DOCKER_EXEC_ENV) php
-CONTAINER_PHP_COVERAGE = $(EXEC) -e XDEBUG_MODE=coverage $(DOCKER_EXEC_ENV) php
+CONTAINER_PHP          = $(EXEC) php
+CONTAINER_PHP_NO_TTY   = $(EXEC_NO_TTY) php
+CONTAINER_PHP_COVERAGE = $(EXEC) -e XDEBUG_MODE=coverage php
 
 PHP              = $(CONTAINER_PHP) php
 COMPOSER         = $(CONTAINER_PHP) composer
@@ -595,19 +595,20 @@ tables: ## Show all tables
 
 .PHONY: dump
 dump: FILE=$(BUILD_DUMPS)/dump-$(NOW).sql
-dump: _doctrine ## Create a SQL dump
+dump: ## Create a SQL dump
 	mkdir -p $(BUILD_DUMPS)
 	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) >$(FILE)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
 dump_gz: FILE=$(BUILD_DUMPS)/dump-$(NOW).gz
-dump_gz: _doctrine ## Create a compressed SQL dump (gzip)
+dump_gz: ## Create a compressed SQL dump (gzip)
 	mkdir -p $(BUILD_DUMPS)
 	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) | gzip >$(FILE)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
 .PHONY: restore
-restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the database) - $ make restore [FILE=<file>] - Example: $ make restore FILE="build/dumps/dump.sql"
+restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the database) - $ make restore FILE=<file> - Example: $ make restore FILE="build/dumps/dump.sql"
+	$(if $(FILE),, $(error FILE argument is required))
 	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) <$(FILE)
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
@@ -919,6 +920,7 @@ vars: ## Show key Makefile variables
 	@printf "UP_ENV       : $(UP_ENV)\n"
 	@printf "COMPOSE_V2   : $(COMPOSE_V2)\n"
 	@printf "COMPOSE      : $(COMPOSE)\n"
+	@printf "FORCE_NO_TTY : $(FORCE_NO_TTY)\n"
 	@printf "CONTAINER_PHP: $(CONTAINER_PHP)\n"
 	@printf "PHP          : $(PHP)\n"
 	@printf "COMPOSER     : $(COMPOSER)\n"

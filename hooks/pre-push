@@ -17,7 +17,7 @@ S="\033[0m"
 TITLE="GIT HOOK PRE-PUSH"
 printf "${Y}>\n> ${TITLE}\n>\n${S}"
 
-make git_pre_push NO_TTY=true
+FORCE_NO_TTY=true make git_pre_push
 
 if [ $? -eq 0 ]; then
   printf "${G}>\n> ${TITLE}: Everything is OK\n>\n${S}"
