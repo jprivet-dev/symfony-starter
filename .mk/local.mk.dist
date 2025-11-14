@@ -12,6 +12,16 @@
 # - If a command is very useful, suggest it and integrate it into the main Makefile.
 #
 
-.PHONY: my_command
+## — MY LOCAL COMMANDS ————————————————————————————————————————————————————————
+
 my_command: ## Description of my_command
 	@printf " $(G)✔$(S) My own command $(G)my_command$(S) is available and use the main Makefile variables - $(Y)[APP_ENV=$(APP_ENV)]$(S)\n"
+
+## — DOCKER UTILS —————————————————————————————————————————————————————————————
+
+docker_stop_all: ## Stops all running containers
+	docker stop $$(docker ps -a -q)
+
+.PHONY: volumes
+volumes: ## Stops and removes all containers and any unnamed volumes
+	docker compose down --volumes --rmi all
