@@ -54,14 +54,13 @@ endif
 # "GENERATION" BLOCK CAN BE REMOVED AFTER SAVING THE PROJECT.
 # These variables are only used for the initial setup.
 
-# Symfony 6.* is the current long-term support version.
-# Released on          : November 2023
-# End of bug fixes     : November 2026
-# End of security fixes: November 2027
+# Symfony 7.* is the current long-term support version.
+# Released on          : November 2025
+# End of bug fixes     : November 2028
+# End of security fixes: November 2029
 # See https://symfony.com/releases
-SYMFONY_LTS_VERSION       = 6
-SYMFONY_STABLE_VERSION    = 7
-SYMFONY_DEV_VERSION       = 8
+SYMFONY_LTS_VERSION       = 7
+SYMFONY_STABLE_VERSION    = 8
 REPOSITORY_SYMFONY_DOCKER = git@github.com:dunglas/symfony-docker.git
 REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
 CLONE_DIR                 = clone
@@ -249,9 +248,6 @@ minimalist: clone_symfony_docker build up_detached permissions ## Generate a min
 
 minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
-
-minimalist_dev: ## Generate a minimalist Symfony application with Docker configuration (under development release)
-	SYMFONY_VERSION=$(SYMFONY_DEV_VERSION).* $(MAKE) minimalist
 
 ##
 

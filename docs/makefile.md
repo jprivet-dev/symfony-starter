@@ -16,7 +16,6 @@
 — GENERATION 🔨 (CAN BE REMOVED AFTER SAVING THE PROJECT) ——————————————————
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist_lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-  minimalist_dev                Generate a minimalist Symfony application with Docker configuration (under development release)
 
   clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
