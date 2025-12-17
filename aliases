@@ -31,7 +31,7 @@ function makefile_create() {
 function makefile_execute() {
     local name="${1}"
     shift
-    make "${name}" ARG="${*}"
+    make "${name}" a="${*}"
 }
 
 function makefile_aliases() {

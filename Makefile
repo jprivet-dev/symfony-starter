@@ -403,11 +403,11 @@ check_stop_on_failure: composer_validate validate lint phpunit ## Check everythi
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: up
-up: ## Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
-	$(UP_ENV) $(COMPOSE) up --remove-orphans $(ARG)
+up: ## Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
+	$(UP_ENV) $(COMPOSE) up --remove-orphans $(a)
 	$(MAKE) safe
 
-up_detached: ARG=-d
+up_detached: a=-d
 up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
 
 .PHONY: down
@@ -415,12 +415,12 @@ down: ## Stop and remove the containers
 	-$(COMPOSE) down --remove-orphans
 
 .PHONY: build
-build: ## Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
-	$(COMPOSE) build $(ARG)
+build: ## Build or rebuild Docker services - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
+	$(COMPOSE) build $(a)
 
 .PHONY: build_force
-build_force: ARG=--no-cache
-build_force: build ## Build or rebuild Docker services (no cache) - $ make build [ARG=<arguments>]
+build_force: a=--no-cache
+build_force: build ## Build or rebuild Docker services (no cache) - $ make build [a=<arguments>]
 
 .PHONY: logs
 logs: ## Display container logs
@@ -439,8 +439,8 @@ config: ## Parse, resolve, and render compose file in canonical format
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
 .PHONY: symfony
-symfony sf: ## Run Symfony console command - $ make symfony [ARG=<arguments>]- Example: $ make symfony ARG=cache:clear
-	$(CONSOLE) $(ARG)
+symfony sf: ## Run Symfony console command - $ make symfony [a=<arguments>]- Example: $ make symfony a=cache:clear
+	$(CONSOLE) $(a)
 
 .PHONY: cc
 cc: ## Clear the Symfony cache
@@ -467,8 +467,8 @@ dumpenv: ## Generate .env.local.php for production
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
 
 .PHONY: php
-php: ## Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
-	$(PHP) $(ARG)
+php: ## Run PHP command - $ make php [a=<arguments>]- Example: $ make php a=--version
+	$(PHP) $(a)
 
 ##
 
@@ -479,14 +479,14 @@ php_env: ## Display all environment variables set within the PHP container
 	$(CONTAINER_PHP) env
 
 .PHONY: php_command
-php_command: ## Run a command inside the PHP container - $ make php_command [ARG=<arguments>]- Example: $ make php_command ARG="ls -al"
-	$(BASH_COMMAND) "$(ARG)"
+php_command: ## Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
+	$(BASH_COMMAND) "$(a)"
 
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
 .PHONY: composer
-composer: ## Run composer command - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
-	$(COMPOSER) $(ARG)
+composer: ## Run composer command - $ make composer [a=<arguments>] - Example: $ make composer a="require --dev phpunit/phpunit"
+	$(COMPOSER) $(a)
 
 composer_install: ## Install Composer packages
 ifeq ($(APP_ENV),prod)
@@ -516,19 +516,19 @@ ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
 	@exit 1
 endif
 
-db_drop: _doctrine ## Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
-	$(CONSOLE) doctrine:database:drop --if-exists --force $(ARG)
+db_drop: _doctrine ## Drop the database - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
+	$(CONSOLE) doctrine:database:drop --if-exists --force $(a)
 
-db_create: _doctrine ## Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
-	$(CONSOLE) doctrine:database:create --if-not-exists $(ARG)
+db_create: _doctrine ## Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
+	$(CONSOLE) doctrine:database:create --if-not-exists $(a)
 
 db_init: _doctrine db_drop db_create migrate ## Drop and create the database and migrate
 
 ##
 
 .PHONY: validate
-validate: _doctrine ## Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
-	$(CONSOLE) doctrine:schema:validate -v $(ARG)
+validate: _doctrine ## Validate the mapping files - $ make validate [a=<arguments>] - Example: $ make validate a="--env=test"
+	$(CONSOLE) doctrine:schema:validate -v $(a)
 
 update_dump: _doctrine ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
 	$(CONSOLE) doctrine:schema:update --dump-sql
@@ -540,19 +540,19 @@ update_force: _doctrine ## Execute the generated SQL needed to synchronize the d
 
 .PHONY: migration
 migration: ## Create a new migration based on database changes (format the generated SQL)
-	$(CONSOLE) make:migration --formatted -v $(ARG)
+	$(CONSOLE) make:migration --formatted -v $(a)
 
 .PHONY: migrate
-migrate: _doctrine ## Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
-	$(CONSOLE) doctrine:migrations:migrate --no-interaction --all-or-nothing $(ARG)
+migrate: _doctrine ## Execute a migration to the latest available version (in a transaction) - $ make migrate [a=<param>] - Example: $ make migrate a="current+3"
+	$(CONSOLE) doctrine:migrations:migrate --no-interaction --all-or-nothing $(a)
 
 .PHONY: list
 list: _doctrine ## Display a list of all available migrations and their status
 	$(CONSOLE) doctrine:migrations:list
 
 .PHONY: execute
-execute: _doctrine ## Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
-	$(CONSOLE) doctrine:migrations:execute $(ARG)
+execute: _doctrine ## Execute one or more migration versions up or down manually - $ make execute a=<arguments> - Example: $ make execute a="DoctrineMigrations\Version20240205143239"
+	$(CONSOLE) doctrine:migrations:execute $(a)
 
 .PHONY: generate
 generate: _doctrine ## Generate a blank migration class
@@ -565,14 +565,14 @@ sql: _doctrine ## Execute the given SQL query and output the results - $ make sq
 	$(CONSOLE) doctrine:query:sql "$(QUERY)"
 
 .PHONY: fixtures
-fixtures: _doctrine ## Load fixtures (CAUTION! The load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
-	$(CONSOLE) doctrine:fixtures:load -n $(ARG)
+fixtures: _doctrine ## Load fixtures (CAUTION! The load command purges the database) - $ make fixtures [a=<param>] - Example: $ make fixtures a="--append"
+	$(CONSOLE) doctrine:fixtures:load -n $(a)
 
 ## — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
 
 .PHONY: psql
-psql: ## Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG="-V"
-	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB) $(ARG)
+psql: ## Execute psql - $ make psql [a=<arguments>] - Example: $ make psql a="-V"
+	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB) $(a)
 
 psql_sh: ## Open a shell on the PostgreSQL container
 	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB)
@@ -610,8 +610,8 @@ ifeq ($(wildcard $(BIN_PHPUNIT)),)
 endif
 
 .PHONY: phpunit
-phpunit: _phpunit ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
-	$(PHPUNIT) $(ARG)
+phpunit: _phpunit ## Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
+	$(PHPUNIT) $(a)
 
 phpunit_log: FILE = $(BUILD)/phpunit/phpunit-$(NOW).log
 phpunit_log: _phpunit ## Exporting PHPUnit terminal output to a log file
@@ -621,25 +621,25 @@ phpunit_log: _phpunit ## Exporting PHPUnit terminal output to a log file
 
 .PHONY: coverage
 coverage: DIR = $(BUILD)/coverage/coverage-$(NOW)
-coverage: _phpunit ## Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
+coverage: _phpunit ## Generate code coverage report in HTML format - $ make coverage [a=<arguments>] - Example: $ make coverage a="tests/myTest.php"
 	mkdir -p $(BUILD)/coverage
-	-$(PHPUNIT_COVERAGE) --coverage-html $(DIR) $(ARG)
+	-$(PHPUNIT_COVERAGE) --coverage-html $(DIR) $(a)
 	@printf " $(G)✔$(S) Coverage is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
 
 .PHONY: dox
-dox: _phpunit ## Report test execution progress in TestDox format - $ make dox [ARG=<arguments>] - Example: $ make dox ARG="tests/myTest.php"
-	$(PHPUNIT) --testdox $(ARG)
+dox: _phpunit ## Report test execution progress in TestDox format - $ make dox [a=<arguments>] - Example: $ make dox a="tests/myTest.php"
+	$(PHPUNIT) --testdox $(a)
 
 dox_text: FILE = $(BUILD)/dox/testdox-$(NOW).txt
 dox_text: _phpunit ## Report test execution progress in TestDox format and export it in text file
 	mkdir -p $(BUILD)/dox
-	-$(PHPUNIT) --testdox-text $(FILE) $(ARG)
+	-$(PHPUNIT) --testdox-text $(FILE) $(a)
 	@printf " $(G)✔$(S) TestDox report is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
 dox_html: FILE = $(BUILD)/dox/testdox-$(NOW).html
 dox_html: _phpunit ## Report test execution progress in TestDox format and export it in HTML file
 	mkdir -p $(BUILD)/dox
-	-$(PHPUNIT) --testdox-html $(FILE) $(ARG)
+	-$(PHPUNIT) --testdox-html $(FILE) $(a)
 	@printf " $(G)✔$(S) TestDox report is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
 #
@@ -656,8 +656,8 @@ ifeq ($(wildcard $(VENDOR_PHPCSFIXER)),)
 endif
 
 .PHONY: phpcsfixer
-phpcsfixer: _phpcsfixer ## Run PHP CS Fixer - $ make phpcsfixer [ARG=<arguments>] - Example: $ make phpcsfixer ARG=list
-	$(PHPCSFIXER) $(ARG)
+phpcsfixer: _phpcsfixer ## Run PHP CS Fixer - $ make phpcsfixer [a=<arguments>] - Example: $ make phpcsfixer a=list
+	$(PHPCSFIXER) $(a)
 
 phpcsfixer_lint: _phpcsfixer ## Check code style
 	@printf "\n$(Y)PHP CS Fixer [LINT]$(S)"
@@ -676,16 +676,16 @@ ifeq ($(wildcard $(VENDOR_PHPSTAN)),)
 endif
 
 .PHONY: phpstan
-phpstan: _phpstan ## Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $ make phpstan ARG="src tests"
-	$(PHPSTAN) $(ARG)
+phpstan: _phpstan ## Run PHPStan - $ make phpstan [a=<arguments>] - Example: $ make phpstan a="src tests"
+	$(PHPSTAN) $(a)
 
-phpstan_lint: _phpstan ## Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
+phpstan_lint: _phpstan ## Run PHPStan analyse - $ make phpstan_analyse [a=<arguments>] - Example: $ make phpstan_analyse a="src tests"
 	@printf "\n$(Y)PHPStan [LINT]$(S)"
 	@printf "\n$(Y)--------------$(S)\n\n"
-	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(ARG)
+	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a)
 
-phpstan_baseline: _phpstan ## Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
-	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(ARG) --generate-baseline $(PHPSTAN_BASELINE)
+phpstan_baseline: _phpstan ## Generate PHPStan baseline - $ make phpstan_baseline [a=<arguments>] - Example: $ make phpstan_baseline a="src tests"
+	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a) --generate-baseline $(PHPSTAN_BASELINE)
 
 ##
 
@@ -696,13 +696,13 @@ ifeq ($(wildcard $(VENDOR_PHPMD)),)
 endif
 
 .PHONY: phpmd
-phpmd: _phpmd ## Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
-	$(PHPMD) $(ARG)
+phpmd: _phpmd ## Run PHP Mess Detector - $ make phpmd [a=<arguments>] - Example: $ make phpmd a="src ansi cleancode"
+	$(PHPMD) $(a)
 
 phpmd_lint: _phpmd ## Run PHP Mess Detector with all rules
 	@printf "\n$(Y)PHP Mess Detector [LINT]$(S)"
 	@printf "\n$(Y)------------------------$(S)\n\n"
-	$(PHPMD) $(SRC),$(TESTS) ansi cleancode,codesize,controversial,design,naming,unusedcode $(ARG)
+	$(PHPMD) $(SRC),$(TESTS) ansi cleancode,codesize,controversial,design,naming,unusedcode $(a)
 
 ##
 
@@ -713,8 +713,8 @@ ifeq ($(wildcard $(VENDOR_TWIGCSFIXER)),)
 endif
 
 .PHONY: twigcsfixer
-twigcsfixer: _twigcsfixer ## Run Twig CS Fixer - $ make twigcsfixer [ARG=<arguments>] - Example: $ make twigcsfixer ARG="lint /path/to/code"
-	$(TWIGCSFIXER) $(ARG)
+twigcsfixer: _twigcsfixer ## Run Twig CS Fixer - $ make twigcsfixer [a=<arguments>] - Example: $ make twigcsfixer a="lint /path/to/code"
+	$(TWIGCSFIXER) $(a)
 
 twigcsfixer_lint: _twigcsfixer ## Check Twig style
 	@printf "\n$(Y)Twig CS Fixer [LINT]$(S)"
@@ -790,7 +790,7 @@ importmap_remove: _assets ## Remove JavaScript packages
 	$(CONSOLE) importmap:remove
 
 importmap_require: _assets ## Require JavaScript packages
-	$(CONSOLE) importmap:require $(ARG)
+	$(CONSOLE) importmap:require $(a)
 
 importmap_update: _assets ## Update JavaScript packages to their latest versions
 	$(CONSOLE) importmap:update
