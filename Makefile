@@ -97,12 +97,6 @@ VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 #
 
 BUILD             = build
-BUILD_COVERAGE    = $(BUILD)/coverage
-BUILD_DOX         = $(BUILD)/dox
-BUILD_DUMPS       = $(BUILD)/dumps
-BUILD_PHPMETRICS  = $(BUILD)/phpmetrics
-BUILD_PHPUNIT     = $(BUILD)/phpunit
-BUILD_TLS         = $(BUILD)/tls
 PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
 PHPSTAN_BASELINE  = phpstan-baseline.php
 PHPSTAN_CONFIG    = phpstan.dist.neon
@@ -590,15 +584,15 @@ tables: ## Show all tables
 ##
 
 .PHONY: dump
-dump: FILE=$(BUILD_DUMPS)/dump-$(NOW).sql
+dump: FILE=$(BUILD)/dumps/dump-$(NOW).sql
 dump: ## Create a SQL dump
-	mkdir -p $(BUILD_DUMPS)
+	mkdir -p $(BUILD)/dumps
 	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) >$(FILE)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
-dump_gz: FILE=$(BUILD_DUMPS)/dump-$(NOW).gz
+dump_gz: FILE=$(BUILD)/dumps/dump-$(NOW).gz
 dump_gz: ## Create a compressed SQL dump (gzip)
-	mkdir -p $(BUILD_DUMPS)
+	mkdir -p $(BUILD)/dumps
 	$(CONTAINER_DATABASE) pg_dump -U $(POSTGRES_USER) $(POSTGRES_DB) | gzip >$(FILE)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
@@ -619,16 +613,16 @@ endif
 phpunit: _phpunit ## Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
 	$(PHPUNIT) $(ARG)
 
-phpunit_log: FILE = $(BUILD_PHPUNIT)/phpunit-$(NOW).log
+phpunit_log: FILE = $(BUILD)/phpunit/phpunit-$(NOW).log
 phpunit_log: _phpunit ## Exporting PHPUnit terminal output to a log file
-	mkdir -p $(BUILD_PHPUNIT)
+	mkdir -p $(BUILD)/phpunit
 	-$(MAKE) phpunit >$(FILE)
 	@printf " $(G)✔$(S) PHPUnit terminal output is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
 .PHONY: coverage
-coverage: DIR = $(BUILD_COVERAGE)/coverage-$(NOW)
+coverage: DIR = $(BUILD)/coverage/coverage-$(NOW)
 coverage: _phpunit ## Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
-	mkdir -p $(BUILD_COVERAGE)
+	mkdir -p $(BUILD)/coverage
 	-$(PHPUNIT_COVERAGE) --coverage-html $(DIR) $(ARG)
 	@printf " $(G)✔$(S) Coverage is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
 
@@ -636,14 +630,15 @@ coverage: _phpunit ## Generate code coverage report in HTML format - $ make cove
 dox: _phpunit ## Report test execution progress in TestDox format - $ make dox [ARG=<arguments>] - Example: $ make dox ARG="tests/myTest.php"
 	$(PHPUNIT) --testdox $(ARG)
 
-dox_text: FILE = $(BUILD_DOX)/testdox-$(NOW).txt
+dox_text: FILE = $(BUILD)/dox/testdox-$(NOW).txt
 dox_text: _phpunit ## Report test execution progress in TestDox format and export it in text file
-	mkdir -p $(BUILD_DOX)
+	mkdir -p $(BUILD)/dox
 	-$(PHPUNIT) --testdox-text $(FILE) $(ARG)
 	@printf " $(G)✔$(S) TestDox report is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
-dox_html: FILE = $(BUILD_DOX)/testdox-$(NOW).html
-dox_html: _phpunit $(BUILD_DOX) ## Report test execution progress in TestDox format and export it in HTML file
+dox_html: FILE = $(BUILD)/dox/testdox-$(NOW).html
+dox_html: _phpunit ## Report test execution progress in TestDox format and export it in HTML file
+	mkdir -p $(BUILD)/dox
 	-$(PHPUNIT) --testdox-html $(FILE) $(ARG)
 	@printf " $(G)✔$(S) TestDox report is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
@@ -747,9 +742,9 @@ ifeq ($(wildcard $(VENDOR_PHPMETRICS)),)
 	@exit 1
 endif
 
-phpmetrics_report: DIR = $(BUILD_PHPMETRICS)/phpmetrics-$(NOW)
+phpmetrics_report: DIR = $(BUILD)/phpmetrics/phpmetrics-$(NOW)
 phpmetrics_report: _phpmetrics ## Run PHPMetrics and generate detailed report
-	mkdir -p $(BUILD_PHPMETRICS)
+	mkdir -p $(BUILD)/phpmetrics
 	$(PHPMETRICS) --report-html=$(DIR) $(SRC)
 	@printf " $(G)✔$(S) PHPMetrics report is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
 
@@ -833,9 +828,9 @@ else ifeq ($(UNAME_S),Linux)
 endif
 	@printf " $(G)✔$(S) The Caddy root certificate has been added to the trust store.\n"
 
-certificates_export: FILE=$(BUILD_TLS)/root.crt
+certificates_export: FILE=$(BUILD)/tls/root.crt
 certificates_export: ## Exports the Caddy root certificate from the container to the host
-	mkdir -p $(BUILD_TLS)
+	mkdir -p $(BUILD)/tls
 	@$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" >$(FILE)
 	@printf " $(G)✔$(S) The Caddy root certificate has been exported to $(Y)$(FILE)$(S).\n"
 	@printf " $(Y)›$(S) You may need to manually import this certificate into your browser's trust store:\n"
