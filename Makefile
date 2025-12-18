@@ -257,7 +257,7 @@ else
 	@printf " $(G)✔$(S) https://github.com/symfony/demo files already present at the root.\n\n"
 endif
 
-clear_all: ## Remove all fresh Symfony application files
+remove_all: ## Remove all fresh Symfony application files
 	-$(MAKE) permissions down
 	git reset --hard
 	git clean -f -d
@@ -399,18 +399,22 @@ build_force: a=--no-cache
 build_force: build ## Build or rebuild Docker services (no cache) - $ make build [a=<arguments>]
 
 .PHONY: logs
-logs: ## Display container logs
+logs: ## View logs (follow mode)
 	$(COMPOSE) logs -f
+
+.PHONY: clean
+clean: ## Clean everything (containers, networks, images)
+	$(COMPOSE) down --rmi all -v
+
+.PHONY: config
+config: ## Parse, resolve, and render compose file in canonical format
+	$(UP_ENV) $(COMPOSE) config
 
 .PHONY: images
 images: ## List images used by the current containers
 	@printf "\n$(Y)Images used by the current containers$(S)"
 	@printf "\n$(Y)-------------------------------------$(S)\n\n"
 	$(COMPOSE) images | grep -E "REPOSITORY|$(IMAGES_PREFIX)"
-
-.PHONY: config
-config: ## Parse, resolve, and render compose file in canonical format
-	$(UP_ENV) $(COMPOSE) config
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
