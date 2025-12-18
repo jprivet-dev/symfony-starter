@@ -48,24 +48,6 @@ $(warning [WARNING] In this Makefile it is not possible to use variables from .e
 endif
 
 #
-# GENERATION
-#
-
-# "GENERATION" BLOCK CAN BE REMOVED AFTER SAVING THE PROJECT.
-# These variables are only used for the initial setup.
-
-# Symfony 7.* is the current long-term support version.
-# Released on          : November 2025
-# End of bug fixes     : November 2028
-# End of security fixes: November 2029
-# See https://symfony.com/releases
-SYMFONY_LTS_VERSION       = 7
-SYMFONY_STABLE_VERSION    = 8
-REPOSITORY_SYMFONY_DOCKER = git@github.com:dunglas/symfony-docker.git
-REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
-CLONE_DIR                 = clone
-
-#
 # FILES & DIRECTORIES
 #
 
@@ -233,8 +215,18 @@ help: ## Display this help message with available commands
 
 ## — GENERATION 🔨 (CAN BE REMOVED AFTER SAVING THE PROJECT) ——————————————————
 
-# "GENERATION" BLOCK CAN BE REMOVED AFTER SAVING THE PROJECT.
-# These following targets are only used for the initial setup.
+# These following targets and variables are only used for the initial setup.
+
+# Symfony 7.* is the current long-term support version.
+# Released on          : November 2025
+# End of bug fixes     : November 2028
+# End of security fixes: November 2029
+# See https://symfony.com/releases
+SYMFONY_LTS_VERSION       = 7
+SYMFONY_STABLE_VERSION    = 8
+REPOSITORY_SYMFONY_DOCKER = git@github.com:dunglas/symfony-docker.git
+REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
+CLONE_DIR                 = clone
 
 .PHONY: minimalist
 minimalist: clone_symfony_docker build up_detached permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
