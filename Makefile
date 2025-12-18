@@ -224,17 +224,19 @@ minimalist_lts: ## Generate a minimalist Symfony application with Docker configu
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
 
 _patch_sqlite: # INTERNAL
+	@printf "\n$(Y)Activate SQLite in the Dockerfile$(S)"
+	@printf "\n$(Y)---------------------------------$(S)\n\n"
 	-git apply .patch/sqlite.patch
 	@printf " $(G)✔$(S) Patch $(Y).patch/sqlite.patch$(S) applied.\n\n"
 
 _symfony_runtime: # INTERNAL
-	@printf "Waiting for Symfony runtime...\n"
+	@printf "Waiting for Symfony Runtime...\n"
 	@until docker compose exec php ls vendor/autoload_runtime.php >/dev/null 2>&1; do \
-		printf "The vendor file is not ready yet. Pause...\n"; \
+		printf " $(R)⨯$(S) The vendor file is not ready yet. Pause...\n"; \
 		sleep 2; \
 	done
-	@printf "Rymfony runtime is ready!\n"
-	@sleep 2;
+	@printf " $(G)✔$(S) Symfony Runtime is ready!\n"
+	@sleep 2
 
 demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
 	$(MAKE) clone_symfony_demo
