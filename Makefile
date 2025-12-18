@@ -215,7 +215,8 @@ help: ## Display this help message with available commands
 
 ## — GENERATION 🔨 (CAN BE REMOVED AFTER SAVING THE PROJECT) ——————————————————
 
-# These following targets and variables are only used for the initial setup.
+# This GENERATION block, with these following targets and variables,
+# is only used for the initial setup and can be removed after saving the project.
 
 # Symfony 7.* is the current long-term support version.
 # Released on          : November 2025
