@@ -253,8 +253,6 @@ demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXP
 	$(MAKE) up_detached
 	$(MAKE) _symfony_runtime
 	$(MAKE) migration
-	$(MAKE) migrate
-	$(MAKE) fixtures
 	$(MAKE) assets
 	$(MAKE) permissions
 	$(MAKE) images
