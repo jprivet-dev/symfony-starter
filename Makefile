@@ -223,12 +223,24 @@ minimalist: clone_symfony_docker build up_detached permissions ## Generate a min
 minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
 
+_patch_sqlite: # INTERNAL
+	-git apply .patch/sqlite.patch
+	@printf " $(G)✔$(S) Patch $(Y).patch/sqlite.patch$(S) applied.\n\n"
+
+_symfony_runtime: # INTERNAL
+	@printf "Waiting for Symfony runtime...\n"
+	@until docker compose exec php ls vendor/autoload_runtime.php >/dev/null 2>&1; do \
+		printf "The vendor file is not ready yet. Pause...\n"; \
+		sleep 2; \
+	done
+
 demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
 	$(MAKE) clone_symfony_demo
 	$(MAKE) clone_symfony_docker
-	-git apply .patch/activate-sqlite.patch
+	$(MAKE) _patch_sqlite
 	$(MAKE) build
 	$(MAKE) up_detached
+	$(MAKE) _symfony_runtime
 	$(MAKE) assets
 	$(MAKE) fixtures
 	$(MAKE) permissions
