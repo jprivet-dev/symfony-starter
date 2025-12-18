@@ -173,6 +173,13 @@ PHPMD            = $(PHP) -d error_reporting="E_ALL & ~E_DEPRECATED" $(VENDOR_PH
 TWIGCSFIXER      = $(PHP) $(VENDOR_TWIGCSFIXER)
 PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 
+# --- SQLITE ---
+
+DATABASE_URL_CLEAN = $(shell echo '$(DATABASE_URL)' | tr -d '"')
+IS_SQLITE          = $(findstring sqlite,$(DATABASE_URL_CLEAN))
+SQLITE_FILE_TMP    = $(subst sqlite:///%kernel.project_dir%/,,$(DATABASE_URL_CLEAN))
+SQLITE_FILE        = $(subst sqlite:///,,$(SQLITE_FILE_TMP))
+
 # --- GIT ---
 
 GIT_HOOKS = off
@@ -400,6 +407,11 @@ check_level_1 c1: composer_validate validate lint ## Check everything before you
 
 check_level_2 c2: composer_validate validate lint phpunit ## Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
 
+##
+
+.PHONY: tests
+tests: db_init@test fixtures@test phpunit ## Run all tests
+
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: up
@@ -521,12 +533,27 @@ ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
 endif
 
 db_drop: _doctrine ## Drop the database - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
+ifneq ($(IS_SQLITE),)
+	@printf "$(G)SQLite$(S) detected via environment. Removing $(Y)$(SQLITE_FILE)$(S).\n"
+	rm -f $(SQLITE_FILE)
+else
+	@printf "$(G)Standard SQL$(S) engine detected. Dropping database...\n"
 	$(CONSOLE) doctrine:database:drop --if-exists --force $(a)
+endif
 
 db_create: _doctrine ## Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
+ifneq ($(IS_SQLITE),)
+	@printf "$(G)SQLite$(S) detected via environment. Ensuring directory exists for $(Y)$(SQLITE_FILE)$(S).\n"
+	mkdir -p $(dir $(SQLITE_FILE))
+else
+	@printf "$(G)Standard SQL$(S) engine detected. Creating database...\n"
 	$(CONSOLE) doctrine:database:create --if-not-exists $(a)
+endif
 
 db_init: _doctrine db_drop db_create migrate ## Drop and create the database and migrate
+
+db_init@test: a="--env=test"
+db_init@test: _doctrine db_drop db_create migrate ## Drop and create the database and migrate (env=test)
 
 ##
 
@@ -571,6 +598,9 @@ sql: _doctrine ## Execute the given SQL query and output the results - $ make sq
 .PHONY: fixtures
 fixtures: _doctrine ## Load fixtures (CAUTION! The load command purges the database) - $ make fixtures [a=<param>] - Example: $ make fixtures a="--append"
 	$(CONSOLE) doctrine:fixtures:load -n $(a)
+
+fixtures@test: a="--env=test"
+fixtures@test: _doctrine fixtures ## Load fixtures (env=test)
 
 ## — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
 
