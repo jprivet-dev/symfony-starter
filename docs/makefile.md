@@ -179,6 +179,7 @@ COMPLETE INSTALLATION
 — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
   env_files                     Show env files loaded into this Makefile
   vars                          Show key Makefile variables
+  tree                          Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
 ```
 
 <!-- MAKEFILE_COMMANDS_END -->

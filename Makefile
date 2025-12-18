@@ -900,3 +900,8 @@ vars: ## Show key Makefile variables
 	@printf "COMPOSER     : $(COMPOSER)\n"
 	@printf "BASH_COMMAND : $(BASH_COMMAND)\n"
 	@printf "CONSOLE      : $(CONSOLE)\n"
+
+.PHONY: tree
+tree: l ?= 2
+tree: ## Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
+	tree -A -L $(l) -F --dirsfirst
