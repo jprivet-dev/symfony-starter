@@ -43,15 +43,21 @@ This will:
 
 Open `https://symfony-starter.localhost:8443/` in your browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
 
+> See [Caddy - Validate certificates](docs/certificates.md)
+
 ### All in one command
 
-```shell
-# Minimalist Stable Release
-git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist
+* Minimalist Stable Release
 
-# Minimalist Long-Term Support Release (LTS)
-git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist_lts
-```
+  ```shell
+  git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist
+  ```
+
+* Minimalist Long-Term Support Release (LTS)
+
+  ```shell
+  git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist_lts
+  ```
 
 ## Generate an app in another existing project
 

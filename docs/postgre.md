@@ -46,20 +46,19 @@ services:
 
 You can apply the above changes with the following patch:
 
-```shell
-git apply .patch/compose.override.yaml-posgresql-port-mapping.patch
-```
+* With Git: `git apply .patch/compose.override.yaml-posgresql-port-mapping.patch`
+* With PhpStorm: **Right clic** on the file and select **Apply Patch...**
 
 ## Connect PhpStorm
 
 1. Open the **Database** tool window (`View > Tool Windows > Database`).
 2. Click the `+` icon in the toolbar, navigate to **Data Source**, and select **PostgreSQL**.
 3. In the right pane, use the following settings under the **General** tab:
-  * **Host**: `127.0.0.1`
-  * **Port**: `5432`
-  * **User**: `app`
-  * **Password**: `!ChangeMe!`
-  * **Database**: `app`
+   * **Host**: `127.0.0.1`
+   * **Port**: `5432`
+   * **User**: `app`
+   * **Password**: `!ChangeMe!`
+   * **Database**: `app`
 4. Click **Test Connection** to confirm the setup. You should see a **Succeeded** message.
 5. Click `OK` or `Apply` to validate the connection.
 
