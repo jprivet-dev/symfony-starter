@@ -246,17 +246,10 @@ _symfony_runtime: # INTERNAL
 	@sleep 2
 
 demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
-	$(MAKE) clone_symfony_demo
-	$(MAKE) clone_symfony_docker
-	$(MAKE) _patch_sqlite
-	$(MAKE) build
-	$(MAKE) up_detached
-	$(MAKE) _symfony_runtime
-	$(MAKE) migration
-	$(MAKE) assets
-	$(MAKE) permissions
-	$(MAKE) images
-	$(MAKE) info
+	$(MAKE) clone_symfony_demo clone_symfony_docker
+	$(MAKE) _patch_sqlite build up_detached
+	$(MAKE) _symfony_runtime migration assets
+	$(MAKE) permissions images info
 
 ##
 
