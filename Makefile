@@ -192,7 +192,7 @@ PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 # EXTENDS THE MAIN MAKEFILE WITH YOUR OWN LOCAL MAKEFILE
 #
 
-ifeq ($(APP_ENV),dev)
+ifneq ($(APP_ENV),prod)
 -include $(LOCAL_MK)
 endif
 
