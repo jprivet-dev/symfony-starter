@@ -42,10 +42,15 @@ In `services.php.volumes` add:
       - ./var/data_dev.db:/app/var/data_dev.db:rw
 ```
 
-## Install dependencies
+You can apply the above changes with the following patch:
+
+* With Git: `git apply .patch/sqlite.patch`
+* With PhpStorm: **Right-click** on the file and select **Apply Patch...**
+
+## All in one command
 
 ```shell
-make up_detached composer_install assets fixtures images info
+make demo
 ```
 
 ---

@@ -27,7 +27,7 @@ services:
 You can apply the above changes with the following patch:
 
 * With Git: `git apply .patch/compose.override.yaml-accessing-the-var-directory.patch`
-* With PhpStorm: **Right clic** on the file and select **Apply Patch...**
+* With PhpStorm: **Right-click** on the file and select **Apply Patch...**
 
 ## How it works
 
