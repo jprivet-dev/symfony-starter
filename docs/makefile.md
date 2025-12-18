@@ -168,8 +168,8 @@ COMPLETE INSTALLATION
 
 — GIT 🐙 ———————————————————————————————————————————————————————————————————
   git_hooks_init                Init the project's hooks directory (set GIT_HOOKS var)
-  git_hooks_on                  Enable the project's hooks directory
-  git_hooks_off                 Disable the project's hooks directory
+  git_hooks_enable              Enable the project's hooks directory
+  git_hooks_disable             Disable the project's hooks directory
   git_pre_push                  Actions on Git pre-push
 
 — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————

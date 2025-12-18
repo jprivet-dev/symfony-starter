@@ -827,16 +827,16 @@ hosts: ## Add the server name to /etc/hosts file
 
 git_hooks_init: ## Init the project's hooks directory (set GIT_HOOKS var)
 ifeq ($(GIT_HOOKS),on)
-	$(MAKE) git_hooks_on
+	$(MAKE) git_hooks_enable
 else
-	$(MAKE) git_hooks_off
+	$(MAKE) git_hooks_disable
 endif
 
-git_hooks_on: ## Enable the project's hooks directory
+git_hooks_enable: ## Enable the project's hooks directory
 	git config core.hooksPath hooks/
 	@printf " $(G)✔$(S) Git hooks enabled.\n"
 
-git_hooks_off: ## Disable the project's hooks directory
+git_hooks_disable: ## Disable the project's hooks directory
 	git config --unset core.hooksPath
 	@printf " $(R)⨯$(S) Git hooks disabled.\n"
 
