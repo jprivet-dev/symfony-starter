@@ -31,7 +31,7 @@ function makefile_create() {
 function makefile_execute() {
     local name="${1}"
     shift
-    make "${name}" ARG="${*}"
+    make "${name}" a="${*}"
 }
 
 function makefile_aliases() {
@@ -39,7 +39,7 @@ function makefile_aliases() {
     printf "\n${Y}-------${S}\n\n"
 
     for entry in "${@}"; do
-        IFS=':' read -r alias_name check_path <<< "${entry}"
+        IFS=':' read -r alias_name check_path <<<"${entry}"
         if [ -z "${check_path}" ]; then
             check_path="."
         fi
@@ -51,4 +51,8 @@ function makefile_aliases() {
 }
 
 # Add alias with its file/directory to check
-makefile_aliases symfony:bin/console sf:bin/console php:compose.yaml composer:composer.json phpunit:bin/phpunit
+makefile_aliases \
+    symfony:bin/console \
+    sf:bin/console php:compose.yaml \
+    composer:composer.json \
+    phpunit:bin/phpunit

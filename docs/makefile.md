@@ -13,13 +13,13 @@
 — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
   help                          Display this help message with available commands
 
-— GENERATION 🔨 ————————————————————————————————————————————————————————————
+— GENERATION 🔨 (CAN BE REMOVED AFTER SAVING THE PROJECT) ——————————————————
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
-  minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+  minimalist_lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 
   clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
-  clear_all                     Remove all fresh Symfony application files
+  remove_all                    Remove all fresh Symfony application files
 
 COMPLETE INSTALLATION
   require_doctrine              Install Doctrine - https://symfony.com/doc/current/doctrine.html
@@ -43,16 +43,29 @@ COMPLETE INSTALLATION
   require_easy_admin            Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 
 — PROJECT 🚀 ———————————————————————————————————————————————————————————————
-  start                         Start the project and show info (up_detached & info alias)
-  stop                          Stop the project (down alias)
-  restart                       Stop & Start the project and show info (up_detached & info alias)
+  install                       Start the project, install dependencies and show info
+
+  start                         Start the project and show info (up_detached & info alias command)
+  stop                          Stop the project (down alias command)
+  restart                       Stop & Start the project and show info (up_detached & info alias command)
   info                          Show project access info
 
-  install                       Start the project, install dependencies and show info
-  check                         Check everything before you deliver
+  check_level_1              c1 Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
+  check_level_2              c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
+
+— DOCKER 🐳 ————————————————————————————————————————————————————————————————
+  up                            Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
+  up_detached                   Start the containers (wait for services to be running|healthy - detached mode)
+  down                          Stop and remove the containers
+  build                         Build or rebuild Docker services - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
+  build_force                   Build or rebuild Docker services (no cache) - $ make build [a=<arguments>]
+  logs                          View logs (follow mode)
+  clean                         Clean everything (containers, networks, images)
+  config                        Parse, resolve, and render compose file in canonical format
+  images                        List images used by the current containers
 
 — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
-  symfony                    sf Run Symfony console command - $ make symfony [ARG=<arguments>]- Example: $ make symfony ARG=cache:clear
+  symfony                    sf Run Symfony console command - $ make symfony [a=<arguments>]- Example: $ make symfony a=cache:clear
   cc                            Clear the Symfony cache
   about                         Display information about the current Symfony project
   routes                        Display current routes with assigned controllers and aliases
@@ -61,71 +74,75 @@ COMPLETE INSTALLATION
   dumpenv                       Generate .env.local.php for production
 
 — PHP 🐘 ———————————————————————————————————————————————————————————————————
-  php                           Run PHP command - $ make php [ARG=<arguments>]- Example: $ make php ARG=--version
+  php                           Run PHP command - $ make php [a=<arguments>]- Example: $ make php a=--version
 
-  php_sh                        Connect to the PHP container shell
+  php_sh                     sh Connect to the PHP container shell
   php_env                       Display all environment variables set within the PHP container
-  php_command                   Run a command inside the PHP container - $ make php_command [ARG=<arguments>]- Example: $ make php_command ARG="ls -al"
+  php_command                   Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
 
 — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
-  composer                      Run composer command - $ make composer [ARG=<arguments>] - Example: $ make composer ARG="require --dev phpunit/phpunit"
+  composer                      Run composer command - $ make composer [a=<arguments>] - Example: $ make composer a="require --dev phpunit/phpunit"
   composer_install              Install Composer packages
   composer_update               Update Composer packages
   composer_update_lock          Update only the content hash of composer.lock without updating dependencies
   composer_validate             Check if lock file is up to date (even when config.lock is false)
 
 — DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
-  db_drop                       Drop the database - $ make db_drop [ARG=<arguments>] - Example: $ make db_drop ARG="--env=test"
-  db_create                     Create the database - $ make db_create [ARG=<arguments>] - Example: $ make db_create ARG="--env=test"
-  db_create_force               Drop and create the database
-  db_init                       Drop and create the database and add fixtures
+  db_drop                       Drop the database - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
+  db_create                     Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
+  db_init                       Drop and create the database and migrate
 
-  validate                      Validate the mapping files - $ make validate [ARG=<arguments>] - Example: $ make validate ARG="--env=test"
+  validate                      Validate the mapping files - $ make validate [a=<arguments>] - Example: $ make validate a="--env=test"
   update_dump                   Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
   update_force                  Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
 
   migration                     Create a new migration based on database changes (format the generated SQL)
-  migrate                       Execute a migration to the latest available version (in a transaction) - $ make migrate [ARG=<param>] - Example: $ make migrate ARG="current+3"
+  migrate                       Execute a migration to the latest available version (in a transaction) - $ make migrate [a=<param>] - Example: $ make migrate a="current+3"
   list                          Display a list of all available migrations and their status
-  execute                       Execute one or more migration versions up or down manually - $ make execute ARG=<arguments> - Example: $ make execute ARG="DoctrineMigrations\Version20240205143239"
+  execute                       Execute one or more migration versions up or down manually - $ make execute a=<arguments> - Example: $ make execute a="DoctrineMigrations\Version20240205143239"
   generate                      Generate a blank migration class
 
   sql                           Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
-  sql_tables                    Show all tables
-
-  fixtures                      Load fixtures (CAUTION! by default the load command purges the database) - $ make fixtures [ARG=<param>] - Example: $ make fixtures ARG="--append"
+  fixtures                      Load fixtures (CAUTION! The load command purges the database) - $ make fixtures [a=<param>] - Example: $ make fixtures a="--append"
 
 — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
-  psql                          Execute psql - $ make psql [ARG=<arguments>] - Example: $ make psql ARG="-V"
+  psql                          Execute psql - $ make psql [a=<arguments>] - Example: $ make psql a="-V"
+  psql_sh                       Open a shell on the PostgreSQL container
+  tables                        Show all tables
+
+  dump                          Create a SQL dump
+  dump_gz                       Create a compressed SQL dump (gzip)
+  restore                       Restore a dump (CAUTION! The command purges the database) - $ make restore FILE=<file> - Example: $ make restore FILE="build/dumps/dump.sql"
 
 — TESTS ✅ —————————————————————————————————————————————————————————————————
-  phpunit                       Run PHPUnit - $ make phpunit [ARG=<arguments>] - Example: $ make phpunit ARG="tests/myTest.php"
-  coverage                      Generate code coverage report in HTML format - $ make coverage [ARG=<arguments>] - Example: $ make coverage ARG="tests/myTest.php"
-  dox                           Report test execution progress in TestDox format - $ make dox [ARG=<arguments>] - Example: $ make dox ARG="tests/myTest.php"
-  dox@text                      Report test execution progress in TestDox format and export it in text file
-  dox@html                      Report test execution progress in TestDox format and export it in HTML file
+  phpunit                       Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
+  phpunit_log                   Exporting PHPUnit terminal output to a log file
+  coverage                      Generate code coverage report in HTML format - $ make coverage [a=<arguments>] - Example: $ make coverage a="tests/myTest.php"
+  dox                           Report test execution progress in TestDox format - $ make dox [a=<arguments>] - Example: $ make dox a="tests/myTest.php"
+  dox_text                      Report test execution progress in TestDox format and export it in text file
+  dox_html                      Report test execution progress in TestDox format and export it in HTML file
   xdebug_version                Xdebug version number
 
 — QUALITY ✅ ———————————————————————————————————————————————————————————————
-  phpcsfixer                    Run PHP CS Fixer - $ make phpcsfixer [ARG=<arguments>] - Example: $ make phpcsfixer ARG=list
+  phpcsfixer                    Run PHP CS Fixer - $ make phpcsfixer [a=<arguments>] - Example: $ make phpcsfixer a=list
   phpcsfixer_lint               Check code style
   phpcsfixer_fix                Fix code style
 
-  phpstan                       Run PHPStan - $ make phpstan [ARG=<arguments>] - Example: $ make phpstan ARG="src tests"
-  phpstan_lint                  Run PHPStan analyse - $ make phpstan_analyse [ARG=<arguments>] - Example: $ make phpstan_analyse ARG="src tests"
-  phpstan_baseline              Generate PHPStan baseline - $ make phpstan_baseline [ARG=<arguments>] - Example: $ make phpstan_baseline ARG="src tests"
+  phpstan                       Run PHPStan - $ make phpstan [a=<arguments>] - Example: $ make phpstan a="src tests"
+  phpstan_lint                  Run PHPStan analyse - $ make phpstan_analyse [a=<arguments>] - Example: $ make phpstan_analyse a="src tests"
+  phpstan_baseline              Generate PHPStan baseline - $ make phpstan_baseline [a=<arguments>] - Example: $ make phpstan_baseline a="src tests"
 
-  phpmd                         Run PHP Mess Detector - $ make phpmd [ARG=<arguments>] - Example: $ make phpmd ARG="src ansi cleancode"
+  phpmd                         Run PHP Mess Detector - $ make phpmd [a=<arguments>] - Example: $ make phpmd a="src ansi cleancode"
   phpmd_lint                    Run PHP Mess Detector with all rules
 
-  twigcsfixer                   Run Twig CS Fixer - $ make twigcsfixer [ARG=<arguments>] - Example: $ make twigcsfixer ARG="lint /path/to/code"
+  twigcsfixer                   Run Twig CS Fixer - $ make twigcsfixer [a=<arguments>] - Example: $ make twigcsfixer a="lint /path/to/code"
   twigcsfixer_lint              Check Twig style
   twigcsfixer_fix               Fix Twig style
 
-  lint                          Run all linters
+  lint                          Run all linters (stop on failure)
   fix                           Fix with all linters
 
-  phpmetrics_report             Run PHPMetrics and generate detailled report
+  phpmetrics_report             Run PHPMetrics and generate detailed report
 
 — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
   assets                        Generate all assets
@@ -144,20 +161,16 @@ COMPLETE INSTALLATION
 — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
   extract                       Extracts translation strings from templates (fr)
 
-— DOCKER 🐳 ————————————————————————————————————————————————————————————————
-  up                            Start the containers - $ make up [ARG=<arguments>] - Example: $ make up ARG=-d
-  up_detached                   Start the containers (wait for services to be running|healthy - detached mode)
-  down                          Stop and remove the containers
-  build                         Build or rebuild Docker services - $ make build [ARG=<arguments>] - Example: $ make build ARG=--no-cache
-  build_force                   Build or rebuild Docker services (no cache) - $ make build [ARG=<arguments>]
-  logs                          Display container logs
-  images                        List images used by the current containers
-  config                        Parse, resolve, and render compose file in canonical format
-
 — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
   certificates                  Installs the Caddy TLS certificate to the trust store
   certificates_export           Exports the Caddy root certificate from the container to the host
   hosts                         Add the server name to /etc/hosts file
+
+— GIT 🐙 ———————————————————————————————————————————————————————————————————
+  git_hooks_init                Init the project's hooks directory (set GIT_HOOKS var)
+  git_hooks_enable              Enable the project's hooks directory
+  git_hooks_disable             Disable the project's hooks directory
+  git_pre_push                  Actions on Git pre-push
 
 — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
   permissions                p  Fix file permissions (primarily for Linux hosts)
