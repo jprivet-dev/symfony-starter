@@ -1,6 +1,4 @@
-#
-# COLORS
-#
+# --- COLORS ---
 
 # (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET
 G = "\\033[32m"
@@ -8,23 +6,17 @@ R = "\\033[31m"
 Y = "\\033[33m"
 S = "\\033[0m"
 
-#
-# USER
-#
+# --- USER ---
 
 USER_ID  = $(shell id -u)
 GROUP_ID = $(shell id -g)
 USER     = $(USER_ID):$(GROUP_ID)
 
-#
-# OS DETECTION
-#
+# --- OS DETECTION ---
 
 UNAME_S := $(shell uname -s)
 
-#
-# SYMFONY ENVIRONMENT VARIABLES
-#
+# --- SYMFONY ENVIRONMENT VARIABLES ---
 
 # Files are loaded in order of increasing priority. For more details, refer to:
 # - https://github.com/jprivet-dev/makefiles/tree/main/symfony-env-include
@@ -47,9 +39,7 @@ ifneq ($(wildcard .env.local.php),)
 $(warning [WARNING] In this Makefile it is not possible to use variables from .env.local.php file)
 endif
 
-#
-# FILES & DIRECTORIES
-#
+# --- FILES & DIRECTORIES ---
 
 SRC       = src
 TEMPLATES = templates
@@ -74,19 +64,16 @@ VENDOR_PROFILER    = vendor/symfony/web-profiler-bundle
 VENDOR_TRANSLATION = vendor/symfony/translation
 VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 
-#
-# COMPONENTS CONFIG
-#
+# --- COMPONENTS CONFIG ---
 
 BUILD             = build
 PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
 PHPSTAN_BASELINE  = phpstan-baseline.php
 PHPSTAN_CONFIG    = phpstan.dist.neon
 
-#
-# DOCKER OPTIONS
+# --- DOCKER OPTIONS ---
+
 # See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md
-#
 
 PROJECT_NAME  ?= $(shell basename $(CURDIR) | tr '[:upper:]' '[:lower:]')
 SERVER_NAME    = $(PROJECT_NAME).localhost
@@ -138,9 +125,7 @@ $(eval $(call append,POSTGRES_VERSION))
 $(eval $(call append,POSTGRES_CHARSET))
 endif
 
-#
-# DOCKER COMMANDS
-#
+# --- DOCKER COMMANDS ---
 
 COMPOSE_V2 := $(shell docker compose version 2> /dev/null)
 
@@ -188,9 +173,7 @@ PHPMD            = $(PHP) -d error_reporting="E_ALL & ~E_DEPRECATED" $(VENDOR_PH
 TWIGCSFIXER      = $(PHP) $(VENDOR_TWIGCSFIXER)
 PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 
-#
-# EXTENDS THE MAIN MAKEFILE WITH YOUR OWN LOCAL MAKEFILE
-#
+# --- EXTENDS THE MAIN MAKEFILE WITH YOUR OWN LOCAL MAKEFILE ---
 
 ifneq ($(APP_ENV),prod)
 -include $(LOCAL_MK)
