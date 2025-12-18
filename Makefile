@@ -223,6 +223,18 @@ minimalist: clone_symfony_docker build up_detached permissions ## Generate a min
 minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
 
+demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
+	$(MAKE) clone_symfony_demo
+	$(MAKE) clone_symfony_docker
+	-git apply .patch/activate-sqlite.patch
+	$(MAKE) build
+	$(MAKE) up_detached
+	$(MAKE) assets
+	$(MAKE) fixtures
+	$(MAKE) permissions
+	$(MAKE) images
+	$(MAKE) info
+
 ##
 
 clone_symfony_docker: ## Clone and extract https://github.com/dunglas/symfony-docker files at the root
