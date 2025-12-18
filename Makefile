@@ -537,8 +537,8 @@ generate: _doctrine ## Generate a blank migration class
 ##
 
 .PHONY: sql
-sql: _doctrine ## Execute the given SQL query and output the results - $ make sql [QUERY=<query>] - Example: $ make sql QUERY="SELECT * FROM user"
-	$(CONSOLE) doctrine:query:sql "$(QUERY)"
+sql: _doctrine ## Execute the given SQL query and output the results - $ make sql [q=<query>] - Example: $ make sql q="SELECT * FROM user"
+	$(CONSOLE) doctrine:query:sql "$(q)"
 
 .PHONY: fixtures
 fixtures: _doctrine ## Load fixtures (CAUTION! The load command purges the database) - $ make fixtures [a=<param>] - Example: $ make fixtures a="--append"
@@ -573,9 +573,9 @@ dump_gz: ## Create a compressed SQL dump (gzip)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
 .PHONY: restore
-restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the database) - $ make restore FILE=<file> - Example: $ make restore FILE="build/dumps/dump.sql"
-	$(if $(FILE),, $(error FILE argument is required))
-	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) <$(FILE)
+restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the database) - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
+	$(if $(f),, $(error f argument is required))
+	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) <$(f)
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
 
