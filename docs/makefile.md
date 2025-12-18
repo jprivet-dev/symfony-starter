@@ -19,7 +19,7 @@
 
   clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
-  clear_all                     Remove all fresh Symfony application files
+  remove_all                    Remove all fresh Symfony application files
 
 COMPLETE INSTALLATION
   require_doctrine              Install Doctrine - https://symfony.com/doc/current/doctrine.html
@@ -43,14 +43,15 @@ COMPLETE INSTALLATION
   require_easy_admin            Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 
 — PROJECT 🚀 ———————————————————————————————————————————————————————————————
-  start                         Start the project and show info (up_detached & info alias)
-  stop                          Stop the project (down alias)
-  restart                       Stop & Start the project and show info (up_detached & info alias)
+  install                       Start the project, install dependencies and show info
+
+  start                         Start the project and show info (up_detached & info alias command)
+  stop                          Stop the project (down alias command)
+  restart                       Stop & Start the project and show info (up_detached & info alias command)
   info                          Show project access info
 
-  install                       Start the project, install dependencies and show info
-  check                         Check everything before you deliver
-  check_stop_on_failure         Check everything before you deliver (stop on failure)
+  check_level_1              c1 Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
+  check_level_2              c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
   up                            Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
@@ -58,9 +59,10 @@ COMPLETE INSTALLATION
   down                          Stop and remove the containers
   build                         Build or rebuild Docker services - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
   build_force                   Build or rebuild Docker services (no cache) - $ make build [a=<arguments>]
-  logs                          Display container logs
-  images                        List images used by the current containers
+  logs                          View logs (follow mode)
+  clean                         Clean everything (containers, networks, images)
   config                        Parse, resolve, and render compose file in canonical format
+  images                        List images used by the current containers
 
 — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
   symfony                    sf Run Symfony console command - $ make symfony [a=<arguments>]- Example: $ make symfony a=cache:clear
@@ -165,6 +167,7 @@ COMPLETE INSTALLATION
   hosts                         Add the server name to /etc/hosts file
 
 — GIT 🐙 ———————————————————————————————————————————————————————————————————
+  git_hooks_init                Init the project's hooks directory (set GIT_HOOKS var)
   git_hooks_on                  Enable the project's hooks directory
   git_hooks_off                 Disable the project's hooks directory
   git_pre_push                  Actions on Git pre-push

@@ -173,6 +173,10 @@ PHPMD            = $(PHP) -d error_reporting="E_ALL & ~E_DEPRECATED" $(VENDOR_PH
 TWIGCSFIXER      = $(PHP) $(VENDOR_TWIGCSFIXER)
 PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 
+# --- GIT ---
+
+GIT_HOOKS = off
+
 # --- EXTENDS THE MAIN MAKEFILE WITH YOUR OWN LOCAL MAKEFILE ---
 
 ifneq ($(APP_ENV),prod)
@@ -329,14 +333,19 @@ require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/Ea
 
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
+.PHONY: install
+install: up_detached composer_install assets images git_hooks_init info ## Start the project, install dependencies and show info
+
+##
+
 .PHONY: start
-start: up_detached images info ## Start the project and show info (up_detached & info alias)
+start: up_detached images info ## Start the project and show info (up_detached & info alias command)
 
 .PHONY: stop
-stop: down ## Stop the project (down alias)
+stop: down ## Stop the project (down alias command)
 
 .PHONY: restart
-restart: stop start ## Stop & Start the project and show info (up_detached & info alias)
+restart: stop start ## Stop & Start the project and show info (up_detached & info alias command)
 
 .PHONY: info
 info: ## Show project access info
@@ -359,22 +368,9 @@ endif
 
 ##
 
-.PHONY: install
-install: up_detached ## Start the project, install dependencies and show info
-	$(MAKE) composer_install
-	-$(MAKE) assets
-	$(MAKE) images
-	#$(MAKE) git_hooks_on
-	$(MAKE) info
+check_level_1 c1: composer_validate validate lint ## Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
 
-.PHONY: check
-check: ## Check everything before you deliver
-	-$(MAKE) composer_validate
-	-$(MAKE) validate
-	-$(MAKE) lint
-	-$(MAKE) phpunit
-
-check_stop_on_failure: composer_validate validate lint phpunit ## Check everything before you deliver (stop on failure)
+check_level_2 c2: composer_validate validate lint phpunit ## Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
@@ -829,6 +825,13 @@ hosts: ## Add the server name to /etc/hosts file
 
 ## — GIT 🐙 ———————————————————————————————————————————————————————————————————
 
+git_hooks_init: ## Init the project's hooks directory (set GIT_HOOKS var)
+ifeq ($(GIT_HOOKS),on)
+	$(MAKE) git_hooks_on
+else
+	$(MAKE) git_hooks_off
+endif
+
 git_hooks_on: ## Enable the project's hooks directory
 	git config core.hooksPath hooks/
 	@printf " $(G)✔$(S) Git hooks enabled.\n"
@@ -837,7 +840,7 @@ git_hooks_off: ## Disable the project's hooks directory
 	git config --unset core.hooksPath
 	@printf " $(R)⨯$(S) Git hooks disabled.\n"
 
-git_pre_push: check_stop_on_failure git_hooks_on ## Actions on Git pre-push
+git_pre_push: c1 ## Actions on Git pre-push
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 

@@ -82,7 +82,7 @@ git push -u origin main
 Stops all Docker containers, removes all Docker-related configuration files copied from `dunglas/symfony-docker` (e.g., `Dockerfile`, `compose.yaml`, `frankenphp/`), and removes all Symfony application files (e.g., `bin/`, `config/`, `src/`, `vendor/`, `composer.json`, `.env`, etc.) :
 
 ```shell
-make clear_all
+make remove_all
 
 # Then regenerate the Symfony app (LTS version for example)
 make minimalist_lts
