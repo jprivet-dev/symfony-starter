@@ -233,6 +233,8 @@ _symfony_runtime: # INTERNAL
 		printf "The vendor file is not ready yet. Pause...\n"; \
 		sleep 2; \
 	done
+	@printf "Rymfony runtime is ready!\n"
+	@sleep 2;
 
 demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
 	$(MAKE) clone_symfony_demo
