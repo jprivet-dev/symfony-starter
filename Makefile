@@ -47,6 +47,7 @@ TESTS     = tests
 
 NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
 PWD                = $(shell pwd)
+GIT_PATCH          = .patch
 LOCAL_MK           = .mk/local.mk
 BIN_CONSOLE        = bin/console
 BIN_PHPUNIT        = bin/phpunit
@@ -223,13 +224,13 @@ REPOSITORY_SYMFONY_DOCKER = git@github.com:dunglas/symfony-docker.git
 REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
 CLONE_DIR                 = clone
 
-_patch_var_log_mapping: f=.patch/var-log-mapping.patch
+_patch_var_log_mapping: f=var-log-mapping.patch
 _patch_var_log_mapping: git_apply # INTERNAL
 
-_patch_posgresql_port_mapping: f=.patch/posgresql-port-mapping.patch
+_patch_posgresql_port_mapping: f=posgresql-port-mapping.patch
 _patch_posgresql_port_mapping: git_apply # INTERNAL
 
-_patch_sqlite: f=.patch/sqlite.patch
+_patch_sqlite: f=sqlite.patch
 _patch_sqlite: git_apply # INTERNAL
 
 _symfony_runtime: # INTERNAL
@@ -899,15 +900,15 @@ git_pre_push: c1 ## Actions on Git pre-push
 
 ##
 
-git_apply: ## Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply f=.patch/file.patch
+git_apply: ## Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply f=file.patch
 	$(if $(f),, $(error f argument is required))
-	git apply $(f)
-	@printf " $(G)✔$(S) Patch $(Y)$(f)$(S) applied.\n\n"
+	git apply --verbose $(GIT_PATCH)/$(f)
+	@printf " $(G)✔$(S) Patch $(Y)$(GIT_PATCH)/$(f)$(S) applied.\n"
 
-git_patch: ## Create a patch from hashes - $ make git_patch h=<hashes> f=<file> - Example: $ make git_patch h="abcd123 efgh456" f=.patch/file.patch
-	$(if $(h),, $(error h argument is required))
-	$(if $(f),, $(error f argument is required))
-	git diff $(h) >$(f)
+git_patch: FILE=$(GIT_PATCH)/$(NOW).patch
+git_patch: ## Generate a patch from current diff or from hashes - $ make git_patch [h=<hashes>] - Example: $ make git_patch h="abcd123 efgh456"
+	git diff $(h) >$(FILE)
+	@printf " $(G)✔$(S) The patch is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
