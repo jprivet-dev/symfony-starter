@@ -899,10 +899,15 @@ git_pre_push: c1 ## Actions on Git pre-push
 
 ##
 
-git_apply: ## Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply a=.patch/file.patch
+git_apply: ## Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply f=.patch/file.patch
 	$(if $(f),, $(error f argument is required))
-	-git apply $(f)
+	git apply $(f)
 	@printf " $(G)✔$(S) Patch $(Y)$(f)$(S) applied.\n\n"
+
+git_patch: ## Create a patch from hashes - $ make git_patch h=<hashes> f=<file> - Example: $ make git_patch h="abcd123 efgh456" f=.patch/file.patch
+	$(if $(h),, $(error h argument is required))
+	$(if $(f),, $(error f argument is required))
+	git diff $(h) >$(f)
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
