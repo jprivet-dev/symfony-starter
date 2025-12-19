@@ -223,18 +223,19 @@ REPOSITORY_SYMFONY_DOCKER = git@github.com:dunglas/symfony-docker.git
 REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
 CLONE_DIR                 = clone
 
-.PHONY: minimalist
-minimalist: clone_symfony_docker build up_detached permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
-	$(MAKE) restart
+_apply_patch:
+	$(if $(FILE),, $(error FILE argument is required))
+	-git apply .patch/$(FILE)
+	@printf " $(G)✔$(S) Patch $(Y)$(FILE)$(S) applied.\n\n"
 
-minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
+_patch_var_log_mapping: FILE=var-log-mapping.patch
+_patch_var_log_mapping: _apply_patch # INTERNAL
 
-_patch_sqlite: # INTERNAL
-	@printf "\n$(Y)Activate SQLite in the Dockerfile$(S)"
-	@printf "\n$(Y)---------------------------------$(S)\n\n"
-	-git apply .patch/sqlite.patch
-	@printf " $(G)✔$(S) Patch $(Y).patch/sqlite.patch$(S) applied.\n\n"
+_patch_posgresql_port_mapping: FILE=posgresql-port-mapping.patch
+_patch_posgresql_port_mapping: _apply_patch # INTERNAL
+
+_patch_sqlite: FILE=sqlite.patch
+_patch_sqlite: _apply_patch # INTERNAL
 
 _symfony_runtime: # INTERNAL
 	@printf "Waiting for Symfony Runtime...\n"
@@ -245,9 +246,17 @@ _symfony_runtime: # INTERNAL
 	@printf " $(G)✔$(S) Symfony Runtime is ready!\n"
 	@sleep 2
 
+.PHONY: minimalist
+minimalist: clone_symfony_docker _patch_var_log_mapping _patch_posgresql_port_mapping build up_detached permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
+	$(MAKE) restart
+
+minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
+
 demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
 	$(MAKE) clone_symfony_demo clone_symfony_docker
-	$(MAKE) _patch_sqlite build up_detached
+	$(MAKE) _patch_var_log_mapping _patch_sqlite
+	$(MAKE) build up_detached
 	$(MAKE) _symfony_runtime migration assets
 	$(MAKE) permissions images info
 
