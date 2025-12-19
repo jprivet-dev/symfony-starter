@@ -223,19 +223,14 @@ REPOSITORY_SYMFONY_DOCKER = git@github.com:dunglas/symfony-docker.git
 REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
 CLONE_DIR                 = clone
 
-_apply_patch:
-	$(if $(FILE),, $(error FILE argument is required))
-	-git apply .patch/$(FILE)
-	@printf " $(G)✔$(S) Patch $(Y)$(FILE)$(S) applied.\n\n"
+_patch_var_log_mapping: f=.patch/var-log-mapping.patch
+_patch_var_log_mapping: git_apply # INTERNAL
 
-_patch_var_log_mapping: FILE=var-log-mapping.patch
-_patch_var_log_mapping: _apply_patch # INTERNAL
+_patch_posgresql_port_mapping: f=.patch/posgresql-port-mapping.patch
+_patch_posgresql_port_mapping: git_apply # INTERNAL
 
-_patch_posgresql_port_mapping: FILE=posgresql-port-mapping.patch
-_patch_posgresql_port_mapping: _apply_patch # INTERNAL
-
-_patch_sqlite: FILE=sqlite.patch
-_patch_sqlite: _apply_patch # INTERNAL
+_patch_sqlite: f=.patch/sqlite.patch
+_patch_sqlite: git_apply # INTERNAL
 
 _symfony_runtime: # INTERNAL
 	@printf "Waiting for Symfony Runtime...\n"
@@ -901,6 +896,13 @@ git_hooks_disable: ## Disable the project's hooks directory
 	@printf " $(R)⨯$(S) Git hooks disabled.\n"
 
 git_pre_push: c1 ## Actions on Git pre-push
+
+##
+
+git_apply: ## Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply a=.patch/file.patch
+	$(if $(f),, $(error f argument is required))
+	-git apply $(f)
+	@printf " $(G)✔$(S) Patch $(Y)$(f)$(S) applied.\n\n"
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 

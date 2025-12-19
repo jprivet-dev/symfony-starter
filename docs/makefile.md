@@ -16,6 +16,7 @@
 — GENERATION 🔨 (CAN BE REMOVED AFTER SAVING THE PROJECT) ——————————————————
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist_lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+  demo                          Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
 
   clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
@@ -52,6 +53,8 @@ COMPLETE INSTALLATION
 
   check_level_1              c1 Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
   check_level_2              c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
+
+  tests                         Run all tests
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
   up                            Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
@@ -91,6 +94,7 @@ COMPLETE INSTALLATION
   db_drop                       Drop the database - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
   db_create                     Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
   db_init                       Drop and create the database and migrate
+  db_init@test                  Drop and create the database and migrate (env=test)
 
   validate                      Validate the mapping files - $ make validate [a=<arguments>] - Example: $ make validate a="--env=test"
   update_dump                   Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
@@ -104,6 +108,7 @@ COMPLETE INSTALLATION
 
   sql                           Execute the given SQL query and output the results - $ make sql [q=<query>] - Example: $ make sql q="SELECT * FROM user"
   fixtures                      Load fixtures (CAUTION! The load command purges the database) - $ make fixtures [a=<param>] - Example: $ make fixtures a="--append"
+  fixtures@test                 Load fixtures (env=test)
 
 — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
   psql                          Execute psql - $ make psql [a=<arguments>] - Example: $ make psql a="-V"
@@ -171,6 +176,8 @@ COMPLETE INSTALLATION
   git_hooks_enable              Enable the project's hooks directory
   git_hooks_disable             Disable the project's hooks directory
   git_pre_push                  Actions on Git pre-push
+
+  git_apply                     Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply a=.patch/file.patch
 
 — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
   permissions                p  Fix file permissions (primarily for Linux hosts)
