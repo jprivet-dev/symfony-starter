@@ -537,7 +537,7 @@ endif
 db_create: _doctrine ## Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
 ifneq ($(IS_SQLITE),)
 	@printf "$(G)SQLite$(S) detected via environment. Ensuring directory exists for $(Y)$(SQLITE_FILE)$(S).\n"
-	mkdir -p $(dir $(SQLITE_FILE))
+	$(CONSOLE) doctrine:schema:create $(a)
 else
 	@printf "$(G)Standard SQL$(S) engine detected. Creating database...\n"
 	$(CONSOLE) doctrine:database:create --if-not-exists $(a)
