@@ -1,0 +1,22 @@
+diff --git a/compose.override.yaml b/compose.override.yaml
+index c97f338..5653013 100644
+--- a/compose.override.yaml
++++ b/compose.override.yaml
+@@ -30,5 +30,5 @@ services:
+ ###> doctrine/doctrine-bundle ###
+   database:
+     ports:
+-      - "5432"
++      - "5432:5432"
+ ###< doctrine/doctrine-bundle ###
+diff --git a/compose.yaml b/compose.yaml
+index d3fb9bd..c94664a 100644
+--- a/compose.yaml
++++ b/compose.yaml
+@@ -9,7 +9,7 @@ services:
+       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
+       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
+       # Run "composer require symfony/orm-pack" to install and configure Doctrine ORM
+-      DATABASE_URL: postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-app}?serverVersion=${POSTGRES_VERSION:-15}&charset=${POSTGRES_CHARSET:-utf8}
++      DATABASE_URL: ${DATABASE_URL}
+       # Run "composer require symfony/mercure-bundle" to install and configure the Mercure integration
