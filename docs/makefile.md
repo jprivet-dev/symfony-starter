@@ -177,7 +177,8 @@ COMPLETE INSTALLATION
   git_hooks_disable             Disable the project's hooks directory
   git_pre_push                  Actions on Git pre-push
 
-  git_apply                     Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply a=.patch/file.patch
+  git_apply                     Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply f=file.patch
+  git_patch                     Generate a patch from current diff or from hashes - $ make git_patch [h=<hashes>] - Example: $ make git_patch h="abcd123 efgh456"
 
 — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
   permissions                p  Fix file permissions (primarily for Linux hosts)
@@ -186,6 +187,7 @@ COMPLETE INSTALLATION
 — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
   env_files                     Show env files loaded into this Makefile
   vars                          Show key Makefile variables
+  aliases                       Show aliases info (how to load it?)
   tree                          Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
 ```
 

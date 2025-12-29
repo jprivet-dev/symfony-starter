@@ -969,6 +969,10 @@ vars: ## Show key Makefile variables
 	@printf "BASH_COMMAND : $(BASH_COMMAND)\n"
 	@printf "CONSOLE      : $(CONSOLE)\n"
 
+.PHONY: aliases
+aliases: ## Show aliases info (how to load it?)
+	@printf "To load aliases, run:\n  $(Y). aliases$(S)\nor:\n  $(Y)console aliases$(S)\n";
+
 .PHONY: tree
 tree: l ?= 2
 tree: ## Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
