@@ -39,6 +39,10 @@ ifneq ($(wildcard .env.local.php),)
 $(warning [WARNING] In this Makefile it is not possible to use variables from .env.local.php file)
 endif
 
+# --- GIT ---
+
+GIT_HOOKS = off
+
 # --- FILES & DIRECTORIES ---
 
 SRC       = src
@@ -72,10 +76,19 @@ PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
 PHPSTAN_BASELINE  = phpstan-baseline.php
 PHPSTAN_CONFIG    = phpstan.dist.neon
 
+# --- DATABASE ---
+
+DB_URL_CLEAN   = $(shell echo '$(DATABASE_URL)' | tr -d '"')
+IS_SQLITE      = $(findstring sqlite,$(DB_URL_CLEAN))
+IS_MYSQL       = $(findstring mysql,$(DB_URL_CLEAN))
+IS_POSTGRESQL  = $(findstring postgresql,$(DB_URL_CLEAN))
+
+SQLITE_DB_ENV  = $(subst %kernel.environment%,$(APP_ENV),$(DB_URL_CLEAN))
+SQLITE_DB_FILE = $(subst sqlite:///%kernel.project_dir%/,,$(SQLITE_DB_ENV))
+
 # --- DOCKER OPTIONS ---
 
 # See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md
-
 PROJECT_NAME  ?= $(shell basename $(CURDIR) | tr '[:upper:]' '[:lower:]')
 SERVER_NAME    = $(PROJECT_NAME).localhost
 IMAGES_PREFIX  = $(PROJECT_NAME)-
@@ -84,15 +97,6 @@ IMAGES_PREFIX  = $(PROJECT_NAME)-
 HTTP_PORT     ?= 8080
 HTTPS_PORT    ?= 8443
 HTTP3_PORT    ?= $(HTTPS_PORT)
-
-# See services.php.environment.DATABASE_URL in compose.yaml
-POSTGRES_USER     ?= app
-POSTGRES_PASSWORD ?= !ChangeMe!
-POSTGRES_HOST     ?= database
-#POSTGRES_PORT    ?= 5432
-POSTGRES_DB       ?= app
-POSTGRES_VERSION  ?= 15
-POSTGRES_CHARSET  ?= utf8
 
 # Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
 HTTP_PORT_SUFFIX  = $(if $(HTTP_PORT),:$(HTTP_PORT))
@@ -116,15 +120,6 @@ $(eval $(call append,STABILITY))
 $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
-
-ifneq ($(DATABASE_URL),)
-$(eval $(call append,POSTGRES_USER))
-$(eval $(call append,POSTGRES_PASSWORD))
-$(eval $(call append,POSTGRES_HOST))
-$(eval $(call append,POSTGRES_DB))
-$(eval $(call append,POSTGRES_VERSION))
-$(eval $(call append,POSTGRES_CHARSET))
-endif
 
 # --- DOCKER COMMANDS ---
 
@@ -173,17 +168,6 @@ PHPSTAN          = $(PHP) $(VENDOR_PHPSTAN)
 PHPMD            = $(PHP) -d error_reporting="E_ALL & ~E_DEPRECATED" $(VENDOR_PHPMD)
 TWIGCSFIXER      = $(PHP) $(VENDOR_TWIGCSFIXER)
 PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
-
-# --- SQLITE ---
-
-DATABASE_URL_CLEAN = $(shell echo '$(DATABASE_URL)' | tr -d '"')
-DATABASE_URL_ENV   = $(subst %kernel.environment%,$(APP_ENV),$(DATABASE_URL_CLEAN))
-IS_SQLITE          = $(findstring sqlite,$(DATABASE_URL_CLEAN))
-SQLITE_FILE        = $(subst sqlite:///%kernel.project_dir%/,,$(DATABASE_URL_ENV))
-
-# --- GIT ---
-
-GIT_HOOKS = off
 
 # --- EXTENDS THE MAIN MAKEFILE WITH YOUR OWN LOCAL MAKEFILE ---
 
@@ -532,8 +516,8 @@ endif
 
 db_drop: _doctrine confirm ## Drop the database - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
 ifneq ($(IS_SQLITE),)
-	@printf "$(G)SQLite$(S) detected via environment. Removing $(Y)$(SQLITE_FILE)$(S).\n"
-	rm -rf $(SQLITE_FILE)
+	@printf "$(G)SQLite$(S) detected via environment. Removing $(Y)$(SQLITE_DB_FILE)$(S).\n"
+	rm -rf $(SQLITE_DB_FILE)
 else
 	@printf "$(G)Standard SQL$(S) engine detected. Dropping database...\n"
 	$(CONSOLE) doctrine:database:drop --if-exists --force $(a)
@@ -541,10 +525,10 @@ endif
 
 db_create: _doctrine ## Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
 ifneq ($(IS_SQLITE),)
-	@printf "$(G)SQLite$(S) detected via environment. Ensuring directory exists for $(Y)$(SQLITE_FILE)$(S).\n"
+	@printf "$(G)SQLite$(S) detected via environment. Ensuring directory exists for $(Y)$(SQLITE_DB_FILE)$(S).\n"
 	$(CONSOLE) doctrine:schema:create $(a)
 else
-	@printf "$(G)Standard SQL$(S) engine detected. Creating database $(Y)$(SQLITE_FILE)$(S)...\n"
+	@printf "$(G)Standard SQL$(S) engine detected. Creating database $(Y)$(SQLITE_DB_FILE)$(S)...\n"
 	$(CONSOLE) doctrine:database:create --if-not-exists $(a)
 endif
 
@@ -939,7 +923,10 @@ env_files: ## Show env files loaded into this Makefile
 vars: ## Show key Makefile variables
 	@printf "\n$(Y)Vars$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-	@$(foreach var, USER UNAME_S APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE, \
+	@$(foreach var, \
+		USER UNAME_S APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
+		CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE \
+		IS_SQLITE IS_MYSQL IS_POSTGRESQL, \
 		printf "%-15s : %s\n" "${var}" "${${var}}"; \
 	)
 
