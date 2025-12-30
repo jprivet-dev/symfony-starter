@@ -120,6 +120,7 @@ $(eval $(call append,STABILITY))
 $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
+$(eval $(call append,DATABASE_URL))
 
 # --- DOCKER COMMANDS ---
 
