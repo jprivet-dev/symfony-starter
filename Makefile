@@ -211,7 +211,7 @@ CLONE_DIR                 = clone
 _patch_var_log_mapping: f=var-log-mapping.patch
 _patch_var_log_mapping: git_apply # INTERNAL
 
-_patch_postgresql: f=posgresql.patch
+_patch_postgresql: f=postgresql.patch
 _patch_postgresql: git_apply # INTERNAL
 
 _patch_sqlite_base: f=sqlite-00-base.patch
