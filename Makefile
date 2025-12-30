@@ -931,43 +931,17 @@ env_files: ## Show env files loaded into this Makefile
 	@printf "\n$(Y)Symfony env files$(S)"
 	@printf "\n$(Y)-----------------$(S)\n\n"
 	@printf "Files loaded into this Makefile (in order of decreasing priority) $(Y)[APP_ENV=$(APP_ENV)]$(S):\n\n"
-ifneq ($(wildcard .env.$(APP_ENV).local),)
-	@printf "* $(G)✔$(S) .env.$(APP_ENV).local\n"
-else
-	@printf "* $(R)⨯$(S) .env.$(APP_ENV).local\n"
-endif
-ifneq ($(wildcard .env.$(APP_ENV)),)
-	@printf "* $(G)✔$(S) .env.$(APP_ENV)\n"
-else
-	@printf "* $(R)⨯$(S) .env.$(APP_ENV)\n"
-endif
-ifneq ($(wildcard .env.local),)
-	@printf "* $(G)✔$(S) .env.local\n"
-else
-	@printf "* $(R)⨯$(S) .env.local\n"
-endif
-ifneq ($(wildcard .env),)
-	@printf "* $(G)✔$(S) .env\n"
-else
-	@printf "* $(R)⨯$(S) .env\n"
-endif
+	@for file in .env.$(APP_ENV).local .env.$(APP_ENV) .env.local .env; do \
+		if [ -f "$${file}" ]; then printf "$(G)✔$(S) $${file}\n"; else printf "$(R)⨯$(S) $${file}\n"; fi; \
+	done
 
 .PHONY: vars
 vars: ## Show key Makefile variables
 	@printf "\n$(Y)Vars$(S)"
 	@printf "\n$(Y)----$(S)\n\n"
-	@printf "USER         : $(USER)\n"
-	@printf "UNAME_S      : $(UNAME_S)\n"
-	@printf "APP_ENV      : $(APP_ENV)\n"
-	@printf "UP_ENV       : $(UP_ENV)\n"
-	@printf "COMPOSE_V2   : $(COMPOSE_V2)\n"
-	@printf "COMPOSE      : $(COMPOSE)\n"
-	@printf "FORCE_NO_TTY : $(FORCE_NO_TTY)\n"
-	@printf "CONTAINER_PHP: $(CONTAINER_PHP)\n"
-	@printf "PHP          : $(PHP)\n"
-	@printf "COMPOSER     : $(COMPOSER)\n"
-	@printf "BASH_COMMAND : $(BASH_COMMAND)\n"
-	@printf "CONSOLE      : $(CONSOLE)\n"
+	@$(foreach var, USER UNAME_S APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE, \
+		printf "%-15s : %s\n" "${var}" "${${var}}"; \
+	)
 
 .PHONY: aliases
 aliases: ## Show aliases info (how to load it?)
