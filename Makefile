@@ -177,9 +177,9 @@ PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 # --- SQLITE ---
 
 DATABASE_URL_CLEAN = $(shell echo '$(DATABASE_URL)' | tr -d '"')
+DATABASE_URL_ENV   = $(subst %kernel.environment%,$(APP_ENV),$(DATABASE_URL_CLEAN))
 IS_SQLITE          = $(findstring sqlite,$(DATABASE_URL_CLEAN))
-SQLITE_FILE_TMP    = $(subst sqlite:///%kernel.project_dir%/,,$(DATABASE_URL_CLEAN))
-SQLITE_FILE        = $(subst sqlite:///,,$(SQLITE_FILE_TMP))
+SQLITE_FILE        = $(subst sqlite:///%kernel.project_dir%/,,$(DATABASE_URL_ENV))
 
 # --- GIT ---
 
@@ -530,10 +530,10 @@ ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
 	@exit 1
 endif
 
-db_drop: _doctrine ## Drop the database - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
+db_drop: _doctrine confirm ## Drop the database - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
 ifneq ($(IS_SQLITE),)
 	@printf "$(G)SQLite$(S) detected via environment. Removing $(Y)$(SQLITE_FILE)$(S).\n"
-	rm -f $(SQLITE_FILE)
+	rm -rf $(SQLITE_FILE)
 else
 	@printf "$(G)Standard SQL$(S) engine detected. Dropping database...\n"
 	$(CONSOLE) doctrine:database:drop --if-exists --force $(a)
@@ -544,7 +544,7 @@ ifneq ($(IS_SQLITE),)
 	@printf "$(G)SQLite$(S) detected via environment. Ensuring directory exists for $(Y)$(SQLITE_FILE)$(S).\n"
 	$(CONSOLE) doctrine:schema:create $(a)
 else
-	@printf "$(G)Standard SQL$(S) engine detected. Creating database...\n"
+	@printf "$(G)Standard SQL$(S) engine detected. Creating database $(Y)$(SQLITE_FILE)$(S)...\n"
 	$(CONSOLE) doctrine:database:create --if-not-exists $(a)
 endif
 
@@ -951,3 +951,10 @@ aliases: ## Show aliases info (how to load it?)
 tree: l ?= 2
 tree: ## Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
 	tree -A -L $(l) -F --dirsfirst
+
+## — INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
+
+PHONY: confirm
+confirm: ## Display a confirmation before continuing [y/N]
+	@if [ "$${NO_INTERACTION}" = "true" ]; then exit 0; fi; \
+	printf "$(G)Do you want to continue?$(S) [$(Y)y/N$(S)]: " && read answer && [ $${answer:-N} = y ]
