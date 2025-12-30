@@ -211,11 +211,14 @@ CLONE_DIR                 = clone
 _patch_var_log_mapping: f=var-log-mapping.patch
 _patch_var_log_mapping: git_apply # INTERNAL
 
-_patch_posgresql_port_mapping: f=posgresql-port-mapping.patch
-_patch_posgresql_port_mapping: git_apply # INTERNAL
+_patch_postgresql: f=posgresql.patch
+_patch_postgresql: git_apply # INTERNAL
 
-_patch_sqlite: f=sqlite.patch
-_patch_sqlite: git_apply # INTERNAL
+_patch_sqlite_base: f=sqlite-00-base.patch
+_patch_sqlite_base: git_apply # INTERNAL
+
+_patch_sqlite_env: f=sqlite-01-env.patch
+_patch_sqlite_env: git_apply # INTERNAL
 
 _symfony_runtime: # INTERNAL
 	@printf "Waiting for Symfony Runtime...\n"
@@ -227,7 +230,7 @@ _symfony_runtime: # INTERNAL
 	@sleep 2
 
 .PHONY: minimalist
-minimalist: clone_symfony_docker _patch_var_log_mapping _patch_posgresql_port_mapping build up_detached permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
+minimalist: clone_symfony_docker _patch_var_log_mapping _patch_postgresql build up_detached permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(MAKE) restart
 
 minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
@@ -235,7 +238,7 @@ minimalist_lts: ## Generate a minimalist Symfony application with Docker configu
 
 demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
 	$(MAKE) clone_symfony_demo clone_symfony_docker
-	$(MAKE) _patch_var_log_mapping _patch_sqlite
+	$(MAKE) _patch_var_log_mapping _patch_sqlite_base _patch_sqlite_env
 	$(MAKE) build up_detached
 	$(MAKE) _symfony_runtime migration assets
 	$(MAKE) permissions images info
@@ -285,8 +288,15 @@ remove_all: ## Remove all fresh Symfony application files
 
 ## COMPLETE INSTALLATION
 
-require_doctrine: ## Install Doctrine - https://symfony.com/doc/current/doctrine.html
+require_doctrine_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
+	$(MAKE) _patch_postgresql
+	$(MAKE) restart
+
+require_doctrine_sqlite: ## Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
+	$(MAKE) _patch_sqlite_base
+	$(COMPOSER) require symfony/orm-pack
+	$(MAKE) _patch_sqlite_env
 	$(MAKE) restart
 
 require_phpunit: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
