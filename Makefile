@@ -230,7 +230,7 @@ _symfony_runtime: # INTERNAL
 	@sleep 2
 
 .PHONY: minimalist
-minimalist: clone_symfony_docker _patch_var_log_mapping _patch_postgresql build up_detached _symfony_runtime permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
+minimalist: clone_symfony_docker _patch_var_log_mapping build up_detached _symfony_runtime permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(MAKE) restart
 
 minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
