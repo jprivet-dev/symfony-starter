@@ -403,7 +403,7 @@ check_level_2 c2: composer_validate validate lint phpunit ## Check everything be
 ##
 
 .PHONY: tests
-tests: db_init@test fixtures@test phpunit ## Run all tests
+tests t: db_init@test fixtures@test phpunit ## Run all tests
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
