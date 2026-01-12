@@ -195,11 +195,11 @@ help: ## Display this help message with available commands
 
 ## — SYMFONY CONTRIBUTION 🔗 (CAN BE REMOVED IF NOT NECESSARY) ————————————————
 
-symfony_link: ## Link local Symfony monorepo to the project (replace vendors with symlinks)
+symfony_contrib_link: ## Link local Symfony monorepo to the project (replace vendors with symlinks)
 	$(PHP) /symfony/link /app
 	@printf "🔗 Local Symfony repository linked to $(Y)$(SYMFONY_REPO_PATH)$(S)\n"
 
-symfony_unlink: ## Restore original vendors (rollback links)
+symfony_contrib_unlink: ## Restore original vendors (rollback links)
 	$(PHP) /symfony/link /app --rollback
 	@printf "🔙 Original vendors restored (detached from $(Y)$(SYMFONY_REPO_PATH)$(S))\n"
 
