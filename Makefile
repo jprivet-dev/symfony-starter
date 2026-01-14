@@ -498,7 +498,7 @@ php_env: ## Display all environment variables set within the PHP container
 	$(CONTAINER_PHP) env
 
 .PHONY: php_command
-php_command: ## Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
+php_command c: ## Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
 	$(BASH_COMMAND) "$(a)"
 
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
