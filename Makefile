@@ -372,7 +372,7 @@ require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/Ea
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
 .PHONY: install
-install: up_detached composer_install assets images git_hooks_init info ## Start the project, install dependencies and show info
+install: up_detached composer_install symfony_contrib_link images info ## Start the project, install dependencies and show info
 
 ##
 
@@ -420,6 +420,7 @@ tests t: db_init@test fixtures@test phpunit ## Run all tests
 .PHONY: up
 up: ## Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans $(a)
+	$(MAKE) _symfony_runtime
 	$(MAKE) safe
 
 up_detached: a=-d
