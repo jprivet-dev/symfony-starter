@@ -195,11 +195,11 @@ help: ## Display this help message with available commands
 
 ## — SYMFONY CONTRIBUTION 🔗 (CAN BE REMOVED IF NOT NECESSARY) ————————————————
 
-symfony_contrib_link: ## Link local Symfony monorepo to the project (replace vendors with symlinks)
+contrib_link: ## Link local Symfony monorepo to the project (replace vendors with symlinks)
 	$(PHP) /symfony/link /app
 	@printf "🔗 Local Symfony repository linked to $(Y)$(SYMFONY_REPO_PATH)$(S)\n"
 
-symfony_contrib_unlink: ## Restore original vendors (rollback links)
+contrib_unlink: ## Restore original vendors (rollback links)
 	$(PHP) /symfony/link /app --rollback
 	@printf "🔙 Original vendors restored (detached from $(Y)$(SYMFONY_REPO_PATH)$(S))\n"
 
@@ -372,7 +372,7 @@ require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/Ea
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
 .PHONY: install
-install: up_detached composer_install symfony_contrib_link images info ## Start the project, install dependencies and show info
+install: up_detached composer_install contrib_link images info ## Start the project, install dependencies and show info
 
 ##
 
