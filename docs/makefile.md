@@ -160,7 +160,7 @@
   aliases                       Show aliases info (how to load it?)
   tree                          Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
 
-— INTERNAL 🚧‍️ —————————————————————————————————————————————————————————————
+— INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
   confirm                       Display a confirmation before continuing [y/N]
 
 — SYMFONY CONTRIBUTION 🔗 (remove .mk/contrib.mk if not necessary) —————————
@@ -177,9 +177,9 @@
   remove_all                    Remove all fresh Symfony application files
 
 COMPLETE INSTALLATION
-  require_doctrine_postgresql    Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
-  require_doctrine_sqlite       Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
-  require_phpunit               Install PHPUnit - https://symfony.com/doc/current/testing.html
+  require_postgresql            Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
+  require_sqlite                Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
+  require_test_pack             Install PHPUnit - https://symfony.com/doc/current/testing.html
   require_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
   require_translation           Install translation - https://symfony.com/doc/current/translation.html
 

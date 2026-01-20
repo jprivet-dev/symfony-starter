@@ -85,18 +85,18 @@ remove_all: ## Remove all fresh Symfony application files
 
 ## COMPLETE INSTALLATION
 
-require_doctrine_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
+require_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) _patch_postgresql
 	$(MAKE) restart
 
-require_doctrine_sqlite: ## Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
+require_sqlite: ## Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
 	$(MAKE) _patch_sqlite_base
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) _patch_sqlite_env
 	$(MAKE) restart
 
-require_phpunit: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
+require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
 	$(COMPOSER) require --dev symfony/test-pack
 
 require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html

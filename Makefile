@@ -467,7 +467,7 @@ restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the da
 
 _phpunit:
 ifeq ($(wildcard $(BIN_PHPUNIT)),)
-	@printf " $(R)⨯$(S) $(Y)TESTS ✅$(S): remove that block or install $(Y)PHPUnit$(S) with $(G)make require_phpunit$(S)\n"
+	@printf " $(R)⨯$(S) $(Y)TESTS ✅$(S): remove that block or install $(Y)PHPUnit$(S) with $(G)make require_test_pack$(S)\n"
 	@exit 1
 endif
 
@@ -785,7 +785,7 @@ tree: l ?= 2
 tree: ## Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
 	tree -A -L $(l) -F --dirsfirst
 
-## — INTERNAL 🚧‍️ —————————————————————————————————————————————————————————————
+## — INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
 
 PHONY: confirm
 confirm: ## Display a confirmation before continuing [y/N]
