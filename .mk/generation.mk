@@ -85,10 +85,40 @@ remove_all: ## Remove all fresh Symfony application files
 
 ## COMPLETE INSTALLATION
 
+require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
+	$(COMPOSER) require api
+	$(MAKE) restart
+
+require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
+	$(COMPOSER) require easycorp/easyadmin-bundle
+	$(MAKE) restart
+
+require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
+	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
+
+require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
+	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
+	$(COMPOSER) require symfony/webapp-pack
+	$(MAKE) restart
+
+##
+
+require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
+
+require_bootstrap: require_asset_mapper ## Install Bootstrap - https://getbootstrap.com/
+	$(CONSOLE) importmap:require bootstrap
+
+require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+	$(COMPOSER) require --dev symfony/maker-bundle
+
 require_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) _patch_postgresql
 	$(MAKE) restart
+
+require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
+	$(COMPOSER) require --dev symfony/profiler-pack
 
 require_sqlite: ## Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
 	$(MAKE) _patch_sqlite_base
@@ -99,30 +129,19 @@ require_sqlite: ## Install Doctrine (SQLite) - https://symfony.com/doc/current/d
 require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
 	$(COMPOSER) require --dev symfony/test-pack
 
-require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
-
-require_translation: ## Install translation - https://symfony.com/doc/current/translation.html
+require_translation: ## Install Translation - https://symfony.com/doc/current/translation.html
 	$(COMPOSER) require symfony/translation
-
-##
-
-require_profiler: ## Install the profiler - https://symfony.com/doc/current/profiler.html
-	$(COMPOSER) require --dev symfony/profiler-pack
-
-require_maker_bundle: ## Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
-	$(COMPOSER) require --dev symfony/maker-bundle
-
-require_bootstrap: require_asset_mapper ## Install Bootstrap - https://getbootstrap.com/
-	$(CONSOLE) importmap:require bootstrap
-
-require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
-	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
 
 ##
 
 require_phpcsfixer: ## Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
 	$(COMPOSER) require --dev friendsofphp/php-cs-fixer
+
+require_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
+	$(COMPOSER) require --dev phpmd/phpmd
+
+require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website/
+	$(COMPOSER) require --dev phpmetrics/phpmetrics
 
 require_phpstan: ## Install PHPStan - https://phpstan.org/
 	$(COMPOSER) require --dev \
@@ -131,26 +150,5 @@ require_phpstan: ## Install PHPStan - https://phpstan.org/
 		phpstan/phpstan-doctrine \
 		phpstan/phpstan-phpunit
 
-require_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
-	$(COMPOSER) require --dev phpmd/phpmd
-
 require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
 	$(COMPOSER) require --dev vincentlanglet/twig-cs-fixer
-
-require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website/
-	$(COMPOSER) require --dev phpmetrics/phpmetrics
-
-##
-
-require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
-	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
-	$(COMPOSER) require symfony/webapp-pack
-	$(MAKE) restart
-
-require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
-	$(COMPOSER) require api
-	$(MAKE) restart
-
-require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
-	$(COMPOSER) require easycorp/easyadmin-bundle
-	$(MAKE) restart

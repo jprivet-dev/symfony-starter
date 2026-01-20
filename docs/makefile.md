@@ -15,70 +15,74 @@
 
 — PROJECT 🚀 ———————————————————————————————————————————————————————————————
   install                       Start the project, install dependencies and show info
+  info                          Show project access info
 
+  restart                       Stop & Start the project and show info (up_detached & info alias command)
   start                         Start the project and show info (up_detached & info alias command)
   stop                          Stop the project (down alias command)
-  restart                       Stop & Start the project and show info (up_detached & info alias command)
-  info                          Show project access info
 
   check_level_1              c1 Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
   check_level_2              c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
-
   tests                      t  Run all tests
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
-  up                            Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
-  up_detached                   Start the containers (wait for services to be running|healthy - detached mode)
-  down                          Stop and remove the containers
   build                         Build or rebuild Docker services - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
   build_force                   Build or rebuild Docker services (no cache) - $ make build [a=<arguments>]
-  logs                          View logs (follow mode)
+  down                          Stop and remove the containers
+  up                            Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
+  up_detached                   Start the containers (wait for services to be running|healthy - detached mode)
+
   clean                         Clean everything (containers, networks, images) [y/N]
   config                        Parse, resolve, and render compose file in canonical format
   images                        List images used by the current containers
+  logs                          View logs (follow mode)
 
 — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
   symfony                    sf Run Symfony console command - $ make symfony [a=<arguments>]- Example: $ make symfony a=cache:clear
-  cache_clear                cc Clear the Symfony cache
-  about                         Display information about the current Symfony project
-  routes                        Display current routes with assigned controllers and aliases
 
+  about                         Display information about the current Symfony project
+  cache_clear                cc Clear the Symfony cache
   dotenv                        Lists all .env files with variables and values
   dumpenv                       Generate .env.local.php for production
+  routes                        Display current routes with assigned controllers and aliases
 
 — PHP 🐘 ———————————————————————————————————————————————————————————————————
   php                           Run PHP command - $ make php [a=<arguments>]- Example: $ make php a=--version
 
-  php_sh                     sh Connect to the PHP container shell
-  php_env                       Display all environment variables set within the PHP container
   php_command                c  Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
+  php_env                       Display all environment variables set within the PHP container
+  php_sh                     sh Connect to the PHP container shell
 
 — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
   composer                      Run composer command - $ make composer [a=<arguments>] - Example: $ make composer a="require --dev phpunit/phpunit"
   composer_install           i  Install Composer packages
-  composer_update               Update Composer packages
-  composer_update_lock          Update only the content hash of composer.lock without updating dependencies
   composer_validate             Check if lock file is up to date (even when config.lock is false)
 
+  outdated                      Show a list of installed packages that have updates available, including their latest version
+  remove                        Remove a package from the require or require-dev - $ make remove [a=<arguments>] - Example: $ make remove a="phpunit/phpunit"
+  require                       Add required packages to your composer.json and installs them - $ make require [a=<arguments>] - Example: $ make require a="--dev phpunit/phpunit"
+  update                        Update Composer packages - $ make update [a=<arguments>] - Example: $ make update a="phpunit/phpunit"
+  update_lock                   Update only the content hash of composer.lock without updating dependencies
+
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
-  db_drop                       Drop the database [y/N] - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
-  db_create                     Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
   db_init                       Drop and create the database and migrate
   db_init@test                  Drop and create the database and migrate (env=test)
 
-  validate                      Validate the mapping files - $ make validate [a=<arguments>] - Example: $ make validate a="--env=test"
-  update_dump                   Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
-  update_force                  Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
+  db_drop                       Drop the database [y/N] - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
+  db_create                     Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
 
-  migration                     Create a new migration based on database changes (format the generated SQL)
-  migrate                       Execute a migration to the latest available version (in a transaction) - $ make migrate [a=<param>] - Example: $ make migrate a="current+3"
-  list                          Display a list of all available migrations and their status
   execute                       Execute one or more migration versions up or down manually - $ make execute a=<arguments> - Example: $ make execute a="DoctrineMigrations\Version20240205143239"
   generate                      Generate a blank migration class
+  list                          Display a list of all available migrations and their status
+  migrate                       Execute a migration to the latest available version (in a transaction) - $ make migrate [a=<param>] - Example: $ make migrate a="current+3"
+  migration                     Create a new migration based on database changes (format the generated SQL)
 
-  sql                           Execute the given SQL query and output the results - $ make sql [q=<query>] - Example: $ make sql q="SELECT * FROM user"
   fixtures                      Load fixtures (CAUTION! The load command purges the database) - $ make fixtures [a=<param>] - Example: $ make fixtures a="--append"
   fixtures@test                 Load fixtures (env=test)
+  sql                           Execute the given SQL query and output the results - $ make sql [q=<query>] - Example: $ make sql q="SELECT * FROM user"
+  update_dump                   Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
+  update_force                  Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
+  validate                      Validate the mapping files - $ make validate [a=<arguments>] - Example: $ make validate a="--env=test"
 
 — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
   psql                          Execute psql - $ make psql [a=<arguments>] - Example: $ make psql a="-V"
@@ -92,6 +96,7 @@
 — TESTS ✅ —————————————————————————————————————————————————————————————————
   phpunit                    p  Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
   phpunit_log                   Exporting PHPUnit terminal output to a log file
+
   coverage                      Generate code coverage report in HTML format - $ make coverage [a=<arguments>] - Example: $ make coverage a="tests/myTest.php"
   dox                           Report test execution progress in TestDox format - $ make dox [a=<arguments>] - Example: $ make dox a="tests/myTest.php"
   dox_text                      Report test execution progress in TestDox format and export it in text file
@@ -99,25 +104,25 @@
   xdebug_version                Xdebug version number
 
 — QUALITY ✅ ———————————————————————————————————————————————————————————————
+  lint                          Run all linters (stop on failure)
+  fix                           Fix with all linters
+
   phpcsfixer                    Run PHP CS Fixer - $ make phpcsfixer [a=<arguments>] - Example: $ make phpcsfixer a=list
   phpcsfixer_lint               Check code style
   phpcsfixer_fix                Fix code style
+
+  phpmd                         Run PHP Mess Detector - $ make phpmd [a=<arguments>] - Example: $ make phpmd a="src ansi cleancode"
+  phpmd_lint                    Run PHP Mess Detector with all rules
+
+  phpmetrics_report             Run PHPMetrics and generate detailed report
 
   phpstan                       Run PHPStan - $ make phpstan [a=<arguments>] - Example: $ make phpstan a="src tests"
   phpstan_lint                  Run PHPStan analyse - $ make phpstan_analyse [a=<arguments>] - Example: $ make phpstan_analyse a="src tests"
   phpstan_baseline              Generate PHPStan baseline - $ make phpstan_baseline [a=<arguments>] - Example: $ make phpstan_baseline a="src tests"
 
-  phpmd                         Run PHP Mess Detector - $ make phpmd [a=<arguments>] - Example: $ make phpmd a="src ansi cleancode"
-  phpmd_lint                    Run PHP Mess Detector with all rules
-
   twigcsfixer                   Run Twig CS Fixer - $ make twigcsfixer [a=<arguments>] - Example: $ make twigcsfixer a="lint /path/to/code"
   twigcsfixer_lint              Check Twig style
   twigcsfixer_fix               Fix Twig style
-
-  lint                          Run all linters (stop on failure)
-  fix                           Fix with all linters
-
-  phpmetrics_report             Run PHPMetrics and generate detailed report
 
 — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
   assets                        Generate all assets
@@ -143,8 +148,9 @@
 
 — GIT 🐙 ———————————————————————————————————————————————————————————————————
   git_hooks_init                Init the project's hooks directory (set GIT_HOOKS var)
-  git_hooks_enable              Enable the project's hooks directory
+
   git_hooks_disable             Disable the project's hooks directory
+  git_hooks_enable              Enable the project's hooks directory
   git_pre_push                  Actions on Git pre-push
 
   git_apply                     Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply f=file.patch
@@ -155,10 +161,10 @@
   safe                          Add /app to Git's safe directories within the php container
 
 — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
-  env_files                     Show env files loaded into this Makefile
-  vars                          Show key Makefile variables
   aliases                       Show aliases info (how to load it?)
+  env_files                     Show env files loaded into this Makefile
   tree                          Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
+  vars                          Show key Makefile variables
 
 — INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
   confirm                       Display a confirmation before continuing [y/N]
@@ -177,26 +183,25 @@
   remove_all                    Remove all fresh Symfony application files
 
 COMPLETE INSTALLATION
-  require_postgresql            Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
-  require_sqlite                Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
-  require_test_pack             Install PHPUnit - https://symfony.com/doc/current/testing.html
-  require_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-  require_translation           Install translation - https://symfony.com/doc/current/translation.html
-
-  require_profiler              Install the profiler - https://symfony.com/doc/current/profiler.html
-  require_maker_bundle          Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
-  require_bootstrap             Install Bootstrap - https://getbootstrap.com/
-  require_stimulus              Install StimulusBundle - https://ux.symfony.com/
-
-  require_phpcsfixer            Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
-  require_phpstan               Install PHPStan - https://phpstan.org/
-  require_phpmd                 Install PHP Mess Detector - https://phpmd.org/
-  require_twigcsfixer           Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
-  require_phpmetrics            Install PHPMetrics - https://phpmetrics.github.io/website/
-
-  require_webapp                Install a web application - https://symfony.com/doc/current/setup.html
   require_api                   Install API Platform - https://api-platform.com/docs/symfony/
   require_easy_admin            Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
+  require_stimulus              Install StimulusBundle - https://ux.symfony.com/
+  require_webapp                Install a web application - https://symfony.com/doc/current/setup.html
+
+  require_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+  require_bootstrap             Install Bootstrap - https://getbootstrap.com/
+  require_maker_bundle          Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+  require_postgresql            Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
+  require_profiler              Install Profiler - https://symfony.com/doc/current/profiler.html
+  require_sqlite                Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
+  require_test_pack             Install PHPUnit - https://symfony.com/doc/current/testing.html
+  require_translation           Install Translation - https://symfony.com/doc/current/translation.html
+
+  require_phpcsfixer            Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
+  require_phpmd                 Install PHP Mess Detector - https://phpmd.org/
+  require_phpmetrics            Install PHPMetrics - https://phpmetrics.github.io/website/
+  require_phpstan               Install PHPStan - https://phpstan.org/
+  require_twigcsfixer           Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
 ```
 
 <!-- MAKEFILE_COMMANDS_END -->
