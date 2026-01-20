@@ -177,7 +177,7 @@ PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 
 # --- EXTEND THE MAIN MAKEFILE ---
 
-ifeq ($(APP_ENV),dev)
+ifneq ($(APP_ENV),prod)
 -include $(sort $(wildcard .mk/*.mk))
 endif
 
