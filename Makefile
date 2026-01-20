@@ -244,7 +244,7 @@ tests t: db_init@test fixtures@test phpunit ## Run all tests
 .PHONY: up
 up: ## Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans $(a)
-	$(MAKE) _symfony_runtime
+	$(MAKE) runtime
 	$(MAKE) safe
 
 up_detached: a=-d
@@ -791,3 +791,13 @@ PHONY: confirm
 confirm: ## Display a confirmation before continuing [y/N]
 	@if [ "$${NO_INTERACTION}" = "true" ]; then exit 0; fi; \
 	printf "$(G)Do you want to continue?$(S) [$(Y)y/N$(S)]: " && read answer && [ $${answer:-N} = y ]
+
+PHONY: runtime
+runtime: # INTERNAL
+	@printf "Waiting for Symfony Runtime...\n"
+	@until $(CONTAINER_PHP) ls vendor/autoload_runtime.php >/dev/null 2>&1; do \
+		printf " $(R)⨯$(S) The vendor file is not ready yet. Pause 3 seconds...\n"; \
+		sleep 3; \
+	done
+	@printf " $(G)✔$(S) Symfony Runtime is ready!\n"
+	@sleep 1

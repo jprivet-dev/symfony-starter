@@ -26,17 +26,8 @@ _patch_sqlite_base: git_apply # INTERNAL
 _patch_sqlite_env: f=sqlite-01-env.patch
 _patch_sqlite_env: git_apply # INTERNAL
 
-_symfony_runtime: # INTERNAL
-	@printf "Waiting for Symfony Runtime...\n"
-	@until docker compose exec php ls vendor/autoload_runtime.php >/dev/null 2>&1; do \
-		printf " $(R)⨯$(S) The vendor file is not ready yet. Pause 3 seconds...\n"; \
-		sleep 3; \
-	done
-	@printf " $(G)✔$(S) Symfony Runtime is ready!\n"
-	@sleep 3
-
 .PHONY: minimalist
-minimalist: clone_symfony_docker _patch_var_log_mapping build up_detached _symfony_runtime permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
+minimalist: clone_symfony_docker _patch_var_log_mapping build up_detached runtime permissions ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(MAKE) restart
 
 minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
@@ -46,7 +37,7 @@ demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXP
 	$(MAKE) clone_symfony_demo clone_symfony_docker
 	$(MAKE) _patch_var_log_mapping _patch_sqlite_base _patch_sqlite_env
 	$(MAKE) build up_detached
-	$(MAKE) _symfony_runtime migration assets
+	$(MAKE) runtime migration assets
 	$(MAKE) permissions images info
 
 ##
