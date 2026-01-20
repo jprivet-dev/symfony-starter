@@ -787,7 +787,6 @@ endif
 .PHONY: safe
 safe: ## Add /app to Git's safe directories within the php container
 	$(COMPOSE) exec php git config --global --add safe.directory /app
-	$(COMPOSE) exec php git config --global --add safe.directory /symfony
 
 ## — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
 
