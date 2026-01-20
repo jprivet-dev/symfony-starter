@@ -121,6 +121,7 @@ $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
 $(eval $(call append,DATABASE_URL))
+$(eval $(call append,SYMFONY_MONOREPO_PATH))
 
 # --- DOCKER COMMANDS ---
 
@@ -144,18 +145,22 @@ endif
 EXEC        = $(COMPOSE) exec
 EXEC_NO_TTY = $(COMPOSE) exec -T
 
-# -T : avoid "the input device is not a TTY" error - Example: $ FORCE_NO_TTY=true make my_command
+# -T: avoid "the input device is not a TTY" error - Example: $ FORCE_NO_TTY=true make my_command
 FORCE_NO_TTY ?= false
 ifeq ($(FORCE_NO_TTY), true)
 EXEC = $(EXEC_NO_TTY)
 endif
 
+# Run commands as www-data user - Example: $ FORCE_WWW_DATA_USER=true make tests
+FORCE_WWW_DATA_USER ?= false
+ifeq ($(FORCE_WWW_DATA_USER), true)
+EXEC += -u www-data php
+endif
+
 CONTAINER_DATABASE        = $(EXEC) database
 CONTAINER_DATABASE_NO_TTY = $(EXEC_NO_TTY) database
-
-CONTAINER_PHP          = $(EXEC) php
-CONTAINER_PHP_NO_TTY   = $(EXEC_NO_TTY) php
-CONTAINER_PHP_COVERAGE = $(EXEC) -e XDEBUG_MODE=coverage php
+CONTAINER_PHP             = $(EXEC) php
+CONTAINER_PHP_COVERAGE    = $(EXEC) -e XDEBUG_MODE=coverage php
 
 PHP              = $(CONTAINER_PHP) php
 COMPOSER         = $(CONTAINER_PHP) composer
@@ -268,6 +273,12 @@ up_detached: up ## Start the containers (wait for services to be running|healthy
 clean: confirm ## Clean everything (containers, networks, images) [y/N]
 	$(COMPOSE) down --rmi all -v
 
+.PHONY: volumes
+volumes: confirm # Stops and removes all containers and any unnamed volumes [y/N]
+	$(COMPOSE) --volumes --rmi all
+
+##
+
 .PHONY: config
 config: ## Parse, resolve, and render compose file in canonical format
 	$(UP_ENV) $(COMPOSE) config
@@ -376,7 +387,7 @@ update_lock: ## Update only the content hash of composer.lock without updating d
 
 _doctrine:
 ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
-	@printf " $(R)⨯$(S) $(Y)DOCTRINE & SQL 💽$(S): remove that block or install $(Y)Doctrine$(S) with $(G)make require_doctrine$(S)\n"
+	@printf " $(R)⨯$(S) Remove the $(Y)DOCTRINE / SQL 💽$(S) section or install $(Y)Doctrine$(S) with $(G)make require_doctrine$(S)\n"
 	@exit 1
 endif
 
@@ -479,7 +490,7 @@ dump_gz: ## Create a compressed SQL dump (gzip)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
 .PHONY: restore
-restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the database) - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
+restore: confirm db_drop db_create ## Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
 	$(if $(f),, $(error f argument is required))
 	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) <$(f)
 
@@ -487,7 +498,7 @@ restore: db_drop db_create ## Restore a dump (CAUTION! The command purges the da
 
 _phpunit:
 ifeq ($(wildcard $(BIN_PHPUNIT)),)
-	@printf " $(R)⨯$(S) $(Y)TESTS ✅$(S): remove that block or install $(Y)PHPUnit$(S) with $(G)make require_test_pack$(S)\n"
+	@printf " $(R)⨯$(S) Remove the $(Y)TESTS ✅$(S) section or install $(Y)PHPUnit$(S) with $(G)make require_test_pack$(S)\n"
 	@exit 1
 endif
 
@@ -543,7 +554,7 @@ lint: phpcsfixer_lint phpstan_lint phpmd_lint twigcsfixer_lint ## Run all linter
 
 _phpcsfixer:
 ifeq ($(wildcard $(VENDOR_PHPCSFIXER)),)
-	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHP CS Fixer$(S): remove that block or install $(Y)PHP CS Fixer$(S) with $(G)make require_phpcsfixer$(S)\n"
+	@printf " $(R)⨯$(S) Remove the $(Y)QUALITY ✅ / PHP CS Fixer$(S) section or install $(Y)PHP CS Fixer$(S) with $(G)make require_phpcsfixer$(S)\n"
 	@exit 1
 endif
 
@@ -563,7 +574,7 @@ phpcsfixer_lint: _phpcsfixer ## Check code style
 
 _phpmd:
 ifeq ($(wildcard $(VENDOR_PHPMD)),)
-	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHP Mess Detector$(S): remove that block or install $(Y)PHP Mess Detector$(S) with $(G)make require_phpmd$(S)\n"
+	@printf " $(R)⨯$(S) Remove the $(Y)QUALITY ✅ / PHP Mess Detector$(S) section or install $(Y)PHP Mess Detector$(S) with $(G)make require_phpmd$(S)\n"
 	@exit 1
 endif
 
@@ -580,7 +591,7 @@ phpmd_lint: _phpmd ## Run PHP Mess Detector with all rules
 
 _phpmetrics:
 ifeq ($(wildcard $(VENDOR_PHPMETRICS)),)
-	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHPMetrics$(S): remove that block or install $(Y)PHPMetrics$(S) with $(G)make require_phpmetrics$(S)\n"
+	@printf " $(R)⨯$(S) Remove the $(Y)QUALITY ✅ / PHPMetrics$(S) section or install $(Y)PHPMetrics$(S) with $(G)make require_phpmetrics$(S)\n"
 	@exit 1
 endif
 
@@ -594,7 +605,7 @@ phpmetrics_report: _phpmetrics ## Run PHPMetrics and generate detailed report
 
 _phpstan:
 ifeq ($(wildcard $(VENDOR_PHPSTAN)),)
-	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / PHPStan$(S): remove that block or install $(Y)PHPStan$(S) with $(G)make require_phpstan$(S)\n"
+	@printf " $(R)⨯$(S) Remove the $(Y)QUALITY ✅ / PHPStan$(S) section or install $(Y)PHPStan$(S) with $(G)make require_phpstan$(S)\n"
 	@exit 1
 endif
 
@@ -614,7 +625,7 @@ phpstan_lint: _phpstan ## Run PHPStan analyse - $ make phpstan_analyse [a=<argum
 
 _twigcsfixer:
 ifeq ($(wildcard $(VENDOR_TWIGCSFIXER)),)
-	@printf " $(R)⨯$(S) $(Y)QUALITY ✅ / Twig CS Fixer$(S): remove that block or install $(Y)Twig CS Fixer$(S) with $(G)make require_twigcsfixer$(S)\n"
+	@printf " $(R)⨯$(S) Remove the $(Y)QUALITY ✅ / Twig CS Fixer$(S) section or install $(Y)Twig CS Fixer$(S) with $(G)make require_twigcsfixer$(S)\n"
 	@exit 1
 endif
 
@@ -634,7 +645,7 @@ twigcsfixer_lint: _twigcsfixer ## Check Twig style
 
 _assets:
 ifeq ($(wildcard $(VENDOR_ASSETS)),)
-	@printf " $(R)⨯$(S) $(Y)ASSETS 🎨‍$(S): remove that block or install $(Y)AssetMapper$(S) with $(G)make require_asset_mapper$(S)\n"
+	@printf " $(R)⨯$(S) Remove the $(Y)ASSETS 🎨‍$(S) section or install $(Y)AssetMapper$(S) with $(G)make require_asset_mapper$(S)\n"
 	@exit 1
 endif
 
@@ -681,7 +692,7 @@ importmap_update: _assets ## Update JavaScript packages to their latest versions
 
 _translation:
 ifeq ($(wildcard $(VENDOR_TRANSLATION)),)
-	@printf " $(R)⨯$(S) $(Y)TRANSLATION 🇬🇧$(S): remove that block or install $(Y)Translation$(S) with $(G)make require_translation$(S)\n"
+	@printf " $(R)⨯$(S) Remove the $(Y)TRANSLATION 🇬🇧$(S) section or install $(Y)Translation$(S) with $(G)make require_translation$(S)\n"
 	@exit 1
 endif
 
@@ -776,6 +787,7 @@ endif
 .PHONY: safe
 safe: ## Add /app to Git's safe directories within the php container
 	$(COMPOSE) exec php git config --global --add safe.directory /app
+	$(COMPOSE) exec php git config --global --add safe.directory /symfony
 
 ## — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
 
@@ -807,15 +819,15 @@ vars: ## Show key Makefile variables
 		printf "%-15s : %s\n" "${var}" "${${var}}"; \
 	)
 
-# —— INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
+# —— INTERNAL (HIDDEN) 🚧‍️ ——————————————————————————————————————————————————————————————
 
 PHONY: confirm
-confirm: ## Display a confirmation before continuing [y/N]
+confirm: # INTERNAL - Display a confirmation before continuing [y/N]
 	@if [ "$${NO_INTERACTION}" = "true" ]; then exit 0; fi; \
 	printf "$(G)Do you want to continue?$(S) [$(Y)y/N$(S)]: " && read answer && [ $${answer:-N} = y ]
 
 PHONY: runtime
-runtime: # INTERNAL
+runtime: # INTERNAL - Check if vendor/autoload_runtime.php is ready yet
 	@printf "Waiting for Symfony Runtime...\n"
 	@until $(CONTAINER_PHP) ls vendor/autoload_runtime.php >/dev/null 2>&1; do \
 		printf " $(R)⨯$(S) The vendor file is not ready yet. Pause 3 seconds...\n"; \
