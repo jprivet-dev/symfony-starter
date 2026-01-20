@@ -1,4 +1,7 @@
-## — SYMFONY CONTRIBUTION 🔗 (remove .mk/contrib.mk if not necessary) —————————
+## — SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
+
+##   (to delete this section, delete .mk/contrib.mk)
+##
 
 contrib_link: ## Link local Symfony monorepo to the project (replace vendors with symlinks)
 	$(PHP) /symfony/link /app

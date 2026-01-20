@@ -220,13 +220,13 @@ endif
 ##
 
 .PHONY: restart
-restart: stop start ## Stop & Start the project and show info (up_detached & info alias command)
+restart: stop start ## Stop & Start the project and show info (detached mode)
 
 .PHONY: start
-start: up_detached images info ## Start the project and show info (up_detached & info alias command)
+start: up_detached images info ## Start the project and show info (detached mode)
 
 .PHONY: stop
-stop: down ## Stop the project (down alias command)
+stop: down ## Stop the project (down)
 
 ##
 
@@ -450,7 +450,7 @@ update_force: _doctrine ## Execute the generated SQL needed to synchronize the d
 validate: _doctrine ## Validate the mapping files - $ make validate [a=<arguments>] - Example: $ make validate a="--env=test"
 	$(CONSOLE) doctrine:schema:validate -v $(a)
 
-## — POSTGRESQL 💽 ————————————————————————————————————————————————————————————
+## — POSTGRESQL 🛢️ ————————————————————————————————————————————————————————————
 
 .PHONY: psql
 psql: ## Execute psql - $ make psql [a=<arguments>] - Example: $ make psql a="-V"
@@ -514,32 +514,30 @@ coverage: _phpunit ## Generate code coverage report in HTML format - $ make cove
 dox: _phpunit ## Report test execution progress in TestDox format - $ make dox [a=<arguments>] - Example: $ make dox a="tests/myTest.php"
 	$(PHPUNIT) --testdox $(a)
 
-dox_text: FILE = $(BUILD)/dox/testdox-$(NOW).txt
-dox_text: _phpunit ## Report test execution progress in TestDox format and export it in text file
-	mkdir -p $(BUILD)/dox
-	-$(PHPUNIT) --testdox-text $(FILE) $(a)
-	@printf " $(G)✔$(S) TestDox report is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
-
 dox_html: FILE = $(BUILD)/dox/testdox-$(NOW).html
-dox_html: _phpunit ## Report test execution progress in TestDox format and export it in HTML file
+dox_html: _phpunit ## Report test execution progress in TestDox format and export it to an HTML file
 	mkdir -p $(BUILD)/dox
 	-$(PHPUNIT) --testdox-html $(FILE) $(a)
 	@printf " $(G)✔$(S) TestDox report is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
-#
+dox_text: FILE = $(BUILD)/dox/testdox-$(NOW).txt
+dox_text: _phpunit ## Report test execution progress in TestDox format and export it to a text file
+	mkdir -p $(BUILD)/dox
+	-$(PHPUNIT) --testdox-text $(FILE) $(a)
+	@printf " $(G)✔$(S) TestDox report is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
 xdebug_version: ## Xdebug version number
 	$(PHP) -r "var_dump(phpversion('xdebug'));"
 
 ## — QUALITY ✅ ———————————————————————————————————————————————————————————————
 
-.PHONY: lint
-lint: phpcsfixer_lint phpstan_lint phpmd_lint twigcsfixer_lint ## Run all linters (stop on failure)
-
 .PHONY: fix
 fix: ## Fix with all linters
 	-$(MAKE) phpcsfixer_fix
 	-$(MAKE) twigcsfixer_fix
+
+.PHONY: lint
+lint: phpcsfixer_lint phpstan_lint phpmd_lint twigcsfixer_lint ## Run all linters (stop on failure)
 
 ##
 
@@ -553,13 +551,13 @@ endif
 phpcsfixer: _phpcsfixer ## Run PHP CS Fixer - $ make phpcsfixer [a=<arguments>] - Example: $ make phpcsfixer a=list
 	$(PHPCSFIXER) $(a)
 
+phpcsfixer_fix: _phpcsfixer ## Fix code style
+	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) fix
+
 phpcsfixer_lint: _phpcsfixer ## Check code style
 	@printf "\n$(Y)PHP CS Fixer [LINT]$(S)"
 	@printf "\n$(Y)-------------------$(S)\n\n"
 	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) check
-
-phpcsfixer_fix: _phpcsfixer ## Fix code style
-	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) fix
 
 ##
 
@@ -604,13 +602,13 @@ endif
 phpstan: _phpstan ## Run PHPStan - $ make phpstan [a=<arguments>] - Example: $ make phpstan a="src tests"
 	$(PHPSTAN) $(a)
 
+phpstan_baseline: _phpstan ## Generate PHPStan baseline - $ make phpstan_baseline [a=<arguments>] - Example: $ make phpstan_baseline a="src tests"
+	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a) --generate-baseline $(PHPSTAN_BASELINE)
+
 phpstan_lint: _phpstan ## Run PHPStan analyse - $ make phpstan_analyse [a=<arguments>] - Example: $ make phpstan_analyse a="src tests"
 	@printf "\n$(Y)PHPStan [LINT]$(S)"
 	@printf "\n$(Y)--------------$(S)\n\n"
 	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a)
-
-phpstan_baseline: _phpstan ## Generate PHPStan baseline - $ make phpstan_baseline [a=<arguments>] - Example: $ make phpstan_baseline a="src tests"
-	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a) --generate-baseline $(PHPSTAN_BASELINE)
 
 ##
 
@@ -624,13 +622,13 @@ endif
 twigcsfixer: _twigcsfixer ## Run Twig CS Fixer - $ make twigcsfixer [a=<arguments>] - Example: $ make twigcsfixer a="lint /path/to/code"
 	$(TWIGCSFIXER) $(a)
 
+twigcsfixer_fix: _twigcsfixer ## Fix Twig style
+	$(TWIGCSFIXER) lint --fix $(TEMPLATES)
+
 twigcsfixer_lint: _twigcsfixer ## Check Twig style
 	@printf "\n$(Y)Twig CS Fixer [LINT]$(S)"
 	@printf "\n$(Y)--------------------$(S)\n\n"
 	$(TWIGCSFIXER) lint $(TEMPLATES)
-
-twigcsfixer_fix: _twigcsfixer ## Fix Twig style
-	$(TWIGCSFIXER) lint --fix $(TEMPLATES)
 
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 
@@ -653,7 +651,7 @@ endif
 asset_map_clear: _assets ## Clear all assets in the public output directory
 	$(COMPOSE) run --rm php rm -rf ./public/assets
 
-asset_map_compile: _assets asset_map_clear ## Compile all mapped assets and writes them to the final public output directory
+asset_map_compile: _assets asset_map_clear ## Compile all mapped assets and write them to the final public output directory
 	$(CONSOLE) asset-map:compile
 
 asset_map_debug: _assets ## See all of the mapped assets
@@ -688,13 +686,13 @@ ifeq ($(wildcard $(VENDOR_TRANSLATION)),)
 endif
 
 .PHONY: extract
-extract: _translation ## Extracts translation strings from templates (fr)
+extract: _translation ## Extract translation strings from templates
 	$(CONSOLE) translation:extract --sort=asc --format=yaml --force fr
 
 ## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
 
 .PHONY: certificates
-certificates: ## Installs the Caddy TLS certificate to the trust store
+certificates: ## Install the Caddy TLS certificate to the trust store
 	@printf "\n$(Y)Copying the Caddy certificate to trust store$(S)"
 	@printf "\n$(Y)--------------------------------------------$(S)\n\n"
 	@if [ ! -f /tmp/caddy_root.crt ]; then \
@@ -713,7 +711,7 @@ endif
 	@printf " $(G)✔$(S) The Caddy root certificate has been added to the trust store.\n"
 
 certificates_export: FILE=$(BUILD)/tls/root.crt
-certificates_export: ## Exports the Caddy root certificate from the container to the host
+certificates_export: ## Export the Caddy root certificate from the container to the host
 	mkdir -p $(BUILD)/tls
 	@$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" >$(FILE)
 	@printf " $(G)✔$(S) The Caddy root certificate has been exported to $(Y)$(FILE)$(S).\n"
@@ -733,7 +731,7 @@ hosts: ## Add the server name to /etc/hosts file
 
 ## — GIT 🐙 ———————————————————————————————————————————————————————————————————
 
-git_hooks_init: ## Init the project's hooks directory (set GIT_HOOKS var)
+git_hooks_init: ## Initialize the project's hooks directory (set GIT_HOOKS var)
 ifeq ($(GIT_HOOKS),on)
 	$(MAKE) git_hooks_enable
 else
@@ -782,7 +780,7 @@ safe: ## Add /app to Git's safe directories within the php container
 ## — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
 
 .PHONY: aliases
-aliases: ## Show aliases info (how to load it?)
+aliases: ## Show aliases info and loading instructions
 	@printf "To load aliases, run:\n  $(Y). aliases$(S)\nor:\n  $(Y)console aliases$(S)\n";
 
 env_files: ## Show env files loaded into this Makefile
@@ -809,7 +807,7 @@ vars: ## Show key Makefile variables
 		printf "%-15s : %s\n" "${var}" "${${var}}"; \
 	)
 
-## — INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
+# —— INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
 
 PHONY: confirm
 confirm: ## Display a confirmation before continuing [y/N]

@@ -1,4 +1,7 @@
-## — GENERATION 🔨 (remove .mk/generation.mk if not necessary) ————————————————
+## — GENERATION 🔨 ————————————————————————————————————————————————————————————
+
+##   (to delete this section, delete .mk/generation.mk)
+##
 
 # This GENERATION block, with these following targets and variables,
 # is only used for the initial setup and can be removed after saving the project.
@@ -83,7 +86,7 @@ remove_all: ## Remove all fresh Symfony application files
 	git reset --hard
 	git clean -f -d
 
-## COMPLETE INSTALLATION
+##   COMPLETE INSTALLATION
 
 require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
 	$(COMPOSER) require api

@@ -17,9 +17,9 @@
   install                       Start the project, install dependencies and show info
   info                          Show project access info
 
-  restart                       Stop & Start the project and show info (up_detached & info alias command)
-  start                         Start the project and show info (up_detached & info alias command)
-  stop                          Stop the project (down alias command)
+  restart                       Stop & Start the project and show info (detached mode)
+  start                         Start the project and show info (detached mode)
+  stop                          Stop the project (down)
 
   check_level_1              c1 Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
   check_level_2              c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
@@ -84,7 +84,7 @@
   update_force                  Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
   validate                      Validate the mapping files - $ make validate [a=<arguments>] - Example: $ make validate a="--env=test"
 
-— POSTGRESQL 💽 ————————————————————————————————————————————————————————————
+— POSTGRESQL 🛢️ ————————————————————————————————————————————————————————————
   psql                          Execute psql - $ make psql [a=<arguments>] - Example: $ make psql a="-V"
   psql_sh                       Open a shell on the PostgreSQL container
   tables                        Show all tables
@@ -99,17 +99,17 @@
 
   coverage                      Generate code coverage report in HTML format - $ make coverage [a=<arguments>] - Example: $ make coverage a="tests/myTest.php"
   dox                           Report test execution progress in TestDox format - $ make dox [a=<arguments>] - Example: $ make dox a="tests/myTest.php"
-  dox_text                      Report test execution progress in TestDox format and export it in text file
-  dox_html                      Report test execution progress in TestDox format and export it in HTML file
+  dox_html                      Report test execution progress in TestDox format and export it to an HTML file
+  dox_text                      Report test execution progress in TestDox format and export it to a text file
   xdebug_version                Xdebug version number
 
 — QUALITY ✅ ———————————————————————————————————————————————————————————————
-  lint                          Run all linters (stop on failure)
   fix                           Fix with all linters
+  lint                          Run all linters (stop on failure)
 
   phpcsfixer                    Run PHP CS Fixer - $ make phpcsfixer [a=<arguments>] - Example: $ make phpcsfixer a=list
-  phpcsfixer_lint               Check code style
   phpcsfixer_fix                Fix code style
+  phpcsfixer_lint               Check code style
 
   phpmd                         Run PHP Mess Detector - $ make phpmd [a=<arguments>] - Example: $ make phpmd a="src ansi cleancode"
   phpmd_lint                    Run PHP Mess Detector with all rules
@@ -117,18 +117,18 @@
   phpmetrics_report             Run PHPMetrics and generate detailed report
 
   phpstan                       Run PHPStan - $ make phpstan [a=<arguments>] - Example: $ make phpstan a="src tests"
-  phpstan_lint                  Run PHPStan analyse - $ make phpstan_analyse [a=<arguments>] - Example: $ make phpstan_analyse a="src tests"
   phpstan_baseline              Generate PHPStan baseline - $ make phpstan_baseline [a=<arguments>] - Example: $ make phpstan_baseline a="src tests"
+  phpstan_lint                  Run PHPStan analyse - $ make phpstan_analyse [a=<arguments>] - Example: $ make phpstan_analyse a="src tests"
 
   twigcsfixer                   Run Twig CS Fixer - $ make twigcsfixer [a=<arguments>] - Example: $ make twigcsfixer a="lint /path/to/code"
-  twigcsfixer_lint              Check Twig style
   twigcsfixer_fix               Fix Twig style
+  twigcsfixer_lint              Check Twig style
 
 — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
   assets                        Generate all assets
 
   asset_map_clear               Clear all assets in the public output directory
-  asset_map_compile             Compile all mapped assets and writes them to the final public output directory
+  asset_map_compile             Compile all mapped assets and write them to the final public output directory
   asset_map_debug               See all of the mapped assets
 
   importmap_audit               Check for security vulnerability advisories for dependencies
@@ -139,15 +139,15 @@
   importmap_update              Update JavaScript packages to their latest versions
 
 — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
-  extract                       Extracts translation strings from templates (fr)
+  extract                       Extract translation strings from templates
 
 — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
-  certificates                  Installs the Caddy TLS certificate to the trust store
-  certificates_export           Exports the Caddy root certificate from the container to the host
+  certificates                  Install the Caddy TLS certificate to the trust store
+  certificates_export           Export the Caddy root certificate from the container to the host
   hosts                         Add the server name to /etc/hosts file
 
 — GIT 🐙 ———————————————————————————————————————————————————————————————————
-  git_hooks_init                Init the project's hooks directory (set GIT_HOOKS var)
+  git_hooks_init                Initialize the project's hooks directory (set GIT_HOOKS var)
 
   git_hooks_disable             Disable the project's hooks directory
   git_hooks_enable              Enable the project's hooks directory
@@ -161,19 +161,23 @@
   safe                          Add /app to Git's safe directories within the php container
 
 — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
-  aliases                       Show aliases info (how to load it?)
+  aliases                       Show aliases info and loading instructions
   env_files                     Show env files loaded into this Makefile
   tree                          Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
   vars                          Show key Makefile variables
-
-— INTERNAL 🚧‍️ ——————————————————————————————————————————————————————————————
   confirm                       Display a confirmation before continuing [y/N]
 
-— SYMFONY CONTRIBUTION 🔗 (remove .mk/contrib.mk if not necessary) —————————
+— SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
+
+  (to delete this section, delete .mk/contrib.mk)
+
   contrib_link                  Link local Symfony monorepo to the project (replace vendors with symlinks)
   contrib_unlink                Restore original vendors (rollback links)
 
-— GENERATION 🔨 (remove .mk/generation.mk if not necessary) ————————————————
+— GENERATION 🔨 ————————————————————————————————————————————————————————————
+
+  (to delete this section, delete .mk/generation.mk)
+
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist_lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
   demo                          Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
@@ -182,7 +186,7 @@
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
   remove_all                    Remove all fresh Symfony application files
 
-COMPLETE INSTALLATION
+  COMPLETE INSTALLATION
   require_api                   Install API Platform - https://api-platform.com/docs/symfony/
   require_easy_admin            Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
   require_stimulus              Install StimulusBundle - https://ux.symfony.com/
