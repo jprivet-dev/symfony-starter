@@ -267,7 +267,7 @@ logs: ## View logs (follow mode)
 	$(COMPOSE) logs -f
 
 .PHONY: clean
-clean: ## Clean everything (containers, networks, images)
+clean: confirm ## Clean everything (containers, networks, images) [y/N]
 	$(COMPOSE) down --rmi all -v
 
 .PHONY: config
@@ -360,7 +360,7 @@ ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
 	@exit 1
 endif
 
-db_drop: _doctrine confirm ## Drop the database - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
+db_drop: _doctrine confirm ## Drop the database [y/N] - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
 ifneq ($(IS_SQLITE),)
 	@printf "$(G)SQLite$(S) detected via environment. Removing $(Y)$(SQLITE_DB_FILE)$(S).\n"
 	rm -rf $(SQLITE_DB_FILE)
