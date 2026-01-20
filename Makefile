@@ -230,13 +230,15 @@ endif
 
 ##
 
+.PHONY: c1
 check_level_1 c1: composer_validate validate lint ## Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
 
+.PHONY: c2
 check_level_2 c2: composer_validate validate lint phpunit ## Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
 
 ##
 
-.PHONY: tests
+.PHONY: tests t
 tests t: db_init@test fixtures@test phpunit ## Run all tests
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
@@ -282,12 +284,12 @@ images: ## List images used by the current containers
 
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
-.PHONY: symfony
+.PHONY: symfony sf
 symfony sf: ## Run Symfony console command - $ make symfony [a=<arguments>]- Example: $ make symfony a=cache:clear
 	$(CONSOLE) $(a)
 
 .PHONY: cc
-cc: ## Clear the Symfony cache
+cache_clear cc: ## Clear the Symfony cache
 	$(CONSOLE) cache:clear
 
 .PHONY: about
@@ -316,13 +318,14 @@ php: ## Run PHP command - $ make php [a=<arguments>]- Example: $ make php a=--ve
 
 ##
 
+.PHONY: sh
 php_sh sh: ## Connect to the PHP container shell
 	$(CONTAINER_PHP) sh
 
 php_env: ## Display all environment variables set within the PHP container
 	$(CONTAINER_PHP) env
 
-.PHONY: php_command
+.PHONY: c
 php_command c: ## Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
 	$(BASH_COMMAND) "$(a)"
 
@@ -332,7 +335,8 @@ php_command c: ## Run a command inside the PHP container - $ make php_command [a
 composer: ## Run composer command - $ make composer [a=<arguments>] - Example: $ make composer a="require --dev phpunit/phpunit"
 	$(COMPOSER) $(a)
 
-composer_install: ## Install Composer packages
+.PHONY: i
+composer_install i: ## Install Composer packages
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
@@ -471,8 +475,8 @@ ifeq ($(wildcard $(BIN_PHPUNIT)),)
 	@exit 1
 endif
 
-.PHONY: phpunit
-phpunit: _phpunit ## Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
+.PHONY: phpunit p
+phpunit p: _phpunit ## Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
 	$(PHPUNIT) $(a)
 
 phpunit_log: FILE = $(BUILD)/phpunit/phpunit-$(NOW).log
@@ -743,7 +747,7 @@ git_patch: ## Generate a patch from current diff or from hashes - $ make git_pat
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
 .PHONY: permissions
-permissions p: ## Fix file permissions (primarily for Linux hosts)
+permissions: ## Fix file permissions (primarily for Linux hosts)
 ifeq ($(UNAME_S),Linux)
 	$(COMPOSE) run --rm php chown -R $(USER) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER)$(S) of the project files.\n"

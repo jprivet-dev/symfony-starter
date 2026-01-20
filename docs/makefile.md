@@ -33,13 +33,13 @@
   build                         Build or rebuild Docker services - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
   build_force                   Build or rebuild Docker services (no cache) - $ make build [a=<arguments>]
   logs                          View logs (follow mode)
-  clean                         Clean everything (containers, networks, images)
+  clean                         Clean everything (containers, networks, images) [y/N]
   config                        Parse, resolve, and render compose file in canonical format
   images                        List images used by the current containers
 
 — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
   symfony                    sf Run Symfony console command - $ make symfony [a=<arguments>]- Example: $ make symfony a=cache:clear
-  cc                            Clear the Symfony cache
+  cache_clear                cc Clear the Symfony cache
   about                         Display information about the current Symfony project
   routes                        Display current routes with assigned controllers and aliases
 
@@ -55,13 +55,13 @@
 
 — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
   composer                      Run composer command - $ make composer [a=<arguments>] - Example: $ make composer a="require --dev phpunit/phpunit"
-  composer_install              Install Composer packages
+  composer_install           i  Install Composer packages
   composer_update               Update Composer packages
   composer_update_lock          Update only the content hash of composer.lock without updating dependencies
   composer_validate             Check if lock file is up to date (even when config.lock is false)
 
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
-  db_drop                       Drop the database - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
+  db_drop                       Drop the database [y/N] - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
   db_create                     Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
   db_init                       Drop and create the database and migrate
   db_init@test                  Drop and create the database and migrate (env=test)
@@ -90,7 +90,7 @@
   restore                       Restore a dump (CAUTION! The command purges the database) - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
 
 — TESTS ✅ —————————————————————————————————————————————————————————————————
-  phpunit                       Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
+  phpunit                    p  Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
   phpunit_log                   Exporting PHPUnit terminal output to a log file
   coverage                      Generate code coverage report in HTML format - $ make coverage [a=<arguments>] - Example: $ make coverage a="tests/myTest.php"
   dox                           Report test execution progress in TestDox format - $ make dox [a=<arguments>] - Example: $ make dox a="tests/myTest.php"
@@ -151,7 +151,7 @@
   git_patch                     Generate a patch from current diff or from hashes - $ make git_patch [h=<hashes>] - Example: $ make git_patch h="abcd123 efgh456"
 
 — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
-  permissions                p  Fix file permissions (primarily for Linux hosts)
+  permissions                   Fix file permissions (primarily for Linux hosts)
   safe                          Add /app to Git's safe directories within the php container
 
 — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
