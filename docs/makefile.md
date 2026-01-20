@@ -60,7 +60,7 @@
   composer_update_lock          Update only the content hash of composer.lock without updating dependencies
   composer_validate             Check if lock file is up to date (even when config.lock is false)
 
-— DOCTRINE & SQL 💽 ————————————————————————————————————————————————————————
+— DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
   db_drop                       Drop the database - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
   db_create                     Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
   db_init                       Drop and create the database and migrate
