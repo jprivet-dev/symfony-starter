@@ -275,7 +275,7 @@ clean: confirm ## Clean everything (containers, networks, images) [y/N]
 
 .PHONY: volumes
 volumes: confirm # Stops and removes all containers and any unnamed volumes [y/N]
-	$(COMPOSE) --volumes --rmi all
+	$(COMPOSE) down --volumes --rmi all
 
 ##
 
