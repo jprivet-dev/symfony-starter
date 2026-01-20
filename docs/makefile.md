@@ -13,36 +13,6 @@
 — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
   help                          Display this help message with available commands
 
-— GENERATION 🔨 (CAN BE REMOVED AFTER SAVING THE PROJECT) ——————————————————
-  minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
-  minimalist_lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-  demo                          Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
-
-  clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
-  clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
-  remove_all                    Remove all fresh Symfony application files
-
-COMPLETE INSTALLATION
-  require_doctrine              Install Doctrine - https://symfony.com/doc/current/doctrine.html
-  require_phpunit               Install PHPUnit - https://symfony.com/doc/current/testing.html
-  require_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-  require_translation           Install translation - https://symfony.com/doc/current/translation.html
-
-  require_profiler              Install the profiler - https://symfony.com/doc/current/profiler.html
-  require_maker_bundle          Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
-  require_bootstrap             Install Bootstrap - https://getbootstrap.com/
-  require_stimulus              Install StimulusBundle - https://ux.symfony.com/
-
-  require_phpcsfixer            Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
-  require_phpstan               Install PHPStan - https://phpstan.org/
-  require_phpmd                 Install PHP Mess Detector - https://phpmd.org/
-  require_twigcsfixer           Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
-  require_phpmetrics            Install PHPMetrics - https://phpmetrics.github.io/website/
-
-  require_webapp                Install a web application - https://symfony.com/doc/current/setup.html
-  require_api                   Install API Platform - https://api-platform.com/docs/symfony/
-  require_easy_admin            Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
-
 — PROJECT 🚀 ———————————————————————————————————————————————————————————————
   install                       Start the project, install dependencies and show info
 
@@ -54,7 +24,7 @@ COMPLETE INSTALLATION
   check_level_1              c1 Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
   check_level_2              c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
 
-  tests                         Run all tests
+  tests                      t  Run all tests
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
   up                            Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
@@ -81,7 +51,7 @@ COMPLETE INSTALLATION
 
   php_sh                     sh Connect to the PHP container shell
   php_env                       Display all environment variables set within the PHP container
-  php_command                   Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
+  php_command                c  Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
 
 — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
   composer                      Run composer command - $ make composer [a=<arguments>] - Example: $ make composer a="require --dev phpunit/phpunit"
@@ -189,6 +159,44 @@ COMPLETE INSTALLATION
   vars                          Show key Makefile variables
   aliases                       Show aliases info (how to load it?)
   tree                          Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
+
+— INTERNAL 🚧‍️ —————————————————————————————————————————————————————————————
+  confirm                       Display a confirmation before continuing [y/N]
+
+— SYMFONY CONTRIBUTION 🔗 (remove .mk/contrib.mk if not necessary) —————————
+  contrib_link                  Link local Symfony monorepo to the project (replace vendors with symlinks)
+  contrib_unlink                Restore original vendors (rollback links)
+
+— GENERATION 🔨 (remove .mk/generation.mk if not necessary) ————————————————
+  minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
+  minimalist_lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+  demo                          Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
+
+  clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
+  clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
+  remove_all                    Remove all fresh Symfony application files
+
+COMPLETE INSTALLATION
+  require_doctrine_postgresql    Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
+  require_doctrine_sqlite       Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
+  require_phpunit               Install PHPUnit - https://symfony.com/doc/current/testing.html
+  require_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+  require_translation           Install translation - https://symfony.com/doc/current/translation.html
+
+  require_profiler              Install the profiler - https://symfony.com/doc/current/profiler.html
+  require_maker_bundle          Install the MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+  require_bootstrap             Install Bootstrap - https://getbootstrap.com/
+  require_stimulus              Install StimulusBundle - https://ux.symfony.com/
+
+  require_phpcsfixer            Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
+  require_phpstan               Install PHPStan - https://phpstan.org/
+  require_phpmd                 Install PHP Mess Detector - https://phpmd.org/
+  require_twigcsfixer           Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
+  require_phpmetrics            Install PHPMetrics - https://phpmetrics.github.io/website/
+
+  require_webapp                Install a web application - https://symfony.com/doc/current/setup.html
+  require_api                   Install API Platform - https://api-platform.com/docs/symfony/
+  require_easy_admin            Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 ```
 
 <!-- MAKEFILE_COMMANDS_END -->
