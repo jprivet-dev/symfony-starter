@@ -33,6 +33,7 @@
   up_detached                   Start the containers (wait for services to be running|healthy - detached mode)
 
   clean                         Clean everything (containers, networks, images) [y/N]
+
   config                        Parse, resolve, and render compose file in canonical format
   images                        List images used by the current containers
   logs                          View logs (follow mode)
@@ -91,7 +92,7 @@
 
   dump                          Create a SQL dump
   dump_gz                       Create a compressed SQL dump (gzip)
-  restore                       Restore a dump (CAUTION! The command purges the database) - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
+  restore                       Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
 
 — TESTS ✅ —————————————————————————————————————————————————————————————————
   phpunit                    p  Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
@@ -165,11 +166,17 @@
   env_files                     Show env files loaded into this Makefile
   tree                          Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
   vars                          Show key Makefile variables
-  confirm                       Display a confirmation before continuing [y/N]
 
 — SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
 
   (to delete this section, delete .mk/contrib.mk)
+
+  contrib_install               Install Composer packages in the local Symfony monorepo
+  contrib_clean                 Remove vendor and lock file from the local Symfony monorepo
+
+  contrib_tests                 Run PHPUnit tests in the local Symfony monorepo - $ make contrib_tests [a=<arguments>] - Example: $ make contrib_tests a="src/Symfony/Bundle/FrameworkBundle"
+  contrib_tests_www_data        Run PHPUnit tests in the local Symfony monorepo as www-data user - $ make contrib_tests_www_data [a=<arguments>] - Example: $ make contrib_tests_www_data a="src/Symfony/Bundle/FrameworkBundle"
+  contrib_tests_clean           Clean PHPUnit cache and temporary files in the local Symfony monorepo
 
   contrib_link                  Link local Symfony monorepo to the project (replace vendors with symlinks)
   contrib_unlink                Restore original vendors (rollback links)
