@@ -1,0 +1,40 @@
+#!/bin/bash
+# This script allows you to test and generate a sample application, with one commit per step.
+#
+# Usage:
+#   . .sh/example-minimalist-postgresql.sh
+# or
+#   source .sh/example-minimalist-postgresql.sh
+
+git switch -c example-minimalist-postgresql-"$(date +"%Y%m%d-%H%M%S")"
+
+make clone_symfony_docker
+git add . && git commit -m "make clone_symfony_demo"
+
+make git_apply f=common/compose-var-mapping.patch
+git add . && git commit -m "make git_apply f=common/compose-var-mapping.patch"
+
+make git_apply f=common/compose-DATABASE_URL.patch
+git add . && git commit -m "make git_apply f=common/compose-DATABASE_URL.patch"
+
+make build
+
+make up_detached runtime permissions
+git add . && git commit -m "make up_detached"
+
+make git_apply f=common/docker-entrypoint-clean.patch
+git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patch"
+
+#make require_postgresql
+make require a=symfony/orm-pack
+git add . && git commit -m "make require a=symfony/orm-pack"
+
+make git_apply f=postgresql/compose-ports-5432.patch
+git add . && git commit -m "make git_apply f=postgresql/compose-ports-5432.patch"
+
+make git_apply f=postgresql/env-DATABASE_URL.patch
+git add . && git commit -m "make git_apply f=postgresql/env-DATABASE_URL.patch"
+
+make restart
+make images
+make info
