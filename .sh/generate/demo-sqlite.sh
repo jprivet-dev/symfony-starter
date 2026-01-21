@@ -45,9 +45,6 @@ git add . && git commit -m "make git_apply f=sqlite/compose-doctrine-bundle.patc
 make git_apply f=sqlite/dockerfile-sqlite.patch
 git add . && git commit -m "make git_apply f=sqlite/dockerfile-sqlite.patch"
 
-make git_apply f=sqlite/compose-data-dev-db.patch
-git add . && git commit -m "make git_apply f=sqlite/compose-data-dev-db.patch"
-
 make restart
 
 # --- end ---
