@@ -491,7 +491,7 @@ dump_gz: ## Create a compressed SQL dump (gzip)
 
 .PHONY: restore
 restore: confirm db_drop db_create ## Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
-	$(if $(f),, $(error f argument is required))
+	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) <$(f)
 
 ## — TESTS ✅ —————————————————————————————————————————————————————————————————
@@ -764,7 +764,7 @@ git_pre_push: c1 ## Actions on Git pre-push
 ##
 
 git_apply: ## Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply f=file.patch
-	$(if $(f),, $(error f argument is required))
+	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	git apply --verbose $(GIT_PATCH)/$(f)
 	@printf " $(G)✔$(S) Patch $(Y)$(GIT_PATCH)/$(f)$(S) applied.\n"
 
