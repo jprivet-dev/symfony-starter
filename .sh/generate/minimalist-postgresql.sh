@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script allows you to test and generate a sample application in new branch, with one commit per step.
+# This script allows you to test and generate a sample application in a new branch, with one commit per main step.
 #
 # Usage:
 #   . .sh/minimalist-postgresql.sh
