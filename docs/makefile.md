@@ -182,9 +182,9 @@
   contrib_link                  Link local Symfony monorepo to the project (replace vendors with symlinks)
   contrib_unlink                Restore original vendors (rollback links)
 
-— GENERATION 🔨 ————————————————————————————————————————————————————————————
+— GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
-  (to delete this section, delete .mk/generation.mk)
+  (to delete this section, delete .mk/generate.mk)
 
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist_lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)

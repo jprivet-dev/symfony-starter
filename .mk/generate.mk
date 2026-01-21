@@ -1,9 +1,9 @@
-## — GENERATION 🔨 ————————————————————————————————————————————————————————————
+## — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
-##   (to delete this section, delete .mk/generation.mk)
+##   (to delete this section, delete .mk/generate.mk)
 ##
 
-# This GENERATION block, with these following targets and variables,
+# This GENERATE block, with these following targets and variables,
 # is only used for the initial setup and can be removed after saving the project.
 
 # Symfony 7.* is the current long-term support version.
