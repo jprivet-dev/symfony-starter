@@ -38,7 +38,7 @@ minimalist_lts: ## Generate a minimalist Symfony application with Docker configu
 
 demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
 	$(MAKE) clone_symfony_demo clone_symfony_docker
-	$(MAKE) _patch_var_log_mapping _patch_sqlite_base _patch_sqlite_env
+	$(MAKE) _patch_var_log_mapping _patch_sqlite_base
 	$(MAKE) build up_detached
 	$(MAKE) runtime migration assets
 	$(MAKE) permissions images info
