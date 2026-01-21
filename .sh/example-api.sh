@@ -48,3 +48,7 @@ make require_api runtime permissions
 git add . && git commit -m "make require_api"
 
 make restart
+
+# --- end ---
+
+make permissions

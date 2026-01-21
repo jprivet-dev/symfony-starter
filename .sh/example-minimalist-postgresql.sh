@@ -43,3 +43,7 @@ make git_apply f=postgresql/env-DATABASE_URL.patch
 git add . && git commit -m "make git_apply f=postgresql/env-DATABASE_URL.patch"
 
 make restart
+
+# --- end ---
+
+make permissions

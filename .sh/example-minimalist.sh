@@ -30,3 +30,7 @@ make git_apply f=common/docker-entrypoint-clean.patch
 git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patch"
 
 make restart
+
+# --- end ---
+
+make permissions

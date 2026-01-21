@@ -44,7 +44,9 @@ make build
 make up_detached runtime permissions
 git add . && git commit -m "make up_detached"
 
-# --- end ---
-
 make images
 make info
+
+# --- end ---
+
+make permissions
