@@ -44,8 +44,8 @@ make restart
 
 # --- api ---
 
-make require_api runtime permissions
-git add . && git commit -m "make require_api"
+make require a=api
+git add . && git commit -m "make require a=api"
 
 make restart
 
