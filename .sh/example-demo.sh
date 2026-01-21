@@ -21,9 +21,8 @@ git add . && git commit -m "make _patch_sqlite_base"
 make build
 
 make up_detached
+make runtime permissions
 git add . && git commit -m "make up_detached"
 
-make runtime
-make permissions
 make images
 make info
