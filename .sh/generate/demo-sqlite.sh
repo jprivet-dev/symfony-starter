@@ -18,7 +18,7 @@ git add . && git commit -m "make clone_symfony_demo"
 # --- clone_symfony_docker ---
 
 make clone_symfony_docker
-git add . && git commit -m "make clone_symfony_demo"
+git add . && git commit -m "make clone_symfony_docker"
 
 make git_apply f=common/compose-var-mapping.patch
 git add . && git commit -m "make git_apply f=common/compose-var-mapping.patch"
