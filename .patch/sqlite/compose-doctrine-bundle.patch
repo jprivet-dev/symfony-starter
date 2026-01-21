@@ -1,0 +1,11 @@
+diff --git a/compose.yaml b/compose.yaml
+index 62a14b2..8551190 100644
+--- a/compose.yaml
++++ b/compose.yaml
+@@ -43,3 +43,6 @@ volumes:
+   caddy_config:
+ ###> symfony/mercure-bundle ###
+ ###< symfony/mercure-bundle ###
++
++###> doctrine/doctrine-bundle ###
++###< doctrine/doctrine-bundle ###
