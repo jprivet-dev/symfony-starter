@@ -12,10 +12,11 @@ git add . && git commit -m "make clone_symfony_demo"
 make _patch_var_log_mapping
 git add . && git commit -m "make _patch_var_log_mapping"
 
-make build up_detached
+make build
+
+make up_detached
+make runtime permissions
 git add . && git commit -m "make up_detached"
 
-make runtime
-make permissions
 make images
 make info
