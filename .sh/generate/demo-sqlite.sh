@@ -36,17 +36,17 @@ git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patc
 
 # --- sqlite ---
 
-make git_apply f=common/compose-data-dev-db.patch
-git add . && git commit -m "make git_apply f=common/compose-data-dev-db.patch"
+make git_apply f=sqlite/compose-data-dev-db.patch
+git add . && git commit -m "make git_apply f=sqlite/compose-data-dev-db.patch"
 
-make git_apply f=common/compose-doctrine-bundle.patch
-git add . && git commit -m "make git_apply f=common/compose-doctrine-bundle.patch"
+make git_apply f=sqlite/compose-doctrine-bundle.patch
+git add . && git commit -m "make git_apply f=sqlite/compose-doctrine-bundle.patch"
 
-make git_apply f=common/dockerfile-sqlite.patch
-git add . && git commit -m "make git_apply f=common/dockerfile-sqlite.patch"
+make git_apply f=sqlite/dockerfile-sqlite.patch
+git add . && git commit -m "make git_apply f=sqlite/dockerfile-sqlite.patch"
 
-make git_apply f=common/compose-data-dev-db.patch
-git add . && git commit -m "make git_apply f=common/compose-data-dev-db.patch"
+make git_apply f=sqlite/compose-data-dev-db.patch
+git add . && git commit -m "make git_apply f=sqlite/compose-data-dev-db.patch"
 
 make restart
 
