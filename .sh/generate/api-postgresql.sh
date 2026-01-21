@@ -8,7 +8,7 @@
 
 # --- new branch ---
 
-git switch -c api-"$(date +"%Y%m%d-%H%M%S")"
+git switch -c api-postgresql-"$(date +"%Y%m%d-%H%M%S")"
 
 # --- clone_symfony_docker ---
 
