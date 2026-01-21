@@ -2,13 +2,13 @@
 # This script allows you to test and generate a sample application in new branch, with one commit per step.
 #
 # Usage:
-#   . .sh/example-minimalist-postgresql.sh
+#   . .sh/minimalist-postgresql.sh
 # or
-#   source .sh/example-minimalist-postgresql.sh
+#   source .sh/minimalist-postgresql.sh
 
 # --- new branch ---
 
-git switch -c example-minimalist-postgresql-"$(date +"%Y%m%d-%H%M%S")"
+git switch -c minimalist-postgresql-"$(date +"%Y%m%d-%H%M%S")"
 
 # --- clone_symfony_docker ---
 

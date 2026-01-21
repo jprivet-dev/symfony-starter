@@ -2,13 +2,13 @@
 # This script allows you to test and generate a sample application in new branch, with one commit per step.
 #
 # Usage:
-#   . .sh/example-api.sh
+#   . .sh/api.sh
 # or
-#   source .sh/example-api.sh
+#   source .sh/api.sh
 
 # --- new branch ---
 
-git switch -c example-api-"$(date +"%Y%m%d-%H%M%S")"
+git switch -c api-"$(date +"%Y%m%d-%H%M%S")"
 
 # --- clone_symfony_docker ---
 

@@ -2,13 +2,13 @@
 # This script allows you to test and generate a sample application in new branch, with one commit per step.
 #
 # Usage:
-#   . .sh/example-minimalist.sh
+#   . .sh/minimalist.sh
 # or
-#   source .sh/example-minimalist.sh
+#   source .sh/minimalist.sh
 
 # --- new branch ---
 
-git switch -c example-minimalist-"$(date +"%Y%m%d-%H%M%S")"
+git switch -c minimalist-"$(date +"%Y%m%d-%H%M%S")"
 
 # --- clone_symfony_docker ---
 

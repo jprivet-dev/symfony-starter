@@ -2,13 +2,13 @@
 # This script allows you to test and generate a sample application in new branch, with one commit per step.
 #
 # Usage:
-#   . .sh/example-demo.sh
+#   . .sh/demo.sh
 # or
-#   source .sh/example-demo.sh
+#   source .sh/demo.sh
 
 # --- new branch ---
 
-git switch -c example-demo-"$(date +"%Y%m%d-%H%M%S")"
+git switch -c demo-"$(date +"%Y%m%d-%H%M%S")"
 
 # --- clone_symfony_demo ---
 
