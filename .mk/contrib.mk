@@ -13,6 +13,25 @@ contrib_install: _monorepo ## Install Composer packages in the local Symfony mon
 	@printf "🧙 Install Composer packages in $(Y)$(SYMFONY_MONOREPO_PATH)$(S)\n"
 	$(BASH_COMMAND) "cd /symfony && composer install"
 
+contrib_checkout: _monorepo ## Switch App and Symfony monorepo branches - $ make contrib_checkout a=<app-branch> [s=<symfony-branch>] - Example: make contrib_checkout a=fix-123 s=fix-123-custom --- 🧪 EXPERIMENTAL 🧪 ---
+	$(if $(a),,$(error "Please specify an App branch with 'a=...'"))
+	@# 1. Safety first: unlink to revert composer.json and composer.lock changes and allow git to switch without conflicts
+	-$(MAKE) contrib_unlink
+
+	@# 2. Checkout App
+	@printf "🔀 Switching App to branch $(Y)$(a)$(S)...\n"
+	git checkout $(a)
+
+	@# 3. Checkout Symfony monorepo (use 's' var if provided, otherwise fallback to 'a')
+	@printf "🔀 Switching Symfony monorepo to branch $(Y)$(or $(s),$(a))$(S)...\n"
+	$(BASH_COMMAND) "cd /symfony && git checkout $(or $(s),$(a))"
+
+	@# 4. Refresh Symfony monorepo vendors
+	$(MAKE) contrib_install
+
+	@# 5. Re-establish the link
+	$(MAKE) contrib_link
+
 contrib_clean: _monorepo ## Remove vendor and lock file from the local Symfony monorepo
 	$(BASH_COMMAND) "rm -fr /symfony/vendor && rm -f /symfony/composer.lock"
 

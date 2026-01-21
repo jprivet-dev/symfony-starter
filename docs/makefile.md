@@ -172,6 +172,7 @@
   (to delete this section, delete .mk/contrib.mk)
 
   contrib_install               Install Composer packages in the local Symfony monorepo
+  contrib_checkout              Switch App and Symfony monorepo branches - $ make contrib_checkout a=<app-branch> [s=<symfony-branch>] - Example: make contrib_checkout a=fix-123 s=fix-123-custom --- 🧪 EXPERIMENTAL 🧪 ---
   contrib_clean                 Remove vendor and lock file from the local Symfony monorepo
 
   contrib_tests                 Run PHPUnit tests in the local Symfony monorepo - $ make contrib_tests [a=<arguments>] - Example: $ make contrib_tests a="src/Symfony/Bundle/FrameworkBundle"
