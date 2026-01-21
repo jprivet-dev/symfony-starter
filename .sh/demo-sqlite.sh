@@ -2,13 +2,13 @@
 # This script allows you to test and generate a sample application in new branch, with one commit per step.
 #
 # Usage:
-#   . .sh/demo.sh
+#   . .sh/demo-sqlite.sh
 # or
-#   source .sh/demo.sh
+#   source .sh/demo-sqlite.sh
 
 # --- new branch ---
 
-git switch -c demo-"$(date +"%Y%m%d-%H%M%S")"
+git switch -c demo-sqlite-"$(date +"%Y%m%d-%H%M%S")"
 
 # --- clone_symfony_demo ---
 
@@ -31,21 +31,24 @@ make build
 make up_detached runtime permissions
 git add . && git commit -m "make up_detached"
 
-make git_apply f=common/docker-entrypoint-clean.patch
+make git_apply f=common/docker-entrypoint-clean-composer-block.patch
 git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patch"
 
 # --- sqlite ---
 
-make _patch_sqlite_base
-git add . && git commit -m "make _patch_sqlite_base"
+make git_apply f=common/compose-data-dev-db.patch
+git add . && git commit -m "make git_apply f=common/compose-data-dev-db.patch"
 
-make build
+make git_apply f=common/compose-doctrine-bundle.patch
+git add . && git commit -m "make git_apply f=common/compose-doctrine-bundle.patch"
 
-make up_detached runtime permissions
-git add . && git commit -m "make up_detached"
+make git_apply f=common/dockerfile-sqlite.patch
+git add . && git commit -m "make git_apply f=common/dockerfile-sqlite.patch"
 
-make images
-make info
+make git_apply f=common/compose-data-dev-db.patch
+git add . && git commit -m "make git_apply f=common/compose-data-dev-db.patch"
+
+make restart
 
 # --- end ---
 

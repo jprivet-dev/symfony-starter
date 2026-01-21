@@ -2,9 +2,9 @@
 # This script allows you to test and generate a sample application in new branch, with one commit per step.
 #
 # Usage:
-#   . .sh/api.sh
+#   . .sh/api-postgresql.sh
 # or
-#   source .sh/api.sh
+#   source .sh/api-postgresql.sh
 
 # --- new branch ---
 
@@ -26,7 +26,7 @@ make build
 make up_detached runtime permissions
 git add . && git commit -m "make up_detached"
 
-make git_apply f=common/docker-entrypoint-clean.patch
+make git_apply f=common/docker-entrypoint-clean-composer-block.patch
 git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patch"
 
 # --- postgresql ---
@@ -47,7 +47,6 @@ make restart
 make require a=api
 git add . && git commit -m "make require a=api"
 
-make permissions
 make restart
 
 # --- end ---
