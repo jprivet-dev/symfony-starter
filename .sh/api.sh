@@ -47,6 +47,7 @@ make restart
 make require a=api
 git add . && git commit -m "make require a=api"
 
+make permissions
 make restart
 
 # --- end ---
