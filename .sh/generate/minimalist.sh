@@ -26,7 +26,7 @@ make build
 make up_detached runtime permissions
 git add . && git commit -m "make up_detached"
 
-make git_apply f=common/docker-entrypoint-clean-composer-block.patch
+make git_apply f=common/docker-entrypoint-clean-composer.patch
 git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patch"
 
 make restart
