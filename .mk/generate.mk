@@ -55,9 +55,6 @@ minimalist: ## Generate a minimalist Symfony application with Docker configurati
 
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
-minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
-
 minimalist@postgresql: ## Generate a minimalist Symfony application (with PostgreSQL) with Docker configuration (stable release)
 	@# --- new branch ---
 	git switch -c minimalist-postgresql-$(NOW)
@@ -93,10 +90,13 @@ minimalist@postgresql: ## Generate a minimalist Symfony application (with Postgr
 
 	@printf " $(G)✔$(S) Minimalist Symfony application with PostgreSQL generated!\n\n"
 
+minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
+
 minimalist_lts@postgresql: ## Generate a minimalist Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist@postgresql
 
-demo: ## Generate Symfony Demo application (with SQLite) with Docker configuration
+demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	@# --- new branch ---
 	git switch -c demo-$(NOW)
 

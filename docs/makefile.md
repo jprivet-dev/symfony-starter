@@ -32,7 +32,7 @@
   up                            Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
   up_detached                   Start the containers (wait for services to be running|healthy - detached mode)
 
-  clean                         Clean everything (containers, networks, images) [y/N]
+  clean_deep                    Cleaning local containers, networks, volumes & images [y/N]
 
   config                        Parse, resolve, and render compose file in canonical format
   images                        List images used by the current containers
@@ -187,11 +187,13 @@
   (to delete this section, delete .mk/generate.mk)
 
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
+  minimalist@postgresql         Generate a minimalist Symfony application (with PostgreSQL) with Docker configuration (stable release)
   minimalist_lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-  demo                          Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
+  minimalist_lts@postgresql     Generate a minimalist Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+  demo                          Generate a Symfony Demo application (with SQLite) with Docker configuration
 
   clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
-  clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
+  clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root
   remove_all                    Remove all fresh Symfony application files
 
   COMPLETE INSTALLATION
