@@ -274,13 +274,8 @@ up_detached: up ## Start the containers (wait for services to be running|healthy
 
 ##
 
-.PHONY: clean
-clean: confirm ## Clean everything (containers, networks, images) [y/N]
-	$(COMPOSE) down --rmi all -v
-
-.PHONY: volumes
-volumes: confirm # Stops and removes all containers and any unnamed volumes [y/N]
-	$(COMPOSE) down --volumes --rmi all
+clean_deep: confirm ## Clean everything (local volumes, containers and images) [y/N]
+	$(COMPOSE) down --volumes --remove-orphans --rmi local -v
 
 ##
 
