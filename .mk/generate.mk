@@ -42,6 +42,18 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	$(MAKE) down clean_deep up_detached runtime permissions images info
 	@printf " $(G)✔$(S) ApiPlatform application with PostgreSQL generated!\n\n"
 
+api_lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+	@# --- minimalist_lts@postgresql ---
+	$(MAKE) minimalist_lts@postgresql
+
+	@# --- api ---
+	$(MAKE) require a=api
+	git add . && git commit -m "make require a=api"
+
+	@# --- restart ---
+	$(MAKE) down clean_deep up_detached runtime permissions images info
+	@printf " $(G)✔$(S) ApiPlatform application with PostgreSQL generated!\n\n"
+
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	@# --- clone_symfony_demo ---

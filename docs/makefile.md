@@ -187,6 +187,7 @@
   (to delete this section, delete .mk/generate.mk)
 
   api                           Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
+  api_lts                       Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
   demo                          Generate a Symfony Demo application (with SQLite) with Docker configuration
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist@postgresql         Generate a minimalist Symfony application (with PostgreSQL) with Docker configuration (stable release)
