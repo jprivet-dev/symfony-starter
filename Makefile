@@ -833,7 +833,7 @@ confirm: # INTERNAL - Display a confirmation before continuing [y/N]
 
 PHONY: runtime
 runtime: # INTERNAL - Check if vendor/autoload_runtime.php is ready yet
-	@printf "Waiting for Symfony Runtime...\n"
+	@printf "\nWaiting for Symfony Runtime...\n"
 	@until $(CONTAINER_PHP) ls vendor/autoload_runtime.php >/dev/null 2>&1; do \
 		printf " $(R)⨯$(S) The vendor file is not ready yet. Pause 3 seconds...\n"; \
 		sleep 3; \
