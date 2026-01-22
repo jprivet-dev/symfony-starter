@@ -40,13 +40,7 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	@printf " $(G)✔$(S) ApiPlatform application with PostgreSQL generated!\n\n"
 
 api_lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	$(MAKE) minimalist_lts
-	$(MAKE) require_postgresql
-	$(MAKE) down up_detached
-	$(MAKE) require_api
-	$(MAKE) down clean_deep up_detached
-	$(MAKE) images info
-	@printf " $(G)✔$(S) ApiPlatform application (LTS - long-term support release) with PostgreSQL generated!\n\n"
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) api
 
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
@@ -69,10 +63,7 @@ minimalist: ## Generate a minimalist Symfony application with Docker configurati
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
 minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) clone_symfony_docker
-	$(MAKE) down up_detached
-	$(MAKE) images info
-	@printf " $(G)✔$(S) Minimalist Symfony application (LTS - long-term support release) generated!\n\n"
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
 
 ##
 
