@@ -201,7 +201,13 @@ help: ## Display this help message with available commands
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
 .PHONY: install
-install: up_detached composer_install assets images git_hooks_init info ## Start the project, install dependencies and show info
+install: up_detached ## Start the project, install dependencies and show info
+	$(MAKE) composer_install
+	-$(MAKE) assets
+	$(MAKE) images
+	$(MAKE) git_hooks_init
+	$(MAKE) info
+	$(MAKE) permissions
 
 .PHONY: info
 info: ## Show project access info
