@@ -46,13 +46,11 @@ demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXP
 ##
 
 clone_symfony_docker: ## Clone and extract https://github.com/dunglas/symfony-docker files at the root
-	@printf "\n$(Y)Clone https://github.com/dunglas/symfony-docker$(S)"
-	@printf "\n$(Y)-----------------------------------------------$(S)\n\n"
+	@printf "\n$(Y)--- Clone https://github.com/dunglas/symfony-docker$(S) ---\n"
 ifeq ($(wildcard $(DOCKERFILE)),)
 	@printf "Repository: $(Y)$(REPOSITORY_SYMFONY_DOCKER)$(S)\n"
 	git clone $(REPOSITORY_SYMFONY_DOCKER) $(CLONE_DIR) --depth 1
-	@printf "\n$(Y)Extract https://github.com/dunglas/symfony-docker at the root$(S)"
-	@printf "\n$(Y)-------------------------------------------------------------$(S)\n\n"
+	@printf "\n$(Y)--- Extract https://github.com/dunglas/symfony-docker at the root$(S) ---\n"
 	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
 	rm -rf $(CLONE_DIR)
 	@if [ -f LICENSE ]; then \
@@ -64,13 +62,11 @@ else
 endif
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
-	@printf "\n$(Y)Clone https://github.com/symfony/demo$(S)"
-	@printf "\n$(Y)-------------------------------------$(S)\n\n"
+	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
 ifeq ($(wildcard .env.local.demo),)
 	@printf "Repository: $(Y)$(REPOSITORY_SYMFONY_DEMO)$(S)\n"
 	git clone $(REPOSITORY_SYMFONY_DEMO) $(CLONE_DIR) --depth 1
-	@printf "\n$(Y)Extract https://github.com/symfony/demo at the root$(S)"
-	@printf "\n$(Y)---------------------------------------------------$(S)\n\n"
+	@printf "\n$(Y)--- Extract https://github.com/symfony/demo at the root$(S) ---\n"
 	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
 	rm -rf $(CLONE_DIR)
 	@if [ -f LICENSE ]; then \
