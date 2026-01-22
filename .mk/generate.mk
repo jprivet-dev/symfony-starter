@@ -31,75 +31,48 @@ _patch_sqlite_env: git_apply # INTERNAL
 
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
-	@# --- minimalist@postgresql ---
-	$(MAKE) minimalist@postgresql
-
-	@# --- api ---
-	$(MAKE) require a=api
-	git add . && git commit -m "make require a=api"
-
-	@# --- restart ---
-	$(MAKE) down clean_deep up_detached runtime permissions images info
+	$(MAKE) minimalist
+	$(MAKE) require_postgresql
+	$(MAKE) down up_detached
+	$(MAKE) require_api
+	$(MAKE) down clean_deep up_detached
+	$(MAKE) images info
 	@printf " $(G)✔$(S) ApiPlatform application with PostgreSQL generated!\n\n"
 
 api_lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	@# --- minimalist_lts@postgresql ---
-	$(MAKE) minimalist_lts@postgresql
-
-	@# --- api ---
-	$(MAKE) require a=api
-	git add . && git commit -m "make require a=api"
-
-	@# --- restart ---
-	$(MAKE) down clean_deep up_detached runtime permissions images info
-	@printf " $(G)✔$(S) ApiPlatform application with PostgreSQL generated!\n\n"
+	$(MAKE) minimalist_lts
+	$(MAKE) require_postgresql
+	$(MAKE) down up_detached
+	$(MAKE) require_api
+	$(MAKE) down clean_deep up_detached
+	$(MAKE) images info
+	@printf " $(G)✔$(S) ApiPlatform application (LTS - long-term support release) with PostgreSQL generated!\n\n"
 
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
-	@# --- clone_symfony_demo ---
 	$(MAKE) clone_symfony_demo
-	git add . && git commit -m "make clone_symfony_demo"
-
 	$(MAKE) clone_symfony_docker
-
-	@# --- sqlite ---
+	$(MAKE) down up_detached
 	$(MAKE) git_apply f=sqlite/compose-doctrine-bundle.patch
 	git add . && git commit -m "make git_apply f=sqlite/compose-doctrine-bundle.patch"
 	$(MAKE) git_apply f=sqlite/dockerfile-sqlite.patch
 	git add . && git commit -m "make git_apply f=sqlite/dockerfile-sqlite.patch"
-
-	@# --- restart ---
-	$(MAKE) down up_detached runtime permissions images info
+	$(MAKE) down up_detached
+	$(MAKE) images info
 	@printf " $(G)✔$(S) Symfony Demo application with SQLite generated!\n\n"
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(MAKE) clone_symfony_docker
-
-	@# --- restart ---
-	$(MAKE) down up_detached runtime permissions images info
+	$(MAKE) down up_detached
+	$(MAKE) images info
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
-minimalist@postgresql: ## Generate a minimalist Symfony application (with PostgreSQL) with Docker configuration (stable release)
-	$(MAKE) clone_symfony_docker
-
-	@# --- postgresql ---
-	$(MAKE) require a=symfony/orm-pack
-	git add . && git commit -m "make require a=symfony/orm-pack"
-	$(MAKE) git_apply f=postgresql/compose-ports-5432.patch
-	git add . && git commit -m "make git_apply f=postgresql/compose-ports-5432.patch"
-	$(MAKE) git_apply f=postgresql/env-DATABASE_URL.patch
-	git add . && git commit -m "make git_apply f=postgresql/env-DATABASE_URL.patch"
-
-	@# --- restart ---
-	$(MAKE) down up_detached runtime permissions images info
-	@printf " $(G)✔$(S) Minimalist Symfony application with PostgreSQL generated!\n\n"
-
 minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
-
-minimalist_lts@postgresql: ## Generate a minimalist Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist@postgresql
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) clone_symfony_docker
+	$(MAKE) down up_detached
+	$(MAKE) images info
+	@printf " $(G)✔$(S) Minimalist Symfony application (LTS - long-term support release) generated!\n\n"
 
 ##
 
@@ -118,13 +91,13 @@ ifeq ($(wildcard $(DOCKERFILE)),)
 else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
 endif
-	git add . && git commit -m "make clone_symfony_demo"
+	git add . && git commit -m "make clone_symfony_docker"
 	$(MAKE) git_apply f=common/compose-var-mapping.patch
 	git add . && git commit -m "make git_apply f=common/compose-var-mapping.patch"
 	$(MAKE) git_apply f=common/compose-DATABASE_URL.patch
 	git add . && git commit -m "make git_apply f=common/compose-DATABASE_URL.patch"
-	$(MAKE) build up_detached runtime permissions
-	git add . && git commit -m "make build up_detached runtime permissions"
+	$(MAKE) build up_detached
+	git add . && git commit -m "make build up_detached"
 	$(MAKE) git_apply f=common/docker-entrypoint-clean-composer.patch
 	git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patch"
 
@@ -143,6 +116,7 @@ ifeq ($(wildcard .env.local.demo),)
 else
 	@printf " $(G)✔$(S) https://github.com/symfony/demo files already present at the root.\n\n"
 endif
+	git add . && git commit -m "make clone_symfony_demo"
 
 remove_all: ## Remove all fresh Symfony application files
 	-$(MAKE) permissions
@@ -154,11 +128,10 @@ remove_all: ## Remove all fresh Symfony application files
 
 require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
 	$(COMPOSER) require api
-	$(MAKE) restart
+	git add . && git commit -m "composer require api"
 
 require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 	$(COMPOSER) require easycorp/easyadmin-bundle
-	$(MAKE) restart
 
 require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
 	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
@@ -166,7 +139,7 @@ require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
 require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
 	$(COMPOSER) require symfony/webapp-pack
-	$(MAKE) restart
+	$(MAKE) down up_detached
 
 ##
 
@@ -181,8 +154,11 @@ require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/Symfo
 
 require_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
-	$(MAKE) _patch_postgresql
-	$(MAKE) restart
+	git add . && git commit -m "composer require symfony/orm-pack"
+	$(MAKE) git_apply f=postgresql/compose-ports-5432.patch
+	git add . && git commit -m "make git_apply f=postgresql/compose-ports-5432.patch"
+	$(MAKE) git_apply f=postgresql/env-DATABASE_URL.patch
+	git add . && git commit -m "make git_apply f=postgresql/env-DATABASE_URL.patch"
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(COMPOSER) require --dev symfony/profiler-pack
@@ -191,7 +167,6 @@ require_sqlite: ## Install Doctrine (SQLite) - https://symfony.com/doc/current/d
 	$(MAKE) _patch_sqlite_base
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) _patch_sqlite_env
-	$(MAKE) restart
 
 require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
 	$(COMPOSER) require --dev symfony/test-pack

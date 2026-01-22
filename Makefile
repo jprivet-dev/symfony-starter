@@ -267,6 +267,7 @@ down: ## Stop and remove the containers
 up: ## Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans $(a)
 	$(MAKE) runtime
+	$(MAKE) permissions
 	$(MAKE) safe
 
 up_detached: a=-d

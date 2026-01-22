@@ -23,7 +23,7 @@ git add . && git commit -m "make git_apply f=common/compose-DATABASE_URL.patch"
 
 make build
 
-make up_detached runtime permissions
+make up_detached
 git add . && git commit -m "make up_detached"
 
 make git_apply f=common/docker-entrypoint-clean-composer.patch
