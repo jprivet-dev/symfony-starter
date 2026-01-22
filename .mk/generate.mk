@@ -58,6 +58,22 @@ minimalist: ## Generate a minimalist Symfony application with Docker configurati
 minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
 
+minimalist@postgresql: minimalist ## Generate a minimalist Symfony application with Docker configuration (stable release)
+	@# --- postgresql ---
+	make require a=symfony/orm-pack
+	git add . && git commit -m "make require a=symfony/orm-pack"
+
+	make git_apply f=postgresql/compose-ports-5432.patch
+	git add . && git commit -m "make git_apply f=postgresql/compose-ports-5432.patch"
+
+	make git_apply f=postgresql/env-DATABASE_URL.patch
+	git add . && git commit -m "make git_apply f=postgresql/env-DATABASE_URL.patch"
+
+	@# --- restart ---
+	make down up_detached runtime permissions images info
+
+	@printf " $(G)✔$(S) Minimalist Symfony application with PostgreSQL generated!\n\n"
+
 demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
 	$(MAKE) clone_symfony_demo clone_symfony_docker
 	$(MAKE) _patch_var_log_mapping _patch_sqlite_base
