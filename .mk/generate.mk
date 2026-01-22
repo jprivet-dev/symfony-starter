@@ -77,8 +77,8 @@ else
 	@printf " $(G)✔$(S) https://github.com/symfony/demo files already present at the root.\n\n"
 endif
 
-remove_all: ## Remove all fresh Symfony application files
-	-$(MAKE) permissions down
+remove_all: confirm ## Remove all fresh Symfony application files
+	-$(MAKE) permissions clean
 	git reset --hard
 	git clean -f -d
 
