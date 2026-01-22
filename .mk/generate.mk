@@ -58,7 +58,7 @@ minimalist: ## Generate a minimalist Symfony application with Docker configurati
 minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
 
-minimalist@postgresql: ## Generate a minimalist Symfony application with Docker configuration (stable release)
+minimalist@postgresql: ## Generate a minimalist Symfony application (with PostgreSQL) with Docker configuration (stable release)
 	@# --- new branch ---
 	git switch -c minimalist-postgresql-$(NOW)
 
@@ -93,12 +93,44 @@ minimalist@postgresql: ## Generate a minimalist Symfony application with Docker 
 
 	@printf " $(G)✔$(S) Minimalist Symfony application with PostgreSQL generated!\n\n"
 
-demo: ## Extract Symfony Demo application with Docker configuration --- 🧪 EXPERIMENTAL 🧪 ---
-	$(MAKE) clone_symfony_demo clone_symfony_docker
-	$(MAKE) _patch_var_log_mapping _patch_sqlite_base
-	$(MAKE) build up_detached
-	$(MAKE) runtime migration assets
-	$(MAKE) permissions images info
+minimalist_lts@postgresql: ## Generate a minimalist Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist@postgresql
+
+demo: ## Generate Symfony Demo application (with SQLite) with Docker configuration
+	@# --- new branch ---
+	git switch -c demo-$(NOW)
+
+	@# --- clone_symfony_demo ---
+	make clone_symfony_demo
+	git add . && git commit -m "make clone_symfony_demo"
+
+	@# --- clone_symfony_docker ---
+	make clone_symfony_docker
+	git add . && git commit -m "make clone_symfony_demo"
+
+	make git_apply f=common/compose-var-mapping.patch
+	git add . && git commit -m "make git_apply f=common/compose-var-mapping.patch"
+
+	make git_apply f=common/compose-DATABASE_URL.patch
+	git add . && git commit -m "make git_apply f=common/compose-DATABASE_URL.patch"
+
+	make build up_detached runtime permissions
+	git add . && git commit -m "make build up_detached runtime permissions"
+
+	make git_apply f=common/docker-entrypoint-clean-composer.patch
+	git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patch"
+
+	@# --- sqlite ---
+	make git_apply f=sqlite/compose-doctrine-bundle.patch
+	git add . && git commit -m "make git_apply f=sqlite/compose-doctrine-bundle.patch"
+
+	make git_apply f=sqlite/dockerfile-sqlite.patch
+	git add . && git commit -m "make git_apply f=sqlite/dockerfile-sqlite.patch"
+
+	@# --- restart ---
+	make down up_detached runtime permissions images info
+
+	@printf " $(G)✔$(S) Symfony Demo application with SQLite generated!\n\n"
 
 ##
 
@@ -118,7 +150,7 @@ else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
 endif
 
-clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root --- 🧪 EXPERIMENTAL 🧪 ---
+clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
 ifeq ($(wildcard .env.local.demo),)
 	@printf "Repository: $(Y)$(REPOSITORY_SYMFONY_DEMO)$(S)\n"
