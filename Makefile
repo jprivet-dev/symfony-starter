@@ -274,7 +274,7 @@ up_detached: up ## Start the containers (wait for services to be running|healthy
 
 ##
 
-clean_deep: confirm ## Cleaning local containers, networks, volumes & images [y/N]
+clean_deep: ## Cleaning local containers, networks, volumes & images [y/N]
 	@printf "🔥 $(Y)Cleaning containers...$(S)\n"
 	-docker ps -a --filter "name=$(PROJECT_NAME)" -q | xargs -r docker rm -f
 

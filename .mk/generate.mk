@@ -39,7 +39,7 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	git add . && git commit -m "make require a=api"
 
 	@# --- restart ---
-	$(MAKE) down up_detached runtime permissions images info
+	$(MAKE) down clean_deep up_detached runtime permissions images info
 	@printf " $(G)✔$(S) ApiPlatform application with PostgreSQL generated!\n\n"
 
 .PHONY: demo
@@ -153,7 +153,7 @@ else
 	@printf " $(G)✔$(S) https://github.com/symfony/demo files already present at the root.\n\n"
 endif
 
-remove_all: confirm ## Remove all fresh Symfony application files
+remove_all: ## Remove all fresh Symfony application files
 	-$(MAKE) permissions
 	$(MAKE) clean_deep
 	git reset --hard
