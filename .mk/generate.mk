@@ -78,7 +78,8 @@ else
 endif
 
 remove_all: confirm ## Remove all fresh Symfony application files
-	-$(MAKE) permissions clean
+	-$(MAKE) permissions
+	$(MAKE) clean_deep
 	git reset --hard
 	git clean -f -d
 
