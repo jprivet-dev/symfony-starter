@@ -31,16 +31,12 @@ _patch_sqlite_env: git_apply # INTERNAL
 
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
-	@# --- new branch ---
-	git switch -c api-$(NOW)
-
 	@# --- minimalist@postgresql ---
 	$(MAKE) minimalist@postgresql
 
 	@# --- api ---
 	$(MAKE) require a=api
 	git add . && git commit -m "make require a=api"
-	$(MAKE) build_force
 
 	@# --- restart ---
 	$(MAKE) down up_detached runtime permissions images info
@@ -48,9 +44,6 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
-	@# --- new branch ---
-	git switch -c demo-$(NOW)
-
 	@# --- clone_symfony_demo ---
 	$(MAKE) clone_symfony_demo
 	git add . && git commit -m "make clone_symfony_demo"
@@ -79,9 +72,6 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
-	@# --- new branch ---
-	git switch -c minimalist-$(NOW)
-
 	@# --- clone_symfony_docker ---
 	$(MAKE) clone_symfony_docker
 	git add . && git commit -m "make clone_symfony_demo"
@@ -99,9 +89,6 @@ minimalist: ## Generate a minimalist Symfony application with Docker configurati
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
 minimalist@postgresql: ## Generate a minimalist Symfony application (with PostgreSQL) with Docker configuration (stable release)
-	@# --- new branch ---
-	git switch -c minimalist-postgresql-$(NOW)
-
 	@# --- clone_symfony_docker ---
 	$(MAKE) clone_symfony_docker
 	git add . && git commit -m "make clone_symfony_demo"
