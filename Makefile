@@ -274,10 +274,18 @@ up_detached: up ## Start the containers (wait for services to be running|healthy
 
 ##
 
-clean_deep: confirm ## Stop containers, remove volumes and delete project images [y/N]
-	-$(COMPOSE) down --volumes --remove-orphans
-	-docker images --filter=reference='$(PROJECT_NAME)*' -q | xargs docker rmi -f 2>/dev/null || true
+clean_deep: confirm ## Cleaning local containers, networks, volumes & images [y/N]
+	@printf "\n🔥 $(Y)Cleaning containers...$(S)\n"
+	-docker ps -a --filter "name=$(PROJECT_NAME)" -q | xargs -r docker rm -f
 
+	@printf "\n🔥 $(Y)Cleaning networks...$(S)\n"
+	-docker network ls --filter "name=$(PROJECT_NAME)" -q | xargs -r docker network rm
+
+	@printf "\n🔥 $(Y)Cleaning volumes...$(S)\n"
+	-docker volume ls --filter "name=$(PROJECT_NAME)" -q | xargs -r docker volume rm
+
+	@printf "\n🔥 $(Y)Cleaning images...$(S)\n"
+	-docker images --filter "reference=$(PROJECT_NAME)*" -q | xargs -r docker rmi -f
 ##
 
 .PHONY: config
