@@ -205,8 +205,7 @@ install: up_detached composer_install assets images git_hooks_init info ## Start
 
 .PHONY: info
 info: ## Show project access info
-	@printf "\n$(Y)Info$(S)"
-	@printf "\n$(Y)----$(S)\n\n"
+	@printf "\n$(Y)--- Info ---$(S)\n"
 	@printf " $(Y)›$(S) Copy $(Y)$(LOCAL_MK).dist$(S) to $(G)$(LOCAL_MK)$(S) to extend the Makefile with your own commands.\n"
 	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
 	@printf " $(Y)›$(S) Access to the application (accept the auto-generated TLS certificate):\n"
@@ -285,8 +284,7 @@ config: ## Parse, resolve, and render compose file in canonical format
 
 .PHONY: images
 images: ## List images used by the current containers
-	@printf "\n$(Y)Images used by the current containers$(S)"
-	@printf "\n$(Y)-------------------------------------$(S)\n\n"
+	@printf "\n$(Y)--- Images used by the current containers ---$(S)\n"
 	$(COMPOSE) images | grep -E "REPOSITORY|$(IMAGES_PREFIX)"
 
 .PHONY: logs
@@ -566,8 +564,7 @@ phpcsfixer_fix: _phpcsfixer ## Fix code style
 	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) fix
 
 phpcsfixer_lint: _phpcsfixer ## Check code style
-	@printf "\n$(Y)PHP CS Fixer [LINT]$(S)"
-	@printf "\n$(Y)-------------------$(S)\n\n"
+	@printf "\n$(Y)--- PHP CS Fixer [LINT] ---$(S)\n"
 	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) check
 
 ##
@@ -583,8 +580,7 @@ phpmd: _phpmd ## Run PHP Mess Detector - $ make phpmd [a=<arguments>] - Example:
 	$(PHPMD) $(a)
 
 phpmd_lint: _phpmd ## Run PHP Mess Detector with all rules
-	@printf "\n$(Y)PHP Mess Detector [LINT]$(S)"
-	@printf "\n$(Y)------------------------$(S)\n\n"
+	@printf "\n$(Y)--- PHP Mess Detector [LINT] ---$(S)\n"
 	$(PHPMD) $(SRC),$(TESTS) ansi cleancode,codesize,controversial,design,naming,unusedcode $(a)
 
 ##
@@ -617,8 +613,7 @@ phpstan_baseline: _phpstan ## Generate PHPStan baseline - $ make phpstan_baselin
 	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a) --generate-baseline $(PHPSTAN_BASELINE)
 
 phpstan_lint: _phpstan ## Run PHPStan analyse - $ make phpstan_analyse [a=<arguments>] - Example: $ make phpstan_analyse a="src tests"
-	@printf "\n$(Y)PHPStan [LINT]$(S)"
-	@printf "\n$(Y)--------------$(S)\n\n"
+	@printf "\n$(Y)--- PHPStan [LINT] ---$(S)\n"
 	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a)
 
 ##
@@ -637,8 +632,7 @@ twigcsfixer_fix: _twigcsfixer ## Fix Twig style
 	$(TWIGCSFIXER) lint --fix $(TEMPLATES)
 
 twigcsfixer_lint: _twigcsfixer ## Check Twig style
-	@printf "\n$(Y)Twig CS Fixer [LINT]$(S)"
-	@printf "\n$(Y)--------------------$(S)\n\n"
+	@printf "\n$(Y)--- Twig CS Fixer [LINT] ---$(S)\n"
 	$(TWIGCSFIXER) lint $(TEMPLATES)
 
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
@@ -704,8 +698,7 @@ extract: _translation ## Extract translation strings from templates
 
 .PHONY: certificates
 certificates: ## Install the Caddy TLS certificate to the trust store
-	@printf "\n$(Y)Copying the Caddy certificate to trust store$(S)"
-	@printf "\n$(Y)--------------------------------------------$(S)\n\n"
+	@printf "\n$(Y)--- Copying the Caddy certificate to trust store ---$(S)\n"
 	@if [ ! -f /tmp/caddy_root.crt ]; then \
 		$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" >/tmp/caddy_root.crt; \
 	fi
@@ -795,8 +788,7 @@ aliases: ## Show aliases info and loading instructions
 	@printf "To load aliases, run:\n  $(Y). aliases$(S)\nor:\n  $(Y)console aliases$(S)\n";
 
 env_files: ## Show env files loaded into this Makefile
-	@printf "\n$(Y)Symfony env files$(S)"
-	@printf "\n$(Y)-----------------$(S)\n\n"
+	@printf "\n$(Y)--- Symfony env files ---$(S)\n"
 	@printf "Files loaded into this Makefile (in order of decreasing priority) $(Y)[APP_ENV=$(APP_ENV)]$(S):\n\n"
 	@for file in .env.$(APP_ENV).local .env.$(APP_ENV) .env.local .env; do \
 		if [ -f "$${file}" ]; then printf "$(G)✔$(S) $${file}\n"; else printf "$(R)⨯$(S) $${file}\n"; fi; \
@@ -809,8 +801,7 @@ tree: ## Visualize your structure (requires `tree` command) - $ make tree [l=<le
 
 .PHONY: vars
 vars: ## Show key Makefile variables
-	@printf "\n$(Y)Vars$(S)"
-	@printf "\n$(Y)----$(S)\n\n"
+	@printf "\n$(Y)--- Vars ---$(S)\n"
 	@$(foreach var, \
 		USER UNAME_S APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
 		CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE \
