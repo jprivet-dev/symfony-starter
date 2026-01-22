@@ -60,17 +60,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(MAKE) clone_symfony_demo
 	git add . && git commit -m "make clone_symfony_demo"
 
-	@# --- clone_symfony_docker ---
 	$(MAKE) clone_symfony_docker
-	git add . && git commit -m "make clone_symfony_demo"
-	$(MAKE) git_apply f=common/compose-var-mapping.patch
-	git add . && git commit -m "make git_apply f=common/compose-var-mapping.patch"
-	$(MAKE) git_apply f=common/compose-DATABASE_URL.patch
-	git add . && git commit -m "make git_apply f=common/compose-DATABASE_URL.patch"
-	$(MAKE) build up_detached runtime permissions
-	git add . && git commit -m "make build up_detached runtime permissions"
-	$(MAKE) git_apply f=common/docker-entrypoint-clean-composer.patch
-	git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patch"
 
 	@# --- sqlite ---
 	$(MAKE) git_apply f=sqlite/compose-doctrine-bundle.patch
@@ -84,34 +74,14 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
-	@# --- clone_symfony_docker ---
 	$(MAKE) clone_symfony_docker
-	git add . && git commit -m "make clone_symfony_demo"
-	$(MAKE) git_apply f=common/compose-var-mapping.patch
-	git add . && git commit -m "make git_apply f=common/compose-var-mapping.patch"
-	$(MAKE) git_apply f=common/compose-DATABASE_URL.patch
-	git add . && git commit -m "make git_apply f=common/compose-DATABASE_URL.patch"
-	$(MAKE) build up_detached runtime permissions
-	git add . && git commit -m "make build up_detached runtime permissions"
-	$(MAKE) git_apply f=common/docker-entrypoint-clean-composer.patch
-	git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patch"
 
 	@# --- restart ---
 	$(MAKE) down up_detached runtime permissions images info
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
 minimalist@postgresql: ## Generate a minimalist Symfony application (with PostgreSQL) with Docker configuration (stable release)
-	@# --- clone_symfony_docker ---
 	$(MAKE) clone_symfony_docker
-	git add . && git commit -m "make clone_symfony_demo"
-	$(MAKE) git_apply f=common/compose-var-mapping.patch
-	git add . && git commit -m "make git_apply f=common/compose-var-mapping.patch"
-	$(MAKE) git_apply f=common/compose-DATABASE_URL.patch
-	git add . && git commit -m "make git_apply f=common/compose-DATABASE_URL.patch"
-	$(MAKE) build up_detached runtime permissions
-	git add . && git commit -m "make build up_detached runtime permissions"
-	$(MAKE) git_apply f=common/docker-entrypoint-clean-composer.patch
-	git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patch"
 
 	@# --- postgresql ---
 	$(MAKE) require a=symfony/orm-pack
@@ -148,6 +118,15 @@ ifeq ($(wildcard $(DOCKERFILE)),)
 else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
 endif
+	git add . && git commit -m "make clone_symfony_demo"
+	$(MAKE) git_apply f=common/compose-var-mapping.patch
+	git add . && git commit -m "make git_apply f=common/compose-var-mapping.patch"
+	$(MAKE) git_apply f=common/compose-DATABASE_URL.patch
+	git add . && git commit -m "make git_apply f=common/compose-DATABASE_URL.patch"
+	$(MAKE) build up_detached runtime permissions
+	git add . && git commit -m "make build up_detached runtime permissions"
+	$(MAKE) git_apply f=common/docker-entrypoint-clean-composer.patch
+	git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patch"
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
