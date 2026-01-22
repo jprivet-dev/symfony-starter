@@ -346,6 +346,7 @@ composer: ## Run composer command - $ make composer [a=<arguments>] - Example: $
 
 .PHONY: i
 composer_install i: ## Install Composer packages
+	@printf "\n$(Y)--- Composer Install (env: $(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
@@ -353,6 +354,7 @@ else
 endif
 
 composer_validate: ## Check if lock file is up to date (even when config.lock is false)
+	@printf "\n$(Y)--- Composer Validate ---$(S)\n"
 	$(COMPOSER) validate --strict
 
 ##
@@ -371,6 +373,7 @@ require: ## Add required packages to your composer.json and installs them - $ ma
 
 .PHONY: update
 update: ## Update Composer packages - $ make update [a=<arguments>] - Example: $ make update a="phpunit/phpunit"
+	@printf "\n$(Y)--- Composer Update (env: $(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
@@ -457,6 +460,7 @@ update_force: _doctrine ## Execute the generated SQL needed to synchronize the d
 
 .PHONY: validate
 validate: _doctrine ## Validate the mapping files - $ make validate [a=<arguments>] - Example: $ make validate a="--env=test"
+	@printf "\n$(Y)--- Doctrine Schema Validate ---$(S)\n"
 	$(CONSOLE) doctrine:schema:validate -v $(a)
 
 ## — POSTGRESQL 🛢️ ————————————————————————————————————————————————————————————
@@ -502,6 +506,7 @@ endif
 
 .PHONY: phpunit p
 phpunit p: _phpunit ## Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
+	@printf "\n$(Y)--- PHPUnit ---$(S)\n"
 	$(PHPUNIT) $(a)
 
 phpunit_log: FILE = $(BUILD)/phpunit/phpunit-$(NOW).log
@@ -515,12 +520,14 @@ phpunit_log: _phpunit ## Exporting PHPUnit terminal output to a log file
 .PHONY: coverage
 coverage: DIR = $(BUILD)/coverage/coverage-$(NOW)
 coverage: _phpunit ## Generate code coverage report in HTML format - $ make coverage [a=<arguments>] - Example: $ make coverage a="tests/myTest.php"
+	@printf "\n$(Y)--- PHPUnit Coverage ---$(S)\n"
 	mkdir -p $(BUILD)/coverage
 	-$(PHPUNIT_COVERAGE) --coverage-html $(DIR) $(a)
 	@printf " $(G)✔$(S) Coverage is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
 
 .PHONY: dox
 dox: _phpunit ## Report test execution progress in TestDox format - $ make dox [a=<arguments>] - Example: $ make dox a="tests/myTest.php"
+	@printf "\n$(Y)--- PHPUnit TestDox ---$(S)\n"
 	$(PHPUNIT) --testdox $(a)
 
 dox_html: FILE = $(BUILD)/dox/testdox-$(NOW).html
@@ -593,6 +600,7 @@ endif
 
 phpmetrics_report: DIR = $(BUILD)/phpmetrics/phpmetrics-$(NOW)
 phpmetrics_report: _phpmetrics ## Run PHPMetrics and generate detailed report
+	@printf "\n$(Y)--- PHPMetrics Report ---$(S)\n"
 	mkdir -p $(BUILD)/phpmetrics
 	$(PHPMETRICS) --report-html=$(DIR) $(SRC)
 	@printf " $(G)✔$(S) PHPMetrics report is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
@@ -645,6 +653,7 @@ endif
 
 .PHONY: assets
 assets: _assets ## Generate all assets
+	@printf "\n$(Y)--- Assets (env: $(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
 	$(MAKE) importmap_install
 else
@@ -788,7 +797,7 @@ aliases: ## Show aliases info and loading instructions
 	@printf "To load aliases, run:\n  $(Y). aliases$(S)\nor:\n  $(Y)console aliases$(S)\n";
 
 env_files: ## Show env files loaded into this Makefile
-	@printf "\n$(Y)--- Symfony env files ---$(S)\n"
+	@printf "\n$(Y)--- Symfony Env Files ---$(S)\n"
 	@printf "Files loaded into this Makefile (in order of decreasing priority) $(Y)[APP_ENV=$(APP_ENV)]$(S):\n\n"
 	@for file in .env.$(APP_ENV).local .env.$(APP_ENV) .env.local .env; do \
 		if [ -f "$${file}" ]; then printf "$(G)✔$(S) $${file}\n"; else printf "$(R)⨯$(S) $${file}\n"; fi; \
