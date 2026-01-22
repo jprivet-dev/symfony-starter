@@ -32,10 +32,8 @@ _patch_sqlite_env: git_apply # INTERNAL
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
 	$(MAKE) minimalist
-	$(MAKE) require_postgresql
-	$(MAKE) down up_detached
-	$(MAKE) require_api
-	$(MAKE) down clean_deep up_detached
+	$(MAKE) require_postgresql down up_detached
+	$(MAKE) require_api down clean_deep up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) ApiPlatform application with PostgreSQL generated!\n\n"
 
@@ -45,8 +43,7 @@ api_lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(MAKE) clone_symfony_demo
-	$(MAKE) clone_symfony_docker
-	$(MAKE) down up_detached
+	$(MAKE) clone_symfony_docker down up_detached
 	$(MAKE) git_apply f=sqlite/compose-doctrine-bundle.patch
 	git add . && git commit -m "make git_apply f=sqlite/compose-doctrine-bundle.patch"
 	$(MAKE) git_apply f=sqlite/dockerfile-sqlite.patch
@@ -57,8 +54,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
-	$(MAKE) clone_symfony_docker
-	$(MAKE) down up_detached
+	$(MAKE) clone_symfony_docker down up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
@@ -123,14 +119,16 @@ require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
 
 require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 	$(COMPOSER) require easycorp/easyadmin-bundle
+	git add . && git commit -m "composer require easycorp/easyadmin-bundle"
 
 require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
 	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
+	git add . && git commit -m "composer require symfony/stimulus-bundle"
 
 require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
 	$(COMPOSER) require symfony/webapp-pack
-	$(MAKE) down up_detached
+	git add . && git commit -m "composer require symfony/webapp-pack"
 
 ##
 
