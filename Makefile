@@ -274,8 +274,9 @@ up_detached: up ## Start the containers (wait for services to be running|healthy
 
 ##
 
-clean_deep: confirm ## Clean everything (local volumes, containers and images) [y/N]
-	$(COMPOSE) down --volumes --remove-orphans --rmi local -v
+clean_deep: confirm ## Stop containers, remove volumes and delete project images [y/N]
+	-$(COMPOSE) down --volumes --remove-orphans
+	-docker images --filter=reference='$(PROJECT_NAME)*' -q | xargs docker rmi -f 2>/dev/null || true
 
 ##
 
