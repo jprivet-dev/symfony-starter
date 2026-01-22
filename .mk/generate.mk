@@ -40,9 +40,10 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	@# --- api ---
 	$(MAKE) require a=api
 	git add . && git commit -m "make require a=api"
+	$(MAKE) build_force
 
 	@# --- restart ---
-	$(MAKE) down build up_detached runtime permissions images info
+	$(MAKE) down up_detached runtime permissions images info
 	@printf " $(G)✔$(S) ApiPlatform application with PostgreSQL generated!\n\n"
 
 .PHONY: demo
@@ -73,7 +74,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	git add . && git commit -m "make git_apply f=sqlite/dockerfile-sqlite.patch"
 
 	@# --- restart ---
-	$(MAKE) down build up_detached runtime permissions images info
+	$(MAKE) down up_detached runtime permissions images info
 	@printf " $(G)✔$(S) Symfony Demo application with SQLite generated!\n\n"
 
 .PHONY: minimalist
@@ -94,7 +95,7 @@ minimalist: ## Generate a minimalist Symfony application with Docker configurati
 	git add . && git commit -m "make git_apply f=common/docker-entrypoint-clean.patch"
 
 	@# --- restart ---
-	$(MAKE) down build up_detached runtime permissions images info
+	$(MAKE) down up_detached runtime permissions images info
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
 minimalist@postgresql: ## Generate a minimalist Symfony application (with PostgreSQL) with Docker configuration (stable release)
@@ -122,7 +123,7 @@ minimalist@postgresql: ## Generate a minimalist Symfony application (with Postgr
 	git add . && git commit -m "make git_apply f=postgresql/env-DATABASE_URL.patch"
 
 	@# --- restart ---
-	$(MAKE) down build up_detached runtime permissions images info
+	$(MAKE) down up_detached runtime permissions images info
 	@printf " $(G)✔$(S) Minimalist Symfony application with PostgreSQL generated!\n\n"
 
 minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
