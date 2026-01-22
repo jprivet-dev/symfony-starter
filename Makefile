@@ -205,9 +205,9 @@ install: up_detached ## Start the project, install dependencies and show info
 	$(MAKE) composer_install
 	-$(MAKE) assets
 	$(MAKE) images
+	$(MAKE) permissions
 	$(MAKE) git_hooks_init
 	$(MAKE) info
-	$(MAKE) permissions
 
 .PHONY: info
 info: ## Show project access info
