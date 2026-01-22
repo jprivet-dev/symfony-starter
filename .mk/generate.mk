@@ -52,6 +52,12 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Symfony Demo application with SQLite generated!\n\n"
 
+easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
+	$(MAKE) minimalist
+	$(MAKE) require_easyadmin down up_detached
+	$(MAKE) images info
+	@printf " $(G)✔$(S) EasyAdmin application with PostgreSQL generated!\n\n"
+
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(MAKE) clone_symfony_docker down up_detached
