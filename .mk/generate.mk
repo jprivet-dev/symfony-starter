@@ -80,8 +80,14 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 
 .PHONY: webapp
 webapp: minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
-	$(MAKE) require_webapp down clean_deep up_detached
+	$(MAKE) require_webapp
 	$(MAKE) permissions
+	# Apply patches after webapp were installed Doctrine & PosteSQL
+	$(MAKE) git_apply f=postgresql/compose-ports-5432.patch
+	git add . && git commit -m "[generate] make git_apply f=postgresql/compose-ports-5432.patch"
+	$(MAKE) git_apply f=postgresql/env-DATABASE_URL.patch
+	git add . && git commit -m "[generate] make git_apply f=postgresql/env-DATABASE_URL.patch"
+	$(MAKE) down clean_deep up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
 
