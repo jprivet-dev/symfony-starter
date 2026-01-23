@@ -194,6 +194,7 @@
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
   webapp                        Generate a webapp Symfony application with Docker configuration (stable release)
+  webapp@lts                    Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
 
   clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root

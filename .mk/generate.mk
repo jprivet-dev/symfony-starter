@@ -91,7 +91,7 @@ webapp: minimalist ## Generate a webapp Symfony application with Docker configur
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
 
-webapp@lts: ## ## Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
+webapp@lts: ## Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) webapp
 
 ##
