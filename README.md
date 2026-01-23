@@ -6,18 +6,58 @@ This project provides a streamlined way to set up a new Symfony application with
 
 ## ✨ Available Flavors
 
-You can choose from several pre-configured setups. Each flavor comes with a standard version and an **LTS** (Long-Term Support) version.
+You can choose from several pre-configured setups.
 
-| Flavor | Description | Command | Branch |
-| --- | --- | --- | --- |
-| **Minimalist** | A bare-bones Symfony skeleton. | `make minimalist` | [`minimalist`](@ltshttps://github.com/jprivet-dev/symfony-starter/tree/minimalist%5D(https://github.com/jprivet-dev/symfony-starter/tree/minimalist)) |
-| **Web App** | Full stack (Twig, AssetMapper, Profiler...). | `make webapp` | [`webapp`](@ltshttps://github.com/jprivet-dev/symfony-starter/tree/webapp%5D(https://github.com/jprivet-dev/symfony-starter/tree/webapp)) |
-| **API Platform** | API Platform + PostgreSQL. | `make api` | [`api`](@ltshttps://github.com/jprivet-dev/symfony-starter/tree/api%5D(https://github.com/jprivet-dev/symfony-starter/tree/api)) |
-| **EasyAdmin** | EasyAdmin + PostgreSQL. | `make easy_admin` | [`easy_admin`](@ltshttps://github.com/jprivet-dev/symfony-starter/tree/easy_admin%5D(https://github.com/jprivet-dev/symfony-starter/tree/easy_admin)) |
-| **Demo** | The official Symfony Demo (SQLite). | `make demo` | [`demo`](@ltshttps://github.com/jprivet-dev/symfony-starter/tree/demo%5D(https://github.com/jprivet-dev/symfony-starter/tree/demo)) |
+<table>
+  <thead>
+    <tr>
+      <th width="100">Flavor</th>
+      <th width="250">Preview</th>
+      <th>Description</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center"><strong>Minimalist</strong><br><sub>(Stable)</sub></td>
+      <td><img src="docs/img/minimalist.png" alt="Symfony Minimalist" width="250"></td>
+      <td>A bare-bones Symfony 7 skeleton. Perfect for starting from scratch.</td>
+      <td><code>make minimalist</code></td>
+    </tr>
+    <tr>
+      <td align="center"><strong>Minimalist</strong><br><sub>(LTS)</sub></td>
+      <td><img src="docs/img/minimalist-lts.png" alt="Symfony LTS" width="250"></td>
+      <td>Long-Term Support version (Symfony 6.4). Stability focused.</td>
+      <td><code>make minimalist_lts</code></td>
+    </tr>
+    <tr>
+      <td align="center"><strong>Web App</strong></td>
+      <td align="center"><em>(Same as Minimalist)</em></td>
+      <td>Full stack application with Twig, AssetMapper, Profiler, etc.</td>
+      <td><code>make webapp</code></td>
+    </tr>
+    <tr>
+      <td align="center"><strong>API Platform</strong></td>
+      <td><img src="docs/img/api.png" alt="API Platform" width="250"></td>
+      <td>Includes <strong>API Platform</strong> and <strong>PostgreSQL</strong>. Ready for REST/GraphQL.</td>
+      <td><code>make api</code></td>
+    </tr>
+    <tr>
+      <td align="center"><strong>EasyAdmin</strong></td>
+      <td><img src="docs/img/easy-admin.png" alt="EasyAdmin" width="250"></td>
+      <td>Includes <strong>EasyAdmin</strong> and <strong>PostgreSQL</strong>. The quickest back-office.</td>
+      <td><code>make easy_admin</code></td>
+    </tr>
+    <tr>
+      <td align="center"><strong>Demo</strong></td>
+      <td><img src="docs/img/demo.png" alt="Symfony Demo" width="250"></td>
+      <td>The official <strong>Symfony Demo</strong> application (SQLite). Great for learning.</td>
+      <td><code>make demo</code></td>
+    </tr>
+  </tbody>
+</table>
 
-> **Note:** To use an LTS version, simply append `@lts` to the command (e.g., `make webapp@lts`) or checkout the corresponding branch (e.g., [`webapp@lts`](@ltshttps://github.com/jprivet-dev/symfony-starter/tree/webapp%40lts%5D(https://github.com/jprivet-dev/symfony-starter/tree/webapp%40lts))).
-
+> **Note:** To use an LTS version on other flavors (e.g., API), simply append `@lts` (e.g., `make api@lts`).
 ## 🚀 Prerequisites
 
 Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
