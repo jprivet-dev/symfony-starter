@@ -48,6 +48,8 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	git add . && git commit -m "[generate] make git_apply f=sqlite/compose-doctrine-bundle.patch"
 	$(MAKE) git_apply f=sqlite/dockerfile-sqlite.patch
 	git add . && git commit -m "[generate] make git_apply f=sqlite/dockerfile-sqlite.patch"
+	$(MAKE) git_apply f=demo/env-APP_SECRET.patch
+	git add . && git commit -m "[generate] make git_apply f=demo/env-APP_SECRET.patch"
 	$(MAKE) down up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
