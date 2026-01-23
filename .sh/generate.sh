@@ -1,19 +1,12 @@
 #!/bin/bash
 # Usage:
-#   . .sh/generate.sh
+#   . .sh/generate.sh my_command
 # or
-#   source .sh/generate.sh
+#   source .sh/generate.sh my_command
 
-function generate() {
-    command=$1
-    git switch next &&
-        make remove_all &&
-        git switch -c "${command}-$(date +"%Y%m%d-%H%M%S")" &&
-        make "${command}"
-}
+command=$1
 
-generate api
-generate api@lts
-
-git switch next
-make remove_all
+git switch next &&
+    make remove_all &&
+    git switch -c "${command}-$(date +"%Y%m%d-%H%M%S")" &&
+    make "${command}"
