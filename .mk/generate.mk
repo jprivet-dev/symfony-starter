@@ -145,6 +145,7 @@ kill_current_app: ## Remove all fresh Symfony application files
 	$(MAKE) deep_clean
 	git reset --hard
 	git clean -f -d
+	rm -rf var/ vendor/
 
 ##   COMPLETE INSTALLATION
 
