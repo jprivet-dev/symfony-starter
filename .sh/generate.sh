@@ -14,3 +14,6 @@ function generate() {
 
 generate api
 generate api@lts
+
+git switch next
+make remove_all
