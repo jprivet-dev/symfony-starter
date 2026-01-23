@@ -59,8 +59,8 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	# Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html
 	$(CONSOLE) make:admin:dashboard --no-interaction
 	git add . && git commit -m "[generate] php bin/console make:admin:dashboard"
-	$(MAKE) cache_clear
-	# Clear cache twice to avoid "Clear the application cache to run the EasyAdmin cache warmer, which generates the needed data to find this route.", I don't no why
+	# Need sleep 1 to avoid "Clear the application cache to run the EasyAdmin cache warmer, which generates the needed data to find this route.", I don't no why
+	sleep 3
 	$(MAKE) cache_clear
 	$(MAKE) images info
 	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
