@@ -60,6 +60,7 @@ DOCKERFILE         = Dockerfile
 VENDOR_API         = vendor/api-platform
 VENDOR_ASSETS      = vendor/symfony/asset-mapper
 VENDOR_DOCTRINE    = vendor/doctrine
+VENDOR_EASYADMIN   = vendor/easycorp/easyadmin-bundle
 VENDOR_MAILER      = vendor/symfony/mailer
 VENDOR_PHPCSFIXER  = vendor/bin/php-cs-fixer
 VENDOR_PHPMD       = vendor/bin/phpmd
@@ -218,6 +219,9 @@ info: ## Show project access info
 	@printf "    - Homepage ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
 ifneq ($(wildcard $(VENDOR_API)),)
 	@printf "    - API ............ $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/api$(S)\n"
+endif
+ifneq ($(wildcard $(VENDOR_EASYADMIN)),)
+	@printf "    - EasyAdmin ...... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/admin$(S)\n"
 endif
 ifneq ($(wildcard $(VENDOR_PROFILER)),)
 	@printf "    - Profiler ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/_profiler$(S)\n"
