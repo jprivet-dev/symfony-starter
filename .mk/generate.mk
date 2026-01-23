@@ -91,6 +91,9 @@ webapp: minimalist ## Generate a webapp Symfony application with Docker configur
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
 
+webapp@lts: ## ## Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) webapp
+
 ##
 
 clone_symfony_docker: ## Clone and extract https://github.com/dunglas/symfony-docker files at the root
