@@ -80,7 +80,7 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 
 .PHONY: webapp
 webapp: minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
-	$(MAKE) require_webapp down up_detached
+	$(MAKE) require_webapp down clean_deep up_detached
 	$(MAKE) permissions
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
