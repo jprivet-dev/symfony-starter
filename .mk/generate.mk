@@ -62,6 +62,9 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(MAKE) images info
 	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
+easy_admin_lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) easy_admin
+
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(MAKE) clone_symfony_docker down up_detached

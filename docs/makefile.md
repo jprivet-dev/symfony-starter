@@ -190,6 +190,7 @@
   api_lts                       Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
   demo                          Generate a Symfony Demo application (with SQLite) with Docker configuration
   easy_admin                    Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
+  easy_admin_lts                Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist_lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 
