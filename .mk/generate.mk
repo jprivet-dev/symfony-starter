@@ -140,12 +140,15 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 
 require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
 	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
+	git add . && git commit -m "composer require symfony/asset-mapper symfony/asset symfony/twig-pack"
 
 require_bootstrap: require_asset_mapper ## Install Bootstrap - https://getbootstrap.com/
 	$(CONSOLE) importmap:require bootstrap
+	git add . && git commit -m "bin/console importmap:require bootstrap"
 
 require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
 	$(COMPOSER) require --dev symfony/maker-bundle
+	git add . && git commit -m "composer require --dev symfony/maker-bundle"
 
 require_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
@@ -157,6 +160,7 @@ require_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/c
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(COMPOSER) require --dev symfony/profiler-pack
+	git add . && git commit -m "composer require --dev symfony/profiler-pack"
 
 require_sqlite: ## Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
 	$(MAKE) _patch_sqlite_base
@@ -165,20 +169,25 @@ require_sqlite: ## Install Doctrine (SQLite) - https://symfony.com/doc/current/d
 
 require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
 	$(COMPOSER) require --dev symfony/test-pack
+	git add . && git commit -m "composer require --dev symfony/test-pack"
 
 require_translation: ## Install Translation - https://symfony.com/doc/current/translation.html
 	$(COMPOSER) require symfony/translation
+	git add . && git commit -m "composer require symfony/translation"
 
 ##
 
 require_phpcsfixer: ## Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
 	$(COMPOSER) require --dev friendsofphp/php-cs-fixer
+	git add . && git commit -m "composer require --dev friendsofphp/php-cs-fixer"
 
 require_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
 	$(COMPOSER) require --dev phpmd/phpmd
+	git add . && git commit -m "composer require --dev phpmd/phpmd"
 
 require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website/
 	$(COMPOSER) require --dev phpmetrics/phpmetrics
+	git add . && git commit -m "composer require --dev phpmetrics/phpmetrics"
 
 require_phpstan: ## Install PHPStan - https://phpstan.org/
 	$(COMPOSER) require --dev \
@@ -186,6 +195,8 @@ require_phpstan: ## Install PHPStan - https://phpstan.org/
 		phpstan/phpstan-symfony \
 		phpstan/phpstan-doctrine \
 		phpstan/phpstan-phpunit
+	git add . && git commit -m "composer require --dev phpstan/phpstan (+ symfony, doctrine & phpunit)"
 
 require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
 	$(COMPOSER) require --dev vincentlanglet/twig-cs-fixer
+	git add . && git commit -m "composer require --dev vincentlanglet/twig-cs-fixer"
