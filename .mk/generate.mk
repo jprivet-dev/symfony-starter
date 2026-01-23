@@ -54,7 +54,11 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
 	$(MAKE) minimalist
-	$(MAKE) require_easyadmin down up_detached
+	$(MAKE) require_postgresql down up_detached
+	$(MAKE) require_easy_admin down clean_deep up_detached
+	# Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html
+	$(CONSOLE) make:admin:dashboard
+	git add . && git commit -m "php bin/console make:admin:dashboard"
 	$(MAKE) images info
 	@printf " $(G)✔$(S) EasyAdmin application with PostgreSQL generated!\n\n"
 
