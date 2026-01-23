@@ -35,7 +35,7 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	$(MAKE) require_postgresql down up_detached
 	$(MAKE) require_api down clean_deep up_detached
 	$(MAKE) images info
-	@printf " $(G)✔$(S) ApiPlatform application with PostgreSQL generated!\n\n"
+	@printf " $(G)✔$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
 api_lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) api
@@ -50,7 +50,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	git add . && git commit -m "make git_apply f=sqlite/dockerfile-sqlite.patch"
 	$(MAKE) down up_detached
 	$(MAKE) images info
-	@printf " $(G)✔$(S) Symfony Demo application with SQLite generated!\n\n"
+	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
 	$(MAKE) minimalist
@@ -60,7 +60,7 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(CONSOLE) make:admin:dashboard
 	git add . && git commit -m "php bin/console make:admin:dashboard"
 	$(MAKE) images info
-	@printf " $(G)✔$(S) EasyAdmin application with PostgreSQL generated!\n\n"
+	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
