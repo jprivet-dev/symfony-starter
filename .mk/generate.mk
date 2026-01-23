@@ -60,10 +60,9 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(CONSOLE) make:admin:dashboard --no-interaction
 	git add . && git commit -m "[generate] php bin/console make:admin:dashboard"
 	$(MAKE) images info
-	$(MAKE) cc
-	$(MAKE) cc
-	$(MAKE) cc
-	$(MAKE) cc
+	$(MAKE) clear_cache
+	# Clear cache twice to avoid "Clear the application cache to run the EasyAdmin cache warmer, which generates the needed data to find this route.", I don't no why
+	$(MAKE) clear_cache
 	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
 easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
