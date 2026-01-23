@@ -78,6 +78,12 @@ minimalist: ## Generate a minimalist Symfony application with Docker configurati
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
 
+.PHONY: webapp
+webapp: minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
+	$(MAKE) require_webapp
+	$(MAKE) images info
+	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
+
 ##
 
 clone_symfony_docker: ## Clone and extract https://github.com/dunglas/symfony-docker files at the root
