@@ -59,8 +59,7 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	# Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html
 	$(CONSOLE) make:admin:dashboard --no-interaction
 	git add . && git commit -m "php bin/console make:admin:dashboard"
-	$(MAKE) cache_clear
-	$(MAKE) images info
+	$(MAKE) images cache_clear info
 	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
 easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
