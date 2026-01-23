@@ -37,7 +37,7 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	$(MAKE) images info
 	@printf " $(G)✔$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
-api_lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) api
 
 .PHONY: demo
@@ -62,7 +62,7 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(MAKE) images info
 	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
-easy_admin_lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) easy_admin
 
 .PHONY: minimalist
@@ -71,7 +71,7 @@ minimalist: ## Generate a minimalist Symfony application with Docker configurati
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
-minimalist_lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
 
 ##
