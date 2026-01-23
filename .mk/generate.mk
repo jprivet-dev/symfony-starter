@@ -33,7 +33,7 @@ _patch_sqlite_env: git_apply # INTERNAL
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
 	$(MAKE) minimalist
 	$(MAKE) require_postgresql down up_detached
-	$(MAKE) require_api down clean_deep up_detached
+	$(MAKE) require_api down deep_clean up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
@@ -55,7 +55,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
 	$(MAKE) minimalist
 	$(MAKE) require_postgresql down up_detached
-	$(MAKE) require_easy_admin down clean_deep up_detached
+	$(MAKE) require_easy_admin down deep_clean up_detached
 	# Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html
 	$(CONSOLE) make:admin:dashboard --no-interaction
 	git add . && git commit -m "[generate] php bin/console make:admin:dashboard"
@@ -87,7 +87,7 @@ webapp: minimalist ## Generate a webapp Symfony application with Docker configur
 	git add . && git commit -m "[generate] make git_apply f=postgresql/compose-ports-5432.patch"
 	$(MAKE) git_apply f=postgresql/env-DATABASE_URL.patch
 	git add . && git commit -m "[generate] make git_apply f=postgresql/env-DATABASE_URL.patch"
-	$(MAKE) down clean_deep up_detached
+	$(MAKE) down deep_clean up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
 
@@ -138,9 +138,9 @@ else
 endif
 	git add . && git commit -m "[generate] make clone_symfony_demo"
 
-remove_all: ## Remove all fresh Symfony application files
+kill_current_app: ## Remove all fresh Symfony application files
 	-$(MAKE) permissions
-	$(MAKE) clean_deep
+	$(MAKE) deep_clean
 	git reset --hard
 	git clean -f -d
 

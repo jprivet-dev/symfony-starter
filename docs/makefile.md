@@ -32,7 +32,7 @@
   up                            Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
   up_detached                   Start the containers (wait for services to be running|healthy - detached mode)
 
-  clean_deep                    Cleaning local containers, networks, volumes & images [y/N]
+  deep_clean                    Cleaning local containers, networks, volumes & images [y/N]
 
   config                        Parse, resolve, and render compose file in canonical format
   images                        List images used by the current containers
@@ -197,7 +197,7 @@
 
   clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root
-  remove_all                    Remove all fresh Symfony application files
+  kill_current_app              Remove all fresh Symfony application files
 
   COMPLETE INSTALLATION
   require_api                   Install API Platform - https://api-platform.com/docs/symfony/

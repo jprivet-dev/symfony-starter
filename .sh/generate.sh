@@ -6,6 +6,6 @@
 
 command=$1
 
-make remove_all &&
+make kill_current_app &&
     git switch -c "${command}-$(date +"%Y%m%d-%H%M%S")" &&
     make "${command}"
