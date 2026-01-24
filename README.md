@@ -160,7 +160,7 @@ cd symfony-starter
 ```
 
 #### Step 2. Generate your application
- 
+
 ```shell
 # Example: Generate a full Web App (Stable)
 make webapp
@@ -173,7 +173,6 @@ SYMFONY_VERSION=6.4.3 make minimalist
 ```
 
 > This will:
-> 
 > * Clone `dunglas/symfony-docker` configuration files and extract them to your project root.
 > * Build the necessary Docker images and start the containers.
 > * Generate a fresh Symfony application inside the container.
@@ -254,7 +253,7 @@ After `make minimalist`, your project structure will look like this (Minimalist 
 └── symfony.lock         (*)
 ```
 
-**(\*)** Indicates files/directories generated or copied from `dunglas/symfony-docker` or `symfony/skeleton`.
+**(*)** Indicates files/directories generated or copied from `dunglas/symfony-docker` or `symfony/skeleton`.
 
 To visualize your structure (requires `tree` command):
 
@@ -262,7 +261,7 @@ To visualize your structure (requires `tree` command):
 tree -A -L 1 -F --dirsfirst
 ```
 
-## 🔍 Transparent Git History
+## 🔍 Traceable Generation Process
 
 Unlike "black box" installers, this starter values **transparency**.
 
@@ -285,16 +284,10 @@ The `Makefile` commits every significant step of the generation process (applyin
 * **Safety:** You can easily revert a specific step if a patch conflicts with your needs.
 * **Learning:** It helps understand the integration between Docker and Symfony.
 
-**See examples:**
+**Check the git history of these branches to see it in action:**
 
-* https://github.com/jprivet-dev/symfony-starter/tree/api@lts
-* https://github.com/jprivet-dev/symfony-starter/tree/demo
-* https://github.com/jprivet-dev/symfony-starter/tree/easy_admin
-* https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts
-* https://github.com/jprivet-dev/symfony-starter/tree/minimalist
-* https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts
-* https://github.com/jprivet-dev/symfony-starter/tree/webapp
-* https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts
+* **Stable:** [minimalist](https://github.com/jprivet-dev/symfony-starter/tree/minimalist) | [webapp](https://github.com/jprivet-dev/symfony-starter/tree/webapp) | [easy_admin](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin) | [demo](https://github.com/jprivet-dev/symfony-starter/tree/demo)
+* **LTS:** [minimalist@lts](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts) | [webapp@lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts) | [api@lts](https://github.com/jprivet-dev/symfony-starter/tree/api@lts) | [easy_admin@lts](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts)
 
 ## 📚 Documentation
 
