@@ -11,19 +11,14 @@ You can choose from several pre-configured setups.
 <table>
     <thead>
     <tr>
-        <th width="100">Flavor</th>
-        <th width="250">Preview</th>
-        <th>Description</th>
+        <th>Flavor & Description</th>
+        <th width="300">Preview</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td align="center"><strong>Minimalist</strong></td>
         <td>
-            <img src="docs/img/minimalist.png" alt="Symfony Minimalist" width="250">
-            <img src="docs/img/minimalist-lts.png" alt="Symfony LTS" width="250">
-        </td>
-        <td>
+            <h3>Minimalist</h3>
             <p>A bare-bones <strong>Symfony skeleton</strong>. Perfect for starting from scratch.</p>
             <ul>
                 <li>Doc: <a href="https://symfony.com/doc/current/setup.html">Installing & Setting up the Symfony Framework</a></li>
@@ -43,11 +38,14 @@ You can choose from several pre-configured setups.
                 </li>
             </ul>
         </td>
+        <td>
+            <img src="docs/img/minimalist.png" alt="Symfony Minimalist" width="300">
+            <img src="docs/img/minimalist-lts.png" alt="Symfony LTS" width="300">
+        </td>
     </tr>
     <tr>
-        <td align="center"><strong>Web App</strong></td>
-        <td align="center"><em>(Same as Minimalist)</em></td>
         <td>
+            <h3>Web App</h3>
             <p><strong>Full stack application</strong> with Twig, AssetMapper, Profiler, etc.</p>
             <ul>
                 <li>Doc: <a href="https://symfony.com/doc/current/setup.html">Installing & Setting up the Symfony Framework</a></li>
@@ -67,11 +65,11 @@ You can choose from several pre-configured setups.
                 </li>
             </ul>
         </td>
+        <td align="center"><em>(Same as Minimalist)</em></td>
     </tr>
     <tr>
-        <td align="center"><strong>API Platform</strong></td>
-        <td><img src="docs/img/api.png" alt="API Platform" width="250"></td>
         <td>
+            <h3>API Platform</h3>
             <p>Includes <strong>API Platform</strong> and <strong>PostgreSQL</strong>. Ready for REST/GraphQL.</p>
             <ul>
                 <li>Doc: <a href="https://api-platform.com/docs/symfony/">Getting Started With API Platform with Symfony</a></li>
@@ -90,11 +88,11 @@ You can choose from several pre-configured setups.
                 </li>
             </ul>
         </td>
+        <td><img src="docs/img/api.png" alt="API Platform" width="300"></td>
     </tr>
     <tr>
-        <td align="center"><strong>EasyAdmin</strong></td>
-        <td><img src="docs/img/easy-admin.png" alt="EasyAdmin" width="250"></td>
         <td>
+            <h3>EasyAdmin</h3>
             <p>Includes <strong>EasyAdmin</strong> and <strong>PostgreSQL</strong>. The quickest back-office.</p>
             <ul>
                 <li>Doc: <a href="https://symfony.com/bundles/EasyAdminBundle/current/index.html">EasyAdmin</a></li>
@@ -114,11 +112,11 @@ You can choose from several pre-configured setups.
                 </li>
             </ul>
         </td>
+        <td><img src="docs/img/easy-admin.png" alt="EasyAdmin" width="300"></td>
     </tr>
     <tr>
-        <td align="center"><strong>Demo</strong></td>
-        <td><img src="docs/img/demo.png" alt="Symfony Demo" width="250"></td>
         <td>
+            <h3>Demo</h3>
             <p>The official <strong>Symfony Demo</strong> application (SQLite). Great for learning.</p>
             <ul>
                 <li>Doc: <a href="https://github.com/symfony/demo">Symfony Demo Application</a></li>
@@ -137,6 +135,7 @@ You can choose from several pre-configured setups.
                 </li>
             </ul>
         </td>
+        <td><img src="docs/img/demo.png" alt="Symfony Demo" width="300"></td>
     </tr>
     </tbody>
 </table>
