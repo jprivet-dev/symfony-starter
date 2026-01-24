@@ -9,79 +9,138 @@ This project provides a streamlined way to set up a new Symfony application with
 You can choose from several pre-configured setups.
 
 <table>
-  <thead>
+    <thead>
     <tr>
-      <th width="100">Flavor</th>
-      <th width="250">Preview</th>
-      <th>Description</th>
+        <th width="100">Flavor</th>
+        <th width="250">Preview</th>
+        <th>Description</th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     <tr>
-      <td align="center"><strong>Minimalist</strong></td>
-      <td>
-        <img src="docs/img/minimalist.png" alt="Symfony Minimalist" width="250">
-        <img src="docs/img/minimalist-lts.png" alt="Symfony LTS" width="250">
-      </td>
-      <td>
-        A bare-bones Symfony 7 skeleton. Perfect for starting from scratch.
-        <ul>
-          <li>Command: <code>make minimalist</code> <code>make minimalist@lts</code></li>
-          <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/minimalist">minimalist</a></li>
-          <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts">minimalist@lts</a></li>
-        </ul>
-      </td>
-    </tr>
-    <tr>
-      <td align="center"><strong>Web App</strong></td>
-      <td align="center"><em>(Same as Minimalist)</em></td>
-      <td>
-        Full stack application with Twig, AssetMapper, Profiler, etc.
-        <ul>
-          <li>Command: <code>make webapp</code> <code>make webapp@lts</code></li>
-          <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/webapp">webapp</a></li>
-          <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts">webapp@lts</a></li>
-        </ul>
-      </td>
-    </tr>
-    <tr>
-      <td align="center"><strong>API Platform</strong></td>
-      <td><img src="docs/img/api.png" alt="API Platform" width="250"></td>
-      <td>
-        Includes <strong>API Platform</strong> and <strong>PostgreSQL</strong>. Ready for REST/GraphQL.
-        <ul>
-          <li>Command: <code>make api@lts</code></li>
-          <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/api@lts">api@lts</a></li>
-        </ul>
-      </td>
+        <td align="center"><strong>Minimalist</strong></td>
+        <td>
+            <img src="docs/img/minimalist.png" alt="Symfony Minimalist" width="250">
+            <img src="docs/img/minimalist-lts.png" alt="Symfony LTS" width="250">
+        </td>
+        <td>
+            <p>A bare-bones <strong>Symfony skeleton</strong>. Perfect for starting from scratch.</p>
+            <ul>
+                <li>Doc: <a href="https://symfony.com/doc/current/setup.html">Installing & Setting up the Symfony Framework</a></li>
+                <li>
+                    <span>Stable version:</span>
+                    <ul>
+                        <li>Command: <code>make minimalist</code></li>
+                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/minimalist">minimalist</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span>LTS version:</span>
+                    <ul>
+                        <li>Command: <code>make minimalist@lts</code></li>
+                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts">minimalist@lts</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </td>
     </tr>
     <tr>
-      <td align="center"><strong>EasyAdmin</strong></td>
-      <td><img src="docs/img/easy-admin.png" alt="EasyAdmin" width="250"></td>
-      <td>
-        Includes <strong>EasyAdmin</strong> and <strong>PostgreSQL</strong>. The quickest back-office.
-        <ul>
-          <li>Command: <code>make easy_admin</code> <code>make easy_admin@lts</code></li>
-          <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/easy_admin">easy_admin</a></li>
-          <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts">easy_admin@lts</a></li>
-        </ul>
-      </td>
+        <td align="center"><strong>Web App</strong></td>
+        <td align="center"><em>(Same as Minimalist)</em></td>
+        <td>
+            <p><strong>Full stack application</strong> with Twig, AssetMapper, Profiler, etc.</p>
+            <ul>
+                <li>Doc: <a href="https://symfony.com/doc/current/setup.html">Installing & Setting up the Symfony Framework</a></li>
+                <li>
+                    <span>Stable version:</span>
+                    <ul>
+                        <li>Command: <code>make webapp</code></li>
+                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/webapp">webapp</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span>LTS version:</span>
+                    <ul>
+                        <li>Command: <code>make webapp@lts</code></li>
+                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts">webapp@lts</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </td>
     </tr>
     <tr>
-      <td align="center"><strong>Demo</strong></td>
-      <td><img src="docs/img/demo.png" alt="Symfony Demo" width="250"></td>
-      <td>
-        The official <strong>Symfony Demo</strong> application (SQLite). Great for learning.
-        <ul>
-          <li>Command: <code>make demo</code></li>
-          <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/demo">demo</a></li>
-        </ul>
-      </td>
+        <td align="center"><strong>API Platform</strong></td>
+        <td><img src="docs/img/api.png" alt="API Platform" width="250"></td>
+        <td>
+            <p>Includes <strong>API Platform</strong> and <strong>PostgreSQL</strong>. Ready for REST/GraphQL.</p>
+            <ul>
+                <li>Doc: <a href="https://api-platform.com/docs/symfony/">Getting Started With API Platform with Symfony</a></li>
+                <li>
+                    <span>Stable version:</span>
+                    <ul>
+                        <li>Not available</li>
+                    </ul>
+                </li>
+                <li>
+                    <span>LTS version:</span>
+                    <ul>
+                        <li>Command: <code>make api@lts</code></li>
+                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/api@lts">api@lts</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </td>
     </tr>
-  </tbody>
+    <tr>
+        <td align="center"><strong>EasyAdmin</strong></td>
+        <td><img src="docs/img/easy-admin.png" alt="EasyAdmin" width="250"></td>
+        <td>
+            <p>Includes <strong>EasyAdmin</strong> and <strong>PostgreSQL</strong>. The quickest back-office.</p>
+            <ul>
+                <li>Doc: <a href="https://symfony.com/bundles/EasyAdminBundle/current/index.html">EasyAdmin</a></li>
+                <li>
+                    <span>Stable version:</span>
+                    <ul>
+                        <li>Command: <code>make easy_admin</code></li>
+                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/easy_admin">easy_admin</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span>LTS version:</span>
+                    <ul>
+                        <li>Command: <code>make easy_admin@lts</code></li>
+                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts">easy_admin@lts</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td align="center"><strong>Demo</strong></td>
+        <td><img src="docs/img/demo.png" alt="Symfony Demo" width="250"></td>
+        <td>
+            <p>The official <strong>Symfony Demo</strong> application (SQLite). Great for learning.</p>
+            <ul>
+                <li>Doc: <a href="https://github.com/symfony/demo">Symfony Demo Application</a></li>
+                <li>
+                    <span>Stable version:</span>
+                    <ul>
+                        <li>Command: <code>make demo</code></li>
+                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/demo">demo</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span>LTS version:</span>
+                    <ul>
+                        <li>Not available</li>
+                    </ul>
+                </li>
+            </ul>
+        </td>
+    </tr>
+    </tbody>
 </table>
 
-> **Note:** To use an LTS version on other flavors (e.g., API), simply append `@lts` (e.g., `make api@lts`).
 ## 🚀 Prerequisites
 
 Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
@@ -94,14 +153,15 @@ There are two ways to use this starter:
 
 Clone the main repository and generate the application you need on the fly.
 
-1. **Clone the repository:**
+#### Step 1. Clone the repository
+
 ```shell
-git clone git@github.com:jprivet-dev/symfony-starter.git my-project
-cd my-project
+git clone git@github.com:jprivet-dev/symfony-starter.git
+cd symfony-starter
 ```
 
-
-2. **Generate your application:**
+#### Step 2. Generate your application
+ 
 ```shell
 # Example: Generate a full Web App (Stable)
 make webapp
@@ -113,15 +173,16 @@ make api@lts
 SYMFONY_VERSION=6.4.3 make minimalist
 ```
 
-This will:
+> This will:
+> 
+> * Clone `dunglas/symfony-docker` configuration files and extract them to your project root.
+> * Build the necessary Docker images and start the containers.
+> * Generate a fresh Symfony application inside the container.
+> * Eventually add extra packages to give you everything you need to build a web application.
 
-* Clone `dunglas/symfony-docker` configuration files and extract them to your project root.
-* Build the necessary Docker images and start the containers.
-* Generate a fresh Symfony application inside the container.
-* Eventually add extra packages to give you everything you need to build a web application.
+#### Step 3. Access the app
 
-3. **Access the app:**
- Open `https://symfony-starter.localhost:8443/` in your browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
+Open `https://symfony-starter.localhost:8443/` in your browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
 
 > See [Caddy - Validate certificates](docs/certificates.md)
 
@@ -129,16 +190,18 @@ This will:
 
 If you just want to test a specific configuration immediately without waiting for the generation process, checkout the specific branch.
 
-1. **Clone and checkout:**
+#### Step 1. Clone and checkout
+
 ```shell
-git clone git@github.com:jprivet-dev/symfony-starter.git my-project
-cd my-project
+git clone git@github.com:jprivet-dev/symfony-starter.git
+cd symfony-starter
 
 # Switch to the desired flavor
 git checkout webapp
 ```
 
-2. **Install and Start:**
+#### Step 2. Install and Start
+
 ```shell
 make install
 ```
@@ -157,14 +220,14 @@ make easy_admin
 
 ## 🎮 Daily Commands
 
-Everything is managed via `make`. Run `make` without arguments to see the beautiful help menu.
+Everything is managed via `make`. For example:
 
 ```shell
 make start    # Start the project (detached mode) and show info
 make stop     # Stop the project and remove containers
 ```
 
-> Run `make` in your terminal or see directly the [Makefile documentation](docs/makefile.md) for the full list of commands.
+> Just run `make` in your terminal or see directly the [Makefile documentation](docs/makefile.md) for the full list of commands.
 
 ## 🏗️ Project Structure
 
@@ -214,13 +277,13 @@ tree -A -L 1 -F --dirsfirst
 * [Symfony and Docker - Use build options](docs/options.md)
 * [Troubleshooting](docs/troubleshooting.md)
 
-## Main links
+## 🔗 Main links
 
 * https://symfony.com/doc/current/setup/docker.html
 * https://github.com/dunglas/symfony-docker
 * https://github.com/jprivet-dev/symfony-docker
 
-## Comments, suggestions?
+## 📝 Comments, suggestions?
 
 Feel free to make comments/suggestions to me in the [Git issues section](https://github.com/jprivet-dev/symfony-starter/issues).
 
