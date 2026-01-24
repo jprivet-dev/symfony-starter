@@ -262,6 +262,40 @@ To visualize your structure (requires `tree` command):
 tree -A -L 1 -F --dirsfirst
 ```
 
+## 🔍 Transparent Git History
+
+Unlike "black box" installers, this starter values **transparency**.
+
+The `Makefile` commits every significant step of the generation process (applying patches, modifying configuration, installing bundles). This creates a clean, readable Git history that lets you understand exactly how your application was constructed.
+
+**Example of a generated `git log`:**
+
+```text
+* (HEAD -> main) [generate] make install_packages p=symfony/webapp-pack
+* [generate] make git_apply f=common/compose-var-mapping.patch
+* [generate] make git_apply f=common/compose-DATABASE_URL.patch
+* [generate] make build up_detached
+* [generate] make clone_symfony_docker
+* Initial commit
+```
+
+**Benefits:**
+
+* **Audit:** You see exactly which files were modified by the starter.
+* **Safety:** You can easily revert a specific step if a patch conflicts with your needs.
+* **Learning:** It helps understand the integration between Docker and Symfony.
+
+**See examples:**
+
+* https://github.com/jprivet-dev/symfony-starter/tree/api@lts
+* https://github.com/jprivet-dev/symfony-starter/tree/demo
+* https://github.com/jprivet-dev/symfony-starter/tree/easy_admin
+* https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts
+* https://github.com/jprivet-dev/symfony-starter/tree/minimalist
+* https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts
+* https://github.com/jprivet-dev/symfony-starter/tree/webapp
+* https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts
+
 ## 📚 Documentation
 
 * [ADR](docs/adr.md)
