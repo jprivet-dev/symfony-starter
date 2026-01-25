@@ -314,8 +314,8 @@ logs: ## View logs (follow mode)
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
 .PHONY: symfony sf
-symfony sf: ## Run Symfony console command - $ make symfony [a=<arguments>]- Example: $ make symfony a=cache:clear
-	$(CONSOLE) $(a)
+symfony sf: ## Run any Symfony console command - $ make symfony [c=<command>]- Example: $ make symfony c=cache:clear
+	$(CONSOLE) $(c)
 
 ##
 
