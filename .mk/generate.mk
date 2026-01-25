@@ -114,12 +114,12 @@ else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
 endif
 	git add . && git commit -m "[generate] make clone_symfony_docker"
-	$(MAKE) yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var:/app/var'
-	git commit -am "[generate] make yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var:/app/var'"
-	$(MAKE) yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var/log:/app/var/log'
-	git commit -am "[generate] make yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var/log:/app/var/log'"
-	$(MAKE) yq_update_file f=compose.yaml k=.services.php.environment.DATABASE_URL v=\$${DATABASE_URL}
-	git commit -am "[generate] make yq_update_file f=compose.yaml k=.services.php.environment.DATABASE_URL v=\$${DATABASE_URL}"
+	$(MAKE) yq_add f=compose.override.yaml k=.services.php.volumes v='./var:/app/var'
+	git commit -am "[generate] make yq_add f=compose.override.yaml k=.services.php.volumes v='./var:/app/var'"
+	$(MAKE) yq_add f=compose.override.yaml k=.services.php.volumes v='./var/log:/app/var/log'
+	git commit -am "[generate] make yq_add f=compose.override.yaml k=.services.php.volumes v='./var/log:/app/var/log'"
+	$(MAKE) yq_update f=compose.yaml k=.services.php.environment.DATABASE_URL v=\$${DATABASE_URL}
+	git commit -am "[generate] make yq_update f=compose.yaml k=.services.php.environment.DATABASE_URL v=\$${DATABASE_URL}"
 	$(MAKE) build up_detached
 	git add . && git commit -m "[generate] make build up_detached"
 	$(MAKE) git_apply f=common/docker-entrypoint-clean-composer.patch
