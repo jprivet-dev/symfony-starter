@@ -84,9 +84,10 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 webapp: minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
 	$(MAKE) require_webapp
 	$(MAKE) permissions
-	# Apply patches after webapp were installed Doctrine & PosteSQL
-	$(MAKE) git_apply f=postgresql/compose-ports-5432.patch
-	git add . && git commit -m "[generate] make git_apply f=postgresql/compose-ports-5432.patch"
+	# Change database ports after the webapp were installed Doctrine & PosteSQL
+	$(MAKE) yq_clear f=compose.override.yaml k=services.database.ports
+	$(MAKE) yq_add f=compose.override.yaml k=services.database.ports v=5432:5432
+	git add . && git commit -m "[generate] make yq_add f=compose.override.yaml k=services.database.ports v=5432:5432"
 	$(MAKE) git_apply f=postgresql/env-DATABASE_URL.patch
 	git add . && git commit -m "[generate] make git_apply f=postgresql/env-DATABASE_URL.patch"
 	$(MAKE) down deep_clean up_detached
