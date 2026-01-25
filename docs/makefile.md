@@ -168,8 +168,12 @@
   vars                          Show key Makefile variables
 
   yq                            Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor - $ make yq [a=<argument>] - Example: $ make yq a=--help
-  yq_print_file                 Print contents of a file as idiomatic YAML - $ make yq f=<file> - Example: $ make yq f=compose.yaml
-  yq_update_file                Update a file in place - $ make yq f=<file> k=<key> v=<value>|a=<value> - Example: $ make yq f=compose.yaml k=.services.database.image v=postgres:16-alpine
+  yq_print                      Print contents of a file as idiomatic YAML with colors - $ make yq_print f=<file> - Example: $ make yq_print f=compose.yaml
+
+  yq_add                        Append a value to an array key in a YAML file - $ make yq_add f=<file> k=<key> v=<value> - Example: $ make yq_add f=compose.yaml k=.services.php.extra_hosts v=host.docker.internal:host-gateway
+  yq_clear                      Clear a key's value in a YAML file (sets it to empty string) - $ make yq_clear f=<file> k=<key> - Example: $ make yq_clear f=compose.yaml k=.services.php.extra_hosts
+  yq_delete                     Delete a key from a YAML file - $ make yq_delete f=<file> k=<key> - Example: $ make yq_delete f=compose.yaml k=.services.php.extra_hosts
+  yq_update                     Set or update a key's value in a YAML file - $ make yq_update f=<file> - Example: $ make yq_add f=compose.yaml k=.services.php.build.target v=frankenphp_prod
 
 — SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
 
