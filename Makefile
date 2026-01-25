@@ -853,9 +853,9 @@ ifeq ($(a),)
 endif
 endif
 ifneq ($(v),)
-	$(YQ) --inplace '$(k)=$(v)' $(f)
+	$(YQ) --inplace '$(k) = "$(v)"' $(f)
 else
-	$(YQ) --inplace '$(k)+=$(a)' $(f)
+	$(YQ) --inplace '$(k) += "$(a)"' $(f)
 endif
 
 yq_print_file: ## Print contents of a file as idiomatic YAML - $ make yq f=<file> - Example: $ make yq f=compose.yaml
