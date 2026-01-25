@@ -115,16 +115,15 @@ else
 endif
 	git add . && git commit -m "[generate] make clone_symfony_docker"
 	$(MAKE) yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var:/app/var'
-		&& git commit -am "[generate] make yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var:/app/var'"
+	git commit -am "[generate] make yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var:/app/var'"
 	$(MAKE) yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var/log:/app/var/log'
-		&& git commit -am "[generate] make yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var/log:/app/var/log'"
+	git commit -am "[generate] make yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var/log:/app/var/log'"
 	$(MAKE) yq_update_file f=compose.yaml k=.services.php.environment.DATABASE_URL v='$${DATABASE_URL}'
-		&& git commit -am "[generate] make yq_update_file f=compose.yaml k=.services.php.environment.DATABASE_URL v='$${DATABASE_URL}'"
+	git commit -am "[generate] make yq_update_file f=compose.yaml k=.services.php.environment.DATABASE_URL v='$${DATABASE_URL}'"
 	$(MAKE) build up_detached
-		&& git add .
-		&& git commit -m "[generate] make build up_detached"
+	git add . && git commit -m "[generate] make build up_detached"
 	$(MAKE) git_apply f=common/docker-entrypoint-clean-composer.patch
-		&& git commit -am "[generate] make git_apply f=common/docker-entrypoint-clean.patch"
+	git commit -am "[generate] make git_apply f=common/docker-entrypoint-clean.patch"
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
