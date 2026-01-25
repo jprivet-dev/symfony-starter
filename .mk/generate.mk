@@ -85,9 +85,8 @@ webapp: minimalist ## Generate a webapp Symfony application with Docker configur
 	$(MAKE) require_webapp
 	$(MAKE) permissions
 	# Change database ports after the webapp were installed Doctrine & PosteSQL
-	$(MAKE) yq_clear f=compose.override.yaml k=services.database.ports
-	$(MAKE) yq_add f=compose.override.yaml k=services.database.ports v=5432:5432
-	git add . && git commit -m "[generate] make yq_add f=compose.override.yaml k=services.database.ports v=5432:5432"
+	$(MAKE) yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
+	git add . && git commit -m "[generate] make yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432"
 	$(MAKE) git_apply f=postgresql/env-DATABASE_URL.patch
 	git add . && git commit -m "[generate] make git_apply f=postgresql/env-DATABASE_URL.patch"
 	$(MAKE) down deep_clean up_detached
@@ -186,9 +185,8 @@ require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/Symfo
 require_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	git add . && git commit -m "[generate] composer require symfony/orm-pack"
-	$(MAKE) yq_clear f=compose.override.yaml k=services.database.ports
-	$(MAKE) yq_add f=compose.override.yaml k=services.database.ports v=5432:5432
-	git add . && git commit -m "[generate] make yq_add f=compose.override.yaml k=services.database.ports v=5432:5432"
+	$(MAKE) yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
+	git add . && git commit -m "[generate] make yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432"
 	$(MAKE) git_apply f=postgresql/env-DATABASE_URL.patch
 	git add . && git commit -m "[generate] make git_apply f=postgresql/env-DATABASE_URL.patch"
 
