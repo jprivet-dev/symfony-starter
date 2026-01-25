@@ -27,7 +27,19 @@ commit:
 	git add . && git commit -m "$(GIT_PREFIX) $(m)"
 
 git_apply_commit: git_apply
-	git add . && git commit -m "$(GIT_PREFIX) make git_apply f=$(f)"
+	git commit -am "$(GIT_PREFIX) make git_apply f=$(f)"
+
+yq_add_commit: yq_add
+	git commit -am "$(GIT_PREFIX) make yq_add f=$(file) k=$(k) v=$(value v)"
+
+yq_clear_commit: yq_clear ## Clear a key's value in a YAML file (sets it to empty string) - $ make yq_clear f=<file> k=<key> - Example: $ make yq_clear f=compose.yaml k=services.php.extra_hosts
+	git commit -am "$(GIT_PREFIX) make yq_clear f=$(file) k=$(k) "
+
+yq_delete_commit: yq_delete ## Delete a key from a YAML file - $ make yq_delete f=<file> k=<key> - Example: $ make yq_delete f=compose.yaml k=services.php.extra_hosts
+	git commit -am "$(GIT_PREFIX) make yq_delete f=$(file) k=$(k)"
+
+yq_update_commit: yq_update ## Set or update a key's value in a YAML file - $ make yq_update f=<file> - Example: $ make yq_add f=compose.yaml k=services.php.build.target v=frankenphp_prod
+	git commit -am "$(GIT_PREFIX) make yq_update f=$(file) v=$(value v)"
 
 #
 
@@ -98,8 +110,7 @@ webapp: minimalist ## Generate a webapp Symfony application with Docker configur
 	$(MAKE) require_webapp
 	$(MAKE) permissions
 	# Change database ports after the webapp were installed Doctrine & PosteSQL
-	$(MAKE) yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
-	git add . && git commit -m "[generate] make yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432"
+	$(MAKE) yq_update_commit f=compose.override.yaml k=services.database.ports[0] v=5432:5432
 	$(MAKE) git_apply_commit f=postgresql/env-DATABASE_URL.patch
 	$(MAKE) down deep_clean up_detached
 	$(MAKE) images info
@@ -126,12 +137,9 @@ else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
 endif
 	git add . && git commit -m "[generate] make clone_symfony_docker"
-	$(MAKE) yq_add f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
-	git commit -am "[generate] make yq_add f=compose.override.yaml k=services.php.volumes v='./var:/app/var'"
-	$(MAKE) yq_add f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
-	git commit -am "[generate] make yq_add f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'"
-	$(MAKE) yq_update f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL}
-	git commit -am "[generate] make yq_update f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL}"
+	$(MAKE) yq_add_commit f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
+	$(MAKE) yq_add_commit f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
+	$(MAKE) yq_update_commit f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL}
 	$(MAKE) build up_detached
 	git add . && git commit -m "[generate] make build up_detached"
 	$(MAKE) git_apply_commit f=common/docker-entrypoint-clean-composer.patch
@@ -196,8 +204,7 @@ require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/Symfo
 require_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	git add . && git commit -m "[generate] composer require symfony/orm-pack"
-	$(MAKE) yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
-	git add . && git commit -m "[generate] make yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432"
+	$(MAKE) yq_update_commit f=compose.override.yaml k=services.database.ports[0] v=5432:5432
 	$(MAKE) git_apply_commit f=postgresql/env-DATABASE_URL.patch
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
