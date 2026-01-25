@@ -186,8 +186,9 @@ require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/Symfo
 require_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	git add . && git commit -m "[generate] composer require symfony/orm-pack"
-	$(MAKE) git_apply f=postgresql/compose-ports-5432.patch
-	git add . && git commit -m "[generate] make git_apply f=postgresql/compose-ports-5432.patch"
+	$(MAKE) yq_clear f=compose.override.yaml k=services.database.ports
+	$(MAKE) yq_add f=compose.override.yaml k=services.database.ports v=5432:5432
+	git add . && git commit -m "[generate] make yq_add f=compose.override.yaml k=services.database.ports v=5432:5432"
 	$(MAKE) git_apply f=postgresql/env-DATABASE_URL.patch
 	git add . && git commit -m "[generate] make git_apply f=postgresql/env-DATABASE_URL.patch"
 
