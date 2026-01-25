@@ -118,8 +118,8 @@ endif
 	git commit -am "[generate] make yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var:/app/var'"
 	$(MAKE) yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var/log:/app/var/log'
 	git commit -am "[generate] make yq_update_file f=compose.override.yaml k=.services.php.volumes a='./var/log:/app/var/log'"
-	$(MAKE) yq_update_file f=compose.yaml k=.services.php.environment.DATABASE_URL v='$${DATABASE_URL}'
-	git commit -am "[generate] make yq_update_file f=compose.yaml k=.services.php.environment.DATABASE_URL v='$${DATABASE_URL}'"
+	$(MAKE) yq_update_file f=compose.yaml k=.services.php.environment.DATABASE_URL v=\$${DATABASE_URL}
+	git commit -am "[generate] make yq_update_file f=compose.yaml k=.services.php.environment.DATABASE_URL v=\$${DATABASE_URL}"
 	$(MAKE) build up_detached
 	git add . && git commit -m "[generate] make build up_detached"
 	$(MAKE) git_apply f=common/docker-entrypoint-clean-composer.patch
