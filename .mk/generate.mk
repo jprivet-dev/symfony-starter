@@ -26,19 +26,19 @@ commit:
 	$(if $(m),, $(error "Please specify a message with 'm=...'"))
 	git add . && git commit -m "$(GIT_PREFIX) $(m)"
 
-git_apply_commit: git_apply
+commit_git_apply: git_apply
 	git commit -am "$(GIT_PREFIX) make git_apply f=$(f)"
 
-yq_add_commit: yq_add
+commit_yq_add: yq_add
 	git commit -am "$(GIT_PREFIX) make yq_add f=$(file) k=$(k) v=$(value v)"
 
-yq_clear_commit: yq_clear ## Clear a key's value in a YAML file (sets it to empty string) - $ make yq_clear f=<file> k=<key> - Example: $ make yq_clear f=compose.yaml k=services.php.extra_hosts
+commit_yq_clear: yq_clear
 	git commit -am "$(GIT_PREFIX) make yq_clear f=$(file) k=$(k) "
 
-yq_delete_commit: yq_delete ## Delete a key from a YAML file - $ make yq_delete f=<file> k=<key> - Example: $ make yq_delete f=compose.yaml k=services.php.extra_hosts
+commit_yq_delete: yq_delete
 	git commit -am "$(GIT_PREFIX) make yq_delete f=$(file) k=$(k)"
 
-yq_update_commit: yq_update ## Set or update a key's value in a YAML file - $ make yq_update f=<file> - Example: $ make yq_add f=compose.yaml k=services.php.build.target v=frankenphp_prod
+commit_yq_update: yq_update
 	git commit -am "$(GIT_PREFIX) make yq_update f=$(file) v=$(value v)"
 
 #
@@ -72,9 +72,9 @@ api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(MAKE) clone_symfony_demo
 	$(MAKE) clone_symfony_docker down up_detached
-	$(MAKE) git_apply_commit f=sqlite/compose-doctrine-bundle.patch
-	$(MAKE) git_apply_commit f=sqlite/dockerfile-sqlite.patch
-	$(MAKE) git_apply_commit f=demo/env-APP_SECRET.patch
+	$(MAKE) commit_git_apply f=sqlite/compose-doctrine-bundle.patch
+	$(MAKE) commit_git_apply f=sqlite/dockerfile-sqlite.patch
+	$(MAKE) commit_git_apply f=demo/env-APP_SECRET.patch
 	$(MAKE) down up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
@@ -85,7 +85,7 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(MAKE) require_easy_admin down deep_clean up_detached
 	# Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html
 	$(CONSOLE) make:admin:dashboard --no-interaction
-	git add . && git commit -m "[generate] php bin/console make:admin:dashboard"
+	$(MAKE) commit m="bin/console make:admin:dashboard --no-interaction"
 	# Need to repeat cache_clear to avoid "Clear the application cache to run the EasyAdmin cache warmer, which generates the needed data to find this route.". Find why!
 	$(MAKE) cache_clear
 	$(MAKE) cache_clear
@@ -110,8 +110,8 @@ webapp: minimalist ## Generate a webapp Symfony application with Docker configur
 	$(MAKE) require_webapp
 	$(MAKE) permissions
 	# Change database ports after the webapp were installed Doctrine & PosteSQL
-	$(MAKE) yq_update_commit f=compose.override.yaml k=services.database.ports[0] v=5432:5432
-	$(MAKE) git_apply_commit f=postgresql/env-DATABASE_URL.patch
+	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
+	$(MAKE) commit_git_apply f=postgresql/env-DATABASE_URL.patch
 	$(MAKE) down deep_clean up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
@@ -136,13 +136,13 @@ ifeq ($(wildcard $(DOCKERFILE)),)
 else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
 endif
-	git add . && git commit -m "[generate] make clone_symfony_docker"
-	$(MAKE) yq_add_commit f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
-	$(MAKE) yq_add_commit f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
-	$(MAKE) yq_update_commit f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL}
+	$(MAKE) commit m="make clone_symfony_docker"
+	$(MAKE) commit_yq_add f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
+	$(MAKE) commit_yq_add f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
+	$(MAKE) commit_yq_update f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL}
 	$(MAKE) build up_detached
-	git add . && git commit -m "[generate] make build up_detached"
-	$(MAKE) git_apply_commit f=common/docker-entrypoint-clean-composer.patch
+	$(MAKE) commit m="make build up_detached"
+	$(MAKE) commit_git_apply f=common/docker-entrypoint-clean-composer.patch
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
@@ -159,7 +159,7 @@ ifeq ($(wildcard .env.local.demo),)
 else
 	@printf " $(G)✔$(S) https://github.com/symfony/demo files already present at the root.\n\n"
 endif
-	git add . && git commit -m "[generate] make clone_symfony_demo"
+	$(MAKE) commit m="make clone_symfony_demo"
 
 kill_current_app: ## Remove all fresh Symfony application files
 	-$(MAKE) permissions
@@ -172,44 +172,44 @@ kill_current_app: ## Remove all fresh Symfony application files
 
 require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
 	$(COMPOSER) require api
-	git add . && git commit -m "[generate] composer require api"
+	$(MAKE) commit m="composer require api"
 
 require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 	$(COMPOSER) require easycorp/easyadmin-bundle
-	git add . && git commit -m "[generate] composer require easycorp/easyadmin-bundle"
+	$(MAKE) commit m="composer require easycorp/easyadmin-bundle"
 
 require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
 	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
-	git add . && git commit -m "[generate] composer require symfony/stimulus-bundle"
+	$(MAKE) commit m="composer require symfony/asset-mapper symfony/stimulus-bundle"
 
 require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
 	$(COMPOSER) require symfony/webapp-pack
-	git add . && git commit -m "[generate] composer require symfony/webapp-pack"
+	$(MAKE) commit m="composer require symfony/webapp-pack"
 
 ##
 
 require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
 	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
-	git add . && git commit -m "[generate] composer require symfony/asset-mapper symfony/asset symfony/twig-pack"
+	$(MAKE) commit m="composer require symfony/asset-mapper symfony/asset symfony/twig-pack"
 
 require_bootstrap: require_asset_mapper ## Install Bootstrap - https://getbootstrap.com/
 	$(CONSOLE) importmap:require bootstrap
-	git add . && git commit -m "[generate] bin/console importmap:require bootstrap"
+	$(MAKE) commit m="bin/console importmap:require bootstrap"
 
 require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
 	$(COMPOSER) require --dev symfony/maker-bundle
-	git add . && git commit -m "[generate] composer require --dev symfony/maker-bundle"
+	$(MAKE) commit m="composer require --dev symfony/maker-bundle"
 
 require_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
-	git add . && git commit -m "[generate] composer require symfony/orm-pack"
-	$(MAKE) yq_update_commit f=compose.override.yaml k=services.database.ports[0] v=5432:5432
-	$(MAKE) git_apply_commit f=postgresql/env-DATABASE_URL.patch
+	$(MAKE) commit m="composer require symfony/orm-pack"
+	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
+	$(MAKE) commit_git_apply f=postgresql/env-DATABASE_URL.patch
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(COMPOSER) require --dev symfony/profiler-pack
-	git add . && git commit -m "[generate] composer require --dev symfony/profiler-pack"
+	$(MAKE) commit m="composer require --dev symfony/profiler-pack"
 
 require_sqlite: ## Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
 	$(MAKE) _patch_sqlite_base
@@ -218,25 +218,25 @@ require_sqlite: ## Install Doctrine (SQLite) - https://symfony.com/doc/current/d
 
 require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
 	$(COMPOSER) require --dev symfony/test-pack
-	git add . && git commit -m "[generate] composer require --dev symfony/test-pack"
+	$(MAKE) commit m="composer require --dev symfony/test-pack"
 
 require_translation: ## Install Translation - https://symfony.com/doc/current/translation.html
 	$(COMPOSER) require symfony/translation
-	git add . && git commit -m "[generate] composer require symfony/translation"
+	$(MAKE) commit m="composer require symfony/translation"
 
 ##
 
 require_phpcsfixer: ## Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
 	$(COMPOSER) require --dev friendsofphp/php-cs-fixer
-	git add . && git commit -m "[generate] composer require --dev friendsofphp/php-cs-fixer"
+	$(MAKE) commit m="composer require --dev friendsofphp/php-cs-fixer"
 
 require_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
 	$(COMPOSER) require --dev phpmd/phpmd
-	git add . && git commit -m "[generate] composer require --dev phpmd/phpmd"
+	$(MAKE) commit m="composer require --dev phpmd/phpmd"
 
 require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website/
 	$(COMPOSER) require --dev phpmetrics/phpmetrics
-	git add . && git commit -m "[generate] composer require --dev phpmetrics/phpmetrics"
+	$(MAKE) commit m="composer require --dev phpmetrics/phpmetrics"
 
 require_phpstan: ## Install PHPStan - https://phpstan.org/
 	$(COMPOSER) require --dev \
@@ -244,8 +244,8 @@ require_phpstan: ## Install PHPStan - https://phpstan.org/
 		phpstan/phpstan-symfony \
 		phpstan/phpstan-doctrine \
 		phpstan/phpstan-phpunit
-	git add . && git commit -m "[generate] composer require --dev phpstan/phpstan (+ symfony, doctrine & phpunit)"
+	$(MAKE) commit m="composer require --dev phpstan/phpstan (+ symfony, doctrine & phpunit)"
 
 require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
 	$(COMPOSER) require --dev vincentlanglet/twig-cs-fixer
-	git add . && git commit -m "[generate] composer require --dev vincentlanglet/twig-cs-fixer"
+	$(MAKE) commit m="composer require --dev vincentlanglet/twig-cs-fixer"
