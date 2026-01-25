@@ -852,23 +852,23 @@ yq_print: ## Print contents of a file as idiomatic YAML with colors - $ make yq_
 
 yq_add: ## Append a value to an array key in a YAML file - $ make yq_add f=<file> k=<key> v=<value> - Example: $ make yq_add f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
-	$(if $(k),, $(error "Please specify a key with 'k=..'"))
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(if $(value v),, $(error "Please specify a value with 'v=...'"))
 	$(YQ) --inplace '.$(k) += "$(value v)"' $(f)
 
 yq_clear: ## Clear a key's value in a YAML file (sets it to empty string) - $ make yq_clear f=<file> k=<key> - Example: $ make yq_clear f=compose.yaml k=services.php.extra_hosts
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
-	$(if $(k),, $(error "Please specify a key with 'k=..'"))
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(YQ) --inplace '.$(k) = ""' $(f)
 
 yq_delete: ## Delete a key from a YAML file - $ make yq_delete f=<file> k=<key> - Example: $ make yq_delete f=compose.yaml k=services.php.extra_hosts
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
-	$(if $(k),, $(error "Please specify a key with 'k=..'"))
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(YQ) --inplace 'del(.$(k))' $(f)
 
 yq_update: ## Set or update a key's value in a YAML file - $ make yq_update f=<file> - Example: $ make yq_add f=compose.yaml k=services.php.build.target v=frankenphp_prod
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
-	$(if $(k),, $(error "Please specify a key with 'k=..'"))
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(if $(value v),, $(error "Please specify a value with 'v=...'"))
 	$(YQ) --inplace '.$(k) = "$(value v)"' $(f)
 
