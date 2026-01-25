@@ -844,10 +844,19 @@ vars: ## Show key Makefile variables
 yq: ## Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor - $ make yq [a=<argument>] - Example: $ make yq a=--help
 	$(YQ) $(a)
 
-yq_update_file: ## Update a file in place - $ make yq a=<argument> f=<file> - Example: $ make yq a='.services.database.image = "postgres:16-alpine"' f=compose.yaml
-	$(if $(a),, $(error "Please specify an argument with 'a=...'"))
+yq_update_file: ## Update a file in place - $ make yq f=<file> k=<key> v=<value>|a=<value> - Example: $ make yq f=compose.yaml k=.services.database.image v=postgres:16-alpine
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
-	$(YQ) --inplace '$(a)' $(f)
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
+ifeq ($(v),)
+ifeq ($(a),)
+	$(if $(v),, $(error "Please specify a value to change with 'v=...' or a value to add with 'a=...'"))
+endif
+endif
+ifneq ($(v),)
+	$(YQ) --inplace '$(k)=$(v)' $(f)
+else
+	$(YQ) --inplace '$(k)+=$(a)' $(f)
+endif
 
 yq_print_file: ## Print contents of a file as idiomatic YAML - $ make yq f=<file> - Example: $ make yq f=compose.yaml
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
