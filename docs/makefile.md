@@ -4,7 +4,7 @@
 
 ---
 
-> Run `make` to see all
+> Run `make` (or `make help`) to see all
 
 <!-- MAKEFILE_COMMANDS_START -->
 
@@ -39,7 +39,7 @@
   logs                          View logs (follow mode)
 
 — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
-  symfony                    sf Run Symfony console command - $ make symfony [a=<arguments>]- Example: $ make symfony a=cache:clear
+  symfony                    sf Run any Symfony console command - $ make symfony [c=<command>]- Example: $ make symfony c=cache:clear
 
   about                         Display information about the current Symfony project
   cache_clear                cc Clear the Symfony cache
@@ -168,8 +168,8 @@
   vars                          Show key Makefile variables
 
   yq                            Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor - $ make yq [a=<argument>] - Example: $ make yq a=--help
-  yq_update_file                Update a file in place - $ make yq a=<argument> f=<file> - Example: $ make yq a='.services.database.image = "postgres:16-alpine"' f=compose.yaml
   yq_print_file                 Print contents of a file as idiomatic YAML - $ make yq f=<file> - Example: $ make yq f=compose.yaml
+  yq_update_file                Update a file in place - $ make yq f=<file> k=<key> v=<value>|a=<value> - Example: $ make yq f=compose.yaml k=.services.database.image v=postgres:16-alpine
 
 — SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
 
