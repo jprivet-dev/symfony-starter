@@ -116,8 +116,8 @@ endif
 	git add . && git commit -m "[generate] make clone_symfony_docker"
 	$(MAKE) git_apply f=common/compose-var-mapping.patch
 	git add . && git commit -m "[generate] make git_apply f=common/compose-var-mapping.patch"
-	$(MAKE) git_apply f=common/compose-DATABASE_URL.patch
-	git add . && git commit -m "[generate] make git_apply f=common/compose-DATABASE_URL.patch"
+	$(MAKE) yq_update_file f=compose.yaml k=.services.php.environment.DATABASE_URL v='$${DATABASE_URL}'
+	git add . && git commit -m "[generate] make yq_update_file f=compose.yaml k=.services.php.environment.DATABASE_URL v='$${DATABASE_URL}'"
 	$(MAKE) build up_detached
 	git add . && git commit -m "[generate] make build up_detached"
 	$(MAKE) git_apply f=common/docker-entrypoint-clean-composer.patch
