@@ -851,15 +851,14 @@ yq_print_file: ## Print contents of a file as idiomatic YAML - $ make yq f=<file
 yq_update_file: ## Update a file in place - $ make yq f=<file> k=<key> v=<value>|a=<value> - Example: $ make yq f=compose.yaml k=.services.database.image v=postgres:16-alpine
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(k),, $(error "Please specify a key with 'k=...'"))
-ifeq ($(v),)
-ifeq ($(a),)
-	$(if $(v),, $(error "Please specify a value to change with 'v=...' or a value to add with 'a=...'"))
-endif
-endif
-ifneq ($(v),)
-	$(YQ) --inplace '$(k) = "$(v)"' $(f)
+ifneq ($(value v),)
+	$(YQ) --inplace '$(k) = "$(value v)"' $(f)
 else
-	$(YQ) --inplace '$(k) += "$(a)"' $(f)
+ifneq ($(value a),)
+	$(YQ) --inplace '$(k) += "$(value a)"' $(f)
+else
+	$(error "Please specify a value to change with 'v=...' or a value to add with 'a=...'")
+endif
 endif
 
 # —— INTERNAL (HIDDEN) 🚧‍️ ——————————————————————————————————————————————————————————————
