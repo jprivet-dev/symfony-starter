@@ -167,6 +167,10 @@
   tree                          Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
   vars                          Show key Makefile variables
 
+  yq                            Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor - $ make yq [a=<argument>] - Example: $ make yq a=--help
+  yq_update_file                Update a file in place - $ make yq a=<argument> f=<file> - Example: $ make yq a='.services.database.image = "postgres:16-alpine"' f=compose.yaml
+  yq_print_file                 Print contents of a file as idiomatic YAML - $ make yq f=<file> - Example: $ make yq f=compose.yaml
+
 — SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
 
   (to delete this section, delete .mk/contrib.mk)
