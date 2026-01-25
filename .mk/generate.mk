@@ -60,7 +60,7 @@ _patch_sqlite_env: git_apply # INTERNAL
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
 	$(MAKE) minimalist
-	$(MAKE) require_postgresql down up_detached
+	$(MAKE) require_orm down up_detached
 	$(MAKE) require_api down deep_clean up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
@@ -81,7 +81,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
 	$(MAKE) minimalist
-	$(MAKE) require_postgresql down up_detached
+	$(MAKE) require_orm down up_detached
 	$(MAKE) require_easy_admin down deep_clean up_detached
 	# Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html
 	$(CONSOLE) make:admin:dashboard --no-interaction
@@ -201,11 +201,14 @@ require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/Symfo
 	$(COMPOSER) require --dev symfony/maker-bundle
 	$(MAKE) commit m="composer require --dev symfony/maker-bundle"
 
-require_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
+require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) commit m="composer require symfony/orm-pack"
 	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
 	$(MAKE) commit_git_apply f=postgresql/env-DATABASE_URL.patch
+	$(MAKE) permissions
+	$(MAKE) down deep_clean up_detached
+	$(MAKE) images info
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(COMPOSER) require --dev symfony/profiler-pack

@@ -217,7 +217,7 @@
   require_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
   require_bootstrap             Install Bootstrap - https://getbootstrap.com/
   require_maker_bundle          Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
-  require_postgresql            Install Doctrine (PostgreSQL) - https://symfony.com/doc/current/doctrine.html
+  require_orm                   Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
   require_profiler              Install Profiler - https://symfony.com/doc/current/profiler.html
   require_sqlite                Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
   require_test_pack             Install PHPUnit - https://symfony.com/doc/current/testing.html
