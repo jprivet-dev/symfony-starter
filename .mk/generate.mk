@@ -17,6 +17,20 @@ REPOSITORY_SYMFONY_DOCKER = git@github.com:dunglas/symfony-docker.git
 REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
 CLONE_DIR                 = clone
 
+#
+
+GIT_PREFIX = 🤖 [starter]
+
+.PHONY: commit
+commit:
+	$(if $(m),, $(error "Please specify a message with 'm=...'"))
+	git add . && git commit -m "$(GIT_PREFIX) $(m)"
+
+git_apply_commit: git_apply
+	git add . && git commit -m "$(GIT_PREFIX) make git_apply f=$(f)"
+
+#
+
 _patch_var_log_mapping: f=var-log-mapping.patch
 _patch_var_log_mapping: git_apply # INTERNAL
 
@@ -28,6 +42,8 @@ _patch_sqlite_base: git_apply # INTERNAL
 
 _patch_sqlite_env: f=sqlite-01-env.patch
 _patch_sqlite_env: git_apply # INTERNAL
+
+#
 
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
@@ -44,12 +60,9 @@ api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(MAKE) clone_symfony_demo
 	$(MAKE) clone_symfony_docker down up_detached
-	$(MAKE) git_apply f=sqlite/compose-doctrine-bundle.patch
-	git add . && git commit -m "[generate] make git_apply f=sqlite/compose-doctrine-bundle.patch"
-	$(MAKE) git_apply f=sqlite/dockerfile-sqlite.patch
-	git add . && git commit -m "[generate] make git_apply f=sqlite/dockerfile-sqlite.patch"
-	$(MAKE) git_apply f=demo/env-APP_SECRET.patch
-	git add . && git commit -m "[generate] make git_apply f=demo/env-APP_SECRET.patch"
+	$(MAKE) git_apply_commit f=sqlite/compose-doctrine-bundle.patch
+	$(MAKE) git_apply_commit f=sqlite/dockerfile-sqlite.patch
+	$(MAKE) git_apply_commit f=demo/env-APP_SECRET.patch
 	$(MAKE) down up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
@@ -87,8 +100,7 @@ webapp: minimalist ## Generate a webapp Symfony application with Docker configur
 	# Change database ports after the webapp were installed Doctrine & PosteSQL
 	$(MAKE) yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
 	git add . && git commit -m "[generate] make yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432"
-	$(MAKE) git_apply f=postgresql/env-DATABASE_URL.patch
-	git add . && git commit -m "[generate] make git_apply f=postgresql/env-DATABASE_URL.patch"
+	$(MAKE) git_apply_commit f=postgresql/env-DATABASE_URL.patch
 	$(MAKE) down deep_clean up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
@@ -122,8 +134,7 @@ endif
 	git commit -am "[generate] make yq_update f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL}"
 	$(MAKE) build up_detached
 	git add . && git commit -m "[generate] make build up_detached"
-	$(MAKE) git_apply f=common/docker-entrypoint-clean-composer.patch
-	git commit -am "[generate] make git_apply f=common/docker-entrypoint-clean.patch"
+	$(MAKE) git_apply_commit f=common/docker-entrypoint-clean-composer.patch
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
@@ -187,8 +198,7 @@ require_postgresql: ## Install Doctrine (PostgreSQL) - https://symfony.com/doc/c
 	git add . && git commit -m "[generate] composer require symfony/orm-pack"
 	$(MAKE) yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
 	git add . && git commit -m "[generate] make yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432"
-	$(MAKE) git_apply f=postgresql/env-DATABASE_URL.patch
-	git add . && git commit -m "[generate] make git_apply f=postgresql/env-DATABASE_URL.patch"
+	$(MAKE) git_apply_commit f=postgresql/env-DATABASE_URL.patch
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(COMPOSER) require --dev symfony/profiler-pack
