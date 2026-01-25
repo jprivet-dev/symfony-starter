@@ -30,16 +30,16 @@ commit_git_apply: git_apply
 	git commit -am "$(GIT_PREFIX) make git_apply f=$(f)"
 
 commit_yq_add: yq_add
-	git commit -am "$(GIT_PREFIX) make yq_add f=$(file) k=$(k) v=$(value v)"
+	git commit -am "$(GIT_PREFIX) make yq_add f=$(f) k=$(k) v=$(value v)"
 
 commit_yq_clear: yq_clear
-	git commit -am "$(GIT_PREFIX) make yq_clear f=$(file) k=$(k) "
+	git commit -am "$(GIT_PREFIX) make yq_clear f=$(f) k=$(k) "
 
 commit_yq_delete: yq_delete
-	git commit -am "$(GIT_PREFIX) make yq_delete f=$(file) k=$(k)"
+	git commit -am "$(GIT_PREFIX) make yq_delete f=$(f) k=$(k)"
 
 commit_yq_update: yq_update
-	git commit -am "$(GIT_PREFIX) make yq_update f=$(file) v=$(value v)"
+	git commit -am "$(GIT_PREFIX) make yq_update f=$(f) v=$(value v)"
 
 #
 
