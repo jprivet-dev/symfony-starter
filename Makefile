@@ -46,7 +46,7 @@ GIT_HOOKS = off
 # --- YQ ---
 
 # See https://github.com/mikefarah/yq
-YQ = docker run --rm -v "$(PWD)":/workdir -w /workdir mikefarah/yq
+YQ = docker run --rm --user "$(USER)" -v "$(PWD)":/workdir -w /workdir mikefarah/yq
 
 # --- FILES & DIRECTORIES ---
 
@@ -847,7 +847,7 @@ yq: ## Run yq, a lightweight and portable command-line YAML, JSON, INI and XML p
 yq_update_file: ## Update a file in place - $ make yq a=<argument> f=<file> - Example: $ make yq a='.services.database.image = "postgres:16-alpine"' f=compose.yaml
 	$(if $(a),, $(error "Please specify an argument with 'a=...'"))
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
-	$(YQ) --inplace $(a) $(f)
+	$(YQ) --inplace '$(a)' $(f)
 
 yq_print_file: ## Print contents of a file as idiomatic YAML - $ make yq f=<file> - Example: $ make yq f=compose.yaml
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
