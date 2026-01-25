@@ -216,16 +216,29 @@ make kill_current_app
 make easy_admin
 ```
 
-## 🎮 Daily Commands
+## 🧰 Developer Toolkit
 
-Everything is managed via `make`. For example:
+This starter is more than just a generator; it is a **daily companion**.
+It embeds a robust `Makefile` to abstract complex Docker/Composer commands, speeding up your workflow.
 
-```shell
-make start    # Start the project (detached mode) and show info
-make stop     # Stop the project and remove containers
-```
+Here is a glimpse of what's included:
 
-> Just run `make` in your terminal or see directly the [Makefile documentation](docs/makefile.md) for the full list of commands.
+| Category        | Key Commands               | Description                                                     |
+|:----------------|:---------------------------|:----------------------------------------------------------------|
+| **🐳 Docker**   | `make start` / `make stop` | Start/Stop the stack (detached mode).                           |
+|                 | `make sh`                  | Access the PHP container shell.                                 |
+|                 | `make logs`                | View live logs from all containers.                             |
+| **🚀 Symfony**  | `make cc`                  | Clear the cache (`cache:clear`).                                |
+|                 | `make symfony c="..."`     | Run any Symfony command (e.g. `make symfony c="debug:router"`). |
+| **🐘 Database** | `make db_init`             | Create DB, run migrations and load fixtures in one go.          |
+|                 | `make migration`           | Generate a new migration file.                                  |
+| **✅ Quality**   | `make tests`               | Run PHPUnit tests.                                              |
+|                 | `make phpmd`               | Run PHP Mess Detector.                                          |
+| **🎨 Assets**   | `make assets`              | Generate all assets.                                            |
+
+> 💡 **Tip**:
+> * Just run `make` (or `make help`) in your terminal to see the beautiful, self-documented list of **30+** available commands.
+> * Or see directly the [full list of commands](docs/makefile.md) in the doc.
 
 ## 🏗️ Project Structure
 
