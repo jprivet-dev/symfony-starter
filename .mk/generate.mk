@@ -108,11 +108,6 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 .PHONY: webapp
 webapp: minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
 	$(MAKE) require_webapp
-	$(MAKE) permissions
-	# Change database ports after the webapp were installed Doctrine & PosteSQL
-	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
-	$(MAKE) commit_git_apply f=postgresql/env-DATABASE_URL.patch
-	$(MAKE) down deep_clean up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
 
@@ -191,6 +186,10 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
 	$(COMPOSER) require symfony/webapp-pack
 	$(MAKE) commit m="composer require symfony/webapp-pack"
+	# Change database ports after the webapp were installed Doctrine & PosteSQL
+	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
+	$(MAKE) commit_git_apply f=postgresql/env-DATABASE_URL.patch
+	$(MAKE) permissions down deep_clean up_detached
 
 ##
 
