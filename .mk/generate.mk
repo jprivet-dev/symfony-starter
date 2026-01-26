@@ -26,6 +26,12 @@ replace: ## Replace a string in a file - $ make replace f=<file> o=<old_string> 
 	$(if $(n),, $(error "Please specify the new string with 'n=...'"))
 	@sed "s|$(o)|$(n)|g" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
+replace_line: ## Replace an entire line beginning with a specific pattern - $ make replace f=<file> s=<start> n=<value> - Example: $ make replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
+	$(if $(f),, $(error "Please specify a file with 'f=...'"))
+	$(if $(k),, $(error "Please specify the start of the line to match with 's=...'"))
+	$(if $(n),, $(error "Please specify the new line content with 'n=...'"))
+	@sed "s|^$(k).*|$(n)|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
+
 #
 
 GIT_PREFIX = 🤖 [starter]
@@ -266,7 +272,39 @@ require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLangle
 
 ##
 
-switch_to_mysql: ## Swith the stack to MySQL/MariaDB
-	$(MAKE) replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
-	$(MAKE) build_force
+switch_to_mysql: ## Switch the stack to MySQL/MariaDB
+	# 1. Update Dockerfile (Driver PHP)
+	$(MAKE) replace f=Dockerfile o="pdo_pgsql" n="pdo_mysql"
 
+	# 2. Update compose.yaml: Change Image
+	$(MAKE) yq_update f=compose.yaml k=services.database.image v="mariadb:11.4-alpine"
+
+	# 3. Optimize Env Vars: Bulk replace POSTGRES_ with MARIADB_
+	$(MAKE) replace f=compose.yaml o="POSTGRES_" n="MARIADB_"
+	$(MAKE) replace f=compose.yaml o="MARIADB_DB" n="MARIADB_DATABASE"
+
+	# 4. Add Root Password (Required for MariaDB, didn't exist in Postgres)
+	$(MAKE) yq_update f=compose.yaml k=services.database.environment.MARIADB_ROOT_PASSWORD v='$${MARIADB_ROOT_PASSWORD:-!ChangeMe!}'
+
+	# 5. Update Volume Path
+	$(MAKE) yq_update f=compose.yaml k=services.database.volumes[0] v="database_data:/var/lib/mysql:rw"
+
+	# 6. Update Healthcheck (MariaDB native script)
+	$(MAKE) yq_delete f=compose.yaml k=services.database.healthcheck.test
+	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="CMD"
+	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="healthcheck.sh"
+	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="--connect"
+	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="--innodb_initialized"
+
+	# 7. Update Port
+	$(MAKE) yq_update f=compose.override.yaml k=services.database.ports[0] v="3306:3306"
+
+	# 8. Update PHP Connection String
+	$(MAKE) replace f=compose.yaml o="postgresql://" n="mysql://"
+	$(MAKE) replace f=compose.yaml o="5432" n="3306"
+	@if [ -f .env ]; then \
+		$(MAKE) replace f=.env o="postgresql://" n="mysql://"; \
+		$(MAKE) replace f=.env o="5432" n="3306"; \
+	fi
+	$(MAKE) commit m="stack updated to MariaDB"
+	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
