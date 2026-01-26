@@ -53,7 +53,7 @@ function makefile_aliases() {
         aliases_list="${aliases_list} ${alias_name}"
     done
 
-    printf "\nTo remove all aliases, simply ${G}close and reopen your terminal${S}, or run:\n"
+    printf "\nThis aliases are temporary for your current shell session. To remove them ${G}close your terminal tab/window (Easiest)${S}, or run:\n"
     printf "${Y}$ unalias${aliases_list}${S}\n"
 }
 
