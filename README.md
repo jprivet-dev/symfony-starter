@@ -2,7 +2,9 @@
 
 **Generate a fully Dockerized Symfony application in seconds.**
 
-This project provides a streamlined way to set up a new Symfony application with Docker. Whether you need a minimalist skeleton, a full web application, an API, or an Administration panel, this starter has you covered. It leverages the power of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) with a powerful Makefile to manage everything.
+Whether you want to instantly test a **Stable or LTS** version of Symfony, API Platform or EasyAdmin, validate your **framework contributions** in a real environment, or start a **client project** with robust, documented tooling: **Symfony Starter is the solution you need**.
+
+It leverages the power of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) combined with a powerful Makefile to manage the entire lifecycle.
 
 ## ⚡ What can you do with this Starter?
 
