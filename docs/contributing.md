@@ -1,4 +1,4 @@
-# Contributing to Symfony Core
+# Contributing to Symfony: Connect Your Local Symfony Repository
 
 [⬅️ README](../README.md)
 
@@ -12,7 +12,7 @@ This means you can :
 2.  Test it immediately within a running application.
 3.  Run the framework's internal unit tests within the Docker container.
 
-## 🛠️ Prerequisites
+## Prerequisites
 
 ### 1. Fork & Clone the Repository
 
@@ -43,7 +43,7 @@ touch .env.local
 echo "SYMFONY_REPO_PATH=../symfony" >> .env.local
 ```
 
-## 🔄 The Contribution Workflow
+## The Contribution Workflow
 
 ### Step 1: Install Symfony Dependencies
 
@@ -83,7 +83,7 @@ Once you have finished your contribution or testing, you can restore the origina
 make contrib_unlink
 ```
 
-## 💡 Workflow Tips
+## Workflow Tips
 
 ### Managing Branches & Upstream
 

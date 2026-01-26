@@ -327,12 +327,12 @@ Initial commit
 **🔧 Advanced**
 
 * [ADR (Architecture Decision Records)](docs/adr.md)
-* [Link local Symfony Repository](docs/contribute.md)
+* [Shell Aliases: Seamless Docker Experience](docs/aliases.md)
 * [Troubleshooting](docs/troubleshooting.md)
 
 **🤝 Contributing**
 
-* [Contributing to Symfony Core](docs/contributing.md)
+* [Contributing to Symfony: Connect Your Local Symfony Repository](docs/contributing.md)
 
 ## 🔗 Main links
 
