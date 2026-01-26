@@ -41,6 +41,8 @@ function makefile_aliases() {
     printf "\n${Y}Aliases${S}"
     printf "\n${Y}-------${S}\n\n"
 
+    local aliases_list=""
+
     for entry in "${@}"; do
         IFS=':' read -r alias_name path argument_name <<<"${entry}"
         if [ -z "${path}" ]; then
@@ -48,14 +50,17 @@ function makefile_aliases() {
         fi
 
         makefile_create "${alias_name}" "${path}" "${argument_name}"
+        aliases_list="${aliases_list} ${alias_name}"
     done
 
-    printf "\nTo remove aliases, simply ${G}close and reopen your terminal${S}, or use ${Y}unalias <alias_name>${S} (e.g., 'unalias foo bar').\n"
+    printf "\nTo remove all aliases, simply ${G}close and reopen your terminal${S}, or run:\n"
+    printf "${Y}$ unalias${aliases_list}${S}\n"
 }
 
 # Add alias with its file/directory to check
 makefile_aliases \
     symfony:bin/console:c \
+    console:bin/console:c \
     sf:bin/console:c \
     php:compose.yaml:a \
     composer:composer.json:a \
