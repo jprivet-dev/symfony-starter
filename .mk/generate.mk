@@ -193,7 +193,7 @@ require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/f
 	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
 	$(MAKE) commit m="composer require symfony/asset-mapper symfony/asset symfony/twig-pack"
 
-require_bootstrap: require_asset_mapper ## Install Bootstrap - https://getbootstrap.com/
+require_bootstrap: _assets ## Install Bootstrap - https://getbootstrap.com/
 	$(CONSOLE) importmap:require bootstrap
 	$(MAKE) commit m="bin/console importmap:require bootstrap"
 
