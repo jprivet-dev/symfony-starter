@@ -50,18 +50,12 @@ You can choose from several pre-configured setups.
             <ul>
                 <li>Doc: <a href="https://symfony.com/doc/current/setup.html">Installing & Setting up the Symfony Framework</a></li>
                 <li>
-                    <span>Stable version:</span>
-                    <ul>
-                        <li>Command: <code>make minimalist</code></li>
-                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/minimalist">minimalist</a></li>
-                    </ul>
+                    <span>Stable version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/minimalist">minimalist</a>):</span>
+                    <pre>make minimalist</pre>
                 </li>
                 <li>
-                    <span>LTS version:</span>
-                    <ul>
-                        <li>Command: <code>make minimalist@lts</code></li>
-                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts">minimalist@lts</a></li>
-                    </ul>
+                    <span>LTS version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts">minimalist@lts</a>):</span>
+                    <pre>make minimalist@lts</pre>
                 </li>
             </ul>
         </td>
@@ -78,18 +72,12 @@ You can choose from several pre-configured setups.
             <ul>
                 <li>Doc: <a href="https://symfony.com/doc/current/setup.html">Installing & Setting up the Symfony Framework</a></li>
                 <li>
-                    <span>Stable version:</span>
-                    <ul>
-                        <li>Command: <code>make webapp</code></li>
-                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/webapp">webapp</a></li>
-                    </ul>
+                    <span>Stable version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/webapp">webapp</a>):</span>
+                    <pre>make webapp</pre>
                 </li>
                 <li>
-                    <span>LTS version:</span>
-                    <ul>
-                        <li>Command: <code>make webapp@lts</code></li>
-                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts">webapp@lts</a></li>
-                    </ul>
+                    <span>LTS version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts">webapp@lts</a>):</span>
+                    <pre>make webapp@lts</pre>
                 </li>
             </ul>
         </td>
@@ -102,17 +90,11 @@ You can choose from several pre-configured setups.
             <ul>
                 <li>Doc: <a href="https://api-platform.com/docs/symfony/">Getting Started With API Platform with Symfony</a></li>
                 <li>
-                    <span>Stable version:</span>
-                    <ul>
-                        <li>Not available</li>
-                    </ul>
+                    <span>Stable version: <strong>Not available</strong></span>
                 </li>
                 <li>
-                    <span>LTS version:</span>
-                    <ul>
-                        <li>Command: <code>make api@lts</code></li>
-                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/api@lts">api@lts</a></li>
-                    </ul>
+                    <span>LTS version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/api@lts">api@lts</a>):</span>
+                    <pre>make api@lts</pre>
                 </li>
             </ul>
         </td>
@@ -125,18 +107,12 @@ You can choose from several pre-configured setups.
             <ul>
                 <li>Doc: <a href="https://symfony.com/bundles/EasyAdminBundle/current/index.html">EasyAdmin</a></li>
                 <li>
-                    <span>Stable version:</span>
-                    <ul>
-                        <li>Command: <code>make easy_admin</code></li>
-                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/easy_admin">easy_admin</a></li>
-                    </ul>
+                    <span>Stable version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/easy_admin">easy_admin</a>):</span>
+                    <pre>make easy_admin</pre>
                 </li>
                 <li>
-                    <span>LTS version:</span>
-                    <ul>
-                        <li>Command: <code>make easy_admin@lts</code></li>
-                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts">easy_admin@lts</a></li>
-                    </ul>
+                    <span>LTS version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts">easy_admin@lts</a>):</span>
+                    <pre>make easy_admin@lts</pre>
                 </li>
             </ul>
         </td>
@@ -149,17 +125,11 @@ You can choose from several pre-configured setups.
             <ul>
                 <li>Doc: <a href="https://github.com/symfony/demo">Symfony Demo Application</a></li>
                 <li>
-                    <span>Stable version:</span>
-                    <ul>
-                        <li>Command: <code>make demo</code></li>
-                        <li>Branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/demo">demo</a></li>
-                    </ul>
+                    <span>Stable version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/demo">demo</a>):</span>
+                    <pre>make demo</pre>
                 </li>
                 <li>
-                    <span>LTS version:</span>
-                    <ul>
-                        <li>Not available</li>
-                    </ul>
+                    <span>LTS version: <strong>Not available</strong></span>
                 </li>
             </ul>
         </td>
