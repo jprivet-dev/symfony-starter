@@ -25,10 +25,11 @@ This project is designed to handle the entire lifecycle of a Symfony project, fr
   * [Connect to the Database](docs/postgre.md)
 * **Quality Assurance:** Pre-configured tools to maintain high code quality from day one (PHPStan, CS Fixer, Tests).
 
-### 4. 🤝 Contribution & Core Development
+### 4. 🤝 Contributing to Symfony Core
 
 * **Seamless Local Linking:** Easily mount your local `symfony/symfony` repository into the container.
 * **Real-world Testing:** Test your pull requests and framework modifications against a running application instantly without complex configuration.
+* **[📖 Read the Contribution Guide](docs/contributing.md)**
 
 ## ✨ Available Flavors
 
@@ -356,6 +357,10 @@ Initial commit
 * [ADR (Architecture Decision Records)](docs/adr.md)
 * [Link local Symfony Repository](docs/contribute.md)
 * [Troubleshooting](docs/troubleshooting.md)
+
+**🤝 Contributing**
+
+* [Contributing to Symfony Core](docs/contributing.md)
 
 ## 🔗 Main links
 
