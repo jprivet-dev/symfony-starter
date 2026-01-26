@@ -272,7 +272,7 @@ require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLangle
 
 ##
 
-switch_to_mysql: ## Switch the stack to MySQL/MariaDB
+switch_to_mysql: .env ## Switch the stack to MySQL/MariaDB
 	# 1. Update Dockerfile (Driver PHP)
 	$(MAKE) replace f=Dockerfile o="pdo_pgsql" n="pdo_mysql"
 
@@ -299,12 +299,7 @@ switch_to_mysql: ## Switch the stack to MySQL/MariaDB
 	# 7. Update Port
 	$(MAKE) yq_update f=compose.override.yaml k=services.database.ports[0] v="3306:3306"
 
-	# 8. Update PHP Connection String
-	$(MAKE) replace f=compose.yaml o="postgresql://" n="mysql://"
-	$(MAKE) replace f=compose.yaml o="5432" n="3306"
-	@if [ -f .env ]; then \
-		$(MAKE) replace f=.env o="postgresql://" n="mysql://"; \
-		$(MAKE) replace f=.env o="5432" n="3306"; \
-	fi
+	# 8. Update DATABASE_URL
+	$(MAKE) replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=mysql://app:!ChangeMe!@database:3306/app?serverVersion=11.4-MariaDB&charset=utf8mb4"
 	$(MAKE) commit m="stack updated to MariaDB"
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
