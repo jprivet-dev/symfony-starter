@@ -186,7 +186,8 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	# FIX: Ban version 6 for the moment to prevent Symfony PropertyInfo crash
 	# symfony/property-info v6 does not support phpdocumentor/reflection-docblock
     # Please stick to ^5.2 in your composer.json file.
-	$(COMPOSER) conflict "phpdocumentor/reflection-docblock:>=6.0"
+	$(COMPOSER) require "phpdocumentor/reflection-docblock:^5.2"
+	$(MAKE) commit m="composer require phpdocumentor/reflection-docblock:^5.2"
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
 	$(COMPOSER) require symfony/webapp-pack
 	$(MAKE) commit m="composer require symfony/webapp-pack"
