@@ -206,9 +206,7 @@ require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.
 	$(MAKE) commit m="composer require symfony/orm-pack"
 	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
 	$(MAKE) commit_git_apply f=postgresql/env-DATABASE_URL.patch
-	$(MAKE) permissions
-	$(MAKE) down deep_clean up_detached
-	$(MAKE) images info
+	$(MAKE) permissions down deep_clean up_detached
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(COMPOSER) require --dev symfony/profiler-pack
