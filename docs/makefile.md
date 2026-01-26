@@ -40,6 +40,7 @@
 
 — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
   symfony                    sf Run any Symfony console command - $ make symfony [c=<command>]- Example: $ make symfony c=cache:clear
+  console                       Symfony console alias - $ make console [c=<command>]- Example: $ make console c=cache:clear
 
   about                         Display information about the current Symfony project
   cache_clear                cc Clear the Symfony cache
@@ -194,6 +195,7 @@
 
   (to delete this section, delete .mk/generate.mk)
 
+  replace                       Replace a string in a file - $ make replace f=<file> o=<old_string> n=<new_string> - Example: $ make replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
   api                           Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
   api@lts                       Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
   demo                          Generate a Symfony Demo application (with SQLite) with Docker configuration
@@ -228,6 +230,8 @@
   require_phpmetrics            Install PHPMetrics - https://phpmetrics.github.io/website/
   require_phpstan               Install PHPStan - https://phpstan.org/
   require_twigcsfixer           Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
+
+  switch_to_mysql               Swith the stack to MySQL/MariaDB
 ```
 
 <!-- MAKEFILE_COMMANDS_END -->
