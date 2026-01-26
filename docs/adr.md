@@ -1,4 +1,4 @@
-# ADR
+# ADR (Architecture Decision Records)
 
 [⬅️ README](../README.md)
 

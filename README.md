@@ -4,6 +4,32 @@
 
 This project provides a streamlined way to set up a new Symfony application with Docker. Whether you need a minimalist skeleton, a full web application, an API, or an Administration panel, this starter has you covered. It leverages the power of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) with a powerful Makefile to manage everything.
 
+## ⚡ What can you do with this Starter?
+
+This project is designed to handle the entire lifecycle of a Symfony project, from initialization to daily development.
+
+### 1. 🏗️ Scaffolding & Initialization
+
+* **Instant Setup:** Bootstrap a Dockerized project in seconds: [Minimalist](#minimalist), [Web App](#web-app), [API Platform](#api-platform), [EasyAdmin](#easyadmin) or [Demo](#demo).
+* **Database Agnostic:** The starter comes with **PostgreSQL** by default but offers commands to easily switch to **MySQL/MariaDB** or **SQLite** configuration.
+
+### 2. 🧰 Daily Workflow
+
+* **Powerful Makefile:** Forget complex Docker commands. Use a standardized set of commands (`make start`, `make db_init`, `make tests`) to manage your stack.
+* **Transparent History:** Every generation step is committed to Git (🤖 `[starter]`), giving you a full audit trail of the installation process.
+
+### 3. 🧩 Ecosystem & Quality
+
+* **IDE Ready:** Comprehensive documentation to configure **PhpStorm** perfectly:
+  * [Connect Docker PHP Interpreter](docs/remote-php-interpreter.md)
+  * [Connect to the Database](docs/postgre.md)
+* **Quality Assurance:** Pre-configured tools to maintain high code quality from day one (PHPStan, CS Fixer, Tests).
+
+### 4. 🤝 Contribution & Core Development
+
+* **Seamless Local Linking:** Easily mount your local `symfony/symfony` repository into the container.
+* **Real-world Testing:** Test your pull requests and framework modifications against a running application instantly without complex configuration.
+
 ## ✨ Available Flavors
 
 You can choose from several pre-configured setups.
@@ -40,6 +66,7 @@ You can choose from several pre-configured setups.
         </td>
         <td>
             <img src="docs/img/minimalist.png" alt="Symfony Minimalist" width="300">
+            <br><br>
             <img src="docs/img/minimalist-lts.png" alt="Symfony LTS" width="300">
         </td>
     </tr>
@@ -173,10 +200,11 @@ SYMFONY_VERSION=6.4.3 make minimalist
 ```
 
 > This will:
-> * Clone `dunglas/symfony-docker` configuration files and extract them to your project root.
+> * Clone and extract `dunglas/symfony-docker` configuration files.
 > * Build the necessary Docker images and start the containers.
 > * Generate a fresh Symfony application inside the container.
-> * Eventually add extra packages to give you everything you need to build a web application.
+> * Eventually add extra packages (API Platform, Admin, etc.) depending on the chosen flavor.
+>
 
 #### Step 3. Access the app
 
@@ -218,31 +246,31 @@ make easy_admin
 
 ## 🧰 Developer Toolkit
 
-This starter is more than just a generator; it is a **daily companion**.
+This starter is a **daily companion**.
 It embeds a robust `Makefile` to abstract complex Docker/Composer commands, speeding up your workflow.
 
 Here is a glimpse of what's included:
 
-| Category        | Key Commands               | Description                                                     |
+| Category        | Key Commands               | Description                                                             |
 |:----------------|:---------------------------|:----------------------------------------------------------------|
-| **🐳 Docker**   | `make start` / `make stop` | Start/Stop the stack (detached mode).                           |
+| **🐳 Docker**   | `make start` / `make stop` | Start/Stop the stack (detached mode).                                   |
 |                 | `make sh`                  | Access the PHP container shell.                                 |
-|                 | `make logs`                | View live logs from all containers.                             |
-| **🚀 Symfony**  | `make cc`                  | Clear the cache (`cache:clear`).                                |
+|                 | `make logs`                | View live logs from all containers.                                     |
+| **🚀 Symfony**  | `make cc`                  | Clear the cache (`cache:clear`).                                        |
 |                 | `make symfony c="..."`     | Run any Symfony command (e.g. `make symfony c="debug:router"`). |
-| **🐘 Database** | `make db_init`             | Create DB, run migrations and load fixtures in one go.          |
-|                 | `make migration`           | Generate a new migration file.                                  |
+| **🐘 Database** | `make db_init`             | Create DB, run migrations and load fixtures in one go.                  |
+|                 | `make migration`           | Generate a new migration file.                                          |
 | **✅ Quality**   | `make tests`               | Run PHPUnit tests.                                              |
 |                 | `make phpmd`               | Run PHP Mess Detector.                                          |
 | **🎨 Assets**   | `make assets`              | Generate all assets.                                            |
 
-> 💡 **Tip**:
-> * Just run `make` (or `make help`) in your terminal to see the beautiful, self-documented list of **30+** available commands.
-> * Or see directly the [full list of commands](docs/makefile.md) in the doc.
+> 💡 **Tip** 
+> * Just run `make` (or `make help`) in your terminal to see the beautiful, self-documented list of **30+ available commands**.
+> * See [Makefile documentation](docs/makefile.md) for details.
 
 ## 🏗️ Project Structure
 
-After `make minimalist`, your project structure will look like this (Minimalist Stable Release):
+After `make minimalist`, your project structure will look like this:
 
 ```
 ./
@@ -276,19 +304,18 @@ tree -A -L 1 -F --dirsfirst
 
 ## 🔍 Traceable Generation Process
 
-Unlike "black box" installers, this starter values **transparency**.
-
 The `Makefile` commits every significant step of the generation process (applying patches, modifying configuration, installing bundles). This creates a clean, readable Git history that lets you understand exactly how your application was constructed.
 
 **Example of a generated `git log`:**
 
 ```text
-* (HEAD -> main) [generate] make install_packages p=symfony/webapp-pack
-* [generate] make git_apply f=common/compose-var-mapping.patch
-* [generate] make git_apply f=common/compose-DATABASE_URL.patch
-* [generate] make build up_detached
-* [generate] make clone_symfony_docker
-* Initial commit
+🤖 [starter] make git_apply f=common/docker-entrypoint-clean-composer.patch
+🤖 [starter] make build up_detached
+🤖 [starter] make yq_update f=compose.yaml k=services.php.environment.DATABASE_URL v=${DATABASE_URL}
+🤖 [starter] make yq_add f=compose.override.yaml k=services.php.volumes v=./var/log:/app/var/log
+🤖 [starter] make yq_add f=compose.override.yaml k=services.php.volumes v=./var:/app/var
+🤖 [starter] make clone_symfony_docker
+Initial commit
 ```
 
 **Benefits:**
@@ -304,16 +331,30 @@ The `Makefile` commits every significant step of the generation process (applyin
 
 ## 📚 Documentation
 
-* [ADR](docs/adr.md)
+**🐳 Docker & Configuration**
+
 * [Caddy - Validate certificates](docs/certificates.md)
 * [Compose - Accessing the `var/` directory](docs/var.md)
 * [Makefile - Discover all commands](docs/makefile.md)
-* [PHP - Quality](docs/quality.md)
-* [PHP - Testing](docs/testing.md)
-* [PhpStorm - Configure a remote PHP interpreter (Docker)](docs/remote-php-interpreter.md)
-* [PhpStorm - Connect it to the running PostgreSQL container](docs/postgre.md)
 * [Symfony - Save your generated application](docs/save.md)
 * [Symfony and Docker - Use build options](docs/options.md)
+
+**🐘 Database**
+
+* [PhpStorm - Connect it to PostgreSQL](docs/postgre.md)
+* *Switching to MySQL/MariaDB (Coming soon)*
+* *Switching to SQLite (Coming soon)*
+
+**💻 IDE & Quality (DX)**
+
+* [PHP - Quality Tools (PHPStan, CS Fixer, etc.)](docs/quality.md)
+* [PHP - Testing (PHPUnit)](docs/testing.md)
+* [PhpStorm - Configure Remote PHP Interpreter](docs/remote-php-interpreter.md)
+
+**🔧 Advanced**
+
+* [ADR (Architecture Decision Records)](docs/adr.md)
+* [Link local Symfony Repository](docs/contribute.md)
 * [Troubleshooting](docs/troubleshooting.md)
 
 ## 🔗 Main links
