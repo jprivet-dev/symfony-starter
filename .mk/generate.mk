@@ -28,9 +28,9 @@ replace: ## Replace a string in a file - $ make replace f=<file> o=<old_string> 
 
 replace_line: ## Replace an entire line beginning with a specific pattern - $ make replace f=<file> s=<start> n=<value> - Example: $ make replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
-	$(if $(k),, $(error "Please specify the start of the line to match with 's=...'"))
+	$(if $(s),, $(error "Please specify the start of the line to match with 's=...'"))
 	$(if $(n),, $(error "Please specify the new line content with 'n=...'"))
-	@sed "s|^$(k).*|$(n)|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
+	@sed "s|^$(s).*|$(n)|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
 #
 
