@@ -263,3 +263,10 @@ require_phpstan: ## Install PHPStan - https://phpstan.org/
 require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
 	$(COMPOSER) require --dev vincentlanglet/twig-cs-fixer
 	$(MAKE) commit m="composer require --dev vincentlanglet/twig-cs-fixer"
+
+##
+
+switch_to_mysql: ## Swith the stack to MySQL/MariaDB
+	$(MAKE) replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
+	$(MAKE) build_force
+
