@@ -408,7 +408,7 @@ update_lock: ## Update only the content hash of composer.lock without updating d
 
 _doctrine:
 ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
-	@printf "\n $(R)⨯$(S) Remove the $(Y)DOCTRINE / SQL 💽$(S) section or install $(Y)Doctrine$(S) with $(G)make require_doctrine$(S)\n"
+	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine$(S) with $(G)make require_doctrine$(S)\n"
 	@exit 1
 endif
 
@@ -520,7 +520,7 @@ restore: confirm db_drop db_create ## Restore a dump (CAUTION! The command purge
 
 _phpunit:
 ifeq ($(wildcard $(BIN_PHPUNIT)),)
-	@printf "\n $(R)⨯$(S) Remove the $(Y)TESTS ✅$(S) section or install $(Y)PHPUnit$(S) with $(G)make require_test_pack$(S)\n"
+	@printf "\n $(R)⨯$(S) Please install $(Y)PHPUnit$(S) with $(G)make require_test_pack$(S)\n"
 	@exit 1
 endif
 
@@ -579,7 +579,7 @@ lint: phpcsfixer_lint phpstan_lint phpmd_lint twigcsfixer_lint ## Run all linter
 
 _phpcsfixer:
 ifeq ($(wildcard $(VENDOR_PHPCSFIXER)),)
-	@printf "\n $(R)⨯$(S) Remove the $(Y)QUALITY ✅ / PHP CS Fixer$(S) section or install $(Y)PHP CS Fixer$(S) with $(G)make require_phpcsfixer$(S)\n"
+	@printf "\n $(R)⨯$(S) Please install $(Y)PHP CS Fixer$(S) with $(G)make require_phpcsfixer$(S)\n"
 	@exit 1
 endif
 
@@ -598,7 +598,7 @@ phpcsfixer_lint: _phpcsfixer ## Check code style
 
 _phpmd:
 ifeq ($(wildcard $(VENDOR_PHPMD)),)
-	@printf "\n $(R)⨯$(S) Remove the $(Y)QUALITY ✅ / PHP Mess Detector$(S) section or install $(Y)PHP Mess Detector$(S) with $(G)make require_phpmd$(S)\n"
+	@printf "\n $(R)⨯$(S) Please install $(Y)PHP Mess Detector$(S) with $(G)make require_phpmd$(S)\n"
 	@exit 1
 endif
 
@@ -614,7 +614,7 @@ phpmd_lint: _phpmd ## Run PHP Mess Detector with all rules
 
 _phpmetrics:
 ifeq ($(wildcard $(VENDOR_PHPMETRICS)),)
-	@printf "\n $(R)⨯$(S) Remove the $(Y)QUALITY ✅ / PHPMetrics$(S) section or install $(Y)PHPMetrics$(S) with $(G)make require_phpmetrics$(S)\n"
+	@printf "\n $(R)⨯$(S) Please install $(Y)PHPMetrics$(S) with $(G)make require_phpmetrics$(S)\n"
 	@exit 1
 endif
 
@@ -629,7 +629,7 @@ phpmetrics_report: _phpmetrics ## Run PHPMetrics and generate detailed report
 
 _phpstan:
 ifeq ($(wildcard $(VENDOR_PHPSTAN)),)
-	@printf "\n $(R)⨯$(S) Remove the $(Y)QUALITY ✅ / PHPStan$(S) section or install $(Y)PHPStan$(S) with $(G)make require_phpstan$(S)\n"
+	@printf "\n $(R)⨯$(S) Please install $(Y)PHPStan$(S) with $(G)make require_phpstan$(S)\n"
 	@exit 1
 endif
 
@@ -648,7 +648,7 @@ phpstan_lint: _phpstan ## Run PHPStan analyse - $ make phpstan_analyse [a=<argum
 
 _twigcsfixer:
 ifeq ($(wildcard $(VENDOR_TWIGCSFIXER)),)
-	@printf "\n $(R)⨯$(S) Remove the $(Y)QUALITY ✅ / Twig CS Fixer$(S) section or install $(Y)Twig CS Fixer$(S) with $(G)make require_twigcsfixer$(S)\n"
+	@printf "\n $(R)⨯$(S) Please install $(Y)Twig CS Fixer$(S) with $(G)make require_twigcsfixer$(S)\n"
 	@exit 1
 endif
 
@@ -667,7 +667,7 @@ twigcsfixer_lint: _twigcsfixer ## Check Twig style
 
 _assets:
 ifeq ($(wildcard $(VENDOR_ASSETS)),)
-	@printf "\n $(R)⨯$(S) Remove the $(Y)ASSETS 🎨‍$(S) section or install $(Y)AssetMapper$(S) with $(G)make require_asset_mapper$(S)\n"
+	@printf "\n $(R)⨯$(S) Please install $(Y)AssetMapper$(S) with $(G)make require_asset_mapper$(S)\n"
 	@exit 1
 endif
 
@@ -715,7 +715,7 @@ importmap_update: _assets ## Update JavaScript packages to their latest versions
 
 _translation:
 ifeq ($(wildcard $(VENDOR_TRANSLATION)),)
-	@printf "\n $(R)⨯$(S) Remove the $(Y)TRANSLATION 🇬🇧$(S) section or install $(Y)Translation$(S) with $(G)make require_translation$(S)\n"
+	@printf "\n $(R)⨯$(S) Please install $(Y)Translation$(S) with $(G)make require_translation$(S)\n"
 	@exit 1
 endif
 
