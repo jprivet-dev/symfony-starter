@@ -17,7 +17,7 @@ This project is designed to handle the entire lifecycle of a Symfony project, fr
 
 ### 2. 🧰 Daily Workflow
 
-* **Powerful Makefile:** Forget complex Docker commands. Use a standardized set of commands (`make start`, `make db_init`, `make tests`) to manage your stack.
+* **Powerful Makefile:** Forget complex Docker commands. Use a standardized set of **90+ available commands** (`make start`, `make db_init`, `make tests`) to manage your stack.
 * **Transparent History:** Every generation step is committed to Git (🤖 `[starter]`), giving you a full audit trail of the installation process.
 
 ### 3. 🧩 Ecosystem & Quality
@@ -237,8 +237,8 @@ Here is a glimpse of what's included:
 |                 | `make phpmd`               | Run PHP Mess Detector.                                          |
 | **🎨 Assets**   | `make assets`              | Generate all assets.                                            |
 
-> 💡 **Tip** 
-> * Just run `make` (or `make help`) in your terminal to see the beautiful, self-documented list of **30+ available commands**.
+> 💡 **Tip: 90+ available makefile commands** 
+> * Just run `make` (or `make help`) in your terminal to see the beautiful, self-documented list of available commands**.
 > * See [Makefile documentation](docs/makefile.md) for details.
 
 ## 🏗️ Project Structure
