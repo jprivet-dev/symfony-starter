@@ -19,6 +19,15 @@ CLONE_DIR                 = clone
 
 #
 
+.PHONY: replace
+replace: ## Replace a string in a file - $ make replace f=<file> o=<old_string> n=<new_string> - Example: $ make replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
+	$(if $(f),, $(error "Please specify a file with 'f=...'"))
+	$(if $(o),, $(error "Please specify the old string with 'o=...'"))
+	$(if $(n),, $(error "Please specify the new string with 'n=...'"))
+	@sed "s|$(o)|$(n)|g" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
+
+#
+
 GIT_PREFIX = 🤖 [starter]
 
 .PHONY: commit
