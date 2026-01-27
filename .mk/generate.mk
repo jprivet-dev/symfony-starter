@@ -285,11 +285,9 @@ endif
 	$(MAKE) yq_update f=compose.yaml k=services.database.environment.MARIADB_ROOT_PASSWORD v='$${MARIADB_ROOT_PASSWORD:-!ChangeMe!}'
 	$(MAKE) yq_update f=compose.yaml k=services.database.volumes[0] v="database_data:/var/lib/mysql:rw"
 	$(MAKE) yq_delete f=compose.yaml k=services.database.healthcheck.test
-	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="CMD"
-	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="healthcheck.sh"
-	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="--connect"
-	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="--innodb_initialized"
+	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="CMD-SHELL"
+	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="mariadb-admin ping -h localhost -u\$${MARIADB_USER} -p\$${MARIADB_PASSWORD} || exit 1"
 	$(MAKE) yq_update f=compose.override.yaml k=services.database.ports[0] v="3306:3306"
-	$(MAKE) replace_line f=.env s="DATABASE_URL=" n='DATABASE_URL=mysql://app:!ChangeMe!@database:3306/app?serverVersion=11.4-MariaDB&charset=utf8mb4'
+	$(MAKE) replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=mysql://app:!ChangeMe!@database:3306/app?serverVersion=11.4-MariaDB&charset=utf8mb4"
 	$(MAKE) commit m="stack updated to MariaDB"
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
