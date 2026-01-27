@@ -274,6 +274,10 @@ require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLangle
 ##
 
 switch_to_mysql: .env ## Switch the stack to MySQL/MariaDB
+ifneq ($(wildcard $(IS_POSTGRESQL)),)
+	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine (with PostgreSQL by default)$(S) with $(G)make require_orm$(S)\n"
+	@exit 1
+endif
 	$(MAKE) replace f=Dockerfile o="pdo_pgsql" n="pdo_mysql"
 	$(MAKE) yq_update f=compose.yaml k=services.database.image v="mariadb:11.4-alpine"
 	$(MAKE) replace f=compose.yaml o="POSTGRES_" n="MARIADB_"
