@@ -30,7 +30,8 @@ replace_line: ## Replace an entire line beginning with a specific pattern - $ ma
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(s),, $(error "Please specify the start of the line to match with 's=...'"))
 	$(if $(n),, $(error "Please specify the new line content with 'n=...'"))
-	@sed "s|^$(s).*|$(n)|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
+	@# Use $(subst) to automatically escape “&” with “\&” for sed
+	@sed "s|^$(s).*|$(subst &,\&,$(n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
 #
 
