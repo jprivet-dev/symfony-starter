@@ -279,7 +279,7 @@ ifneq ($(wildcard $(IS_POSTGRESQL)),)
 	@exit 1
 endif
 	$(MAKE) replace f=Dockerfile o="pdo_pgsql" n="pdo_mysql"
-	$(MAKE) yq_update f=compose.yaml k=services.database.image v="mariadb:11.4-alpine"
+	$(MAKE) yq_update f=compose.yaml k=services.database.image v="mariadb:11.4"
 	$(MAKE) replace f=compose.yaml o="POSTGRES_" n="MARIADB_"
 	$(MAKE) replace f=compose.yaml o="MARIADB_DB" n="MARIADB_DATABASE"
 	$(MAKE) yq_update f=compose.yaml k=services.database.environment.MARIADB_ROOT_PASSWORD v='$${MARIADB_ROOT_PASSWORD:-!ChangeMe!}'
