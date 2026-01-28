@@ -1,0 +1,10 @@
+  database:
+    image: mariadb:${MARIADB_VERSION:-11.8.5}
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-app}
+      # You should definitely change the password in production
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-!ChangeMe!}
+      MARIADB_USER: ${MARIADB_USER:-app}
+      MARIADB_ROOT_PASSWORD: '${MARIADB_ROOT_PASSWORD:-!ChangeMe!}'
+    volumes:
+      - database_data:/var/lib/mysql:rw

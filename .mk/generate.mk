@@ -292,19 +292,10 @@ ifneq ($(wildcard $(IS_POSTGRESQL)),)
 	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine (with PostgreSQL by default)$(S) with $(G)make require_orm$(S)\n"
 	@exit 1
 endif
-	# Dockerfile
 	$(MAKE) rp f=Dockerfile o="pdo_pgsql" n="pdo_mysql"
-	# compose.yaml
-	$(MAKE) yu f=compose.yaml k=services.database.image v=mariadb:#{MARIADB_VERSION:-11.8.5}
-	$(MAKE) rp f=compose.yaml o=POSTGRES_ n=MARIADB_
-	$(MAKE) rp f=compose.yaml o=MARIADB_DB n=MARIADB_DATABASE
-	$(MAKE) yu f=compose.yaml k=services.database.environment.MARIADB_ROOT_PASSWORD v=#{MARIADB_ROOT_PASSWORD:-!ChangeMe!}
-	$(MAKE) yu f=compose.yaml k=services.database.volumes[0] v=database_data:/var/lib/mysql:rw
-	$(MAKE) yd f=compose.yaml k=services.database.healthcheck
-	#$(MAKE) rp f=compose.yaml o="#{" n="\$$\{"
+	$(MAKE) rb f=compose.yaml c=.generate/mariadb/doctrine-bundle-block.compose.yaml s="###> doctrine/doctrine-bundle ###" e="###< doctrine/doctrine-bundle ###"
 	$(MAKE) rb f=compose.override.yaml c=.generate/mariadb/doctrine-bundle-block.compose.override.yaml s="###> doctrine/doctrine-bundle ###" e="###< doctrine/doctrine-bundle ###"
 	$(MAKE) rb f=.env c=.generate/mariadb/doctrine-bundle.block.env s="###> doctrine/doctrine-bundle ###" e="###< doctrine/doctrine-bundle ###"
-	# save all
 	$(MAKE) commit m="stack updated to MariaDB"
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
 
