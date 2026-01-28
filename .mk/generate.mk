@@ -320,7 +320,7 @@ endif
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
 
 switch_to_mariadb_new: ##
-	$(MAKE) replace_block f=.env s=generate/mariadb/doctrine.env start="###> doctrine/doctrine-bundle ###" end="###< doctrine/doctrine-bundle ###"
+	$(MAKE) replace_block file=.env source=generate/mariadb/doctrine.env start="###> doctrine/doctrine-bundle ###" end="###< doctrine/doctrine-bundle ###"
 
 ##
 
