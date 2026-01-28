@@ -273,7 +273,7 @@ require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLangle
 
 ##
 
-switch_to_mysql: .env ## Switch the stack to MySQL/MariaDB
+switch_to_mysql: .env ## Switch the stack to MySQL/MariaDB --- 🧪 EXPERIMENTAL 🧪 ---
 ifneq ($(wildcard $(IS_POSTGRESQL)),)
 	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine (with PostgreSQL by default)$(S) with $(G)make require_orm$(S)\n"
 	@exit 1
