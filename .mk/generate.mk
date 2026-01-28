@@ -33,19 +33,18 @@ replace_line rl: ## Replace an entire line beginning with a specific pattern - $
 	@# Use $(subst) to automatically escape “&” with “\&” for sed
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_block rb: ## Replace a block in a file with content from a source file, wrapping it with block markers
-	$(if $(f),, $(error "Please specify the file with 'f=...'"))
-	$(if $(c),, $(error "Please specify the content with 'c=...'"))
-	$(if $(s),, $(error "Please specify the start block with 's=...'"))
-	$(if $(e),, $(error "Please specify the end block with 'e=...'"))
+replace_block rb: ## Replace a block in a target file with content from a source file, wrapping it with markers
+	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
+	$(if $(t),, $(error "Please specify the target with 't=...'"))
+	$(if $(s),, $(error "Please specify the source with 's=...'"))
 	@# Remove the old block (using tilde \~ delimiter to handle slashes in markers)
-	@sed -i '\~$(s)~,\~$(e)~d' $(f)
+	@sed -i '\~###> $(m) ###~,\~###< $(m) ###~d' $(t)
 	@# Ensure target file ends with a newline before appending
-	@sed -i -e '$$a\' $(f)
+	@sed -i -e '$$a\' $(t)
 	@# Reconstruct the block: Start Marker -> Content -> End Marker
-	@echo "$(s)" >> $(f)
-	@cat $(c) >> $(f)
-	@echo "$(e)" >> $(f)
+	@echo "###> $(m) ###" >> $(t)
+	@cat $(s) >> $(t)
+	@echo "###< $(m) ###" >> $(t)
 
 #
 
@@ -292,10 +291,10 @@ ifneq ($(wildcard $(IS_POSTGRESQL)),)
 	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine (with PostgreSQL by default)$(S) with $(G)make require_orm$(S)\n"
 	@exit 1
 endif
-	$(MAKE) rp f=Dockerfile o="pdo_pgsql" n="pdo_mysql"
-	$(MAKE) rb f=compose.yaml c=.generate/mariadb/doctrine-bundle-block.compose.yaml s="###> doctrine/doctrine-bundle ###" e="###< doctrine/doctrine-bundle ###"
-	$(MAKE) rb f=compose.override.yaml c=.generate/mariadb/doctrine-bundle-block.compose.override.yaml s="###> doctrine/doctrine-bundle ###" e="###< doctrine/doctrine-bundle ###"
-	$(MAKE) rb f=.env c=.generate/mariadb/doctrine-bundle.block.env s="###> doctrine/doctrine-bundle ###" e="###< doctrine/doctrine-bundle ###"
+	$(MAKE) rb m="doctrine/doctrine-bundle" t=Dockerfile s=.block/mariadb/Dockerfile
+	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.yaml s=.block/mariadb/compose.yaml
+	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/mariadb/compose.override.yaml
+	$(MAKE) rb m="doctrine/doctrine-bundle" t=.env s=.block/mariadb/.env
 	$(MAKE) commit m="stack updated to MariaDB"
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
 
