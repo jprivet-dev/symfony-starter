@@ -33,19 +33,19 @@ replace_line rl: ## Replace an entire line beginning with a specific pattern - $
 	@# Use $(subst) to automatically escape “&” with “\&” for sed
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_block: ## Replace a block in $(file) with content from $(source), wrapping it with $(start) and $(end)
-	$(if $(file),, $(error "Please specify the file with 'file=...'"))
-	$(if $(source),, $(error "Please specify the source file with 'source=...'"))
-	$(if $(start),, $(error "Please specify the start with 'start=...'"))
-	$(if $(end),, $(error "Please specify the end line content with 'end=...'"))
+replace_block rb: ## Replace a block in a file with content from a source file, wrapping it with block markers
+	$(if $(f),, $(error "Please specify the file with 'f=...'"))
+	$(if $(c),, $(error "Please specify the content with 'c=...'"))
+	$(if $(s),, $(error "Please specify the start block with 's=...'"))
+	$(if $(e),, $(error "Please specify the end block with 'e=...'"))
 	@# Remove the old block (using tilde \~ delimiter to handle slashes in markers)
-	@sed -i '\~$(start)~,\~$(end)~d' $(file)
+	@sed -i '\~$(s)~,\~$(e)~d' $(f)
 	@# Ensure target file ends with a newline before appending
-	@sed -i -e '$$a\' $(file)
+	@sed -i -e '$$a\' $(f)
 	@# Reconstruct the block: Start Marker -> Content -> End Marker
-	@echo "$(start)" >> $(file)
-	@cat $(source) >> $(file)
-	@echo "$(end)" >> $(file)
+	@echo "$(s)" >> $(f)
+	@cat $(c) >> $(f)
+	@echo "$(e)" >> $(f)
 
 #
 
@@ -306,19 +306,10 @@ endif
 	$(MAKE) yu f=compose.override.yaml k=services.database.ports[0] v=#{MARIADB_PORT_PUBLIC:-3306}:#{MARIADB_PORT:-3306}
 	#$(MAKE) rp f=compose.override.yaml o="#{" n="\$$\{"
 	# compose.yaml
-	$(MAKE) rp f=.env o=POSTGRES_ n=MARIADB_
-	$(MAKE) rp f=.env o=MARIADB_DB n=MARIADB_DATABASE
-	$(MAKE) rl f=.env s="MARIADB_VERSION=" n="MARIADB_VERSION=11.8.5"
-	$(MAKE) rl f=.env s="MARIADB_PORT=" n="MARIADB_PORT=3306"
-	$(MAKE) rl f=.env s="MARIADB_PORT_PUBLIC=" n="MARIADB_PORT_PUBLIC=3306"
-	$(MAKE) rl f=.env s="DATABASE_URL=" n="DATABASE_URL=mysql://#{MARIADB_USER}:#{MARIADB_PASSWORD}@#{MARIADB_HOST}:#{MARIADB_PORT}/app?serverVersion=#{MARIADB_VERSION}-MariaDB&charset=utf8mb4"
-	#$(MAKE) rp f=.env o="#{" n="\$$\{"
+	$(MAKE) rb f=.env c=.generate/mariadb/doctrine-bundle.block.env s="###> doctrine/doctrine-bundle ###" e="###< doctrine/doctrine-bundle ###"
 	# save all
 	$(MAKE) commit m="stack updated to MariaDB"
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
-
-switch_to_mariadb_new: ##
-	$(MAKE) replace_block file=.env source=generate/mariadb/doctrine.env start="###> doctrine/doctrine-bundle ###" end="###< doctrine/doctrine-bundle ###"
 
 ##
 
