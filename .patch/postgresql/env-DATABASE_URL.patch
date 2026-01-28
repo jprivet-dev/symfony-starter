@@ -1,7 +1,7 @@
 diff --git a/.env b/.env
---- a/.env	(revision c11b519660d7a269f7e33cff6296419f19ba57b0)
-+++ b/.env	(revision fcf67598bfa4c7ccd280e3fcdf3bd02898ad01a4)
-@@ -33,5 +33,5 @@
+--- a/.env	(revision 1cac5fcd028c36bfc33b73ae27ff303f9c8f024e)
++++ b/.env	(revision eeb20f781b5ae604568fc4f387f6c413cdc55678)
+@@ -33,5 +33,13 @@
  # DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"
  # DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8.0.32&charset=utf8mb4"
  # DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
