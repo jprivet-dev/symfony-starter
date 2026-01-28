@@ -117,24 +117,22 @@ define append
   endif
 endef
 
-#$(eval $(call append,APP_ENV))
-#$(eval $(call append,XDEBUG_MODE))
 $(eval $(call append,SERVER_NAME))
 $(eval $(call append,IMAGES_PREFIX))
-#$(eval $(call append,SYMFONY_VERSION))
-#$(eval $(call append,STABILITY))
+$(eval $(call append,SYMFONY_VERSION))
+$(eval $(call append,STABILITY))
 $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
-#$(eval $(call append,DATABASE_URL))
+#$(eval $(call append,XDEBUG_MODE))
 #$(eval $(call append,SYMFONY_MONOREPO_PATH))
 
 # --- DOCKER ENVIRONMENT FILES ---
 
 # Docker Compose automatically reads the '.env' file by default.
 # However, it does NOT natively support Symfony's hierarchical override system
-#
 # (e.g., .env.local) for variable interpolation in compose.yaml.
+#
 # To enable local overrides for infrastructure variables (like ports, versions),
 # we explicitly build the --env-file chain.
 ENV_FILES = --env-file .env
