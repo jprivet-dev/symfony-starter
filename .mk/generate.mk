@@ -203,7 +203,7 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	$(COMPOSER) require symfony/webapp-pack
 	$(MAKE) commit m="composer require symfony/webapp-pack"
 	# Change database ports after the webapp were installed Doctrine & PosteSQL
-	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v="$${POSTGRES_PORT_PUBLIC:-5432}:$${POSTGRES_PORT:-5432}"
+	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v=\$${POSTGRES_PORT_PUBLIC:-5432}:\$${POSTGRES_PORT:-5432}
 	$(MAKE) commit_git_apply f=postgresql/env-DATABASE_URL.patch
 	$(MAKE) permissions down deep_clean up_detached
 
@@ -224,7 +224,7 @@ require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/Symfo
 require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) commit m="composer require symfony/orm-pack"
-	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v="$${POSTGRES_PORT_PUBLIC:-5432}:$${POSTGRES_PORT:-5432}"
+	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v=\$${POSTGRES_PORT_PUBLIC:-5432}:\$${POSTGRES_PORT:-5432}
 	$(MAKE) commit_git_apply f=postgresql/env-DATABASE_URL.patch
 	$(MAKE) permissions down deep_clean up_detached
 
