@@ -281,19 +281,24 @@ endif
 	# Dockerfile
 	$(MAKE) rp f=Dockerfile o="pdo_pgsql" n="pdo_mysql"
 	# compose.yaml
-	$(MAKE) yu f=compose.yaml k=services.database.image v="mariadb:11.4"
-	$(MAKE) rp f=compose.yaml o="POSTGRES_" n="MARIADB_"
-	$(MAKE) rp f=compose.yaml o="MARIADB_DB" n="MARIADB_DATABASE"
-	$(MAKE) yu f=compose.yaml k=services.database.environment.MARIADB_ROOT_PASSWORD v='$${MARIADB_ROOT_PASSWORD:-!ChangeMe!}'
-	$(MAKE) yu f=compose.yaml k=services.database.volumes[0] v="database_data:/var/lib/mysql:rw"
-	$(MAKE) yd f=compose.yaml k=services.database.healthcheck.test
-	$(MAKE) ya f=compose.yaml k=services.database.healthcheck.test v="CMD-SHELL"
-	$(MAKE) ya f=compose.yaml k=services.database.healthcheck.test v="mariadb-admin ping -h localhost -u\$${MARIADB_USER} -p\$${MARIADB_PASSWORD} || exit 1"
-	$(MAKE) yu f=compose.override.yaml k=services.database.ports[0] v=\$${MARIADB_PORT_PUBLIC:-3306}:\$${MARIADB_PORT:-3306}
+	$(MAKE) yu f=compose.yaml k=services.database.image v=mariadb:#{MARIADB_VERSION:-11.8.5}
+	$(MAKE) rp f=compose.yaml o=POSTGRES_ n=MARIADB_
+	$(MAKE) rp f=compose.yaml o=MARIADB_DB n=MARIADB_DATABASE
+	$(MAKE) yu f=compose.yaml k=services.database.environment.MARIADB_ROOT_PASSWORD v=#{MARIADB_ROOT_PASSWORD:-!ChangeMe!}
+	$(MAKE) yu f=compose.yaml k=services.database.volumes[0] v=database_data:/var/lib/mysql:rw
+	$(MAKE) yd f=compose.yaml k=services.database.healthcheck
+	$(MAKE) rp f=.env o="#{" n="\$$\{"
+	# compose.override.yaml
+	$(MAKE) yu f=compose.override.yaml k=services.database.ports[0] v=#{MARIADB_PORT_PUBLIC:-3306}:#{MARIADB_PORT:-3306}
+	$(MAKE) rp f=.env o="#{" n="\$$\{"
 	# compose.yaml
-	$(MAKE) rp f=.env o="POSTGRES_" n="MARIADB_"
-	$(MAKE) rp f=.env o="MARIADB_DB" n="MARIADB_DATABASE"
-	$(MAKE) rl f=.env s="DATABASE_URL=" n="MARIADB_VERSION=11.8.5\nDATABASE_URL=mysql://\$${MARIADB_USER}:\$${MARIADB_PWD}@\$${MARIADB_HOST}:\$${MARIADB_PORT}/app?serverVersion=\$${MARIADB_VERSION}-MariaDB&charset=utf8mb4"
+	$(MAKE) rp f=.env o=POSTGRES_ n=MARIADB_
+	$(MAKE) rp f=.env o=MARIADB_DB n=MARIADB_DATABASE
+	$(MAKE) rl f=.env s="MARIADB_VERSION=" n="MARIADB_VERSION=11.8.5"
+	$(MAKE) rl f=.env s="MARIADB_PORT=" n="MARIADB_PORT=3306"
+	$(MAKE) rl f=.env s="MARIADB_PORT_PUBLIC=" n="MARIADB_PORT_PUBLIC=3306"
+	$(MAKE) rl f=.env s="DATABASE_URL=" n="DATABASE_URL=mysql://#{MARIADB_USER}:#{MARIADB_PASSWORD}@#{MARIADB_HOST}:#{MARIADB_PORT}/app?serverVersion=#{MARIADB_VERSION}-MariaDB&charset=utf8mb4"
+	$(MAKE) rp f=.env o="#{" n="\$$\{"
 	$(MAKE) commit m="stack updated to MariaDB"
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
 
