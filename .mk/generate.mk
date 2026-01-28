@@ -308,6 +308,9 @@ endif
 	$(MAKE) commit m="stack updated to MariaDB"
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
 
+switch_to_mariadb_new: ##
+	$(MAKE) rb f=.env s=generate/mariadb/doctrine.env start="###> doctrine/doctrine-bundle ###" end="###< doctrine/doctrine-bundle ###"
+
 ##
 
 phpstorm_config: ##
