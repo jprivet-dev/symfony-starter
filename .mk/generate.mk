@@ -45,8 +45,6 @@ replace_block: ## Replace a block in $(file) with content from $(source), wrappi
 	@# Reconstruct the block: Start Marker -> Content -> End Marker
 	@echo "$(start)" >> $(file)
 	@cat $(source) >> $(file)
-	@# Add a safety newline to avoid merging the last line of content with the end marker
-	@echo "" >> $(file)
 	@echo "$(end)" >> $(file)
 
 #
