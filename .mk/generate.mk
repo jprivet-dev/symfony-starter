@@ -302,10 +302,7 @@ endif
 	$(MAKE) yu f=compose.yaml k=services.database.volumes[0] v=database_data:/var/lib/mysql:rw
 	$(MAKE) yd f=compose.yaml k=services.database.healthcheck
 	#$(MAKE) rp f=compose.yaml o="#{" n="\$$\{"
-	# compose.override.yaml
-	$(MAKE) yu f=compose.override.yaml k=services.database.ports[0] v=#{MARIADB_PORT_PUBLIC:-3306}:#{MARIADB_PORT:-3306}
-	#$(MAKE) rp f=compose.override.yaml o="#{" n="\$$\{"
-	# compose.yaml
+	$(MAKE) rb f=compose.override.yaml c=.generate/mariadb/doctrine-bundle-block.compose.override.yaml s="###> doctrine/doctrine-bundle ###" e="###< doctrine/doctrine-bundle ###"
 	$(MAKE) rb f=.env c=.generate/mariadb/doctrine-bundle.block.env s="###> doctrine/doctrine-bundle ###" e="###< doctrine/doctrine-bundle ###"
 	# save all
 	$(MAKE) commit m="stack updated to MariaDB"
