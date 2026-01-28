@@ -34,10 +34,10 @@ replace_line rl: ## Replace an entire line beginning with a specific pattern - $
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
 replace_block: ## Replace a block in $(file) with content from $(source), wrapping it with $(start) and $(end)
-	$(if $(f),, $(error "Please specify the file with 'file=...'"))
-	$(if $(s),, $(error "Please specify the source file with 'source=...'"))
-	$(if $(n),, $(error "Please specify the start with 'start=...'"))
-	$(if $(n),, $(error "Please specify the end line content with 'end=...'"))
+	$(if $(file),, $(error "Please specify the file with 'file=...'"))
+	$(if $(source),, $(error "Please specify the source file with 'source=...'"))
+	$(if $(start),, $(error "Please specify the start with 'start=...'"))
+	$(if $(end),, $(error "Please specify the end line content with 'end=...'"))
 	@# Remove the old block (using tilde \~ delimiter to handle slashes in markers)
 	@sed -i '\~$(start)~,\~$(end)~d' $(file)
 	@# Ensure target file ends with a newline before appending
