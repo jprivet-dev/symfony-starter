@@ -33,6 +33,11 @@ replace_line rl: ## Replace an entire line beginning with a specific pattern - $
 	@# Use $(subst) to automatically escape “&” with “\&” for sed
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
+replace_block rb: ##
+	@sed -i '/$(start)/,/$(end)/d' $(f)
+	@sed -i -e '$$a\' $(f)
+	@cat $(s) >> $(f)
+
 #
 
 GIT_PREFIX = 🤖 [starter]
