@@ -33,10 +33,21 @@ replace_line rl: ## Replace an entire line beginning with a specific pattern - $
 	@# Use $(subst) to automatically escape “&” with “\&” for sed
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_block rb: ##
-	sed -i '\~$(start)~,\~$(end)~d' $(f)
-	sed -i -e '$$a\' $(f)
-	cat $(s) >> $(f)
+replace_block: ## Replace a block in $(file) with content from $(source), wrapping it with $(start) and $(end)
+	$(if $(f),, $(error "Please specify the file with 'file=...'"))
+	$(if $(s),, $(error "Please specify the source file with 'source=...'"))
+	$(if $(n),, $(error "Please specify the start with 'start=...'"))
+	$(if $(n),, $(error "Please specify the end line content with 'end=...'"))
+	@# Remove the old block (using tilde \~ delimiter to handle slashes in markers)
+	@sed -i '\~$(start)~,\~$(end)~d' $(file)
+	@# Ensure target file ends with a newline before appending
+	@sed -i -e '$$a\' $(file)
+	@# Reconstruct the block: Start Marker -> Content -> End Marker
+	@echo "$(start)" >> $(file)
+	@cat $(source) >> $(file)
+	@# Add a safety newline to avoid merging the last line of content with the end marker
+	@echo "" >> $(file)
+	@echo "$(end)" >> $(file)
 
 #
 
