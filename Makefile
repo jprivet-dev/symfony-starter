@@ -117,17 +117,36 @@ define append
   endif
 endef
 
-$(eval $(call append,APP_ENV))
-$(eval $(call append,XDEBUG_MODE))
+#$(eval $(call append,APP_ENV))
+#$(eval $(call append,XDEBUG_MODE))
 $(eval $(call append,SERVER_NAME))
 $(eval $(call append,IMAGES_PREFIX))
-$(eval $(call append,SYMFONY_VERSION))
-$(eval $(call append,STABILITY))
+#$(eval $(call append,SYMFONY_VERSION))
+#$(eval $(call append,STABILITY))
 $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
-$(eval $(call append,DATABASE_URL))
-$(eval $(call append,SYMFONY_MONOREPO_PATH))
+#$(eval $(call append,DATABASE_URL))
+#$(eval $(call append,SYMFONY_MONOREPO_PATH))
+
+# --- DOCKER ENVIRONMENT FILES ---
+
+# Docker Compose automatically reads the '.env' file by default.
+# However, it does NOT natively support Symfony's hierarchical override system
+#
+# (e.g., .env.local) for variable interpolation in compose.yaml.
+# To enable local overrides for infrastructure variables (like ports, versions),
+# we explicitly build the --env-file chain.
+ENV_FILES = --env-file .env
+ifneq ($(wildcard .env.local),)
+ENV_FILES += --env-file .env.local
+endif
+ifneq ($(wildcard .env.$(APP_ENV)),)
+ENV_FILES += --env-file .env.$(APP_ENV)
+endif
+ifneq ($(wildcard .env.$(APP_ENV).local),)
+ENV_FILES += --env-file .env.$(APP_ENV).local
+endif
 
 # --- DOCKER COMMANDS ---
 
@@ -137,14 +156,14 @@ ifndef COMPOSE_V2
 $(warning [WARNING] Docker Compose CLI plugin is required but is not available on your system)
 endif
 
-COMPOSE = docker compose
+COMPOSE = docker compose $(ENV_FILES)
 
 # In a first step, you can test the application's production behavior in a development environment by setting APP_ENV=prod.
 # To test the full Docker production setup (e.g., optimized images, production-specific configurations), you can also add USE_COMPOSE_PROD_YAML=true.
 # This allows for a smooth transition from testing the code's behavior to testing the full Docker infrastructure.
 ifeq ($(USE_COMPOSE_PROD_YAML),prod)
 ifeq ($(APP_ENV),prod)
-COMPOSE = docker compose -f compose.yaml -f compose.prod.yaml
+COMPOSE = docker compose -f compose.yaml -f compose.prod.yaml $(ENV_FILES)
 endif
 endif
 
