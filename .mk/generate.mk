@@ -20,13 +20,13 @@ CLONE_DIR                 = clone
 #
 
 .PHONY: replace
-replace: ## Replace a string in a file - $ make replace f=<file> o=<old_string> n=<new_string> - Example: $ make replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
+replace rp: ## Replace a string in a file - $ make replace f=<file> o=<old_string> n=<new_string> - Example: $ make replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(o),, $(error "Please specify the old string with 'o=...'"))
 	$(if $(n),, $(error "Please specify the new string with 'n=...'"))
 	@sed "s|$(o)|$(n)|g" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_line: ## Replace an entire line beginning with a specific pattern - $ make replace f=<file> s=<start> n=<value> - Example: $ make replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
+replace_line rl: ## Replace an entire line beginning with a specific pattern - $ make replace f=<file> s=<start> n=<value> - Example: $ make replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(s),, $(error "Please specify the start of the line to match with 's=...'"))
 	$(if $(n),, $(error "Please specify the new line content with 'n=...'"))
@@ -279,21 +279,21 @@ ifneq ($(wildcard $(IS_POSTGRESQL)),)
 	@exit 1
 endif
 	# Dockerfile
-	$(MAKE) replace f=Dockerfile o="pdo_pgsql" n="pdo_mysql"
+	$(MAKE) rp f=Dockerfile o="pdo_pgsql" n="pdo_mysql"
 	# compose.yaml
-	$(MAKE) yq_update f=compose.yaml k=services.database.image v="mariadb:11.4"
-	$(MAKE) replace f=compose.yaml o="POSTGRES_" n="MARIADB_"
-	$(MAKE) replace f=compose.yaml o="MARIADB_DB" n="MARIADB_DATABASE"
-	$(MAKE) yq_update f=compose.yaml k=services.database.environment.MARIADB_ROOT_PASSWORD v='$${MARIADB_ROOT_PASSWORD:-!ChangeMe!}'
-	$(MAKE) yq_update f=compose.yaml k=services.database.volumes[0] v="database_data:/var/lib/mysql:rw"
-	$(MAKE) yq_delete f=compose.yaml k=services.database.healthcheck.test
-	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="CMD-SHELL"
-	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="mariadb-admin ping -h localhost -u\$${MARIADB_USER} -p\$${MARIADB_PASSWORD} || exit 1"
-	$(MAKE) yq_update f=compose.override.yaml k=services.database.ports[0] v=\$${MARIADB_PORT_PUBLIC:-3306}:\$${MARIADB_PORT:-3306}
+	$(MAKE) yu f=compose.yaml k=services.database.image v="mariadb:11.4"
+	$(MAKE) rp f=compose.yaml o="POSTGRES_" n="MARIADB_"
+	$(MAKE) rp f=compose.yaml o="MARIADB_DB" n="MARIADB_DATABASE"
+	$(MAKE) yu f=compose.yaml k=services.database.environment.MARIADB_ROOT_PASSWORD v='$${MARIADB_ROOT_PASSWORD:-!ChangeMe!}'
+	$(MAKE) yu f=compose.yaml k=services.database.volumes[0] v="database_data:/var/lib/mysql:rw"
+	$(MAKE) yd f=compose.yaml k=services.database.healthcheck.test
+	$(MAKE) ya f=compose.yaml k=services.database.healthcheck.test v="CMD-SHELL"
+	$(MAKE) ya f=compose.yaml k=services.database.healthcheck.test v="mariadb-admin ping -h localhost -u\$${MARIADB_USER} -p\$${MARIADB_PASSWORD} || exit 1"
+	$(MAKE) yu f=compose.override.yaml k=services.database.ports[0] v=\$${MARIADB_PORT_PUBLIC:-3306}:\$${MARIADB_PORT:-3306}
 	# compose.yaml
-	$(MAKE) replace f=.env o="POSTGRES_" n="MARIADB_"
-	$(MAKE) replace f=.env o="MARIADB_DB" n="MARIADB_DATABASE"
-	$(MAKE) replace_line f=.env s="DATABASE_URL=" n="MARIADB_VERSION=11.8.5\nDATABASE_URL=mysql://\$${MARIADB_USER}:\$${MARIADB_PWD}@\$${MARIADB_HOST}:\$${MARIADB_PORT}/app?serverVersion=\$${MARIADB_VERSION}-MariaDB&charset=utf8mb4"
+	$(MAKE) rp f=.env o="POSTGRES_" n="MARIADB_"
+	$(MAKE) rp f=.env o="MARIADB_DB" n="MARIADB_DATABASE"
+	$(MAKE) rl f=.env s="DATABASE_URL=" n="MARIADB_VERSION=11.8.5\nDATABASE_URL=mysql://\$${MARIADB_USER}:\$${MARIADB_PWD}@\$${MARIADB_HOST}:\$${MARIADB_PORT}/app?serverVersion=\$${MARIADB_VERSION}-MariaDB&charset=utf8mb4"
 	$(MAKE) commit m="stack updated to MariaDB"
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
 
