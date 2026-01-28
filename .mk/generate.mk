@@ -33,7 +33,7 @@ replace_line rl: ## Replace an entire line beginning with a specific pattern - $
 	@# Use $(subst) to automatically escape “&” with “\&” for sed
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_block rb: ## Replace a block in a target file with content from a source file, wrapping it with markers
+replace_block rb: ## Replace a block in a target file with content from a source file, wrapping it with markers - $ make replace_block m=<marker> t=<target> s=<source>
 	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
 	$(if $(t),, $(error "Please specify the target with 't=...'"))
 	$(if $(s),, $(error "Please specify the source with 's=...'"))
