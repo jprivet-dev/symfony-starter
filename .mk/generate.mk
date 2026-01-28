@@ -34,9 +34,9 @@ replace_line rl: ## Replace an entire line beginning with a specific pattern - $
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
 replace_block rb: ##
-	@sed -i '/$(start)/,/$(end)/d' $(f)
-	@sed -i -e '$$a\' $(f)
-	@cat $(s) >> $(f)
+	sed -i '\~$(start)~,\~$(end)~d' $(f)
+	sed -i -e '$$a\' $(f)
+	cat $(s) >> $(f)
 
 #
 
@@ -309,7 +309,7 @@ endif
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
 
 switch_to_mariadb_new: ##
-	$(MAKE) rb f=.env s=generate/mariadb/doctrine.env start="###> doctrine/doctrine-bundle ###" end="###< doctrine/doctrine-bundle ###"
+	$(MAKE) replace_block f=.env s=generate/mariadb/doctrine.env start="###> doctrine/doctrine-bundle ###" end="###< doctrine/doctrine-bundle ###"
 
 ##
 
