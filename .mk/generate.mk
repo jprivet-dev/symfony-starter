@@ -287,10 +287,10 @@ endif
 	$(MAKE) yu f=compose.yaml k=services.database.environment.MARIADB_ROOT_PASSWORD v=#{MARIADB_ROOT_PASSWORD:-!ChangeMe!}
 	$(MAKE) yu f=compose.yaml k=services.database.volumes[0] v=database_data:/var/lib/mysql:rw
 	$(MAKE) yd f=compose.yaml k=services.database.healthcheck
-	$(MAKE) rp f=compose.yaml o="#{" n="\$$\{"
+	#$(MAKE) rp f=compose.yaml o="#{" n="\$$\{"
 	# compose.override.yaml
 	$(MAKE) yu f=compose.override.yaml k=services.database.ports[0] v=#{MARIADB_PORT_PUBLIC:-3306}:#{MARIADB_PORT:-3306}
-	$(MAKE) rp f=compose.override.yaml o="#{" n="\$$\{"
+	#$(MAKE) rp f=compose.override.yaml o="#{" n="\$$\{"
 	# compose.yaml
 	$(MAKE) rp f=.env o=POSTGRES_ n=MARIADB_
 	$(MAKE) rp f=.env o=MARIADB_DB n=MARIADB_DATABASE
@@ -298,7 +298,7 @@ endif
 	$(MAKE) rl f=.env s="MARIADB_PORT=" n="MARIADB_PORT=3306"
 	$(MAKE) rl f=.env s="MARIADB_PORT_PUBLIC=" n="MARIADB_PORT_PUBLIC=3306"
 	$(MAKE) rl f=.env s="DATABASE_URL=" n="DATABASE_URL=mysql://#{MARIADB_USER}:#{MARIADB_PASSWORD}@#{MARIADB_HOST}:#{MARIADB_PORT}/app?serverVersion=#{MARIADB_VERSION}-MariaDB&charset=utf8mb4"
-	$(MAKE) rp f=.env o="#{" n="\$$\{"
+	#$(MAKE) rp f=.env o="#{" n="\$$\{"
 	# save all
 	$(MAKE) commit m="stack updated to MariaDB"
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
