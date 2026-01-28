@@ -31,7 +31,7 @@ replace_line rl: ## Replace an entire line beginning with a specific pattern - $
 	$(if $(s),, $(error "Please specify the start of the line to match with 's=...'"))
 	$(if $(n),, $(error "Please specify the new line content with 'n=...'"))
 	@# Use $(subst) to automatically escape “&” with “\&” for sed
-	@sed "s|^$(s).*|$(subst &,\&,$(n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
+	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
 #
 
