@@ -135,7 +135,9 @@ $(eval $(call append,HTTP3_PORT))
 #
 # To enable local overrides for infrastructure variables (like ports, versions),
 # we explicitly build the --env-file chain.
-ENV_FILES = --env-file .env
+ifneq ($(wildcard .env),)
+ENV_FILES += --env-file .env
+endif
 ifneq ($(wildcard .env.local),)
 ENV_FILES += --env-file .env.local
 endif
