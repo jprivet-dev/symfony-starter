@@ -203,7 +203,7 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	$(COMPOSER) require symfony/webapp-pack
 	$(MAKE) commit m="composer require symfony/webapp-pack"
 	# Change database ports after the webapp were installed Doctrine & PosteSQL
-	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
+	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v="$${POSTGRES_PORT_PUBLIC:-5432}:$${POSTGRES_PORT:-5432}"
 	$(MAKE) commit_git_apply f=postgresql/env-DATABASE_URL.patch
 	$(MAKE) permissions down deep_clean up_detached
 
@@ -224,7 +224,7 @@ require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/Symfo
 require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) commit m="composer require symfony/orm-pack"
-	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v=5432:5432
+	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v="$${POSTGRES_PORT_PUBLIC:-5432}:$${POSTGRES_PORT:-5432}"
 	$(MAKE) commit_git_apply f=postgresql/env-DATABASE_URL.patch
 	$(MAKE) permissions down deep_clean up_detached
 
@@ -287,7 +287,7 @@ endif
 	$(MAKE) yq_delete f=compose.yaml k=services.database.healthcheck.test
 	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="CMD-SHELL"
 	$(MAKE) yq_add f=compose.yaml k=services.database.healthcheck.test v="mariadb-admin ping -h localhost -u\$${MARIADB_USER} -p\$${MARIADB_PASSWORD} || exit 1"
-	$(MAKE) yq_update f=compose.override.yaml k=services.database.ports[0] v="3306:3306"
+	$(MAKE) yq_update f=compose.override.yaml k=services.database.ports[0] v="$${MARIADB_PORT_PUBLIC:-3306}:$${MARIADB_PORT:-3306}"
 	$(MAKE) replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=mysql://app:!ChangeMe!@database:3306/app?serverVersion=11.4-MariaDB&charset=utf8mb4"
 	$(MAKE) commit m="stack updated to MariaDB"
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
