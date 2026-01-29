@@ -831,7 +831,7 @@ git_pre_push: c1 ## Actions on Git pre-push
 
 ##
 
-git_apply: ## Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply f=file.patch
+git_apply ga: ## Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply f=file.patch
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	git apply --verbose $(GIT_PATCH)/$(f)
 	@printf " $(G)✔$(S) Patch $(Y)$(GIT_PATCH)/$(f)$(S) applied.\n"

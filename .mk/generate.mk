@@ -48,21 +48,6 @@ commit:
 	$(if $(m),, $(error "Please specify a message with 'm=...'"))
 	git add . && git commit -m "$(GIT_PREFIX) $(m)"
 
-commit_git_apply: git_apply
-	git commit -am "$(GIT_PREFIX) make git_apply f=$(f)"
-
-commit_yq_add: yq_add
-	git commit -am "$(GIT_PREFIX) make yq_add f=$(f) k=$(k) v=$(value v)"
-
-commit_yq_clear: yq_clear
-	git commit -am "$(GIT_PREFIX) make yq_clear f=$(f) k=$(k) "
-
-commit_yq_delete: yq_delete
-	git commit -am "$(GIT_PREFIX) make yq_delete f=$(f) k=$(k)"
-
-commit_yq_update: yq_update
-	git commit -am "$(GIT_PREFIX) make yq_update f=$(f) v=$(value v)"
-
 #
 
 _adjust_postgresql_configuration: # INTERNAL
@@ -91,7 +76,8 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(MAKE) commit m="Dockerfile updated to SQLite"
 	$(MAKE) rb m="symfony/framework-bundle" t=.env.dev s=.block/demo/.env.dev
 	$(MAKE) commit m=".env.dev updated with APP_SECRET value"
-	$(MAKE) commit_git_apply f=clean/docker-entrypoint.sh.database.patch
+	$(MAKE) ga f=clean/docker-entrypoint.sh.database.patch
+	$(MAKE) commit m="clean docker-entrypoint.sh"
 	$(MAKE) down up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
@@ -156,7 +142,8 @@ endif
 	$(MAKE) commit m="use DATABASE_URL var in compose.yaml"
 	$(MAKE) build up_detached
 	$(MAKE) commit m="make build up_detached"
-	$(MAKE) commit_git_apply f=clean/docker-entrypoint.sh.composer.patch
+	$(MAKE) ga f=clean/docker-entrypoint.sh.composer.patch
+	$(MAKE) commit m="clean docker-entrypoint.sh"
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
