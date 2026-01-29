@@ -98,11 +98,9 @@ api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(MAKE) clone_symfony_demo
-	$(MAKE) clone_symfony_docker down up_detached
-	$(MAKE) rb m="doctrine/doctrine-bundle" t=Dockerfile s=.block/sqlite/Dockerfile
-	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/sqlite/compose.override.yaml
-	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.yaml s=.block/sqlite/compose.yaml
-	$(MAKE) commit m="stack updated to SQLite"
+	$(MAKE) clone_symfony_docker
+	$(MAKE) rb m="recipes" t=Dockerfile s=.block/sqlite/Dockerfile
+	$(MAKE) commit m="Dockerfile updated to SQLite"
 	$(MAKE) rb m="symfony/framework-bundle" t=.env.dev s=.block/sqlite/.env.dev
 	$(MAKE) commit m="update APP_SECRET"
 	$(MAKE) down up_detached
