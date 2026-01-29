@@ -291,13 +291,3 @@ endif
 	$(MAKE) commit m="stack updated to MariaDB"
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
 
-##
-
-phpstorm_config: ##
-	@printf "\n$(Y)--- PostgreSQL ---$(S)\n"
-	@printf "Name    : $(POSTGRES_DB)@$(POSTGRES_HOST_PUBLIC)\n"
-	@printf "Host    : $(POSTGRES_HOST_PUBLIC)\n"
-	@printf "User    : $(POSTGRES_USER)\n"
-	@printf "Password: $(POSTGRES_PASSWORD)\n"
-	@printf "Database: $(POSTGRES_DB)\n"
-	@printf "URL     : jdbc:postgresql://$(POSTGRES_HOST_PUBLIC):$(POSTGRES_PORT_PUBLIC)/$(POSTGRES_DB)\n"

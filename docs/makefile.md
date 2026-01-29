@@ -86,6 +86,8 @@
   update_force                  Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
   validate                      Validate the mapping files - $ make validate [a=<arguments>] - Example: $ make validate a="--env=test"
 
+  phpstorm_config               Display database connection details for PhpStorm "Data Sources and Drivers" dialog
+
 — POSTGRESQL 🛢️ ————————————————————————————————————————————————————————————
   psql                          Execute psql - $ make psql [a=<arguments>] - Example: $ make psql a="-V"
   psql_sh                       Open a shell on the PostgreSQL container
@@ -171,10 +173,10 @@
   yq                            Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor - $ make yq [a=<argument>] - Example: $ make yq a=--help
   yq_print                      Print contents of a file as idiomatic YAML with colors - $ make yq_print f=<file> - Example: $ make yq_print f=compose.yaml
 
-  yq_add                        Append a value to an array key in a YAML file - $ make yq_add f=<file> k=<key> v=<value> - Example: $ make yq_add f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway
-  yq_clear                      Clear a key's value in a YAML file (sets it to empty string) - $ make yq_clear f=<file> k=<key> - Example: $ make yq_clear f=compose.yaml k=services.php.extra_hosts
-  yq_delete                     Delete a key from a YAML file - $ make yq_delete f=<file> k=<key> - Example: $ make yq_delete f=compose.yaml k=services.php.extra_hosts
-  yq_update                     Set or update a key's value in a YAML file - $ make yq_update f=<file> - Example: $ make yq_add f=compose.yaml k=services.php.build.target v=frankenphp_prod
+  yq_add                     ya Append a value to an array key in a YAML file - $ make yq_add f=<file> k=<key> v=<value> - Example: $ make yq_add f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway
+  yq_clear                   yc Clear a key's value in a YAML file (sets it to empty string) - $ make yq_clear f=<file> k=<key> - Example: $ make yq_clear f=compose.yaml k=services.php.extra_hosts
+  yq_delete                  yd Delete a key from a YAML file - $ make yq_delete f=<file> k=<key> - Example: $ make yq_delete f=compose.yaml k=services.php.extra_hosts
+  yq_update                  yu Set or update a key's value in a YAML file - $ make yq_update f=<file> - Example: $ make yq_add f=compose.yaml k=services.php.build.target v=frankenphp_prod
 
 — SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
 
@@ -195,7 +197,9 @@
 
   (to delete this section, delete .mk/generate.mk)
 
-  replace                       Replace a string in a file - $ make replace f=<file> o=<old_string> n=<new_string> - Example: $ make replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
+  replace                    rp Replace a string in a file - $ make replace f=<file> o=<old_string> n=<new_string> - Example: $ make replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
+  replace_line               rl Replace an entire line beginning with a specific pattern - $ make replace f=<file> s=<start> n=<value> - Example: $ make replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
+  replace_block              rb Replace a block in a target file with content from a source file, wrapping it with markers - $ make replace_block m=<marker> t=<target> s=<source>
   api                           Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
   api@lts                       Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
   demo                          Generate a Symfony Demo application (with SQLite) with Docker configuration
@@ -231,7 +235,7 @@
   require_phpstan               Install PHPStan - https://phpstan.org/
   require_twigcsfixer           Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
 
-  switch_to_mysql               Swith the stack to MySQL/MariaDB
+  switch_to_mariadb             Switch the stack to MySQL/MariaDB --- 🧪 EXPERIMENTAL 🧪 ---
 ```
 
 <!-- MAKEFILE_COMMANDS_END -->

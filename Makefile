@@ -506,6 +506,29 @@ validate: _doctrine ## Validate the mapping files - $ make validate [a=<argument
 	@printf "\n$(Y)--- Doctrine Schema Validate ---$(S)\n"
 	$(CONSOLE) doctrine:schema:validate -v $(a)
 
+##
+
+phpstorm_config: ## Display database connection details for PhpStorm "Data Sources and Drivers" dialog
+	@printf "See https://www.jetbrains.com/help/phpstorm/data-sources-and-drivers-dialog.html\n"
+ifneq ($(IS_POSTGRESQL),)
+	@printf "\n$(Y)--- PostgreSQL ---$(S)\n"
+	@printf "Name    : $(POSTGRES_DB)@$(POSTGRES_HOST_PUBLIC)\n"
+	@printf "Host    : $(POSTGRES_HOST_PUBLIC)\n"
+	@printf "User    : $(POSTGRES_USER)\n"
+	@printf "Password: $(POSTGRES_PASSWORD)\n"
+	@printf "Database: $(POSTGRES_DB)\n"
+	@printf "URL     : jdbc:postgresql://$(POSTGRES_HOST_PUBLIC):$(POSTGRES_PORT_PUBLIC)/$(POSTGRES_DB)\n"
+endif
+ifneq ($(IS_MYSQL),)
+	@printf "\n$(Y)--- MySQL/MariaDB ---$(S)\n"
+	@printf "Name    : $(MARIADB_DATABASE)@$(MARIADB_HOST_PUBLIC)\n"
+	@printf "Host    : $(MARIADB_HOST_PUBLIC)\n"
+	@printf "User    : $(MARIADB_USER)\n"
+	@printf "Password: $(MARIADB_PASSWORD)\n"
+	@printf "Database: $(MARIADB_DATABASE)\n"
+	@printf "URL     : jdbc:mariadb://$(MARIADB_HOST_PUBLIC):$(MARIADB_PORT_PUBLIC)/$(MARIADB_DATABASE)\n"
+endif
+
 ## — POSTGRESQL 🛢️ ————————————————————————————————————————————————————————————
 
 .PHONY: psql
