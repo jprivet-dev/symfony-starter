@@ -101,7 +101,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(MAKE) clone_symfony_docker
 	$(MAKE) rb m="recipes" t=Dockerfile s=.block/sqlite/Dockerfile
 	$(MAKE) commit m="Dockerfile updated to SQLite"
-	$(MAKE) rb m="symfony/framework-bundle" t=.env.dev s=.block/sqlite/.env.dev
+	$(MAKE) rb m="symfony/framework-bundle" t=.env.dev s=.block/demo/.env.dev
 	$(MAKE) commit m="update APP_SECRET"
 	$(MAKE) down up_detached
 	$(MAKE) images info
