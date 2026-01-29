@@ -25,6 +25,10 @@ while getopts "m:t:s:i:" opt; do
   esac
 done
 
+if [ -z "$INDEX" ]; then
+    INDEX=1
+fi
+
 # 2. Validation
 if [ -z "$MARKER" ] || [ -z "$TARGET" ] || [ -z "$SOURCE" ]; then
     echo -e "${RED}Error: Missing arguments.${NC}"
