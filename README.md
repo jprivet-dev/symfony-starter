@@ -138,15 +138,15 @@ Direct links to the generated source code for each variation.
 
 | Stack          | Version | 🚫 No DB                          | 🐘 PostgreSQL                                | 🐬 MariaDB                                | 🪶 SQLite               |
 |----------------|---------|-----------------------------------|----------------------------------------------|-------------------------------------------|-------------------------|
-| **Minimalist** | Stable  | [🔗 Source](/tree/minimalist)     | [🔗 Source](/tree/minimalist-postgresql)     | [🔗 Source](/tree/minimalist-mariadb)     | —                       |
-|                | LTS     | [🔗 Source](/tree/minimalist@lts) | [🔗 Source](/tree/minimalist@lts-postgresql) | [🔗 Source](/tree/minimalist@lts-mariadb) | —                       |
-| **Webapp**     | Stable  | —                                 | [🔗 Source](/tree/webapp)                    | [🔗 Source](/tree/webapp-mariadb)         | —                       |
-|                | LTS     | —                                 | [🔗 Source](/tree/webapp@lts)                | [🔗 Source](/tree/webapp@lts-mariadb)     | —                       |
-| **API**        | Stable  | —                                 | [🔗 Source](/tree/api)                       | [🔗 Source](/tree/api-mariadb)            | —                       |
-|                | LTS     | —                                 | [🔗 Source](/tree/api@lts)                   | [🔗 Source](/tree/api@lts-mariadb)        | —                       |
-| **EasyAdmin**  | Stable  | —                                 | [🔗 Source](/tree/easy_admin)                | [🔗 Source](/tree/easy_admin-mariadb)     | —                       |
-|                | LTS     | —                                 | [🔗 Source](/tree/easy_admin@lts)            | [🔗 Source](/tree/easy_admin@lts-mariadb) | —                       |
-| **Demo**       | Stable  | —                                 | —                                            | —                                         | [🔗 Source](/tree/demo) |
+| **Minimalist** | Stable  | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/minimalist)     | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/minimalist-postgresql)     | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/minimalist-mariadb)     | —                       |
+|                | LTS     | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts) | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts-postgresql) | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts-mariadb) | —                       |
+| **Webapp**     | Stable  | —                                 | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/webapp)                    | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/webapp-mariadb)         | —                       |
+|                | LTS     | —                                 | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts)                | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts-mariadb)     | —                       |
+| **API**        | Stable  | —                                 | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/api)                       | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/api-mariadb)            | —                       |
+|                | LTS     | —                                 | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/api@lts)                   | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/api@lts-mariadb)        | —                       |
+| **EasyAdmin**  | Stable  | —                                 | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin)                | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin-mariadb)     | —                       |
+|                | LTS     | —                                 | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts)            | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts-mariadb) | —                       |
+| **Demo**       | Stable  | —                                 | —                                            | —                                         | [🔗 Source](https://github.com/jprivet-dev/symfony-starter/tree/demo) |
 
 ## 🚀 Prerequisites
 
