@@ -39,19 +39,6 @@ replace_block rb: ## Replace a block in a target file with content from a source
 	$(if $(s),, $(error "Please specify the source with 's=...'"))
 	.sh/replace_block.sh -m "$(m)" -t "$(t)" -s "$(s)" -i "$(i)"
 
-replace_block_old: ## Replace a block in a target file with content from a source file, wrapping it with markers - $ make replace_block m=<marker> t=<target> s=<source>
-	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
-	$(if $(t),, $(error "Please specify the target with 't=...'"))
-	$(if $(s),, $(error "Please specify the source with 's=...'"))
-	@# Remove the old block (using tilde \~ delimiter to handle slashes in markers)
-	@sed -i '\~###> $(m) ###~,\~###< $(m) ###~d' $(t)
-	@# Ensure target file ends with a newline before appending
-	@sed -i -e '$$a\' $(t)
-	@# Reconstruct the block: Start Marker -> Content -> End Marker
-	@echo "###> $(m) ###" >> $(t)
-	@cat $(s) >> $(t)
-	@echo "###< $(m) ###" >> $(t)
-
 #
 
 GIT_PREFIX = 🤖 [starter]
