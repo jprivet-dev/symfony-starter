@@ -39,106 +39,114 @@ You can choose from several pre-configured setups.
 
 <table>
     <thead>
-    <tr>
-        <th>Flavor & Description</th>
-        <th width="300">Preview</th>
-    </tr>
+        <tr>
+            <th>Stack & Description</th>
+            <th width="35%">Preview</th>
+        </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>
-            <h3>Minimalist</h3>
-            <p>A bare-bones <strong>Symfony skeleton</strong>. Perfect for starting from scratch.</p>
-            <ul>
-                <li>Doc: <a href="https://symfony.com/doc/current/setup.html">Installing & Setting up the Symfony Framework</a></li>
-                <li>
-                    <span>Stable version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/minimalist">minimalist</a>):</span>
-                    <pre>make minimalist</pre>
-                </li>
-                <li>
-                    <span>LTS version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts">minimalist@lts</a>):</span>
-                    <pre>make minimalist@lts</pre>
-                </li>
-            </ul>
-        </td>
-        <td>
-            <img src="docs/img/minimalist.png" alt="Symfony Minimalist" width="300">
-            <br><br>
-            <img src="docs/img/minimalist-lts.png" alt="Symfony LTS" width="300">
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h3>Web App</h3>
-            <p><strong>Full stack application</strong> with Twig, AssetMapper, Profiler, etc.</p>
-            <ul>
-                <li>Doc: <a href="https://symfony.com/doc/current/setup.html">Installing & Setting up the Symfony Framework</a></li>
-                <li>
-                    <span>Stable version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/webapp">webapp</a>):</span>
-                    <pre>make webapp</pre>
-                </li>
-                <li>
-                    <span>LTS version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts">webapp@lts</a>):</span>
-                    <pre>make webapp@lts</pre>
-                </li>
-            </ul>
-        </td>
-        <td align="center"><em>(Same as Minimalist)</em></td>
-    </tr>
-    <tr>
-        <td>
-            <h3>API Platform</h3>
-            <p>Includes <strong>API Platform</strong> and <strong>PostgreSQL</strong>. Ready for REST/GraphQL.</p>
-            <ul>
-                <li>Doc: <a href="https://api-platform.com/docs/symfony/">Getting Started With API Platform with Symfony</a></li>
-                <li>
-                    <span>Stable version: <strong>Not available</strong></span>
-                </li>
-                <li>
-                    <span>LTS version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/api@lts">api@lts</a>):</span>
-                    <pre>make api@lts</pre>
-                </li>
-            </ul>
-        </td>
-        <td><img src="docs/img/api.png" alt="API Platform" width="300"></td>
-    </tr>
-    <tr>
-        <td>
-            <h3>EasyAdmin</h3>
-            <p>Includes <strong>EasyAdmin</strong> and <strong>PostgreSQL</strong>. The quickest back-office.</p>
-            <ul>
-                <li>Doc: <a href="https://symfony.com/bundles/EasyAdminBundle/current/index.html">EasyAdmin</a></li>
-                <li>
-                    <span>Stable version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/easy_admin">easy_admin</a>):</span>
-                    <pre>make easy_admin</pre>
-                </li>
-                <li>
-                    <span>LTS version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts">easy_admin@lts</a>):</span>
-                    <pre>make easy_admin@lts</pre>
-                </li>
-            </ul>
-        </td>
-        <td><img src="docs/img/easy-admin.png" alt="EasyAdmin" width="300"></td>
-    </tr>
-    <tr>
-        <td>
-            <h3>Demo</h3>
-            <p>The official <strong>Symfony Demo</strong> application (SQLite). Great for learning.</p>
-            <ul>
-                <li>Doc: <a href="https://github.com/symfony/demo">Symfony Demo Application</a></li>
-                <li>
-                    <span>Stable version (branch: <a href="https://github.com/jprivet-dev/symfony-starter/tree/demo">demo</a>):</span>
-                    <pre>make demo</pre>
-                </li>
-                <li>
-                    <span>LTS version: <strong>Not available</strong></span>
-                </li>
-            </ul>
-        </td>
-        <td><img src="docs/img/demo.png" alt="Symfony Demo" width="300"></td>
-    </tr>
+        <tr>
+            <td>
+                <h3>🌱 Minimalist</h3>
+                <p>The bare minimum. A clean Symfony skeleton without Docker bloat or ORM pre-configured.</p>
+                <p><em>Perfect for: Microservices, Learning, Custom architecture.</em></p>
+            </td>
+            <td align="center"><img src="docs/img/minimalist.png" alt="Minimalist Preview" width="100%"></td>
+        </tr>
+        <tr>
+            <td>
+                <h3>🌍 Web App</h3>
+                <p>The standard full-stack experience. Includes <strong>Twig</strong>, <strong>AssetMapper</strong>, <strong>Profiler</strong>, and a complete Docker setup.</p>
+                <p><em>Perfect for: Traditional Websites, SaaS, MVP.</em></p>
+            </td>
+            <td align="center"><img src="docs/img/minimalist.png" alt="Webapp Preview" width="100%"></td>
+        </tr>
+        <tr>
+            <td>
+                <h3>🔌 API Platform</h3>
+                <p>A headless stack optimized for <strong>API Platform</strong>. No front-end assets, focused on performance and REST/GraphQL.</p>
+                <p><em>Perfect for: SPA Backends (React/Vue), Mobile Apps.</em></p>
+            </td>
+            <td align="center"><img src="docs/img/api.png" alt="API Preview" width="100%"></td>
+        </tr>
+        <tr>
+            <td>
+                <h3>⚡ EasyAdmin</h3>
+                <p>Based on the Web App, but pre-installed with <strong>EasyAdmin</strong> for an instant back-office generation.</p>
+                <p><em>Perfect for: Admin Panels, rapid CRUD apps.</em></p>
+            </td>
+            <td align="center"><img src="docs/img/easy-admin.png" alt="EasyAdmin Preview" width="100%"></td>
+        </tr>
+         <tr>
+            <td>
+                <h3>🎓 Demo</h3>
+                <p>The official <strong>Symfony Demo</strong> application. A great reference for best practices.</p>
+            </td>
+            <td align="center"><img src="docs/img/demo.png" alt="Demo Preview" width="100%"></td>
+        </tr>
     </tbody>
 </table>
+
+## 📦 Generation Guide & Availability
+
+Depending on your needs, you might need to run extra commands after the initial generation (e.g., to install the ORM or switch databases).
+
+### 1. Command Recipes
+
+Find your desired stack below and follow the command steps.
+
+> **ℹ️ LTS Version:** To target the **Long Term Support** version of Symfony, simply append `@lts` to the main command (e.g., `make webapp` → `make webapp@lts`).
+
+#### 🌱 Minimalist
+
+| Database          | Stable                                                              | LTS                      |
+|-------------------|---------------------------------------------------------------------|--------------------------|
+| **🚫 No DB**      | `make minimalist`                                                   | `make minimalist@lts`    |
+| **🐘 PostgreSQL** | `make minimalist`<br>`make require_orm`                             | *Same steps with `@lts`* |
+| **🐬 MariaDB**    | `make minimalist`<br>`make require_orm`<br>`make switch_to_mariadb` | *Same steps with `@lts`* |
+
+#### 🌍 Web App
+
+| Database          | Stable                                    | LTS                      |
+|-------------------|-------------------------------------------|--------------------------|
+| **🐘 PostgreSQL** | `make webapp`                             | `make webapp@lts`        |
+| **🐬 MariaDB**    | `make webapp`<br>`make switch_to_mariadb` | *Same steps with `@lts`* |
+
+#### 🔌 API Platform
+
+| Database          | Stable                                 | LTS                      |
+|-------------------|----------------------------------------|--------------------------|
+| **🐘 PostgreSQL** | `make api`                             | `make api@lts`           |
+| **🐬 MariaDB**    | `make api`<br>`make switch_to_mariadb` | *Same steps with `@lts`* |
+
+#### ⚡ EasyAdmin
+
+| Database          | Stable                                        | LTS                      |
+|-------------------|-----------------------------------------------|--------------------------|
+| **🐘 PostgreSQL** | `make easy_admin`                             | `make easy_admin@lts`    |
+| **🐬 MariaDB**    | `make easy_admin`<br>`make switch_to_mariadb` | *Same steps with `@lts`* |
+
+#### 🎓 Demo
+
+| Database      | Stable      |
+|---------------|-------------|
+| **🪶 SQLite** | `make demo` |
+
+### 2. Source Code & Branches
+
+Direct links to the generated source code for each variation.
+
+| Stack          | Version | 🚫 No DB                          | 🐘 PostgreSQL                                | 🐬 MariaDB                                | 🪶 SQLite               |
+|----------------|---------|-----------------------------------|----------------------------------------------|-------------------------------------------|-------------------------|
+| **Minimalist** | Stable  | [🔗 Source](/tree/minimalist)     | [🔗 Source](/tree/minimalist-postgresql)     | [🔗 Source](/tree/minimalist-mariadb)     | —                       |
+|                | LTS     | [🔗 Source](/tree/minimalist@lts) | [🔗 Source](/tree/minimalist@lts-postgresql) | [🔗 Source](/tree/minimalist@lts-mariadb) | —                       |
+| **Webapp**     | Stable  | —                                 | [🔗 Source](/tree/webapp)                    | [🔗 Source](/tree/webapp-mariadb)         | —                       |
+|                | LTS     | —                                 | [🔗 Source](/tree/webapp@lts)                | [🔗 Source](/tree/webapp@lts-mariadb)     | —                       |
+| **API**        | Stable  | —                                 | [🔗 Source](/tree/api)                       | [🔗 Source](/tree/api-mariadb)            | —                       |
+|                | LTS     | —                                 | [🔗 Source](/tree/api@lts)                   | [🔗 Source](/tree/api@lts-mariadb)        | —                       |
+| **EasyAdmin**  | Stable  | —                                 | [🔗 Source](/tree/easy_admin)                | [🔗 Source](/tree/easy_admin-mariadb)     | —                       |
+|                | LTS     | —                                 | [🔗 Source](/tree/easy_admin@lts)            | [🔗 Source](/tree/easy_admin@lts-mariadb) | —                       |
+| **Demo**       | Stable  | —                                 | —                                            | —                                         | [🔗 Source](/tree/demo) |
 
 ## 🚀 Prerequisites
 
@@ -224,20 +232,20 @@ It embeds a robust `Makefile` to abstract complex Docker/Composer commands, spee
 
 Here is a glimpse of what's included:
 
-| Category        | Key Commands               | Description                                                             |
-|:----------------|:---------------------------|:----------------------------------------------------------------|
-| **🐳 Docker**   | `make start` / `make stop` | Start/Stop the stack (detached mode).                                   |
+| Category        | Key Commands               | Description                                                     |
+|-----------------|----------------------------|-----------------------------------------------------------------|
+| **🐳 Docker**   | `make start` / `make stop` | Start/Stop the stack (detached mode).                           |
 |                 | `make sh`                  | Access the PHP container shell.                                 |
-|                 | `make logs`                | View live logs from all containers.                                     |
-| **🚀 Symfony**  | `make cc`                  | Clear the cache (`cache:clear`).                                        |
+|                 | `make logs`                | View live logs from all containers.                             |
+| **🚀 Symfony**  | `make cc`                  | Clear the cache (`cache:clear`).                                |
 |                 | `make symfony c="..."`     | Run any Symfony command (e.g. `make symfony c="debug:router"`). |
-| **🐘 Database** | `make db_init`             | Create DB, run migrations and load fixtures in one go.                  |
-|                 | `make migration`           | Generate a new migration file.                                          |
+| **🐘 Database** | `make db_init`             | Create DB, run migrations and load fixtures in one go.          |
+|                 | `make migration`           | Generate a new migration file.                                  |
 | **✅ Quality**   | `make tests`               | Run PHPUnit tests.                                              |
 |                 | `make phpmd`               | Run PHP Mess Detector.                                          |
 | **🎨 Assets**   | `make assets`              | Generate all assets.                                            |
 
-> 💡 **Tip: 90+ available makefile commands** 
+> 💡 **Tip: 90+ available makefile commands**
 > * Just run `make` (or `make help`) in your terminal to see the beautiful, self-documented list of available commands**.
 > * See [Makefile documentation](docs/makefile.md) for details.
 
