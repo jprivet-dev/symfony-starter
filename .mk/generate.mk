@@ -65,18 +65,6 @@ commit_yq_update: yq_update
 
 #
 
-_patch_var_log_mapping: f=var-log-mapping.patch
-_patch_var_log_mapping: git_apply # INTERNAL
-
-_patch_postgresql: f=postgresql.patch
-_patch_postgresql: git_apply # INTERNAL
-
-_patch_sqlite_base: f=sqlite-00-base.patch
-_patch_sqlite_base: git_apply # INTERNAL
-
-_patch_sqlite_env: f=sqlite-01-env.patch
-_patch_sqlite_env: git_apply # INTERNAL
-
 _adjust_postgresql_configuration: # INTERNAL
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=.env s=.block/postgresql/.env
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/postgresql/compose.override.yaml
@@ -241,11 +229,6 @@ require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(COMPOSER) require --dev symfony/profiler-pack
 	$(MAKE) commit m="composer require --dev symfony/profiler-pack"
-
-require_sqlite: ## Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
-	$(MAKE) _patch_sqlite_base
-	$(COMPOSER) require symfony/orm-pack
-	$(MAKE) _patch_sqlite_env
 
 require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
 	$(COMPOSER) require --dev symfony/test-pack
