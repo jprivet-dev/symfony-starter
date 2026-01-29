@@ -37,7 +37,8 @@ replace_block rb: ## Replace a block in a target file with content from a source
 	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
 	$(if $(t),, $(error "Please specify the target with 't=...'"))
 	$(if $(s),, $(error "Please specify the source with 's=...'"))
-	@.sh/replace_block.sh -m "$(m)" -t "$(t)" -s "$(s)" -i "$(i:-1)"
+	$(if $(i),, $(error "Please specify the index with 'i=...'"))
+	.sh/replace_block.sh -m "$(m)" -t "$(t)" -s "$(s)" -i "$(i)"
 
 replace_block_old: ## Replace a block in a target file with content from a source file, wrapping it with markers - $ make replace_block m=<marker> t=<target> s=<source>
 	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
