@@ -165,7 +165,7 @@ endif
 	$(MAKE) commit_yq_update f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL}
 	$(MAKE) build up_detached
 	$(MAKE) commit m="make build up_detached"
-	$(MAKE) commit_git_apply f=common/docker-entrypoint-clean-composer.patch
+	$(MAKE) commit_git_apply f=clean/docker-entrypoint.sh.composer.patch
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
