@@ -149,9 +149,11 @@ else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
 endif
 	$(MAKE) commit m="make clone_symfony_docker"
-	$(MAKE) commit_yq_add f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
-	$(MAKE) commit_yq_add f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
-	$(MAKE) commit_yq_update f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL}
+	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
+	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
+	$(MAKE) commit m="activating the bind mount (var/, var/log)"
+	$(MAKE) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL}
+	$(MAKE) commit m="use DATABASE_URL var in compose.yaml"
 	$(MAKE) build up_detached
 	$(MAKE) commit m="make build up_detached"
 	$(MAKE) commit_git_apply f=clean/docker-entrypoint.sh.composer.patch
