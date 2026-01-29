@@ -77,7 +77,7 @@ _patch_sqlite_base: git_apply # INTERNAL
 _patch_sqlite_env: f=sqlite-01-env.patch
 _patch_sqlite_env: git_apply # INTERNAL
 
-_replace_block_postgresql: # INTERNAL
+_adjust_postgresql_configuration: # INTERNAL
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=.env s=.block/postgresql/.env
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/postgresql/compose.override.yaml
 	$(MAKE) commit m="configuration adjusted for PosgreSQL"
@@ -213,7 +213,7 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
 	$(COMPOSER) require symfony/webapp-pack
 	$(MAKE) commit m="composer require symfony/webapp-pack"
-	$(MAKE) _replace_block_postgresql
+	$(MAKE) _adjust_postgresql_configuration
 	$(MAKE) permissions down deep_clean up_detached
 
 ##
@@ -233,7 +233,7 @@ require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/Symfo
 require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) commit m="composer require symfony/orm-pack"
-	$(MAKE) _replace_block_postgresql
+	$(MAKE) _adjust_postgresql_configuration
 	$(MAKE) permissions down deep_clean up_detached
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
