@@ -279,15 +279,10 @@ require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLangle
 
 ##
 
-switch_to_mariadb: .env ## Switch the stack to MySQL/MariaDB --- 🧪 EXPERIMENTAL 🧪 ---
-ifneq ($(wildcard $(IS_POSTGRESQL)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine (with PostgreSQL by default)$(S) with $(G)make require_orm$(S)\n"
-	@exit 1
-endif
-	$(MAKE) rb m="doctrine/doctrine-bundle" t=Dockerfile s=.block/mariadb/Dockerfile
-	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.yaml s=.block/mariadb/compose.yaml
-	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/mariadb/compose.override.yaml
+switch_to_mariadb: .env Dockerfile compose.override.yaml compose.yaml ## Switch the stack to MySQL/MariaDB
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=.env s=.block/mariadb/.env
+	$(MAKE) rb m="doctrine/doctrine-bundle" t=Dockerfile s=.block/mariadb/Dockerfile
+	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/mariadb/compose.override.yaml
+	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.yaml s=.block/mariadb/compose.yaml
 	$(MAKE) commit m="stack updated to MariaDB"
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
-
