@@ -77,6 +77,11 @@ _patch_sqlite_base: git_apply # INTERNAL
 _patch_sqlite_env: f=sqlite-01-env.patch
 _patch_sqlite_env: git_apply # INTERNAL
 
+_replace_block_postgresql: # INTERNAL
+	$(MAKE) rb m="doctrine/doctrine-bundle" t=.env s=.block/postgresql/.env
+	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/postgresql/compose.override.yaml
+	$(MAKE) commit m="configuration adjusted for PosgreSQL"
+
 #
 
 .PHONY: api
@@ -208,9 +213,7 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
 	$(COMPOSER) require symfony/webapp-pack
 	$(MAKE) commit m="composer require symfony/webapp-pack"
-	# Change database ports after the webapp were installed Doctrine & PosteSQL
-	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v=\$${POSTGRES_PORT_PUBLIC:-5432}:\$${POSTGRES_PORT:-5432}
-	$(MAKE) commit_git_apply f=postgresql/env-DATABASE_URL.patch
+	$(MAKE) _replace_block_postgresql
 	$(MAKE) permissions down deep_clean up_detached
 
 ##
@@ -230,8 +233,7 @@ require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/Symfo
 require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) commit m="composer require symfony/orm-pack"
-	$(MAKE) commit_yq_update f=compose.override.yaml k=services.database.ports[0] v=\$${POSTGRES_PORT_PUBLIC:-5432}:\$${POSTGRES_PORT:-5432}
-	$(MAKE) commit_git_apply f=postgresql/env-DATABASE_URL.patch
+	$(MAKE) _replace_block_postgresql
 	$(MAKE) permissions down deep_clean up_detached
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
