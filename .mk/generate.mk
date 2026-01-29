@@ -60,8 +60,8 @@ _adjust_postgresql_configuration: # INTERNAL
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
 	$(MAKE) minimalist
-	$(MAKE) require_orm down up_detached
-	$(MAKE) require_api down deep_clean up_detached
+	$(MAKE) require_orm
+	$(MAKE) require_api
 	$(MAKE) images info
 	@printf " $(G)✔$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
@@ -84,8 +84,8 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
 	$(MAKE) minimalist
-	$(MAKE) require_orm down up_detached
-	$(MAKE) require_easy_admin down deep_clean up_detached
+	$(MAKE) require_orm
+	$(MAKE) require_easy_admin
 	# Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html
 	$(CONSOLE) make:admin:dashboard --no-interaction
 	$(MAKE) commit m="bin/console make:admin:dashboard --no-interaction"
@@ -174,10 +174,12 @@ kill_current_app: ## Remove all fresh Symfony application files
 require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
 	$(COMPOSER) require api
 	$(MAKE) commit m="composer require api"
+	$(MAKE) permissions down deep_clean up_detached
 
 require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 	$(COMPOSER) require easycorp/easyadmin-bundle
 	$(MAKE) commit m="composer require easycorp/easyadmin-bundle"
+	$(MAKE) permissions down deep_clean up_detached
 
 require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
 	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
