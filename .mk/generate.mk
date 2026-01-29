@@ -99,9 +99,12 @@ api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(MAKE) clone_symfony_demo
 	$(MAKE) clone_symfony_docker down up_detached
-	$(MAKE) commit_git_apply f=sqlite/compose-doctrine-bundle.patch
-	$(MAKE) commit_git_apply f=sqlite/dockerfile-sqlite.patch
-	$(MAKE) commit_git_apply f=demo/env-APP_SECRET.patch
+	$(MAKE) rb m="doctrine/doctrine-bundle" t=Dockerfile s=.block/sqlite/Dockerfile
+	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/sqlite/compose.override.yaml
+	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.yaml s=.block/sqlite/compose.yaml
+	$(MAKE) commit m="stack updated to SQLite"
+	$(MAKE) rb m="symfony/framework-bundle" t=.env.dev s=.block/sqlite/.env.dev
+	$(MAKE) commit m="update APP_SECRET"
 	$(MAKE) down up_detached
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
