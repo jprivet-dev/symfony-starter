@@ -267,4 +267,5 @@ endif
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/mariadb/compose.override.yaml
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.yaml s=.block/mariadb/compose.yaml
 	$(MAKE) commit m="stack updated to MariaDB"
+	$(MAKE) permissions down deep_clean up_detached
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
