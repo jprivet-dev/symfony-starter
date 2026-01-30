@@ -26,7 +26,7 @@ contrib_init: ## Configure Docker volume for Symfony contribution (updates compo
 	$(MAKE) yq_add f=compose.override.yaml k=services.php.volumes v='$${SYMFONY_MONOREPO_PATH:-../symfony}:/symfony'
 	$(MAKE) commit m="use volume to /symfony with SYMFONY_MONOREPO_PATH var in compose.override.yaml"
 	$(MAKE) build up_detached
-	@echo " $(G)🛠️ Docker for Symfony contribution configured...$(S)"
+	@echo " $(G)✔ Docker for Symfony contribution configured...$(S)"
 
 ##
 
