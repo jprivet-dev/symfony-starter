@@ -20,20 +20,20 @@ CLONE_DIR                 = clone
 #
 
 .PHONY: replace
-replace rp: ## Replace a string in a file - $ make replace f=<file> o=<old_string> n=<new_string> - Example: $ make replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
+replace rp: # INTERNAL - Replace a string in a file - $ make replace f=<file> o=<old_string> n=<new_string> - Example: $ make replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(o),, $(error "Please specify the old string with 'o=...'"))
 	$(if $(n),, $(error "Please specify the new string with 'n=...'"))
 	@sed "s|$(o)|$(n)|g" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_line rl: ## Replace an entire line beginning with a specific pattern - $ make replace f=<file> s=<start> n=<value> - Example: $ make replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
+replace_line rl: # INTERNAL - Replace an entire line beginning with a specific pattern - $ make replace f=<file> s=<start> n=<value> - Example: $ make replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(s),, $(error "Please specify the start of the line to match with 's=...'"))
 	$(if $(n),, $(error "Please specify the new line content with 'n=...'"))
 	@# Use $(subst) to automatically escape “&” with “\&” for sed
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_block rb: ## Replace a block in a target file with content from a source file, wrapping it with markers - $ make replace_block m=<marker> t=<target> s=<source>
+replace_block rb: # INTERNAL - Replace a block in a target file with content from a source file, wrapping it with markers - $ make replace_block m=<marker> t=<target> s=<source>
 	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
 	$(if $(t),, $(error "Please specify the target with 't=...'"))
 	$(if $(s),, $(error "Please specify the source with 's=...'"))
@@ -44,7 +44,7 @@ replace_block rb: ## Replace a block in a target file with content from a source
 GIT_PREFIX = 🤖 [starter]
 
 .PHONY: commit
-commit:
+commit: # INTERNAL
 	$(if $(m),, $(error "Please specify a message with 'm=...'"))
 	git add . && git commit -m "$(GIT_PREFIX) $(m)"
 
