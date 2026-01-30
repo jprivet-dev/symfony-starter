@@ -13,10 +13,10 @@ ifeq ($(wildcard $(SYMFONY_MONOREPO_ROOT)),)
 	@printf "   Check $(Y)SYMFONY_MONOREPO_PATH$(S) in your $(G).env.local$(S) file if you don't use $(G)$(SYMFONY_MONOREPO_DEFAULT)$(S) by default\n"
 	@exit 1
 endif
-	@printf " $(R)❌ Error:$(S) $(G)/symfony$(S) is missing or empty inside the container.$(S)\n"
-	@printf "   1. Check $(Y)SYMFONY_MONOREPO_PATH$(S) in $(G).env.local$(S) if you don't use $(G)../symfony$(S) by default\n"
-	@printf "   2. Run $(Y)make contrib_init$(S)\n"
-	@exit 1
+	@$(PHP) test -d /symfony \
+		|| (printf " $(R)❌ Error:$(S) Volume not mounted in Docker and the directory $(G)/symfony$(S) is missing inside the container.\n" \
+		&& printf "   Run $(Y)make contrib_init$(S)\n" \
+		&& exit 1)
 
 contrib_init: ## Configure Docker volume for Symfony contribution (updates compose.override.yaml)
 	$(MAKE) yq_add f=compose.override.yaml k=services.php.volumes v='$${SYMFONY_MONOREPO_PATH:-../symfony}:/symfony'
