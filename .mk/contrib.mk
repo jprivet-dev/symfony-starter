@@ -19,7 +19,7 @@ endif
 		&& printf " $(Y)›$(S) Run $(Y)make contrib_init$(S) to add the volume in your $(G)compose.override.yaml$(S) file.\n" \
 		&& exit 1)
 
-contrib_check: _monorepo ## Configure Docker volume for Symfony contribution (updates compose.override.yaml)
+contrib_check: _monorepo ## Check if local Symfony monorepo is correctly mounted
 	@echo "  $(G)✔ All is good!$(S) The Docker volume $(Y)/symfony$(S) is configured and connected to $(Y)$(SYMFONY_MONOREPO_ROOT).$(S)"
 
 contrib_init: ## Configure Docker volume for Symfony contribution (updates compose.override.yaml)
