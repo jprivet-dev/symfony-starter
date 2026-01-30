@@ -3,9 +3,9 @@
 ##   (to delete this section, delete .mk/contrib.mk)
 ##
 
-SYMFONY_MONOREPO_DEFAULT =../symfony
-SYMFONY_MONOREPO_ROOT    =$(or $(SYMFONY_MONOREPO_PATH),$(SYMFONY_MONOREPO_DEFAULT))
-SYMFONY_MONOREPO_COMPOSER=$(SYMFONY_MONOREPO_ROOT)/composer.json
+SYMFONY_MONOREPO_DEFAULT  = ../symfony
+SYMFONY_MONOREPO_ROOT     = $(or $(SYMFONY_MONOREPO_PATH),$(SYMFONY_MONOREPO_DEFAULT))
+SYMFONY_MONOREPO_COMPOSER = $(SYMFONY_MONOREPO_ROOT)/composer.json
 
 _monorepo: # INTERNAL - Check if local Symfony monorepo is correctly mounted
 ifeq ($(wildcard $(SYMFONY_MONOREPO_ROOT)),)
