@@ -138,7 +138,7 @@ endif
 	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
 	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
 	$(MAKE) commit m="activating the bind mount (var/, var/log)"
-	$(MAKE) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL}
+	$(MAKE) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(MAKE) commit m="use DATABASE_URL var in compose.yaml"
 	$(MAKE) build up_detached
 	$(MAKE) commit m="make build up_detached"
