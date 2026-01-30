@@ -856,6 +856,9 @@ endif
 .PHONY: safe
 safe: ## Add /app to Git's safe directories within the php container
 	$(COMPOSE) exec php git config --global --add safe.directory /app
+ifneq ($(SYMFONY_MONOREPO_PATH),)
+	$(COMPOSE) exec php git config --global --add safe.directory /symfony
+endif
 
 ## — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
 
