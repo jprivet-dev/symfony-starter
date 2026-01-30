@@ -3,13 +3,20 @@
 ##   (to delete this section, delete .mk/contrib.mk)
 ##
 
+SYMFONY_MONOREPO_DEFAULT =../symfony
+SYMFONY_MONOREPO_ROOT    =$(or $(SYMFONY_MONOREPO_PATH),$(SYMFONY_MONOREPO_DEFAULT))
+SYMFONY_MONOREPO_COMPOSER=$(SYMFONY_MONOREPO_ROOT)/composer.json
+
 _monorepo: # INTERNAL - Check if local Symfony monorepo is correctly mounted
-ifeq ($(wildcard $(SYMFONY_MONOREPO_PATH)/composer.json),)
+ifeq ($(wildcard $(SYMFONY_MONOREPO_ROOT)),)
+	@printf " $(R)❌ Error:$(S) $(G)$(SYMFONY_MONOREPO_ROOT)$(S) does not exist on your machine.\n"
+	@printf "   Check $(Y)SYMFONY_MONOREPO_PATH$(S) in your $(G).env.local$(S) file if you don't use $(G)$(SYMFONY_MONOREPO_DEFAULT)$(S) by default\n"
+	@exit 1
+endif
 	@printf " $(R)❌ Error:$(S) $(G)/symfony$(S) is missing or empty inside the container.$(S)\n"
 	@printf "   1. Check $(Y)SYMFONY_MONOREPO_PATH$(S) in $(G).env.local$(S) if you don't use $(G)../symfony$(S) by default\n"
 	@printf "   2. Run $(Y)make contrib_init$(S)\n"
 	@exit 1
-endif
 
 contrib_init: ## Configure Docker volume for Symfony contribution (updates compose.override.yaml)
 	$(MAKE) yq_add f=compose.override.yaml k=services.php.volumes v='$${SYMFONY_MONOREPO_PATH:-../symfony}:/symfony'
