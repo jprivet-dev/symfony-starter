@@ -157,7 +157,7 @@
   git_hooks_enable              Enable the project's hooks directory
   git_pre_push                  Actions on Git pre-push
 
-  git_apply                     Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply f=file.patch
+  git_apply                  ga Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply f=file.patch
   git_patch                     Generate a patch from current diff or from hashes - $ make git_patch [h=<hashes>] - Example: $ make git_patch h="abcd123 efgh456"
 
 — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
@@ -182,24 +182,37 @@
 
   (to delete this section, delete .mk/contrib.mk)
 
+  contrib_check                 Check if local Symfony monorepo is correctly mounted
+  contrib_init                  Configure Docker volume for Symfony contribution (updates compose.override.yaml)
+
+  contrib_link                  Link local Symfony monorepo to the project (replace vendors with symlinks)
+  contrib_unlink                Restore original vendors (rollback links)
+
   contrib_install               Install Composer packages in the local Symfony monorepo
-  contrib_checkout              Switch App and Symfony monorepo branches - $ make contrib_checkout a=<app-branch> [s=<symfony-branch>] - Example: make contrib_checkout a=fix-123 s=fix-123-custom --- 🧪 EXPERIMENTAL 🧪 ---
   contrib_clean                 Remove vendor and lock file from the local Symfony monorepo
 
   contrib_tests                 Run PHPUnit tests in the local Symfony monorepo - $ make contrib_tests [a=<arguments>] - Example: $ make contrib_tests a="src/Symfony/Bundle/FrameworkBundle"
   contrib_tests_www_data        Run PHPUnit tests in the local Symfony monorepo as www-data user - $ make contrib_tests_www_data [a=<arguments>] - Example: $ make contrib_tests_www_data a="src/Symfony/Bundle/FrameworkBundle"
   contrib_tests_clean           Clean PHPUnit cache and temporary files in the local Symfony monorepo
 
-  contrib_link                  Link local Symfony monorepo to the project (replace vendors with symlinks)
-  contrib_unlink                Restore original vendors (rollback links)
+  doctrine_bridge               Run PHPUnit tests for the Doctrine Bridge
+  monolog_bridge                Run PHPUnit tests for the Monolog Bridge
+  phpunit_bridge                Run PHPUnit tests for the PhpUnit Bridge
+  psr_http_message_bridge       Run PHPUnit tests for the PsrHttpMessage Bridge
+  twig_bridge                   Run PHPUnit tests for the Twig Bridge
+
+  debug_bundle                  Run PHPUnit tests for the DebugBundle
+  framework_bundle              Run PHPUnit tests for the FrameworkBundle
+  security_bundle               Run PHPUnit tests for the SecurityBundle
+  twig_bundle                   Run PHPUnit tests for the TwigBundle
+  web_profiler_bundle           Run PHPUnit tests for the WebProfilerBundle
+
+  dependency_injection          Run PHPUnit tests for the DependencyInjection Component (Sample command: You can add any other necessary commands to this contrib.mk file)
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
   (to delete this section, delete .mk/generate.mk)
 
-  replace                    rp Replace a string in a file - $ make replace f=<file> o=<old_string> n=<new_string> - Example: $ make replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
-  replace_line               rl Replace an entire line beginning with a specific pattern - $ make replace f=<file> s=<start> n=<value> - Example: $ make replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
-  replace_block              rb Replace a block in a target file with content from a source file, wrapping it with markers - $ make replace_block m=<marker> t=<target> s=<source>
   api                           Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
   api@lts                       Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
   demo                          Generate a Symfony Demo application (with SQLite) with Docker configuration
@@ -225,7 +238,6 @@
   require_maker_bundle          Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
   require_orm                   Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
   require_profiler              Install Profiler - https://symfony.com/doc/current/profiler.html
-  require_sqlite                Install Doctrine (SQLite) - https://symfony.com/doc/current/doctrine.html
   require_test_pack             Install PHPUnit - https://symfony.com/doc/current/testing.html
   require_translation           Install Translation - https://symfony.com/doc/current/translation.html
 
@@ -235,7 +247,7 @@
   require_phpstan               Install PHPStan - https://phpstan.org/
   require_twigcsfixer           Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
 
-  switch_to_mariadb             Switch the stack to MySQL/MariaDB --- 🧪 EXPERIMENTAL 🧪 ---
+  switch_to_mariadb             Switch the stack from PostgreSQL to MySQL/MariaDB
 ```
 
 <!-- MAKEFILE_COMMANDS_END -->

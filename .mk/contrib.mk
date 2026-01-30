@@ -61,5 +61,39 @@ contrib_tests_clean: _monorepo ## Clean PHPUnit cache and temporary files in the
 
 ##
 
-contrib_tests_framework_bundle: a=src/Symfony/Bundle/FrameworkBundle
-contrib_tests_framework_bundle: contrib_tests ## Run PHPUnit tests for the FrameworkBundle (Sample command: You can add any other necessary commands to this contrib.mk file)
+doctrine_bridge: a=src/Symfony/Bridge/Doctrine
+doctrine_bridge: contrib_tests ## Run PHPUnit tests for the Doctrine Bridge
+
+monolog_bridge: a=src/Symfony/Bridge/Monolog
+monolog_bridge: contrib_tests ## Run PHPUnit tests for the Monolog Bridge
+
+phpunit_bridge: a=src/Symfony/Bridge/PhpUnit
+phpunit_bridge: contrib_tests ## Run PHPUnit tests for the PhpUnit Bridge
+
+psr_http_message_bridge: a=src/Symfony/Bridge/PsrHttpMessage
+psr_http_message_bridge: contrib_tests ## Run PHPUnit tests for the PsrHttpMessage Bridge
+
+twig_bridge: a=src/Symfony/Bridge/Twig
+twig_bridge: contrib_tests ## Run PHPUnit tests for the Twig Bridge
+
+##
+
+debug_bundle: a=src/Symfony/Bundle/DebugBundle
+debug_bundle: contrib_tests ## Run PHPUnit tests for the DebugBundle
+
+framework_bundle: a=src/Symfony/Bundle/FrameworkBundle
+framework_bundle: contrib_tests ## Run PHPUnit tests for the FrameworkBundle
+
+security_bundle: a=src/Symfony/Bundle/SecurityBundle
+security_bundle: contrib_tests ## Run PHPUnit tests for the SecurityBundle
+
+twig_bundle: a=src/Symfony/Bundle/TwigBundle
+twig_bundle: contrib_tests ## Run PHPUnit tests for the TwigBundle
+
+web_profiler_bundle: a=src/Symfony/Bundle/WebProfilerBundle
+web_profiler_bundle: contrib_tests ## Run PHPUnit tests for the WebProfilerBundle
+
+##
+
+dependency_injection: a=src/Symfony/Component/DependencyInjection
+dependency_injection: contrib_tests ## Run PHPUnit tests for the DependencyInjection Component (Sample command: You can add any other necessary commands to this contrib.mk file)
