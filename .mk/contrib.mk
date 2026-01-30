@@ -5,7 +5,7 @@
 
 _monorepo: # INTERNAL - Check if local Symfony monorepo is correctly mounted
 ifeq ($(wildcard $(SYMFONY_MONOREPO_PATH)/composer.json),)
-	@printf " $(R)❌ Error: /symfony is missing or empty inside the container.$(S)\n"
+	@printf " $(R)❌ Error:$(S) $(G)/symfony$(S) is missing or empty inside the container.$(S)\n"
 	@printf "   1. Check $(Y)SYMFONY_MONOREPO_PATH$(S) in $(G).env.local$(S) if you don't use $(G)../symfony$(S) by default\n"
 	@printf "   2. Run $(Y)make contrib_init$(S)\n"
 	@exit 1
