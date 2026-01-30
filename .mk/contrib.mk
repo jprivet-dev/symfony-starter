@@ -39,7 +39,7 @@ contrib_clean: _monorepo ## Remove vendor and lock file from the local Symfony m
 ##
 
 contrib_tests: _monorepo ## Run PHPUnit tests in the local Symfony monorepo - $ make contrib_tests [a=<arguments>] - Example: $ make contrib_tests a="src/Symfony/Bundle/FrameworkBundle"
-	#$(BASH_COMMAND) "cd /symfony && ./phpunit $(a)"
+	$(BASH_COMMAND) "cd /symfony && ./phpunit $(a)"
 
 contrib_tests_www_data: ## Run PHPUnit tests in the local Symfony monorepo as www-data user - $ make contrib_tests_www_data [a=<arguments>] - Example: $ make contrib_tests_www_data a="src/Symfony/Bundle/FrameworkBundle"
 	FORCE_WWW_DATA_USER=true $(MAKE) contrib_tests
