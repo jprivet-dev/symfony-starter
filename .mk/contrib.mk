@@ -3,11 +3,21 @@
 ##   (to delete this section, delete .mk/contrib.mk)
 ##
 
-_monorepo:
-ifeq ($(wildcard $(SYMFONY_MONOREPO_PATH)),)
-	@printf " $(R)⨯$(S) Remove the $(Y)SYMFONY CONTRIBUTION 🔗$(S) section or define $(Y)SYMFONY_MONOREPO_PATH$(S) in your $(G).env.local$(S)\n"
-	@exit 1
-endif
+_monorepo: # INTERNAL - Check if local Symfony monorepo is correctly mounted
+	@$(EXEC_PHP) test -f /symfony/composer.json \
+		&& echo "   $(G)✔$(S) Symfony Monorepo detected in $(Y)/symfony$(S)" \
+		|| (echo "   $(R)❌ Error: /symfony is missing or empty inside the container.$(S)"; \
+			echo "      1. Check SYMFONY_MONOREPO_PATH in .env.local"; \
+			echo "      2. Run 'make contrib_init'"; \
+			exit 1)
+
+contrib_init: ## Configure Docker volume for Symfony contribution (updates compose.override.yaml)
+	$(MAKE) yq_add f=compose.override.yaml k=services.php.volumes v='$${SYMFONY_MONOREPO_PATH:-../symfony}:/symfony'
+	$(MAKE) commit m="use volume to /symfony with SYMFONY_MONOREPO_PATH var in compose.override.yaml"
+	$(MAKE) build up_detached
+	@echo " $(G)🛠️ Docker for Symfony contribution configured...$(S)"
+
+##
 
 contrib_link: _monorepo ## Link local Symfony monorepo to the project (replace vendors with symlinks)
 	$(PHP) /symfony/link /app
