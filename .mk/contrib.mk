@@ -9,13 +9,14 @@ SYMFONY_MONOREPO_COMPOSER = $(SYMFONY_MONOREPO_ROOT)/composer.json
 
 _monorepo: # INTERNAL - Check if local Symfony monorepo is correctly mounted
 ifeq ($(wildcard $(SYMFONY_MONOREPO_ROOT)),)
-	@printf " $(R)❌ Error:$(S) $(G)$(SYMFONY_MONOREPO_ROOT)$(S) does not exist on your machine.\n"
-	@printf "   Check $(Y)SYMFONY_MONOREPO_PATH$(S) in your $(G).env.local$(S) file if you don't use $(G)$(SYMFONY_MONOREPO_DEFAULT)$(S) by default\n"
+	@printf " $(R)❌ Error: $(SYMFONY_MONOREPO_ROOT) does not exist on your machine.$(S)\n"
+	@printf " $(Y)›$(S) Check $(Y)SYMFONY_MONOREPO_PATH$(S) in your $(G).env.local$(S) file if you don't use $(G)$(SYMFONY_MONOREPO_DEFAULT)$(S) by default\n"
 	@exit 1
 endif
 	@$(BASH_COMMAND) "test -f /symfony/composer.json" \
-		|| (printf " $(R)❌ Error: Volume not mounted in Docker.$(S) The directory $(G)/symfony$(S) is missing inside the container.\n" \
-		&& printf "   Run $(Y)make contrib_init$(S) to add the volume in your $(G)compose.override.yaml$(S) file.\n" \
+		|| (printf " $(R)❌ Error: Volume not mounted in Docker.$(S)\n" \
+		&& printf " $(Y)›$(S) The directory $(G)/symfony$(S) is missing inside the container.\n" \
+		&& printf " $(Y)›$(S) Run $(Y)make contrib_init$(S) to add the volume in your $(G)compose.override.yaml$(S) file.\n" \
 		&& exit 1)
 
 contrib_init: ## Configure Docker volume for Symfony contribution (updates compose.override.yaml)
