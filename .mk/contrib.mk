@@ -4,12 +4,12 @@
 ##
 
 _monorepo: # INTERNAL - Check if local Symfony monorepo is correctly mounted
-	@$(EXEC_PHP) test -f /symfony/composer.json \
-		&& echo "   $(G)✔$(S) Symfony Monorepo detected in $(Y)/symfony$(S)" \
-		|| (echo "   $(R)❌ Error: /symfony is missing or empty inside the container.$(S)"; \
-			echo "      1. Check SYMFONY_MONOREPO_PATH in .env.local"; \
-			echo "      2. Run 'make contrib_init'"; \
-			exit 1)
+ifeq ($(wildcard $(SYMFONY_MONOREPO_PATH)/composer.json),)
+	@printf " $(R)❌ Error: /symfony is missing or empty inside the container.$(S)\n"
+	@printf "   1. Check $(Y)SYMFONY_MONOREPO_PATH$(S) in $(G).env.local$(S) if you don't use $(G)../symfony$(S) by default\n"
+	@printf "   2. Run $(Y)make contrib_init$(S)\n"
+	@exit 1
+endif
 
 contrib_init: ## Configure Docker volume for Symfony contribution (updates compose.override.yaml)
 	$(MAKE) yq_add f=compose.override.yaml k=services.php.volumes v='$${SYMFONY_MONOREPO_PATH:-../symfony}:/symfony'
