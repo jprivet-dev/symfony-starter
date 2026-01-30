@@ -31,7 +31,7 @@ git clone git@github.com:YOUR_USERNAME/symfony.git
 ### 2. Configure the Path
 
 Tell the starter where your local Symfony repository is located.
-You can add the `SYMFONY_MONOREPO_PATH` variable to your `.env.local` file.
+You can add the `CONTRIB_MONOREPO_LOCAL_PATH` variable to your `.env.local` file.
 
 ```bash
 # Example: if your folders are side-by-side
@@ -40,7 +40,7 @@ You can add the `SYMFONY_MONOREPO_PATH` variable to your `.env.local` file.
 #   └── symfony
 
 touch .env.local
-echo "SYMFONY_MONOREPO_PATH=../symfony" >> .env.local
+echo "CONTRIB_MONOREPO_LOCAL_PATH=../symfony" >> .env.local
 ```
 
 ## The Contribution Workflow
@@ -55,7 +55,7 @@ make contrib_install
 
 ### Step 2: Link the Repository
 
-This is the magic command. It replaces the `vendor/symfony/*` packages in your application with symbolic links pointing to your local `SYMFONY_MONOREPO_PATH`.
+This is the magic command. It replaces the `vendor/symfony/*` packages in your application with symbolic links pointing to your local `CONTRIB_MONOREPO_LOCAL_PATH`.
 
 ```shell
 make contrib_link

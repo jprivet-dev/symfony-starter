@@ -32,7 +32,7 @@ This project is designed to handle the entire lifecycle of a Symfony project, fr
 
 Turn your starter into a contribution powerhouse:
 
-1.  **Configure:** Use `../symfony` (default) or set a custom path via `SYMFONY_MONOREPO_PATH` in `.env.local`.
+1.  **Configure:** Use `../symfony` (default) or set a custom path via `CONTRIB_MONOREPO_LOCAL_PATH` in `.env.local`.
 2.  **Init:** `make contrib_init` (Updates `compose.override.yaml` and restarts the project).
 3.  **Link:** `make contrib_link` (Symlinks your local monorepo into `vendor/`).
 4.  **Test:** `make contrib_tests a=src/Symfony/Component/HttpKernel` (Runs unit tests using the Docker runtime).
