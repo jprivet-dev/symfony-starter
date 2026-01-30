@@ -39,7 +39,7 @@ Turn your starter into a contribution powerhouse:
 
 * **Seamless Local Linking:** Easily mount your local `symfony/symfony` repository into the container.
 * **Real-world Testing:** Test your pull requests and framework modifications against a running application instantly without complex configuration.
-* **[📖 Read the Contribution Guide](docs/contributing.md)**
+* **[📖 Read the Contribution Guide](docs/contrib.md)**
 
 ## 🔭 Scope & Limitations
 
@@ -356,7 +356,7 @@ Initial commit
 
 **🤝 Contributing**
 
-* [Contributing to Symfony: Connect Your Local Symfony Repository](docs/contributing.md)
+* [Contributing to Symfony: Connect Your Local Symfony Repository](docs/contrib.md)
 
 ## 🔗 Main links
 
