@@ -13,9 +13,9 @@ ifeq ($(wildcard $(SYMFONY_MONOREPO_ROOT)),)
 	@printf "   Check $(Y)SYMFONY_MONOREPO_PATH$(S) in your $(G).env.local$(S) file if you don't use $(G)$(SYMFONY_MONOREPO_DEFAULT)$(S) by default\n"
 	@exit 1
 endif
-	@$(PHP) test -d /symfony \
-		|| (printf " $(R)❌ Error:$(S) Volume not mounted in Docker and the directory $(G)/symfony$(S) is missing inside the container.\n" \
-		&& printf "   Run $(Y)make contrib_init$(S)\n" \
+	@$(BASH_COMMAND) "test -f /symfony/composer.json" \
+		|| (printf " $(R)❌ Error: Volume not mounted in Docker.$(S) The directory $(G)/symfony$(S) is missing inside the container.\n" \
+		&& printf "   Run $(Y)make contrib_init$(S) to add the volume in your $(G)compose.override.yaml$(S) file.\n" \
 		&& exit 1)
 
 contrib_init: ## Configure Docker volume for Symfony contribution (updates compose.override.yaml)
