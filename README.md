@@ -17,7 +17,8 @@ This project is designed to handle the entire lifecycle of a Symfony project, fr
 
 ### 2. 🧰 Daily Workflow
 
-* **Powerful Makefile:** Forget complex Docker commands. Use a standardized set of **90+ available commands** (`make start`, `make db_init`, `make tests`) to manage your stack.
+* **Context Aware Makefile:** No more `docker compose exec -e VAR=...`. The Makefile automatically injects variables from your `.env` and `.env.local` files into every command.
+* **Standardized Commands:** Forget complex Docker syntax. Use a standardized set of **90+ available commands** (`make start`, `make db_init`, `make tests`) to manage your stack.
 * **Transparent History:** Every generation step is committed to Git (🤖 `[starter]`), giving you a full audit trail of the installation process.
 
 ### 3. 🧩 Ecosystem & Quality
@@ -29,9 +30,24 @@ This project is designed to handle the entire lifecycle of a Symfony project, fr
 
 ### 4. 🤝 Contributing to Symfony Core
 
+Turn your starter into a contribution powerhouse:
+
+1.  **Configure:** Use `../symfony` (default) or set a custom path via `SYMFONY_MONOREPO_PATH` in `.env.local`.
+2.  **Init:** `make contrib_init` (Updates `compose.override.yaml` and restarts the project).
+3.  **Link:** `make contrib_link` (Symlinks your local monorepo into `vendor/`).
+4.  **Test:** `make contrib_tests a=src/Symfony/Component/HttpKernel` (Runs unit tests using the Docker runtime).
+
 * **Seamless Local Linking:** Easily mount your local `symfony/symfony` repository into the container.
 * **Real-world Testing:** Test your pull requests and framework modifications against a running application instantly without complex configuration.
 * **[📖 Read the Contribution Guide](docs/contributing.md)**
+
+## 🔭 Scope & Limitations
+
+To ensure this starter fits your needs, here is what it is **not**:
+
+* **Not a CMS:** It provides infrastructure, not business logic (no pre-built blog, e-commerce, or user management beyond standard Symfony).
+* **Not a PaaS:** It generates a production-ready Docker configuration (FrankenPHP), but deployment (CI/CD, Kubernetes, VPS) remains your responsibility.
+* **Not a Wrapper:** Once generated, the code is **standard Symfony**. There is no proprietary library or hidden vendor lock-in.
 
 ## ✨ Available Flavors
 
@@ -323,8 +339,8 @@ Initial commit
 **🐘 Database**
 
 * [PhpStorm - Connect it to PostgreSQL](docs/postgre.md)
-* *Switching to MySQL/MariaDB (Coming soon)*
-* *Switching to SQLite (Coming soon)*
+* Switching to MySQL/MariaDB (Available via Makefile)
+* Switching to SQLite (Available via Makefile)
 
 **💻 IDE & Quality (DX)**
 
