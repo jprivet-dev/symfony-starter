@@ -51,7 +51,7 @@
 — PHP 🐘 ———————————————————————————————————————————————————————————————————
   php                           Run PHP command - $ make php [a=<arguments>]- Example: $ make php a=--version
 
-  php_command                c  Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
+  php_command                   Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
   php_env                       Display all environment variables set within the PHP container
   php_sh                     sh Connect to the PHP container shell
 
@@ -182,18 +182,18 @@
 
   (to delete this section, delete .mk/contrib.mk)
 
-  contrib_check                 Check if local Symfony monorepo is correctly mounted
+  contrib                    c  Check if the your Symfony monorepo is correctly mounted
   contrib_init                  Configure Docker volume for Symfony contribution (updates compose.override.yaml)
 
-  contrib_link                  Link local Symfony monorepo to the project (replace vendors with symlinks)
+  contrib_link                  Link the your Symfony monorepo to the project (replace vendors with symlinks)
   contrib_unlink                Restore original vendors (rollback links)
 
-  contrib_install               Install Composer packages in the local Symfony monorepo
-  contrib_clean                 Remove vendor and lock file from the local Symfony monorepo
+  contrib_install               Install Composer packages in the your Symfony monorepo
+  contrib_clean                 Remove vendor and lock file from the your Symfony monorepo
 
-  contrib_tests                 Run PHPUnit tests in the local Symfony monorepo - $ make contrib_tests [a=<arguments>] - Example: $ make contrib_tests a="src/Symfony/Bundle/FrameworkBundle"
-  contrib_tests_www_data        Run PHPUnit tests in the local Symfony monorepo as www-data user - $ make contrib_tests_www_data [a=<arguments>] - Example: $ make contrib_tests_www_data a="src/Symfony/Bundle/FrameworkBundle"
-  contrib_tests_clean           Clean PHPUnit cache and temporary files in the local Symfony monorepo
+  contrib_tests                 Run PHPUnit tests in the your Symfony monorepo - $ make contrib_tests [a=<arguments>] - Example: $ make contrib_tests a="src/Symfony/Bundle/FrameworkBundle"
+  contrib_tests_www_data        Run PHPUnit tests in the your Symfony monorepo as www-data user - $ make contrib_tests_www_data [a=<arguments>] - Example: $ make contrib_tests_www_data a="src/Symfony/Bundle/FrameworkBundle"
+  contrib_tests_clean           Clean PHPUnit cache and temporary files in the your Symfony monorepo
 
   doctrine_bridge               Run PHPUnit tests for the Doctrine Bridge
   monolog_bridge                Run PHPUnit tests for the Monolog Bridge

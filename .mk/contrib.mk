@@ -23,7 +23,8 @@ endif
 		&& printf " $(Y)›$(S) Run $(G)make contrib_init$(S) to add the volume in your $(Y)compose.override.yaml$(S) file.\n" \
 		&& exit 1)
 
-contrib: _monorepo ## Check if the your Symfony monorepo is correctly mounted
+.PHONY: c
+contrib c: _monorepo ## Check if the your Symfony monorepo is correctly mounted
 	@printf " $(G)✔ All is good!$(S) The Docker volume $(Y)$(CONTRIB_INTERNAL_PATH)$(S) is configured and connected to $(Y)$(CONTRIB_PATH).$(S)\n"
 	@printf " $(Y)›$(S) Current branch : $(Y)$(CONTRIB_CURRENT_BRANCH)$(S)\n"
 	@printf " $(Y)›$(S) Monorepo branch: $(Y)$(CONTRIB_MONOREPO_BRANCH)$(S)\n"

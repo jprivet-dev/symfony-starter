@@ -370,8 +370,7 @@ php: ## Run PHP command - $ make php [a=<arguments>]- Example: $ make php a=--ve
 
 ##
 
-.PHONY: c
-php_command c: ## Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
+php_command: ## Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
 	$(BASH_COMMAND) "$(a)"
 
 php_env: ## Display all environment variables set within the PHP container
