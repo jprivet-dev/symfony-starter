@@ -17,22 +17,29 @@
   install                       Start the project, install dependencies and show info
   info                          Show project access info
 
-  restart                       Stop & Start the project and show info (detached mode)
   start                         Start the project and show info (detached mode)
   stop                          Stop the project (down)
+
+  restart                       [Level 1] Restart containers (triggers: .env, compose.yaml, code changes or clean state)
+  restart_deps                  [Level 2] Rebuild dependencies (triggers: composer.lock)
+  restart_infra                 [Level 3] Hard rebuild (triggers: Dockerfile, frankenphp/)
 
   check_level_1              c1 Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
   check_level_2              c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
   tests                      t  Run all tests
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
-  build                         Build or rebuild Docker services - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
-  build_force                   Build or rebuild Docker services (no cache) - $ make build [a=<arguments>]
-  down                          Stop and remove the containers
+  build                         Build or rebuild Docker services using cache - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
+  build_force                   Build or rebuild Docker services without cache (force fresh install)
+
   up                            Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
   up_detached                   Start the containers (wait for services to be running|healthy - detached mode)
 
-  deep_clean                    Cleaning local containers, networks, volumes & images [y/N]
+  down                          Stop the containers
+  kill                          Remove containers and networks (keep database data)
+  kill_all                      Remove containers, networks AND VOLUMES (database destroyed)
+
+  deep_clean                    Aggressively remove all Docker resources (containers, volumes, networks, images) including orphans - Use when switching branches/projects [y/N]
 
   config                        Parse, resolve, and render compose file in canonical format
   images                        List images used by the current containers

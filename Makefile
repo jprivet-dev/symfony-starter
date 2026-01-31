@@ -257,14 +257,26 @@ endif
 
 ##
 
-.PHONY: restart
-restart: stop start ## Stop & Start the project and show info (detached mode)
-
 .PHONY: start
 start: up_detached images info ## Start the project and show info (detached mode)
 
 .PHONY: stop
 stop: down ## Stop the project (down)
+
+##
+
+.PHONY: restart
+restart: ## [Level 1] Restart containers (triggers: .env, compose.yaml, code changes or clean state)
+	@printf " $(G)🔄 [Level 1] Standard restart. Restarting containers...$(S)\n"
+	$(MAKE) stop start
+
+restart_deps: ## [Level 2] Rebuild dependencies (triggers: composer.lock)
+	@printf " $(Y)🏗️ [Level 2] Dependencies update. Rebuilding...$(S)\n"
+	$(MAKE) build start
+
+restart_infra: ## [Level 3] Hard rebuild (triggers: Dockerfile, frankenphp/)
+	@printf " $(R)🏗️ [Level 3] Infrastructure rebuild. Rebuilding from scratch...$(S)\n"
+	$(MAKE) build_force start
 
 ##
 
@@ -287,6 +299,8 @@ build: ## Build or rebuild Docker services using cache - $ make build [a=<argume
 build_force: a=--no-cache
 build_force: build ## Build or rebuild Docker services without cache (force fresh install)
 
+##
+
 .PHONY: up
 up: ## Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans $(a)
@@ -296,6 +310,8 @@ up: ## Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-
 
 up_detached: a=-d
 up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
+
+##
 
 .PHONY: down
 down: ## Stop the containers
