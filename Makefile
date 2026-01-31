@@ -280,16 +280,12 @@ tests t: db_init@test fixtures@test phpunit ## Run all tests
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: build
-build: ## Build or rebuild Docker services - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
+build: ## Build or rebuild Docker services using cache - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
 	$(COMPOSE) build $(a)
 
 .PHONY: build_force
 build_force: a=--no-cache
-build_force: build ## Build or rebuild Docker services (no cache) - $ make build [a=<arguments>]
-
-.PHONY: down
-down: ## Stop and remove the containers
-	-$(COMPOSE) down --remove-orphans
+build_force: build ## Build or rebuild Docker services without cache (force fresh install)
 
 .PHONY: up
 up: ## Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
@@ -301,20 +297,32 @@ up: ## Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-
 up_detached: a=-d
 up_detached: up ## Start the containers (wait for services to be running|healthy - detached mode)
 
+.PHONY: down
+down: ## Stop the containers
+	-$(COMPOSE) down
+
+.PHONY: kill
+kill: ## Remove containers and networks (keep database data)
+	$(COMPOSE) down --remove-orphans
+
+.PHONY: kill_all
+kill_all: confirm ## Remove containers, networks AND VOLUMES (database destroyed)
+	$(COMPOSE) down --remove-orphans --volumes
+
 ##
 
-deep_clean: ## Cleaning local containers, networks, volumes & images [y/N]
-	@printf "🔥 $(Y)Cleaning containers...$(S)\n"
-	-docker ps -a --filter "name=$(PROJECT_NAME)" -q | xargs -r docker rm -f
+deep_clean: confirm ## Aggressively remove all Docker resources (containers, volumes, networks, images) including orphans - Use when switching branches/projects [y/N]
+	@printf "🔥 $(Y)Cleaning Docker environment for $(PROJECT_NAME) (if file exists)...$(S)\n"
+	-$(COMPOSE) down --volumes --rmi local --remove-orphans 2>/dev/null || true
 
-	@printf "🔥 $(Y)Cleaning networks...$(S)\n"
-	-docker network ls --filter "name=$(PROJECT_NAME)" -q | xargs -r docker network rm
+	@printf "🔥 $(Y)Force clean everything else using Docker labels (works even if compose.yaml is missing)...$(S)\n"
+	-docker ps -a --filter "label=com.docker.compose.project=$(PROJECT_NAME)" -q | xargs -r docker rm -f
+	-docker network ls --filter "label=com.docker.compose.project=$(PROJECT_NAME)" -q | xargs -r docker network rm
+	-docker volume ls --filter "label=com.docker.compose.project=$(PROJECT_NAME)" -q | xargs -r docker volume rm
 
-	@printf "🔥 $(Y)Cleaning volumes...$(S)\n"
-	-docker volume ls --filter "name=$(PROJECT_NAME)" -q | xargs -r docker volume rm
+	@printf "🔥 $(Y)Cleaning project images...$(S)\n"
+	-docker images --filter "reference=$(IMAGES_PREFIX)*" -q | xargs -r docker rmi -f
 
-	@printf "🔥 $(Y)Cleaning images...$(S)\n"
-	-docker images --filter "reference=$(PROJECT_NAME)*" -q | xargs -r docker rmi -f
 ##
 
 .PHONY: config
