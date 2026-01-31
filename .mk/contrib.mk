@@ -3,25 +3,30 @@
 ##   (to delete this section, delete .mk/contrib.mk)
 ##
 
-CONTRIB_INTERNAL_PATH = /symfony
-CONTRIB_DEFAULT_PATH  = ../symfony
-CONTRIB_PATH          = $(or $(SYMFONY_MONOREPO),$(CONTRIB_DEFAULT_PATH))
-CONTRIB_COMPOSER      = $(CONTRIB_PATH)/composer.json
+CONTRIB_INTERNAL_PATH     = /symfony
+CONTRIB_DEFAULT_PATH      = ../symfony
+CONTRIB_PATH              = $(or $(SYMFONY_MONOREPO),$(CONTRIB_DEFAULT_PATH))
+CONTRIB_INTERNAL_COMPOSER = $(CONTRIB_INTERNAL_PATH)/composer.json
 
-_monorepo: # INTERNAL - Check if local Symfony monorepo is correctly mounted
+CONTRIB_CURRENT_BRANCH    = $(shell git rev-parse --abbrev-ref HEAD)
+CONTRIB_MONOREPO_BRANCH   = $(shell git -C $(CONTRIB_PATH) rev-parse --abbrev-ref HEAD 2>/dev/null || echo "Unknown (git error)")
+
+_monorepo: # INTERNAL - Check if the your Symfony monorepo is correctly mounted
 ifeq ($(wildcard $(CONTRIB_PATH)),)
 	@printf " $(R)❌ Error: $(CONTRIB_PATH) does not exist on your machine.$(S)\n"
-	@printf " $(Y)›$(S) Check $(Y)CONTRIB_MONOREPO_LOCAL_PATH$(S) in your $(G).env.local$(S) file if you don't use $(G)$(CONTRIB_DEFAULT_PATH)$(S) by default\n"
+	@printf " $(Y)›$(S) Check $(Y)CONTRIB_MONOREPO_LOCAL_PATH$(S) in your $(G).env.local$(S) file if you don't use $(G)$(CONTRIB_DEFAULT_PATH)$(S) by default.\n"
 	@exit 1
 endif
-	@$(BASH_COMMAND) "test -f $(CONTRIB_COMPOSER)" \
+	@$(BASH_COMMAND) "test -f $(CONTRIB_INTERNAL_COMPOSER)" \
 		|| (printf " $(R)❌ Error: Volume not mounted in Docker.$(S)\n" \
 		&& printf " $(Y)›$(S) The directory $(Y)$(CONTRIB_INTERNAL_PATH)$(S) is missing inside the container.\n" \
 		&& printf " $(Y)›$(S) Run $(G)make contrib_init$(S) to add the volume in your $(Y)compose.override.yaml$(S) file.\n" \
 		&& exit 1)
 
-contrib_check: _monorepo ## Check if local Symfony monorepo is correctly mounted
+contrib_check: _monorepo ## Check if the your Symfony monorepo is correctly mounted
 	@echo "  $(G)✔ All is good!$(S) The Docker volume $(Y)$(CONTRIB_INTERNAL_PATH)$(S) is configured and connected to $(Y)$(CONTRIB_PATH).$(S)"
+	@printf " $(Y)›$(S) Current branch : $(Y)$(CONTRIB_CURRENT_BRANCH)$(S)\n"
+	@printf " $(Y)›$(S) Monorepo branch: $(Y)$(CONTRIB_MONOREPO_BRANCH)$(S)\n"
 
 contrib_init: ## Configure Docker volume for Symfony contribution (updates compose.override.yaml)
 	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='$${SYMFONY_MONOREPO:-../symfony}:/symfony'
@@ -31,7 +36,7 @@ contrib_init: ## Configure Docker volume for Symfony contribution (updates compo
 
 ##
 
-contrib_link: _monorepo ## Link local Symfony monorepo to the project (replace vendors with symlinks)
+contrib_link: _monorepo ## Link the your Symfony monorepo to the project (replace vendors with symlinks)
 	$(PHP) $(CONTRIB_INTERNAL_PATH)/link /app
 	@printf "🔗 Local Symfony repository linked to $(Y)$(SYMFONY_MONOREPO)$(S)\n"
 
@@ -41,22 +46,22 @@ contrib_unlink: _monorepo ## Restore original vendors (rollback links)
 
 ##
 
-contrib_install: _monorepo ## Install Composer packages in the local Symfony monorepo
+contrib_install: _monorepo ## Install Composer packages in the your Symfony monorepo
 	@printf "🧙 Install Composer packages in $(Y)$(SYMFONY_MONOREPO)$(S)\n"
 	$(BASH_COMMAND) "cd $(CONTRIB_INTERNAL_PATH) && composer install"
 
-contrib_clean: _monorepo ## Remove vendor and lock file from the local Symfony monorepo
+contrib_clean: _monorepo ## Remove vendor and lock file from the your Symfony monorepo
 	$(BASH_COMMAND) "rm -fr $(CONTRIB_INTERNAL_PATH)/vendor && rm -f $(CONTRIB_INTERNAL_PATH)/composer.lock"
 
 ##
 
-contrib_tests: _monorepo ## Run PHPUnit tests in the local Symfony monorepo - $ make contrib_tests [a=<arguments>] - Example: $ make contrib_tests a="src/Symfony/Bundle/FrameworkBundle"
+contrib_tests: _monorepo ## Run PHPUnit tests in the your Symfony monorepo - $ make contrib_tests [a=<arguments>] - Example: $ make contrib_tests a="src/Symfony/Bundle/FrameworkBundle"
 	$(BASH_COMMAND) "cd $(CONTRIB_INTERNAL_PATH) && ./phpunit $(a)"
 
-contrib_tests_www_data: ## Run PHPUnit tests in the local Symfony monorepo as www-data user - $ make contrib_tests_www_data [a=<arguments>] - Example: $ make contrib_tests_www_data a="src/Symfony/Bundle/FrameworkBundle"
+contrib_tests_www_data: ## Run PHPUnit tests in the your Symfony monorepo as www-data user - $ make contrib_tests_www_data [a=<arguments>] - Example: $ make contrib_tests_www_data a="src/Symfony/Bundle/FrameworkBundle"
 	FORCE_WWW_DATA_USER=true $(MAKE) contrib_tests
 
-contrib_tests_clean: _monorepo ## Clean PHPUnit cache and temporary files in the local Symfony monorepo
+contrib_tests_clean: _monorepo ## Clean PHPUnit cache and temporary files in the your Symfony monorepo
 	$(BASH_COMMAND) "rm -fr /tmp/* && rm -f $(CONTRIB_INTERNAL_PATH)/.phpunit.result.cache"
 
 ##
