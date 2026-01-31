@@ -125,7 +125,7 @@ $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
 #$(eval $(call append,XDEBUG_MODE))
-#$(eval $(call append,CONTRIB_MONOREPO_LOCAL_PATH))
+#$(eval $(call append,SYMFONY_MONOREPO))
 
 # --- DOCKER ENVIRONMENT FILES ---
 
@@ -856,7 +856,7 @@ endif
 .PHONY: safe
 safe: ## Add /app to Git's safe directories within the php container
 	$(COMPOSE) exec php git config --global --add safe.directory /app
-ifneq ($(CONTRIB_MONOREPO_LOCAL_PATH),)
+ifneq ($(SYMFONY_MONOREPO),)
 	$(COMPOSE) exec php git config --global --add safe.directory /symfony
 endif
 
