@@ -90,7 +90,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(MAKE) commit m=".env.dev updated with APP_SECRET value"
 	$(MAKE) ga f=clean/docker-entrypoint.sh.database.patch
 	$(MAKE) commit m="clean docker-entrypoint.sh"
-	$(MAKE) down up_detached
+	$(MAKE) restart_infra
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
