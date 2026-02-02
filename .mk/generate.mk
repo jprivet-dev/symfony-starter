@@ -59,7 +59,7 @@ _adjust_postgresql_configuration: # INTERNAL
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
-	$(MAKE) clone_symfony_docker down up_detached
+	$(MAKE) clone_symfony_docker
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
