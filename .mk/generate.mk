@@ -190,12 +190,12 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	# symfony/property-info v6 does not support phpdocumentor/reflection-docblock
     # Please stick to ^5.2 in your composer.json file.
 	$(COMPOSER) require "phpdocumentor/reflection-docblock:^5.2"
-	$(MAKE) commit m="composer require phpdocumentor/reflection-docblock:^5.2"
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
 	$(COMPOSER) require symfony/webapp-pack
 	$(MAKE) commit m="composer require symfony/webapp-pack"
-	$(MAKE) restart_force
 	$(MAKE) update_postgresql_configuration
+	$(MAKE) deep_clean
+	$(MAKE) restart_force
 
 ##
 
@@ -214,8 +214,9 @@ require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/Symfo
 require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) commit m="composer require symfony/orm-pack"
-	$(MAKE) restart_force
 	$(MAKE) update_postgresql_configuration
+	$(MAKE) deep_clean
+	$(MAKE) restart_force
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(COMPOSER) require --dev symfony/profiler-pack
