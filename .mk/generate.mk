@@ -144,10 +144,11 @@ endif
 	$(MAKE) commit m="activating the bind mount (var/, var/log)"
 	$(MAKE) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(MAKE) commit m="use DATABASE_URL var in compose.yaml"
-	$(MAKE) restart_infra
-	$(MAKE) commit m="make restart_infra"
+	$(MAKE) build
+	$(MAKE) commit m="make build"
 	$(MAKE) ga f=clean/docker-entrypoint.sh.composer.patch
 	$(MAKE) commit m="clean docker-entrypoint.sh"
+	$(MAKE) restart_infra
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
