@@ -178,12 +178,10 @@ kill_current_app: ## Remove all fresh Symfony application files
 require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
 	$(COMPOSER) require api
 	$(MAKE) commit m="composer require api"
-	$(MAKE) permissions down deep_clean up_detached
 
 require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 	$(COMPOSER) require easycorp/easyadmin-bundle
 	$(MAKE) commit m="composer require easycorp/easyadmin-bundle"
-	$(MAKE) permissions down deep_clean up_detached
 
 require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
 	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
