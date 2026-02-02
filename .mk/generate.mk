@@ -91,11 +91,10 @@ demo: deep_clean ## Generate a Symfony Demo application (with SQLite) with Docke
 	$(M) clone_symfony_demo
 	$(M) clone_symfony_docker
 	$(M) rb m=recipes t=Dockerfile s=.block/sqlite/Dockerfile
-	$(M) co m="Dockerfile updated to SQLite"
 	$(M) rb m=symfony/framework-bundle t=.env.dev s=.block/demo/.env.dev
-	$(M) co m=".env.dev updated with APP_SECRET value"
 	$(M) ga f=clean/docker-entrypoint.sh.database.patch
-	$(M) co m="clean docker-entrypoint.sh"
+	$(M) co m="switch to SQLite"
+	$(M) deep_clean
 	$(M) restart_force
 	$(M) images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
