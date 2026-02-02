@@ -54,7 +54,7 @@ _adjust_postgresql_configuration: # INTERNAL
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=.env s=.block/postgresql/.env
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/postgresql/compose.override.yaml
 	$(MAKE) commit m="configuration adjusted for PosgreSQL"
-	$(MAKE) restart_deps
+	$(MAKE) restart_build
 
 #
 
@@ -91,7 +91,7 @@ demo: deep_clean ## Generate a Symfony Demo application (with SQLite) with Docke
 	$(MAKE) commit m=".env.dev updated with APP_SECRET value"
 	$(MAKE) ga f=clean/docker-entrypoint.sh.database.patch
 	$(MAKE) commit m="clean docker-entrypoint.sh"
-	$(MAKE) restart_infra
+	$(MAKE) restart_force
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
@@ -144,10 +144,10 @@ endif
 	$(MAKE) commit m="activating the bind mount (var/, var/log)"
 	$(MAKE) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(MAKE) commit m="use DATABASE_URL var in compose.yaml"
-	$(MAKE) restart_infra
+	$(MAKE) restart_force
 	$(MAKE) ga f=clean/docker-entrypoint.sh.composer.patch
 	$(MAKE) commit m="clean docker-entrypoint.sh"
-	$(MAKE) restart_deps
+	$(MAKE) restart_build
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
