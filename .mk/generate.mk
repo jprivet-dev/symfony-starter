@@ -54,7 +54,7 @@ _adjust_postgresql_configuration: # INTERNAL
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=.env s=.block/postgresql/.env
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/postgresql/compose.override.yaml
 	$(MAKE) commit m="configuration adjusted for PosgreSQL"
-	$(MAKE) restart_build
+	$(MAKE) restart
 
 #
 
@@ -196,6 +196,7 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
 	$(COMPOSER) require symfony/webapp-pack
 	$(MAKE) commit m="composer require symfony/webapp-pack"
+	$(MAKE) restart_force
 	$(MAKE) _adjust_postgresql_configuration
 
 ##
