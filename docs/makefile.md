@@ -11,7 +11,7 @@
 ```
 
 — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
-  help                          Display this help message with available commands
+  help                          Display this help message with available commands - $ make [f=<filter>] - $ make f=restart
 
 — PROJECT 🚀 ———————————————————————————————————————————————————————————————
   install                       Start the project, install dependencies and show info

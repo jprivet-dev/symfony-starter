@@ -214,12 +214,17 @@ endif
 
 .DEFAULT_GOAL = help
 .PHONY: help
-help: ## Display this help message with available commands
-	@grep -E '(^[.a-zA-Z_-]+[^:]+:.*##.*?$$)|(^#{2})' $(MAKEFILE_LIST) | awk 'BEGIN {FS = "## "}; { \
+help: f ?=
+help: ## Display this help message with available commands - $ make [f=<filter>] - $ make f=restart
+	@grep -E '(^[.a-zA-Z_-]+[^:]+:.*##.*?$$)|(^#{2})' $(MAKEFILE_LIST) | awk -v filter="$(f)" 'BEGIN {FS = "## "}; { \
 		split($$1, line, ":"); targets=line[2]; description=$$2; \
-		if (targets == "##") { printf "\033[33m%s\n", ""; } \
-		else if (targets == "" && description != "") { printf "\033[33m\n%s\n", description; } \
-		else if (targets != "" && description != "") { split(targets, parts, " "); target=parts[1]; alias=parts[2]; printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; } \
+		if (filter == "") { \
+			if (targets == "##") { printf "\033[33m%s\n", ""; } \
+			else if (targets == "" && description != "") { printf "\033[33m\n%s\n", description; } \
+			else if (targets != "" && description != "") { split(targets, parts, " "); target=parts[1]; alias=parts[2]; printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; } \
+		} else if (targets != "" && description != "" && (index(tolower(targets), tolower(filter)) || index(tolower(description), tolower(filter)))) { \
+			split(targets, parts, " "); target=parts[1]; alias=parts[2]; printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; \
+		} \
 	}'
 	@echo
 
