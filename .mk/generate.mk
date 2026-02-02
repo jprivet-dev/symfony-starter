@@ -48,13 +48,17 @@ commit: # INTERNAL
 	$(if $(m),, $(error "Please specify a message with 'm=...'"))
 	git add . && git commit -m "$(GIT_PREFIX) $(m)"
 
-#
+activate_bind_mount: # INTERNAL - Execute after $ make restart
+	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
+	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
+	$(MAKE) commit m="activate the bind mount (var/, var/log)"
 
-_adjust_postgresql_configuration: # INTERNAL
+update_postgresql_configuration: # INTERNAL - Execute after $ make restart
+	$(MAKE) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=.env s=.block/postgresql/.env
 	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/postgresql/compose.override.yaml
-	$(MAKE) commit m="configuration adjusted for PosgreSQL"
-	$(MAKE) restart
+	$(MAKE) commit m="update PosgreSQL configuration"
+
 #
 
 .PHONY: minimalist
@@ -65,7 +69,6 @@ minimalist: deep_clean ## Generate a minimalist Symfony application with Docker 
 
 minimalist@lts: deep_clean ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
-
 
 ##
 
@@ -138,11 +141,7 @@ else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
 endif
 	$(MAKE) commit m="make clone_symfony_docker"
-	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
-	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
-	$(MAKE) commit m="activating the bind mount (var/, var/log)"
-	$(MAKE) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
-	$(MAKE) commit m="use DATABASE_URL var in compose.yaml"
+	$(MAKE) activate_bind_mount
 	$(MAKE) restart_force
 	$(MAKE) ga f=clean/docker-entrypoint.sh.composer.patch
 	$(MAKE) commit m="clean docker-entrypoint.sh"
@@ -196,7 +195,7 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	$(COMPOSER) require symfony/webapp-pack
 	$(MAKE) commit m="composer require symfony/webapp-pack"
 	$(MAKE) restart_force
-	$(MAKE) _adjust_postgresql_configuration
+	$(MAKE) update_postgresql_configuration
 
 ##
 
@@ -216,7 +215,7 @@ require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.
 	$(COMPOSER) require symfony/orm-pack
 	$(MAKE) commit m="composer require symfony/orm-pack"
 	$(MAKE) restart_force
-	$(MAKE) _adjust_postgresql_configuration
+	$(MAKE) update_postgresql_configuration
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(COMPOSER) require --dev symfony/profiler-pack
