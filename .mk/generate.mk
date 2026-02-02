@@ -198,7 +198,7 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	$(COMPOSER) require symfony/webapp-pack
 	$(MAKE) commit m="composer require symfony/webapp-pack"
 	$(MAKE) _adjust_postgresql_configuration
-	$(MAKE) permissions down deep_clean up_detached
+	$(MAKE) restart_deps
 
 ##
 
