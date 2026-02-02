@@ -17,6 +17,9 @@ REPOSITORY_SYMFONY_DOCKER = git@github.com:dunglas/symfony-docker.git
 REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
 CLONE_DIR                 = clone
 
+C = $(COMPOSER)
+M = $(MAKE)
+
 #
 
 .PHONY: replace
@@ -49,66 +52,66 @@ commit: # INTERNAL
 	git add . && git commit -m "$(GIT_PREFIX) $(m)"
 
 activate_bind_mount: # INTERNAL - Execute after $ make restart
-	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
-	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
-	$(MAKE) commit m="activate the bind mount (var/, var/log)"
+	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
+	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
+	$(M) commit m="activate the bind mount (var/, var/log)"
 
 update_postgresql_configuration: # INTERNAL - Execute after $ make restart
-	$(MAKE) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
-	$(MAKE) rb m="doctrine/doctrine-bundle" t=.env s=.block/postgresql/.env
-	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/postgresql/compose.override.yaml
-	$(MAKE) commit m="update PosgreSQL configuration"
+	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
+	$(M) rb m="doctrine/doctrine-bundle" t=.env s=.block/postgresql/.env
+	$(M) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/postgresql/compose.override.yaml
+	$(M) commit m="update PosgreSQL configuration"
 
 #
 
 .PHONY: minimalist
 minimalist: deep_clean ## Generate a minimalist Symfony application with Docker configuration (stable release)
-	$(MAKE) clone_symfony_docker
-	$(MAKE) images info
+	$(M) clone_symfony_docker
+	$(M) images info
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
 minimalist@lts: deep_clean ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist
 
 ##
 
 .PHONY: api
 api: deep_clean ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
-	$(MAKE) minimalist
-	$(MAKE) require_orm
-	$(MAKE) require_api
-	$(MAKE) images info
+	$(M) minimalist
+	$(M) require_orm
+	$(M) require_api
+	$(M) images info
 	@printf " $(G)✔$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
 api@lts: deep_clean ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) api
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api
 
 .PHONY: demo
 demo: deep_clean ## Generate a Symfony Demo application (with SQLite) with Docker configuration
-	$(MAKE) clone_symfony_demo
-	$(MAKE) clone_symfony_docker
-	$(MAKE) rb m="recipes" t=Dockerfile s=.block/sqlite/Dockerfile
-	$(MAKE) commit m="Dockerfile updated to SQLite"
-	$(MAKE) rb m="symfony/framework-bundle" t=.env.dev s=.block/demo/.env.dev
-	$(MAKE) commit m=".env.dev updated with APP_SECRET value"
-	$(MAKE) ga f=clean/docker-entrypoint.sh.database.patch
-	$(MAKE) commit m="clean docker-entrypoint.sh"
-	$(MAKE) restart_force
-	$(MAKE) images info
+	$(M) clone_symfony_demo
+	$(M) clone_symfony_docker
+	$(M) rb m="recipes" t=Dockerfile s=.block/sqlite/Dockerfile
+	$(M) commit m="Dockerfile updated to SQLite"
+	$(M) rb m="symfony/framework-bundle" t=.env.dev s=.block/demo/.env.dev
+	$(M) commit m=".env.dev updated with APP_SECRET value"
+	$(M) ga f=clean/docker-entrypoint.sh.database.patch
+	$(M) commit m="clean docker-entrypoint.sh"
+	$(M) restart_force
+	$(M) images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
 easy_admin: deep_clean ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
-	$(MAKE) minimalist
-	$(MAKE) require_orm
-	$(MAKE) require_easy_admin
+	$(M) minimalist
+	$(M) require_orm
+	$(M) require_easy_admin
 	# Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html
 	$(CONSOLE) make:admin:dashboard --no-interaction
-	$(MAKE) commit m="bin/console make:admin:dashboard --no-interaction"
+	$(M) commit m="bin/console make:admin:dashboard --no-interaction"
 	# Need to repeat cache_clear to avoid "Clear the application cache to run the EasyAdmin cache warmer, which generates the needed data to find this route.". Find why!
-	$(MAKE) cache_clear
-	$(MAKE) cache_clear
-	$(MAKE) cache_clear
-	$(MAKE) images info
+	$(M) cache_clear
+	$(M) cache_clear
+	$(M) cache_clear
+	$(M) images info
 	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
 easy_admin@lts: deep_clean ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
@@ -116,8 +119,8 @@ easy_admin@lts: deep_clean ## Generate an EasyAdmin application (with PostgreSQL
 
 .PHONY: webapp
 webapp: kill_current_app minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
-	$(MAKE) require_webapp
-	$(MAKE) images info
+	$(M) require_webapp
+	$(M) images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
 
 webapp@lts: ## Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
@@ -140,12 +143,12 @@ ifeq ($(wildcard $(DOCKERFILE)),)
 else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
 endif
-	$(MAKE) commit m="make clone_symfony_docker"
-	$(MAKE) activate_bind_mount
-	$(MAKE) restart_force
-	$(MAKE) ga f=clean/docker-entrypoint.sh.composer.patch
-	$(MAKE) commit m="clean docker-entrypoint.sh"
-	$(MAKE) restart_build
+	$(M) commit m="make clone_symfony_docker"
+	$(M) activate_bind_mount
+	$(M) restart_force
+	$(M) ga f=clean/docker-entrypoint.sh.composer.patch
+	$(M) commit m="clean docker-entrypoint.sh"
+	$(M) restart_build
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
@@ -162,11 +165,11 @@ ifeq ($(wildcard .env.local.demo),)
 else
 	@printf " $(G)✔$(S) https://github.com/symfony/demo files already present at the root.\n\n"
 endif
-	$(MAKE) commit m="make clone_symfony_demo"
+	$(M) commit m="make clone_symfony_demo"
 
 kill_current_app: ## Remove all fresh Symfony application files
-	-$(MAKE) permissions
-	$(MAKE) deep_clean
+	-$(M) permissions
+	$(M) deep_clean
 	git reset --hard
 	git clean -f -d
 	rm -rf var/ vendor/
@@ -174,87 +177,87 @@ kill_current_app: ## Remove all fresh Symfony application files
 ##   COMPLETE INSTALLATION
 
 require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
-	$(COMPOSER) require api
-	$(MAKE) commit m="composer require api"
+	$(C) require api
+	$(M) commit m="composer require api"
 
 require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
-	$(COMPOSER) require easycorp/easyadmin-bundle
-	$(MAKE) commit m="composer require easycorp/easyadmin-bundle"
+	$(C) require easycorp/easyadmin-bundle
+	$(M) commit m="composer require easycorp/easyadmin-bundle"
 
 require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
-	$(COMPOSER) require symfony/asset-mapper symfony/stimulus-bundle
-	$(MAKE) commit m="composer require symfony/asset-mapper symfony/stimulus-bundle"
+	$(C) require symfony/asset-mapper symfony/stimulus-bundle
+	$(M) commit m="composer require symfony/asset-mapper symfony/stimulus-bundle"
 
 require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
 	# FIX: Ban version 6 for the moment to prevent Symfony PropertyInfo crash
 	# symfony/property-info v6 does not support phpdocumentor/reflection-docblock
     # Please stick to ^5.2 in your composer.json file.
-	$(COMPOSER) require "phpdocumentor/reflection-docblock:^5.2"
+	$(C) require "phpdocumentor/reflection-docblock:^5.2"
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
-	$(COMPOSER) require symfony/webapp-pack
-	$(MAKE) commit m="composer require symfony/webapp-pack"
-	$(MAKE) update_postgresql_configuration
-	$(MAKE) deep_clean
-	$(MAKE) restart_force
+	$(C) require symfony/webapp-pack
+	$(M) commit m="composer require symfony/webapp-pack"
+	$(M) update_postgresql_configuration
+	$(M) deep_clean
+	$(M) restart_force
 
 ##
 
 require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-	$(COMPOSER) require symfony/asset-mapper symfony/asset symfony/twig-pack
-	$(MAKE) commit m="composer require symfony/asset-mapper symfony/asset symfony/twig-pack"
+	$(C) require symfony/asset-mapper symfony/asset symfony/twig-pack
+	$(M) commit m="composer require symfony/asset-mapper symfony/asset symfony/twig-pack"
 
 require_bootstrap: _assets ## Install Bootstrap - https://getbootstrap.com/
 	$(CONSOLE) importmap:require bootstrap
-	$(MAKE) commit m="bin/console importmap:require bootstrap"
+	$(M) commit m="bin/console importmap:require bootstrap"
 
 require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
-	$(COMPOSER) require --dev symfony/maker-bundle
-	$(MAKE) commit m="composer require --dev symfony/maker-bundle"
+	$(C) require --dev symfony/maker-bundle
+	$(M) commit m="composer require --dev symfony/maker-bundle"
 
 require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
-	$(COMPOSER) require symfony/orm-pack
-	$(MAKE) commit m="composer require symfony/orm-pack"
-	$(MAKE) update_postgresql_configuration
-	$(MAKE) deep_clean
-	$(MAKE) restart_force
+	$(C) require symfony/orm-pack
+	$(M) commit m="composer require symfony/orm-pack"
+	$(M) update_postgresql_configuration
+	$(M) deep_clean
+	$(M) restart_force
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
-	$(COMPOSER) require --dev symfony/profiler-pack
-	$(MAKE) commit m="composer require --dev symfony/profiler-pack"
+	$(C) require --dev symfony/profiler-pack
+	$(M) commit m="composer require --dev symfony/profiler-pack"
 
 require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
-	$(COMPOSER) require --dev symfony/test-pack
-	$(MAKE) commit m="composer require --dev symfony/test-pack"
+	$(C) require --dev symfony/test-pack
+	$(M) commit m="composer require --dev symfony/test-pack"
 
 require_translation: ## Install Translation - https://symfony.com/doc/current/translation.html
-	$(COMPOSER) require symfony/translation
-	$(MAKE) commit m="composer require symfony/translation"
+	$(C) require symfony/translation
+	$(M) commit m="composer require symfony/translation"
 
 ##
 
 require_phpcsfixer: ## Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
-	$(COMPOSER) require --dev friendsofphp/php-cs-fixer
-	$(MAKE) commit m="composer require --dev friendsofphp/php-cs-fixer"
+	$(C) require --dev friendsofphp/php-cs-fixer
+	$(M) commit m="composer require --dev friendsofphp/php-cs-fixer"
 
 require_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
-	$(COMPOSER) require --dev phpmd/phpmd
-	$(MAKE) commit m="composer require --dev phpmd/phpmd"
+	$(C) require --dev phpmd/phpmd
+	$(M) commit m="composer require --dev phpmd/phpmd"
 
 require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website/
-	$(COMPOSER) require --dev phpmetrics/phpmetrics
-	$(MAKE) commit m="composer require --dev phpmetrics/phpmetrics"
+	$(C) require --dev phpmetrics/phpmetrics
+	$(M) commit m="composer require --dev phpmetrics/phpmetrics"
 
 require_phpstan: ## Install PHPStan - https://phpstan.org/
-	$(COMPOSER) require --dev \
+	$(C) require --dev \
 		phpstan/phpstan \
 		phpstan/phpstan-symfony \
 		phpstan/phpstan-doctrine \
 		phpstan/phpstan-phpunit
-	$(MAKE) commit m="composer require --dev phpstan/phpstan (+ symfony, doctrine & phpunit)"
+	$(M) commit m="composer require --dev phpstan/phpstan (+ symfony, doctrine & phpunit)"
 
 require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
-	$(COMPOSER) require --dev vincentlanglet/twig-cs-fixer
-	$(MAKE) commit m="composer require --dev vincentlanglet/twig-cs-fixer"
+	$(C) require --dev vincentlanglet/twig-cs-fixer
+	$(M) commit m="composer require --dev vincentlanglet/twig-cs-fixer"
 
 ##
 
@@ -263,10 +266,10 @@ ifeq ($(IS_POSTGRESQL),)
 	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine (with PostgreSQL by default)$(S) with $(G)make require_orm$(S)\n"
 	@exit 1
 endif
-	$(MAKE) rb m="doctrine/doctrine-bundle" t=.env s=.block/mariadb/.env
-	$(MAKE) rb m="doctrine/doctrine-bundle" t=Dockerfile s=.block/mariadb/Dockerfile
-	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/mariadb/compose.override.yaml
-	$(MAKE) rb m="doctrine/doctrine-bundle" t=compose.yaml s=.block/mariadb/compose.yaml
-	$(MAKE) commit m="stack updated to MariaDB"
-	$(MAKE) permissions down deep_clean up_detached
+	$(M) rb m="doctrine/doctrine-bundle" t=.env s=.block/mariadb/.env
+	$(M) rb m="doctrine/doctrine-bundle" t=Dockerfile s=.block/mariadb/Dockerfile
+	$(M) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/mariadb/compose.override.yaml
+	$(M) rb m="doctrine/doctrine-bundle" t=compose.yaml s=.block/mariadb/compose.yaml
+	$(M) commit m="stack updated to MariaDB"
+	$(M) permissions down deep_clean up_detached
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
