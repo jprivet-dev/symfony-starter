@@ -147,7 +147,7 @@ endif
 	$(MAKE) restart_infra
 	$(MAKE) ga f=clean/docker-entrypoint.sh.composer.patch
 	$(MAKE) commit m="clean docker-entrypoint.sh"
-	$(MAKE) restart_infra
+	$(MAKE) restart_deps
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
