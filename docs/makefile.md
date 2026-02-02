@@ -21,8 +21,8 @@
   stop                          Stop the project (down)
 
   restart                       [Level 1] Restart containers (triggers: .env, compose.yaml, code changes or clean state)
-  restart_deps                  [Level 2] Rebuild dependencies (triggers: composer.lock)
-  restart_infra                 [Level 3] Hard rebuild (triggers: Dockerfile, frankenphp/)
+  restart_deps                  [Level 2] Smart rebuild (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
+  restart_infra                 [Level 3] Hard rebuild (triggers: Dockerfile, system packages, cache issues)
 
   check_level_1              c1 Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
   check_level_2              c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)

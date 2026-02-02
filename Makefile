@@ -275,11 +275,11 @@ restart: ## [Level 1] Restart containers (triggers: .env, compose.yaml, code cha
 	@printf " $(G)🔄 [Level 1] Standard restart. Restarting containers...$(S)\n"
 	$(MAKE) stop start
 
-restart_deps: ## [Level 2] Rebuild dependencies (triggers: composer.lock)
+restart_deps: ## [Level 2] Smart rebuild (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
 	@printf " $(Y)🏗️ [Level 2] Dependencies update. Rebuilding...$(S)\n"
 	$(MAKE) build start
 
-restart_infra: ## [Level 3] Hard rebuild (triggers: Dockerfile, frankenphp/)
+restart_infra: ## [Level 3] Hard rebuild (triggers: Dockerfile, system packages, cache issues)
 	@printf " $(R)🏗️ [Level 3] Infrastructure rebuild. Rebuilding from scratch...$(S)\n"
 	$(MAKE) build_force start
 
