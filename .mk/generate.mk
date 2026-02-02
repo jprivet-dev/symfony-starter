@@ -58,8 +58,8 @@ activate_bind_mount: # INTERNAL - Execute after $ make restart
 
 update_postgresql_configuration: # INTERNAL - Execute after $ make restart
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
-	$(M) rb m="doctrine/doctrine-bundle" t=.env s=.block/postgresql/.env
-	$(M) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/postgresql/compose.override.yaml
+	$(M) rb m=doctrine/doctrine-bundle t=.env s=.block/postgresql/.env
+	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/postgresql/compose.override.yaml
 	$(M) co m="update PosgreSQL configuration"
 
 #
@@ -90,9 +90,9 @@ api@lts: deep_clean ## Generate an ApiPlatform application (with PostgreSQL) wit
 demo: deep_clean ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(M) clone_symfony_demo
 	$(M) clone_symfony_docker
-	$(M) rb m="recipes" t=Dockerfile s=.block/sqlite/Dockerfile
+	$(M) rb m=recipes t=Dockerfile s=.block/sqlite/Dockerfile
 	$(M) co m="Dockerfile updated to SQLite"
-	$(M) rb m="symfony/framework-bundle" t=.env.dev s=.block/demo/.env.dev
+	$(M) rb m=symfony/framework-bundle t=.env.dev s=.block/demo/.env.dev
 	$(M) co m=".env.dev updated with APP_SECRET value"
 	$(M) ga f=clean/docker-entrypoint.sh.database.patch
 	$(M) co m="clean docker-entrypoint.sh"
@@ -266,10 +266,10 @@ ifeq ($(IS_POSTGRESQL),)
 	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine (with PostgreSQL by default)$(S) with $(G)make require_orm$(S)\n"
 	@exit 1
 endif
-	$(M) rb m="doctrine/doctrine-bundle" t=.env s=.block/mariadb/.env
-	$(M) rb m="doctrine/doctrine-bundle" t=Dockerfile s=.block/mariadb/Dockerfile
-	$(M) rb m="doctrine/doctrine-bundle" t=compose.override.yaml s=.block/mariadb/compose.override.yaml
-	$(M) rb m="doctrine/doctrine-bundle" t=compose.yaml s=.block/mariadb/compose.yaml
+	$(M) rb m=doctrine/doctrine-bundle t=.env s=.block/mariadb/.env
+	$(M) rb m=doctrine/doctrine-bundle t=Dockerfile s=.block/mariadb/Dockerfile
+	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/mariadb/compose.override.yaml
+	$(M) rb m=doctrine/doctrine-bundle t=compose.yaml s=.block/mariadb/compose.yaml
 	$(M) co m="stack updated to MariaDB"
 	$(M) permissions down deep_clean up_detached
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
