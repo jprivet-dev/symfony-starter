@@ -332,7 +332,7 @@ kill_all: confirm ## Remove containers, networks AND VOLUMES (database destroyed
 
 ##
 
-deep_clean: confirm ## Aggressively remove all Docker resources (containers, volumes, networks, images) including orphans - Use when switching branches/projects [y/N]
+deep_clean: confirm ## [Danger] Remove containers, volumes, networks and images, including orphans (triggers: webapp-pack, database, branch switch) [y/N]
 	@printf "🔥 $(Y)Cleaning Docker environment for $(PROJECT_NAME) (if file exists)...$(S)\n"
 	-$(COMPOSE) down --volumes --rmi local --remove-orphans 2>/dev/null || true
 
