@@ -59,30 +59,30 @@ _adjust_postgresql_configuration: # INTERNAL
 #
 
 .PHONY: minimalist
-minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
+minimalist: deep_clean ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(MAKE) clone_symfony_docker
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
-minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+minimalist@lts: deep_clean ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) minimalist
 
 
 ##
 
 .PHONY: api
-api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
+api: deep_clean ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
 	$(MAKE) minimalist
 	$(MAKE) require_orm
 	$(MAKE) require_api
 	$(MAKE) images info
 	@printf " $(G)✔$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
-api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+api@lts: deep_clean ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) api
 
 .PHONY: demo
-demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
+demo: deep_clean ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(MAKE) clone_symfony_demo
 	$(MAKE) clone_symfony_docker
 	$(MAKE) rb m="recipes" t=Dockerfile s=.block/sqlite/Dockerfile
@@ -95,7 +95,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
-easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
+easy_admin: deep_clean ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
 	$(MAKE) minimalist
 	$(MAKE) require_orm
 	$(MAKE) require_easy_admin
@@ -109,11 +109,11 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(MAKE) images info
 	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
-easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+easy_admin@lts: deep_clean ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) easy_admin
 
 .PHONY: webapp
-webapp: minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
+webapp: deep_clean minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
 	$(MAKE) require_webapp
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
