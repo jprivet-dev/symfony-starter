@@ -112,7 +112,7 @@ easy_admin@lts: deep_clean ## Generate an EasyAdmin application (with PostgreSQL
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) easy_admin
 
 .PHONY: webapp
-webapp: deep_clean minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
+webapp: kill_current_app minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
 	$(MAKE) require_webapp
 	$(MAKE) images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
