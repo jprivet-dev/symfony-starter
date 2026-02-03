@@ -78,7 +78,6 @@ update_postgresql_configuration: .env compose.yaml compose.override.yaml # INTER
 
 demo_switch_to_sqlite: .env.dev Dockerfile frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make restart_force
 	$(M) ga f=clean/docker-entrypoint.sh.database.patch
-	$(M) rb m=symfony/framework-bundle t=.env.dev s=.block/demo/.env.dev
 	$(M) rb m=recipes t=Dockerfile s=.block/sqlite/Dockerfile
 	$(M) co m="switch to SQLite"
 
@@ -121,6 +120,7 @@ api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(M) clone_symfony_demo
 	$(M) clone_symfony_docker
+	cp .env.local.demo .env.local
 	$(M) demo_switch_to_sqlite
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) restart_force
