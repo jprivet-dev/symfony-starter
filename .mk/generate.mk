@@ -20,6 +20,16 @@ CLONE_DIR                 = clone
 C = $(COMPOSER)
 M = $(MAKE)
 
+START_TIME := $(shell date +%s)
+
+define PRINT_EXECUTION_TIME
+	@END_TIME=$$(date +%s); \
+	DURATION=$$(( $$END_TIME - $(START_TIME) )); \
+	MINUTES=$$(( $$DURATION / 60 )); \
+	SECONDS=$$(( $$DURATION % 60 )); \
+	printf "\n ⏱️  $(Y)Total execution time: %02dm %02ds$(S)\n" $$MINUTES $$SECONDS
+endef
+
 #
 
 .PHONY: replace
@@ -82,6 +92,7 @@ minimalist: ## Generate a minimalist Symfony application with Docker configurati
 	$(M) clone_symfony_docker
 	$(M) permissions images info
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
+	$(PRINT_EXECUTION_TIME)
 
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist
@@ -95,6 +106,7 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	$(M) require_api
 	$(M) permissions images info
 	@printf " $(G)✔$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
+	$(PRINT_EXECUTION_TIME)
 
 api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api
@@ -111,6 +123,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(M) restart_force
 	$(M) permissions images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
+	$(PRINT_EXECUTION_TIME)
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
 	$(M) clone_symfony_docker
@@ -125,6 +138,7 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(M) cache_clear
 	$(M) permissions images info
 	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
+	$(PRINT_EXECUTION_TIME)
 
 easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) easy_admin
@@ -135,6 +149,7 @@ webapp: ## Generate a webapp Symfony application with Docker configuration (stab
 	$(M) require_webapp
 	$(M) permissions images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
+	$(PRINT_EXECUTION_TIME)
 
 webapp@lts: ## Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) webapp
