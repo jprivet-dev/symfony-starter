@@ -95,7 +95,6 @@ kill_current_app: confirm ## Remove all fresh Symfony application files (var/, v
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(M) clone_symfony_docker
-	$(M) permissions images info
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
@@ -124,7 +123,6 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(M) demo_switch_to_sqlite
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) restart_force
-	$(M) permissions images info
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
