@@ -89,7 +89,8 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 ##
 
 .PHONY: api
-api: minimalist ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
+api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
+	$(M) clone_symfony_docker
 	$(M) require_orm
 	$(M) require_api
 	$(M) permissions images info
@@ -111,7 +112,8 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(M) permissions images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
-easy_admin: minimalist ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
+easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
+	$(M) clone_symfony_docker
 	$(M) require_orm
 	$(M) require_easy_admin
 	# Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html
@@ -128,7 +130,8 @@ easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Dock
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) easy_admin
 
 .PHONY: webapp
-webapp: minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
+webapp: ## Generate a webapp Symfony application with Docker configuration (stable release)
+	$(M) clone_symfony_docker
 	$(M) require_webapp
 	$(M) permissions images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
