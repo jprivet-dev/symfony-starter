@@ -64,30 +64,38 @@ update_postgresql_configuration: # INTERNAL - Execute after $ make restart
 
 #
 
+kill_current_app: ## Remove all fresh Symfony application files (var/, vendor/, ...)
+	-$(M) permissions
+	$(M) deep_clean
+	git reset --hard
+	git clean -f -d
+	rm -rf var/ vendor/
+
+#
+
 .PHONY: minimalist
-minimalist: deep_clean ## Generate a minimalist Symfony application with Docker configuration (stable release)
+minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(M) clone_symfony_docker
 	$(M) images info
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
-minimalist@lts: deep_clean ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist
 
 ##
 
 .PHONY: api
-api: deep_clean ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
-	$(M) minimalist
+api: minimalist ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
 	$(M) require_orm
 	$(M) require_api
 	$(M) images info
 	@printf " $(G)✔$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
-api@lts: deep_clean ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api
 
 .PHONY: demo
-demo: deep_clean ## Generate a Symfony Demo application (with SQLite) with Docker configuration
+demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(M) clone_symfony_demo
 	$(M) clone_symfony_docker
 	$(M) rb m=recipes t=Dockerfile s=.block/sqlite/Dockerfile
@@ -99,8 +107,7 @@ demo: deep_clean ## Generate a Symfony Demo application (with SQLite) with Docke
 	$(M) images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
-easy_admin: deep_clean ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
-	$(M) minimalist
+easy_admin: minimalist ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
 	$(M) require_orm
 	$(M) require_easy_admin
 	# Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html
@@ -113,11 +120,11 @@ easy_admin: deep_clean ## Generate an EasyAdmin application (with PostgreSQL) wi
 	$(M) images info
 	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
-easy_admin@lts: deep_clean ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) easy_admin
 
 .PHONY: webapp
-webapp: kill_current_app minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
+webapp: minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
 	$(M) require_webapp
 	$(M) images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
@@ -165,13 +172,6 @@ else
 	@printf " $(G)✔$(S) https://github.com/symfony/demo files already present at the root.\n\n"
 endif
 	$(M) co m="make clone_symfony_demo"
-
-kill_current_app: ## Remove all fresh Symfony application files
-	-$(M) permissions
-	$(M) deep_clean
-	git reset --hard
-	git clean -f -d
-	rm -rf var/ vendor/
 
 ##   COMPLETE INSTALLATION
 
