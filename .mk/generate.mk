@@ -78,9 +78,9 @@ update_postgresql_configuration: # INTERNAL - Execute after $ make restart
 
 #
 
-kill_current_app: ## Remove all fresh Symfony application files (var/, vendor/, ...)
+kill_current_app: confirm ## Remove all fresh Symfony application files (var/, vendor/, ...)
 	-$(M) permissions
-	$(M) deep_clean
+	$(M) deep_clean NO_INTERACTION=true
 	git reset --hard
 	git clean -f -d
 	rm -rf var/ vendor/
@@ -119,7 +119,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(M) rb m=symfony/framework-bundle t=.env.dev s=.block/demo/.env.dev
 	$(M) ga f=clean/docker-entrypoint.sh.database.patch
 	$(M) co m="switch to SQLite"
-	$(M) deep_clean
+	$(M) deep_clean NO_INTERACTION=true
 	$(M) restart_force
 	$(M) permissions images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
@@ -239,7 +239,8 @@ require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.
 	$(M) co m="composer require symfony/orm-pack"
 	$(M) update_postgresql_configuration
 	# Running deep_clean is essential to properly take into account the ORM installed by symfony/orm-pack
-	$(M) deep_clean restart_force
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) restart_force
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(C) require --dev symfony/profiler-pack
@@ -292,5 +293,6 @@ endif
 	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/mariadb/compose.override.yaml
 	$(M) rb m=doctrine/doctrine-bundle t=compose.yaml s=.block/mariadb/compose.yaml
 	$(M) co m="stack updated to MariaDB"
-	$(M) deep_clean restart_force
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) restart_force
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
