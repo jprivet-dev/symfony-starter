@@ -79,7 +79,7 @@ update_postgresql_configuration: .env compose.yaml compose.override.yaml # INTER
 demo_add_sqlite_configuration_before_orm_pack: Dockerfile frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make restart_force
 	$(M) ga f=clean/docker-entrypoint.sh.database.patch
 	$(M) rb m=recipes t=Dockerfile s=.block/sqlite/Dockerfile
-	$(M) co m="switch to SQLite before ORM pack installation"
+	$(M) co m="add SQLite configuration before ORM pack installation"
 
 demo_update_sqlite_configuration_after_orm_pack: compose.yaml # INTERNAL - Execute after $ make restart_force
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
