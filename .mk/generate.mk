@@ -61,20 +61,26 @@ commit co: # INTERNAL
 	$(if $(m),, $(error "Please specify a message with 'm=...'"))
 	git add . && git commit -m "$(GIT_PREFIX) $(m)"
 
-activate_bind_mount: # INTERNAL - Execute after $ make restart_force
+activate_bind_mount: compose.override.yaml # INTERNAL - Execute after $ make restart
 	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
 	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
 	$(M) co m="activate the bind mount (var/, var/log)"
 
-clean_docker_entrypoint: # INTERNAL - Execute after $ make restart_build
+clean_docker_entrypoint: frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make restart_build
 	$(M) ga f=clean/docker-entrypoint.sh.composer.patch
 	$(M) co m="clean docker-entrypoint.sh"
 
-update_postgresql_configuration: # INTERNAL - Execute after $ make restart
+update_postgresql_configuration: .env compose.yaml compose.override.yaml # INTERNAL - Execute after $ make restart
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(M) rb m=doctrine/doctrine-bundle t=.env s=.block/postgresql/.env
 	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/postgresql/compose.override.yaml
 	$(M) co m="update PosgreSQL configuration"
+
+demo_switch_to_sqlite: .env.dev Dockerfile frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make restart_force
+	$(M) ga f=clean/docker-entrypoint.sh.database.patch
+	$(M) rb m=symfony/framework-bundle t=.env.dev s=.block/demo/.env.dev
+	$(M) rb m=recipes t=Dockerfile s=.block/sqlite/Dockerfile
+	$(M) co m="switch to SQLite"
 
 #
 
@@ -115,10 +121,7 @@ api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(M) clone_symfony_demo
 	$(M) clone_symfony_docker
-	$(M) rb m=recipes t=Dockerfile s=.block/sqlite/Dockerfile
-	$(M) rb m=symfony/framework-bundle t=.env.dev s=.block/demo/.env.dev
-	$(M) ga f=clean/docker-entrypoint.sh.database.patch
-	$(M) co m="switch to SQLite"
+	$(M) demo_switch_to_sqlite
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) restart_force
 	$(M) permissions images info
