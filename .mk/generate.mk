@@ -172,10 +172,10 @@ ifeq ($(wildcard $(DOCKERFILE)),)
 	fi
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker cloned and extracted at the root.\n\n"
 	$(M) co m="https://github.com/dunglas/symfony-docker cloned and extracted at the root"
-	$(M) activate_bind_mount
-	$(M) restart_force
-	$(M) clean_docker_entrypoint
-	$(M) restart_build
+#	$(M) activate_bind_mount
+#	$(M) restart_force
+#	$(M) clean_docker_entrypoint
+#	$(M) restart_build
 else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
 endif
