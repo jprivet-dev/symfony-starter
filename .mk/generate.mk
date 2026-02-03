@@ -126,6 +126,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	cp .env.local.demo .env.local
 	$(M) demo_add_sqlite_configuration_before_orm_pack
 	$(C) require symfony/orm-pack
+	git restore .env.local.demo
 	$(M) co m="composer require symfony/orm-pack"
 	$(M) demo_update_sqlite_configuration_after_orm_pack
 	$(M) deep_clean NO_INTERACTION=true
