@@ -168,12 +168,14 @@ ifeq ($(wildcard $(DOCKERFILE)),)
 	@if [ -f LICENSE ]; then \
 		git restore LICENSE; \
 	fi
-	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker cloned and extracted at the root.\n\n"
-	$(M) co m="https://github.com/dunglas/symfony-docker cloned and extracted at the root"
-#	$(M) activate_bind_mount
-#	$(M) restart_force
-#	$(M) clean_docker_entrypoint
-#	$(M) restart_build
+	@printf " $(G)✔$(S) dunglas/symfony-docker cloned and extracted at the root.\n\n"
+	$(M) co m="dunglas/symfony-docker cloned and extracted at the root"
+	$(M) restart_force
+	# No file modifications expected after restart (ex: .env.local.demo)
+	git reset --hard
+	$(M) activate_bind_mount
+	$(M) clean_docker_entrypoint
+	$(M) restart_build
 else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
 endif
