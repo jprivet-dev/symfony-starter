@@ -80,7 +80,7 @@ kill_current_app: ## Remove all fresh Symfony application files (var/, vendor/, 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(M) clone_symfony_docker
-	$(M) images info
+	$(M) permissions images info
 	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
 
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
@@ -92,7 +92,7 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 api: minimalist ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
 	$(M) require_orm
 	$(M) require_api
-	$(M) images info
+	$(M) permissions images info
 	@printf " $(G)✔$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
 api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
@@ -108,7 +108,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(M) co m="switch to SQLite"
 	$(M) deep_clean
 	$(M) restart_force
-	$(M) images info
+	$(M) permissions images info
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
 easy_admin: minimalist ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
@@ -121,7 +121,7 @@ easy_admin: minimalist ## Generate an EasyAdmin application (with PostgreSQL) wi
 	$(M) cache_clear
 	$(M) cache_clear
 	$(M) cache_clear
-	$(M) images info
+	$(M) permissions images info
 	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
 easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
@@ -130,7 +130,7 @@ easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Dock
 .PHONY: webapp
 webapp: minimalist ## Generate a webapp Symfony application with Docker configuration (stable release)
 	$(M) require_webapp
-	$(M) images info
+	$(M) permissions images info
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
 
 webapp@lts: ## Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
@@ -151,13 +151,13 @@ ifeq ($(wildcard $(DOCKERFILE)),)
 	fi
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker cloned and extracted at the root.\n\n"
 	$(M) co m="https://github.com/dunglas/symfony-docker cloned and extracted at the root"
-else
-	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
-endif
 	$(M) activate_bind_mount
 	$(M) restart_force
 	$(M) clean_docker_entrypoint
 	$(M) restart_build
+else
+	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
+endif
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
