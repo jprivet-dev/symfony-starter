@@ -51,10 +51,14 @@ commit co: # INTERNAL
 	$(if $(m),, $(error "Please specify a message with 'm=...'"))
 	git add . && git commit -m "$(GIT_PREFIX) $(m)"
 
-activate_bind_mount: # INTERNAL - Execute after $ make restart
+activate_bind_mount: # INTERNAL - Execute after $ make restart_force
 	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
 	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
 	$(M) co m="activate the bind mount (var/, var/log)"
+
+clean_docker_entrypoint: # INTERNAL - Execute after $ make restart_build
+	$(M) ga f=clean/docker-entrypoint.sh.composer.patch
+	$(M) co m="clean docker-entrypoint.sh"
 
 update_postgresql_configuration: # INTERNAL - Execute after $ make restart
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
@@ -146,14 +150,13 @@ ifeq ($(wildcard $(DOCKERFILE)),)
 		git restore LICENSE; \
 	fi
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker cloned and extracted at the root.\n\n"
+	$(M) co m="https://github.com/dunglas/symfony-docker cloned and extracted at the root"
 else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
 endif
-	$(M) co m="make clone_symfony_docker"
 	$(M) activate_bind_mount
 	$(M) restart_force
-	$(M) ga f=clean/docker-entrypoint.sh.composer.patch
-	$(M) co m="clean docker-entrypoint.sh"
+	$(M) clean_docker_entrypoint
 	$(M) restart_build
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
@@ -196,8 +199,8 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	$(C) require symfony/webapp-pack
 	$(M) co m="composer require symfony/webapp-pack"
 	$(M) update_postgresql_configuration
-	$(M) deep_clean
-	$(M) restart_force
+	# Running deep_clean is essential to properly take into account the ORM installed by symfony/webapp-pack
+	$(M) deep_clean restart_force
 
 ##
 
@@ -217,8 +220,8 @@ require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.
 	$(C) require symfony/orm-pack
 	$(M) co m="composer require symfony/orm-pack"
 	$(M) update_postgresql_configuration
-	$(M) deep_clean
-	$(M) restart_force
+	# Running deep_clean is essential to properly take into account the ORM installed by symfony/orm-pack
+	$(M) deep_clean restart_force
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(C) require --dev symfony/profiler-pack
@@ -265,10 +268,11 @@ ifeq ($(IS_POSTGRESQL),)
 	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine (with PostgreSQL by default)$(S) with $(G)make require_orm$(S)\n"
 	@exit 1
 endif
+	$(M) permissions
 	$(M) rb m=doctrine/doctrine-bundle t=.env s=.block/mariadb/.env
 	$(M) rb m=doctrine/doctrine-bundle t=Dockerfile s=.block/mariadb/Dockerfile
 	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/mariadb/compose.override.yaml
 	$(M) rb m=doctrine/doctrine-bundle t=compose.yaml s=.block/mariadb/compose.yaml
 	$(M) co m="stack updated to MariaDB"
-	$(M) permissions down deep_clean up_detached
+	$(M) deep_clean restart_force
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
