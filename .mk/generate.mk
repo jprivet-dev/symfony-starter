@@ -61,17 +61,16 @@ commit co: # INTERNAL
 	$(if $(m),, $(error "Please specify a message with 'm=...'"))
 	git add . && git commit -m "$(GIT_PREFIX) $(m)"
 
-activate_bind_mount: compose.override.yaml # INTERNAL - Execute after $ make restart
+compose_activate_bind_mount: compose.override.yaml # INTERNAL - Execute after $ make restart
 	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
 	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
 	$(M) co m="activate the bind mount (var/, var/log)"
 
-clean_docker_entrypoint: frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make restart_build
+docker_entrypoint_clean: frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make restart_build
 	$(M) ga f=clean/docker-entrypoint.sh.composer.patch
 	$(M) co m="clean docker-entrypoint.sh"
 
-update_postgresql_configuration: .env compose.yaml compose.override.yaml # INTERNAL - Execute after $ make restart
-	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
+update_postgresql_configuration: .env compose.override.yaml # INTERNAL - Execute after $ make restart
 	$(M) rb m=doctrine/doctrine-bundle t=.env s=.block/postgresql/.env
 	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/postgresql/compose.override.yaml
 	$(M) co m="update PosgreSQL configuration"
@@ -81,7 +80,7 @@ demo_add_sqlite_configuration_before_orm_pack: Dockerfile frankenphp/docker-entr
 	$(M) rb m=recipes t=Dockerfile s=.block/sqlite/Dockerfile
 	$(M) co m="add SQLite configuration before ORM pack installation"
 
-demo_update_sqlite_configuration_after_orm_pack: compose.yaml # INTERNAL - Execute after $ make restart_force
+compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make restart_force
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(M) co m="update SQLite configuration after ORM pack installation (DATABASE_URL)"
 
@@ -128,7 +127,6 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(C) require symfony/orm-pack
 	git restore .env.local.demo
 	$(M) co m="composer require symfony/orm-pack"
-	$(M) demo_update_sqlite_configuration_after_orm_pack
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) restart_force
 	$(PRINT_EXECUTION_TIME)
@@ -181,8 +179,9 @@ ifeq ($(wildcard $(DOCKERFILE)),)
 	$(M) restart_force
 	# No file modifications expected after restart (ex: .env.local.demo)
 	git reset --hard
-	$(M) activate_bind_mount
-	$(M) clean_docker_entrypoint
+	$(M) compose_use_database_url_var
+	$(M) compose_activate_bind_mount
+	$(M) docker_entrypoint_clean
 	$(M) restart_build
 else
 	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
