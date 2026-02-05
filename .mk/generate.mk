@@ -98,6 +98,7 @@ kill_current_app: confirm ## Remove all fresh Symfony application files (var/, v
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(M) clone_symfony_docker
+	$(M) health c=404 t="Welcome to Symfony"
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application generated!\n\n"
 
@@ -112,6 +113,7 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	$(M) require_orm
 	$(M) require_api
 	$(M) permissions images info
+	$(M) health c=200 t="Hello ApiPlatform"
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
@@ -128,7 +130,8 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	git restore .env.local.demo
 	$(M) co m="composer require symfony/orm-pack"
 	$(M) deep_clean NO_INTERACTION=true
-	$(M) restart_force health
+	$(M) restart_force
+	$(M) health c=200 t="Symfony Demo"
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
@@ -143,7 +146,8 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(M) cache_clear
 	$(M) cache_clear
 	$(M) cache_clear
-	$(M) permissions images info health
+	$(M) permissions images info
+	$(M) health c=200 t="Welcome to EasyAdmin"
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
@@ -154,7 +158,8 @@ easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Dock
 webapp: ## Generate a webapp Symfony application with Docker configuration (stable release)
 	$(M) clone_symfony_docker
 	$(M) require_webapp
-	$(M) permissions images info health
+	$(M) permissions images info
+	$(M) health c=404 t="Welcome to Symfony"
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Webapp Symfony application generated!\n\n"
 
