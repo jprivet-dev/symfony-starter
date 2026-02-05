@@ -1,3 +1,5 @@
+MAKEFLAGS += --no-print-directory
+
 # --- COLORS ---
 
 # (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET
