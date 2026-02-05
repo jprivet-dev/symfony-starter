@@ -28,9 +28,7 @@
   check_level_2              c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
   tests                      t  Run all tests
 
-  check_http                    Check if the website returns HTTP 200 OK
-  check_db                      Check database connection (via Doctrine)
-  check_health                  Run all health checks (HTTP & DB)
+  health                        Check the website and database connection (via Doctrine) - $ make health [c=<status_code>] [t=<text>] - Example: $ make health c=404 t="Welcome to Symfony"
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
   build                         Build or rebuild Docker services using cache - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
