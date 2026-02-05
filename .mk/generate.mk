@@ -139,9 +139,8 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(M) clone_symfony_docker
 	$(M) require_orm
 	$(M) require_easy_admin
-	# Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html
 	$(CONSOLE) make:admin:dashboard --no-interaction
-	$(M) co m="bin/console make:admin:dashboard --no-interaction"
+	$(M) co m="Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html"
 	# Need to repeat cache_clear to avoid "Clear the application cache to run the EasyAdmin cache warmer, which generates the needed data to find this route.". Find why!
 	$(M) cache_clear
 	$(M) cache_clear
