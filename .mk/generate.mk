@@ -27,7 +27,7 @@ define PRINT_EXECUTION_TIME
 	DURATION=$$(( $$END_TIME - $(START_TIME) )); \
 	MINUTES=$$(( $$DURATION / 60 )); \
 	SECONDS=$$(( $$DURATION % 60 )); \
-	printf " \n⏱️ $(Y)Total execution time: %02dm %02ds$(S)\n" $$MINUTES $$SECONDS
+	printf "\n ⏱️ Total execution time: $(Y)%02dm %02ds$(S)\n" $$MINUTES $$SECONDS
 endef
 
 #
