@@ -232,7 +232,8 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	$(M) co m="composer require symfony/webapp-pack"
 	$(M) update_postgresql_configuration
 	# Running deep_clean is essential to properly take into account the ORM installed by symfony/webapp-pack
-	$(M) deep_clean restart_force
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) restart_force
 
 ##
 
