@@ -129,6 +129,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(M) co m="composer require symfony/orm-pack"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) restart_force
+	$(M) check_healthy
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
@@ -144,6 +145,7 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(M) cache_clear
 	$(M) cache_clear
 	$(M) permissions images info
+	$(M) check_healthy
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
@@ -155,6 +157,7 @@ webapp: ## Generate a webapp Symfony application with Docker configuration (stab
 	$(M) clone_symfony_docker
 	$(M) require_webapp
 	$(M) permissions images info
+	$(M) check_healthy
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
 

@@ -28,6 +28,10 @@
   check_level_2              c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
   tests                      t  Run all tests
 
+  check_http                    Check if the website returns HTTP 200 OK
+  check_db                      Check database connection (via Doctrine)
+  check_health                  Run all health checks (HTTP & DB)
+
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
   build                         Build or rebuild Docker services using cache - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
   build_force                   Build or rebuild Docker services without cache (force fresh install)
@@ -39,7 +43,7 @@
   kill                          Remove containers and networks (keep database data)
   kill_all                      Remove containers, networks AND VOLUMES (database destroyed)
 
-  deep_clean                    Aggressively remove all Docker resources (containers, volumes, networks, images) including orphans - Use when switching branches/projects [y/N]
+  deep_clean                    [Danger] Remove containers, volumes, networks and images, including orphans (triggers: webapp-pack, database, branch switch) [y/N]
 
   config                        Parse, resolve, and render compose file in canonical format
   images                        List images used by the current containers
@@ -220,6 +224,7 @@
 
   (to delete this section, delete .mk/generate.mk)
 
+  kill_current_app              Remove all fresh Symfony application files (var/, vendor/, ...)
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 
@@ -233,7 +238,6 @@
 
   clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root
-  kill_current_app              Remove all fresh Symfony application files
 
   COMPLETE INSTALLATION
   require_api                   Install API Platform - https://api-platform.com/docs/symfony/

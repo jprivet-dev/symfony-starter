@@ -109,6 +109,8 @@ HTTP_PORT_SUFFIX  = $(if $(HTTP_PORT),:$(HTTP_PORT))
 # Will be ":PORT" if HTTPS_PORT is defined and not 443, otherwise empty.
 HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(HTTPS_PORT)))
 
+LOCALHOST = https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)
+
 UP_ENV ?=
 
 define append
@@ -245,15 +247,15 @@ info: ## Show project access info
 	@printf " $(Y)›$(S) Copy $(Y)$(LOCAL_MK).dist$(S) to $(G)$(LOCAL_MK)$(S) to extend the Makefile with your own commands.\n"
 	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
 	@printf " $(Y)›$(S) Access to the application (accept the auto-generated TLS certificate):\n"
-	@printf "    - Homepage ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/$(S)\n"
+	@printf "    - Homepage ....... $(G)$(LOCALHOST)/$(S)\n"
 ifneq ($(wildcard $(VENDOR_API)),)
-	@printf "    - API ............ $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/api$(S)\n"
+	@printf "    - API ............ $(G)$(LOCALHOST)/api$(S)\n"
 endif
 ifneq ($(wildcard $(VENDOR_EASYADMIN)),)
-	@printf "    - EasyAdmin ...... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/admin$(S)\n"
+	@printf "    - EasyAdmin ...... $(G)$(LOCALHOST)/admin$(S)\n"
 endif
 ifneq ($(wildcard $(VENDOR_PROFILER)),)
-	@printf "    - Profiler ....... $(G)https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)/_profiler$(S)\n"
+	@printf "    - Profiler ....... $(G)$(LOCALHOST)/_profiler$(S)\n"
 endif
 ifneq ($(wildcard $(VENDOR_MAILER)),)
 	@printf "    - Mail Catcher ... $(G)http://$(SERVER_NAME):8025/$(S)\n"
@@ -293,6 +295,32 @@ check_level_2 c2: composer_validate validate lint phpunit ## Check everything be
 
 .PHONY: tests t
 tests t: db_init@test fixtures@test phpunit ## Run all tests
+
+##
+
+check_http: ## Check if the website returns HTTP 200 OK
+	@HTTP_CODE=$$(curl -k -s -o /dev/null -w "%{http_code}" $(LOCALHOST)); \
+	if [ "$${HTTP_CODE}" -eq 200 ]; then \
+		printf " $(G)✔ HTTP 200 OK$(S)\n"; \
+	else \
+		printf " $(R)✘ Failed (Code: $${HTTP_CODE})$(S)\n"; \
+		exit 1; \
+	fi
+
+check_db: ## Check database connection (via Doctrine)
+ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
+	@printf "\n $(Y)- No database$(S)\n"
+	@exit 1
+else
+	@if $(CONSOLE) dbal:run-sql "SELECT 1" > /dev/null 2>&1; then \
+		printf " $(G)✔ Connection OK$(S)\n"; \
+	else \
+		printf " $(R)✘ Connection Failed$(S)\n"; \
+		exit 1; \
+	fi
+endif
+
+check_health: check_http check_db ## Run all health checks (HTTP & DB)
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
