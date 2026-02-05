@@ -314,31 +314,34 @@ tests t: db_init@test fixtures@test phpunit ## Run all tests
 health: c ?= 200
 health: ## Check the website and database connection (via Doctrine) - $ make health [c=<status_code>] [t=<text>] - Example: $ make health c=404 t="Welcome to Symfony"
 	@printf "\n$(Y)--- Check Health ---$(S)\n"
-	@STATUS_CODE=$$(curl -k -L -s -o /dev/null -w "%{http_code}" $(LOCALHOST_MAIN)); \
+	@EXIT_CODE=0; \
+	STATUS_CODE=$$(curl -k -L -s -o /dev/null -w "%{http_code}" $(LOCALHOST_MAIN)); \
 	if [ "$${STATUS_CODE}" -eq $(c) ]; then \
 		printf " $(G)✔ HTTP status OK (Expecting $(c)) - $(LOCALHOST_MAIN)$(S)\n"; \
 	else \
 		printf " $(R)✘ HTTP status failed (Expecting $(c) - Got $${STATUS_CODE}) - $(LOCALHOST_MAIN)$(S)\n"; \
-		exit 1; \
-	fi
-	@if [ -n "$(t)" ]; then \
+		EXIT_CODE=1; \
+	fi; \
+	if [ -n "$(t)" ]; then \
 		if curl -k -L -s $(LOCALHOST_MAIN) | grep -q "$(t)"; then \
 			printf " $(G)✔ Content found (Searching for '$(t)') - $(LOCALHOST_MAIN)$(S)\n"; \
 		else \
 			printf " $(R)✘ Content missing (Searching for '$(t)') - $(LOCALHOST_MAIN)$(S)\n"; \
-			exit 1; \
-		fi \
-	fi
-ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
-	@printf "\n $(Y)- Doctrine not installed$(S)\n"
-else
-	@if $(CONSOLE) dbal:run-sql "SELECT 1" > /dev/null 2>&1; then \
-		printf " $(G)✔ Database connection OK$(S)\n"; \
+			EXIT_CODE=1; \
+		fi; \
+	fi; \
+	if [ ! -e "$(VENDOR_DOCTRINE)" ]; then \
+		printf " $(Y)› Database connection skipped (Doctrine not installed)$(S)\n"; \
 	else \
-		printf " $(R)✘ Database connection Failed$(S)\n"; \
-		exit 1; \
-	fi
-endif
+		if $(CONSOLE) dbal:run-sql "SELECT 1" > /dev/null 2>&1; then \
+			printf " $(G)✔ Database connection OK$(S)\n"; \
+		else \
+			printf " $(R)✘ Database connection Failed$(S)\n"; \
+			EXIT_CODE=1; \
+		fi; \
+	fi; \
+	printf "\n"; \
+	exit $${EXIT_CODE}
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
