@@ -17,9 +17,24 @@
 #  . .sh/generate.sh webapp
 #  . .sh/generate.sh webapp@lts
 
-command=$1
+# (R)ED & RE(S)ET
+R='\033[31m'
+S='\033[0m'
 
-git switch next &&
-    make kill_current_app &&
-    git switch -C ${command} &&
-    make ${command}
+COMMAND=$1
+
+case "${COMMAND%@lts}" in # Remove '@lts' suffix for the check
+    minimalist|api|demo|easy_admin|webapp)
+        ;;
+    *)
+        echo -e "${R}Error: Unauthorized or unknown application: '${COMMAND}'${S}"
+        echo "Allowed apps: minimalist, api, demo, easy_admin, webapp (with optional @lts)"
+        # Use return instead of exit because this script is sourced
+        return 1 2>/dev/null || exit 1
+        ;;
+esac
+
+git switch next && \
+    make kill_current_app && \
+    git switch -C "${COMMAND}" && \
+    make "${COMMAND}"
