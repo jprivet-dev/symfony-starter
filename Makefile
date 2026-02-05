@@ -109,8 +109,6 @@ HTTP_PORT_SUFFIX  = $(if $(HTTP_PORT),:$(HTTP_PORT))
 # Will be ":PORT" if HTTPS_PORT is defined and not 443, otherwise empty.
 HTTPS_PORT_SUFFIX = $(if $(HTTPS_PORT),$(if $(filter-out 443,$(HTTPS_PORT)),:$(HTTPS_PORT)))
 
-LOCALHOST = https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)
-
 UP_ENV ?=
 
 define append
@@ -128,6 +126,22 @@ $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
 #$(eval $(call append,XDEBUG_MODE))
 #$(eval $(call append,SYMFONY_MONOREPO))
+
+# --- LOCALHOST ---
+
+LOCALHOST          = https://$(SERVER_NAME)$(HTTPS_PORT_SUFFIX)
+LOCALHOST_API      = $(LOCALHOST)/api
+LOCALHOST_ADMIN    = $(LOCALHOST)/admin
+LOCALHOST_PROFILER = $(LOCALHOST)/_profiler
+LOCALHOST_MAILER   = http://$(SERVER_NAME):8025/
+
+LOCALHOST_MAIN = $(LOCALHOST)
+ifneq ($(wildcard $(VENDOR_API)),)
+	LOCALHOST_MAIN = $(LOCALHOST_API)
+endif
+ifneq ($(wildcard $(VENDOR_EASYADMIN)),)
+	LOCALHOST_MAIN = $(LOCALHOST_ADMIN)
+endif
 
 # --- DOCKER ENVIRONMENT FILES ---
 
@@ -236,10 +250,7 @@ help: ## Display this help message with available commands - $ make [f=<filter>]
 install: up_detached ## Start the project, install dependencies and show info
 	$(MAKE) composer_install
 	-$(MAKE) assets
-	$(MAKE) images
-	$(MAKE) permissions
-	$(MAKE) git_hooks_init
-	$(MAKE) info
+	$(MAKE) images permissions git_hooks_init info
 
 .PHONY: info
 info: ## Show project access info
@@ -249,16 +260,16 @@ info: ## Show project access info
 	@printf " $(Y)›$(S) Access to the application (accept the auto-generated TLS certificate):\n"
 	@printf "    - Homepage ....... $(G)$(LOCALHOST)/$(S)\n"
 ifneq ($(wildcard $(VENDOR_API)),)
-	@printf "    - API ............ $(G)$(LOCALHOST)/api$(S)\n"
+	@printf "    - API ............ $(G)$(LOCALHOST_API)$(S)\n"
 endif
 ifneq ($(wildcard $(VENDOR_EASYADMIN)),)
-	@printf "    - EasyAdmin ...... $(G)$(LOCALHOST)/admin$(S)\n"
+	@printf "    - EasyAdmin ...... $(G)$(LOCALHOST_ADMIN)$(S)\n"
 endif
 ifneq ($(wildcard $(VENDOR_PROFILER)),)
-	@printf "    - Profiler ....... $(G)$(LOCALHOST)/_profiler$(S)\n"
+	@printf "    - Profiler ....... $(G)$(LOCALHOST_PROFILER)$(S)\n"
 endif
 ifneq ($(wildcard $(VENDOR_MAILER)),)
-	@printf "    - Mail Catcher ... $(G)http://$(SERVER_NAME):8025/$(S)\n"
+	@printf "    - Mail Catcher ... $(G)$(LOCALHOST_MAILER)$(S)\n"
 endif
 	@printf "\n"
 
@@ -299,9 +310,9 @@ tests t: db_init@test fixtures@test phpunit ## Run all tests
 ##
 
 check_http: ## Check if the website returns HTTP 200 OK
-	@HTTP_CODE=$$(curl -k -s -o /dev/null -w "%{http_code}" $(LOCALHOST)); \
+	@HTTP_CODE=$$(curl -k -s -o /dev/null -w "%{http_code}" $(LOCALHOST_MAIN)); \
 	if [ "$${HTTP_CODE}" -eq 200 ]; then \
-		printf " $(G)✔ HTTP 200 OK$(S)\n"; \
+		printf " $(G)✔ HTTP 200 OK$(S) ($(LOCALHOST_MAIN))\n"; \
 	else \
 		printf " $(R)✘ Failed (Code: $${HTTP_CODE})$(S)\n"; \
 		exit 1; \
@@ -309,7 +320,7 @@ check_http: ## Check if the website returns HTTP 200 OK
 
 check_db: ## Check database connection (via Doctrine)
 ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
-	@printf "\n $(Y)- No database$(S)\n"
+	@printf "\n $(Y)- Doctrine not installed$(S)\n"
 	@exit 1
 else
 	@if $(CONSOLE) dbal:run-sql "SELECT 1" > /dev/null 2>&1; then \
