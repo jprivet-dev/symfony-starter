@@ -273,7 +273,6 @@ endif
 ifneq ($(wildcard $(VENDOR_MAILER)),)
 	@printf "    - Mail Catcher ... $(G)$(LOCALHOST_MAILER)$(S)\n"
 endif
-	@printf "\n"
 
 ##
 
@@ -874,7 +873,6 @@ certificates_export: ## Export the Caddy root certificate from the container to 
 	@printf " $(Y)›$(S) You may need to manually import this certificate into your browser's trust store:\n"
 	@printf "    - $(Y)Chrome/Brave:$(S) Go to chrome://settings/certificates and import the file '$(FILE)' under 'Authorities'.\n"
 	@printf "    - $(Y)Firefox:$(S) Go to about:preferences#privacy, click 'View Certificates...' and import '$(FILE)' under 'Authorities'.\n"
-	@printf "\n"
 
 .PHONY: hosts
 hosts: ## Add the server name to /etc/hosts file
