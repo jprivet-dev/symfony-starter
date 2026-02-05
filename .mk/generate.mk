@@ -99,7 +99,7 @@ kill_current_app: confirm ## Remove all fresh Symfony application files (var/, v
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(M) clone_symfony_docker
 	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)✔$(S) Minimalist Symfony application generated!\n\n"
+	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application generated!\n\n"
 
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist
@@ -113,7 +113,7 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	$(M) require_api
 	$(M) permissions images info
 	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)✔$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
+	@printf " $(G)🎉 Success!$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
 api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api
@@ -130,7 +130,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) restart_force check_health
 	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)✔$(S) Symfony Demo application (with SQLite) generated!\n\n"
+	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
 	$(M) clone_symfony_docker
@@ -145,7 +145,7 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(M) cache_clear
 	$(M) permissions images info check_health
 	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)✔$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
+	@printf " $(G)🎉 Success!$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
 easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) easy_admin
@@ -156,7 +156,7 @@ webapp: ## Generate a webapp Symfony application with Docker configuration (stab
 	$(M) require_webapp
 	$(M) permissions images info check_health
 	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)✔$(S) Webapp Symfony application generated!\n\n"
+	@printf " $(G)🎉 Success!$(S) Webapp Symfony application generated!\n\n"
 
 webapp@lts: ## Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) webapp
