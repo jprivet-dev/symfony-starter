@@ -221,7 +221,7 @@ PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 # --- EXTEND THE MAIN MAKEFILE ---
 
 ifneq ($(APP_ENV),prod)
--include $(sort $(wildcard .mk/*.mk))
+-include $(sort $(wildcard .mk/*local.mk))
 endif
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
@@ -1012,3 +1012,6 @@ runtime: # INTERNAL - Check if vendor/autoload_runtime.php is ready yet
 	done
 	@printf " $(G)✔$(S) Symfony Runtime is ready!\n"
 	@sleep 1
+
+include .mk/contrib.mk
+include .mk/generate.mk
