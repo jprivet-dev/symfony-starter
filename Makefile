@@ -246,6 +246,10 @@ help: ## Display this help message with available commands - $ make [f=<filter>]
 	}'
 	@echo
 
+.PHONY: all
+all:
+	ALL=true $(MAKE) help
+
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 
 .PHONY: install
@@ -503,27 +507,27 @@ endif
 update_lock: ## Update only the content hash of composer.lock without updating dependencies
 	$(COMPOSER) update --lock
 
-ifneq ($(wildcard $(VENDOR_DOCTRINE)),)
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),)
 include .mk/doctrine.mk
 endif
 
-ifneq ($(IS_POSTGRESQL),)
+ifneq ($(or $(ALL), $(IS_POSTGRESQL)),)
 include .mk/postgresql.mk
 endif
 
-ifneq ($(wildcard $(BIN_PHPUNIT)),)
+ifneq ($(or $(ALL), $(wildcard $(BIN_PHPUNIT))),)
 include .mk/tests.mk
 endif
 
-ifneq ($(or $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)), $(wildcard $(VENDOR_PHPMETRICS)), $(wildcard $(VENDOR_PHPSTAN)), $(wildcard $(VENDOR_TWIGCSFIXER))),)
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)), $(wildcard $(VENDOR_PHPMETRICS)), $(wildcard $(VENDOR_PHPSTAN)), $(wildcard $(VENDOR_TWIGCSFIXER))),)
 include .mk/quality.mk
 endif
 
-ifneq ($(wildcard $(VENDOR_ASSETS)),)
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_ASSETS))),)
 include .mk/assets.mk
 endif
 
-ifneq ($(wildcard $(VENDOR_TRANSLATION)),)
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_TRANSLATION))),)
 include .mk/translation.mk
 endif
 
