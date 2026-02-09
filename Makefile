@@ -247,7 +247,7 @@ help: ## Display this help message with available commands - $ make [f=<filter>]
 	@echo
 
 .PHONY: all
-all: ## Display all commands, including inactive ones
+all: ## See the full catalog of commands available in the Starter Kit (including inactive ones)
 	@$(MAKE) help ALL=true
 
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————

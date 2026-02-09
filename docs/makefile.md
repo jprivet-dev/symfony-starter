@@ -4,7 +4,12 @@
 
 ---
 
-> Run ‘make’ (or ‘make help’) to display context-sensitive commands (depending on what you have installed), or ‘make all’ to display all available commands.
+> **Tip: A Dynamic Makefile**
+>
+> This project uses a modular Makefile system. Commands are loaded **dynamically** based on the components currently installed in your project.
+>
+> * Run `make` (or `make help`) to see **context-sensitive commands** (only those relevant to your current environment).
+> * Run `make all` to see the **full catalog** of commands available in the Starter Kit (including inactive ones).
 
 <!-- MAKEFILE_COMMANDS_START -->
 
