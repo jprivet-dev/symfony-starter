@@ -247,8 +247,8 @@ help: ## Display this help message with available commands - $ make [f=<filter>]
 	@echo
 
 .PHONY: all
-all:
-	ALL=true $(MAKE) help
+all: ## Display all commands, including inactive ones
+	@$(MAKE) help ALL=true
 
 ## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
 

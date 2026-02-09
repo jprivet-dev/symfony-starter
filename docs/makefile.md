@@ -4,7 +4,7 @@
 
 ---
 
-> Run `make` (or `make help`) to see all
+> Run ‘make’ (or ‘make help’) to display context-sensitive commands (depending on what you have installed), or ‘make all’ to display all available commands.
 
 <!-- MAKEFILE_COMMANDS_START -->
 
@@ -12,6 +12,7 @@
 
 — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
   help                          Display this help message with available commands - $ make [f=<filter>] - $ make f=restart
+  all                           Display all commands, including inactive ones
 
 — PROJECT 🚀 ———————————————————————————————————————————————————————————————
   install                       Start the project, install dependencies and show info
@@ -107,6 +108,85 @@
   yq_clear                   yc Clear a key's value in a YAML file (sets it to empty string) - $ make yq_clear f=<file> k=<key> - Example: $ make yq_clear f=compose.yaml k=services.php.extra_hosts
   yq_delete                  yd Delete a key from a YAML file - $ make yq_delete f=<file> k=<key> - Example: $ make yq_delete f=compose.yaml k=services.php.extra_hosts
   yq_update                  yu Set or update a key's value in a YAML file - $ make yq_update f=<file> - Example: $ make yq_add f=compose.yaml k=services.php.build.target v=frankenphp_prod
+
+— DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
+  db_init                       Drop and create the database and migrate
+  db_init@test                  Drop and create the database and migrate (env=test)
+
+  db_drop                       Drop the database [y/N] - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
+  db_create                     Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
+
+  execute                       Execute one or more migration versions up or down manually - $ make execute a=<arguments> - Example: $ make execute a="DoctrineMigrations\Version20240205143239"
+  generate                      Generate a blank migration class
+  list                          Display a list of all available migrations and their status
+  migrate                       Execute a migration to the latest available version (in a transaction) - $ make migrate [a=<param>] - Example: $ make migrate a="current+3"
+  migration                     Create a new migration based on database changes (format the generated SQL)
+
+  fixtures                      Load fixtures (CAUTION! The load command purges the database) - $ make fixtures [a=<param>] - Example: $ make fixtures a="--append"
+  fixtures@test                 Load fixtures (env=test)
+  sql                           Execute the given SQL query and output the results - $ make sql [q=<query>] - Example: $ make sql q="SELECT * FROM user"
+  update_dump                   Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
+  update_force                  Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
+  validate                      Validate the mapping files - $ make validate [a=<arguments>] - Example: $ make validate a="--env=test"
+
+  phpstorm_config               Display database connection details for PhpStorm "Data Sources and Drivers" dialog
+
+— POSTGRESQL 🛢️ ————————————————————————————————————————————————————————————
+  psql                          Execute psql - $ make psql [a=<arguments>] - Example: $ make psql a="-V"
+  psql_sh                       Open a shell on the PostgreSQL container
+  tables                        Show all tables
+
+  dump                          Create a SQL dump
+  dump_gz                       Create a compressed SQL dump (gzip)
+  restore                       Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
+
+— TESTS ✅ —————————————————————————————————————————————————————————————————
+  phpunit                    p  Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
+  phpunit_log                   Exporting PHPUnit terminal output to a log file
+
+  coverage                      Generate code coverage report in HTML format - $ make coverage [a=<arguments>] - Example: $ make coverage a="tests/myTest.php"
+  dox                           Report test execution progress in TestDox format - $ make dox [a=<arguments>] - Example: $ make dox a="tests/myTest.php"
+  dox_html                      Report test execution progress in TestDox format and export it to an HTML file
+  dox_text                      Report test execution progress in TestDox format and export it to a text file
+  xdebug_version                Xdebug version number
+
+— QUALITY ✅ ———————————————————————————————————————————————————————————————
+  fix                           Fix with all linters
+  lint                          Run all linters (stop on failure)
+
+  phpcsfixer                    Run PHP CS Fixer - $ make phpcsfixer [a=<arguments>] - Example: $ make phpcsfixer a=list
+  phpcsfixer_fix                Fix code style
+  phpcsfixer_lint               Check code style
+
+  phpmd                         Run PHP Mess Detector - $ make phpmd [a=<arguments>] - Example: $ make phpmd a="src ansi cleancode"
+  phpmd_lint                    Run PHP Mess Detector with all rules
+
+  phpmetrics_report             Run PHPMetrics and generate detailed report
+
+  phpstan                       Run PHPStan - $ make phpstan [a=<arguments>] - Example: $ make phpstan a="src tests"
+  phpstan_baseline              Generate PHPStan baseline - $ make phpstan_baseline [a=<arguments>] - Example: $ make phpstan_baseline a="src tests"
+  phpstan_lint                  Run PHPStan analyse - $ make phpstan_analyse [a=<arguments>] - Example: $ make phpstan_analyse a="src tests"
+
+  twigcsfixer                   Run Twig CS Fixer - $ make twigcsfixer [a=<arguments>] - Example: $ make twigcsfixer a="lint /path/to/code"
+  twigcsfixer_fix               Fix Twig style
+  twigcsfixer_lint              Check Twig style
+
+— ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
+  assets                        Generate all assets
+
+  asset_map_clear               Clear all assets in the public output directory
+  asset_map_compile             Compile all mapped assets and write them to the final public output directory
+  asset_map_debug               See all of the mapped assets
+
+  importmap_audit               Check for security vulnerability advisories for dependencies
+  importmap_install             Download all assets that should be downloaded
+  importmap_outdated            List outdated JavaScript packages and their latest versions
+  importmap_remove              Remove JavaScript packages
+  importmap_require             Require JavaScript packages
+  importmap_update              Update JavaScript packages to their latest versions
+
+— TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
+  extract                       Extract translation strings from templates
 
 — SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
 
