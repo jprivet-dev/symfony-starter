@@ -50,6 +50,14 @@ GIT_HOOKS = off
 # See https://github.com/mikefarah/yq
 YQ = docker run --rm --user "$(USER)" -v "$(PWD)":/workdir -w /workdir mikefarah/yq
 
+# --- SYMFONY MONOREPO ---
+
+CONTRIB_ACTIVE :=
+
+ifneq ($(origin SYMFONY_MONOREPO),undefined)
+    CONTRIB_ACTIVE := true
+endif
+
 # --- FILES & DIRECTORIES ---
 
 SRC       = src
@@ -617,7 +625,7 @@ endif
 .PHONY: safe
 safe: ## Add /app to Git's safe directories within the php container
 	$(COMPOSE) exec php git config --global --add safe.directory /app
-ifneq ($(SYMFONY_MONOREPO),)
+ifeq ($(CONTRIB_ACTIVE),true)
 	$(COMPOSE) exec php git config --global --add safe.directory /symfony
 endif
 
@@ -699,5 +707,8 @@ runtime: # INTERNAL - Check if vendor/autoload_runtime.php is ready yet
 	@printf " $(G)✔$(S) Symfony Runtime is ready!\n"
 	@sleep 1
 
+ifeq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),true)
 include .mk/contrib.mk
+endif
+
 include .mk/generate.mk
