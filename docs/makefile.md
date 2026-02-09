@@ -106,14 +106,6 @@
   tree                          Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
   vars                          Show key Makefile variables
 
-  yq                            Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor - $ make yq [a=<argument>] - Example: $ make yq a=--help
-  yq_print                      Print contents of a file as idiomatic YAML with colors - $ make yq_print f=<file> - Example: $ make yq_print f=compose.yaml
-
-  yq_add                     ya Append a value to an array key in a YAML file - $ make yq_add f=<file> k=<key> v=<value> - Example: $ make yq_add f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway
-  yq_clear                   yc Clear a key's value in a YAML file (sets it to empty string) - $ make yq_clear f=<file> k=<key> - Example: $ make yq_clear f=compose.yaml k=services.php.extra_hosts
-  yq_delete                  yd Delete a key from a YAML file - $ make yq_delete f=<file> k=<key> - Example: $ make yq_delete f=compose.yaml k=services.php.extra_hosts
-  yq_update                  yu Set or update a key's value in a YAML file - $ make yq_update f=<file> - Example: $ make yq_add f=compose.yaml k=services.php.build.target v=frankenphp_prod
-
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
   db_init                       Drop and create the database and migrate
   db_init@test                  Drop and create the database and migrate (env=test)
@@ -229,6 +221,7 @@
   (to delete this section, delete .mk/generate.mk)
 
   kill_current_app              Remove all fresh Symfony application files (var/, vendor/, ...)
+
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 
@@ -263,7 +256,16 @@
   require_phpstan               Install PHPStan - https://phpstan.org/
   require_twigcsfixer           Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
 
+  DATABASE
   switch_to_mariadb             Switch the stack from PostgreSQL to MySQL/MariaDB
+
+  YQ
+  yq                            Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor - $ make yq [a=<argument>] - Example: $ make yq a=--help
+  yq_add                     ya Append a value to an array key in a YAML file - $ make yq_add f=<file> k=<key> v=<value> - Example: $ make yq_add f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway
+  yq_clear                   yc Clear a key's value in a YAML file (sets it to empty string) - $ make yq_clear f=<file> k=<key> - Example: $ make yq_clear f=compose.yaml k=services.php.extra_hosts
+  yq_delete                  yd Delete a key from a YAML file - $ make yq_delete f=<file> k=<key> - Example: $ make yq_delete f=compose.yaml k=services.php.extra_hosts
+  yq_print                      Print contents of a file as idiomatic YAML with colors - $ make yq_print f=<file> - Example: $ make yq_print f=compose.yaml
+  yq_update                  yu Set or update a key's value in a YAML file - $ make yq_update f=<file> - Example: $ make yq_add f=compose.yaml k=services.php.build.target v=frankenphp_prod
 ```
 
 <!-- MAKEFILE_COMMANDS_END -->
