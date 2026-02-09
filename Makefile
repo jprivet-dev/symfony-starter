@@ -653,7 +653,7 @@ vars: ## Show key Makefile variables
 	@$(foreach var, \
 		USER UNAME_S APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
 		CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE \
-		IS_SQLITE IS_MYSQL IS_POSTGRESQL, \
+		IS_SQLITE IS_MYSQL IS_POSTGRESQL CONTRIB_ACTIVE, \
 		printf "%-15s : %s\n" "${var}" "${${var}}"; \
 	)
 
@@ -707,7 +707,7 @@ runtime: # INTERNAL - Check if vendor/autoload_runtime.php is ready yet
 	@printf " $(G)✔$(S) Symfony Runtime is ready!\n"
 	@sleep 1
 
-ifeq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),true)
+ifeq ($(or $(ALL), $(CONTRIB_ACTIVE)),true)
 include .mk/contrib.mk
 endif
 
