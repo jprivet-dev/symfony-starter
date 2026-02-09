@@ -17,7 +17,7 @@
 
 — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
   help                          Display this help message with available commands - $ make [f=<filter>] - $ make f=restart
-  all                           Display all commands, including inactive ones
+  all                           See the full catalog of commands available in the Starter Kit (including inactive ones)
 
 — PROJECT 🚀 ———————————————————————————————————————————————————————————————
   install                       Start the project, install dependencies and show info
