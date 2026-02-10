@@ -524,7 +524,7 @@ include .mk/postgresql.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(BIN_PHPUNIT))),)
-include .mk/tests.mk
+include .mk/phpunit.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)), $(wildcard $(VENDOR_PHPMETRICS)), $(wildcard $(VENDOR_PHPSTAN)), $(wildcard $(VENDOR_TWIGCSFIXER))),)
