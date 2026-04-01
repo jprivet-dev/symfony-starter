@@ -3,7 +3,7 @@
 # Script: update_symfony_docker.sh
 # Description: Vendors the latest HEAD of dunglas/symfony-docker
 #              directly at the project root, updates the upstream
-#              commit SHA in SYMFONY_DOCKER_UPSTREAM, and creates a
+#              commit SHA in UPSTREAM, and creates a
 #              git commit for full traceability.
 #
 # Run via Makefile (recommended):
@@ -23,7 +23,7 @@ S='\033[0m'
 
 REPOSITORY="git@github.com:dunglas/symfony-docker.git"
 CLONE_DIR=".symfony-docker-clone"
-UPSTREAM_FILE="SYMFONY_DOCKER_UPSTREAM"
+UPSTREAM_FILE="UPSTREAM"
 
 # --- 1. Check current upstream commit ---
 
@@ -83,7 +83,7 @@ printf " ${G}✔${S} dunglas/symfony-docker synced at the project root.\n"
 rm -rf "${CLONE_DIR}"
 printf " ${G}✔${S} Temp directory removed.\n"
 
-# --- 7. Update SYMFONY_DOCKER_UPSTREAM ---
+# --- 7. Update UPSTREAM ---
 
 printf "\n${Y}--- Updating ${UPSTREAM_FILE} ---${S}\n"
 echo "${UPSTREAM_COMMIT}" > "${UPSTREAM_FILE}"

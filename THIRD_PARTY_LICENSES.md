@@ -6,6 +6,6 @@ reproduced below as required by the MIT License terms.
 ## dunglas/symfony-docker
 
 * **Repository:** https://github.com/dunglas/symfony-docker
-* **Upstream commit:** (see SYMFONY_DOCKER_UPSTREAM)
+* **Upstream commit:** (see UPSTREAM)
 * **License:** MIT
 * **License text:** https://github.com/dunglas/symfony-docker/blob/main/LICENSE
