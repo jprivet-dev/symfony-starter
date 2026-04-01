@@ -2,8 +2,8 @@
 # ------------------------------------------------------------------
 # Script: update_symfony_docker.sh
 # Description: Vendors the latest HEAD of dunglas/symfony-docker
-#              into .symfony-docker/, records the upstream commit SHA
-#              into .symfony-docker/UPSTREAM_COMMIT, and creates a
+#              directly at the project root, updates the upstream
+#              commit SHA in THIRD_PARTY_LICENSES.md, and creates a
 #              git commit for full traceability.
 #
 # Run via Makefile (recommended):
@@ -22,8 +22,8 @@ Y='\033[33m'
 S='\033[0m'
 
 REPOSITORY="git@github.com:dunglas/symfony-docker.git"
-VENDOR_DIR=".symfony-docker"
 CLONE_DIR=".symfony-docker-clone"
+LICENSES_FILE="THIRD_PARTY_LICENSES.md"
 
 # --- 1. Cleanup any leftover temp clone ---
 
@@ -40,31 +40,57 @@ git clone "${REPOSITORY}" "${CLONE_DIR}" --depth 1
 UPSTREAM_COMMIT=$(git -C "${CLONE_DIR}" rev-parse HEAD)
 printf " ${G}✔${S} Cloned at commit: ${Y}${UPSTREAM_COMMIT}${S}\n"
 
-# --- 3. Sync into .symfony-docker/ (full copy, including LICENSE & README.md) ---
+# --- 3. Sync into project root ---
 
-printf "\n${Y}--- Vendoring into ${VENDOR_DIR}/ ---${S}\n"
-
-mkdir -p "${VENDOR_DIR}"
+printf "\n${Y}--- Syncing into project root ---${S}\n"
 
 rsync -av \
-    --delete \
+    --exclude=".devcontainer" \
+    --exclude=".editorconfig" \
     --exclude=".git" \
-    "${CLONE_DIR}/" "${VENDOR_DIR}/"
+    --exclude=".gitattributes" \
+    --exclude=".github" \
+    --exclude="docs" \
+    --exclude="LICENSE" \
+    --exclude="README.md" \
+    --exclude="UPSTREAM_COMMIT" \
+    "${CLONE_DIR}/" .
 
-# --- 4. Record the upstream commit SHA ---
+printf " ${G}✔${S} dunglas/symfony-docker synced at the project root.\n"
 
-echo "${UPSTREAM_COMMIT}" > "${VENDOR_DIR}/UPSTREAM_COMMIT"
-printf " ${G}✔${S} Upstream commit recorded in ${Y}${VENDOR_DIR}/UPSTREAM_COMMIT${S}\n"
-
-# --- 5. Cleanup temp clone ---
+# --- 4. Cleanup temp clone ---
 
 rm -rf "${CLONE_DIR}"
 printf " ${G}✔${S} Temp directory removed.\n"
 
+# --- 5. Update THIRD_PARTY_LICENSES.md ---
+
+printf "\n${Y}--- Updating ${LICENSES_FILE} ---${S}\n"
+
+if [ ! -f "${LICENSES_FILE}" ]; then
+    printf " ${R}⨯${S} ${LICENSES_FILE} not found. Please create it first.\n"
+    exit 1
+fi
+
+sed -i "s|^\(\* \*\*Upstream commit:\*\*\).*\(dunglas/symfony-docker\).*|\1 ${UPSTREAM_COMMIT}|" "${LICENSES_FILE}"
+
+# Portable sed: use a temporary file to support both Linux and macOS
+TEMP_FILE=$(mktemp)
+awk "
+    /## dunglas\/symfony-docker/{found=1}
+    found && /\*\*Upstream commit:\*\*/{
+        sub(/\*\*Upstream commit:\*\* .*/, \"** Upstream commit:** ${UPSTREAM_COMMIT}\");
+        found=0
+    }
+    {print}
+" "${LICENSES_FILE}" > "${TEMP_FILE}" && mv "${TEMP_FILE}" "${LICENSES_FILE}"
+
+printf " ${G}✔${S} Upstream commit updated in ${Y}${LICENSES_FILE}${S}\n"
+
 # --- 6. Git commit ---
 
 printf "\n${Y}--- Committing ---${S}\n"
-git add "${VENDOR_DIR}"
+git add .
 git commit -m "🤖 [starter] update symfony-docker to dunglas/symfony-docker@${UPSTREAM_COMMIT}"
 
-printf "\n ${G}✔${S} dunglas/symfony-docker vendored at ${G}${UPSTREAM_COMMIT}${S}\n\n"
+printf "\n ${G}✔${S} dunglas/symfony-docker updated at ${G}${UPSTREAM_COMMIT}${S}\n\n"
