@@ -25,14 +25,29 @@ REPOSITORY="git@github.com:dunglas/symfony-docker.git"
 CLONE_DIR=".symfony-docker-clone"
 LICENSES_FILE="THIRD_PARTY_LICENSES.md"
 
-# --- 1. Cleanup any leftover temp clone ---
+# --- 1. Check current upstream commit ---
+
+printf "\n${Y}--- Checking current upstream commit ---${S}\n"
+
+if [ ! -f "${LICENSES_FILE}" ]; then
+    printf " ${R}⨯${S} ${LICENSES_FILE} not found. Please create it first.\n"
+    exit 1
+fi
+
+CURRENT_COMMIT=$(grep -A4 "## dunglas/symfony-docker" "${LICENSES_FILE}" | grep "\*\*Upstream commit:\*\*" | sed 's/.*\*\*Upstream commit:\*\* //')
+
+if [ -n "${CURRENT_COMMIT}" ]; then
+    printf " ${Y}›${S} Current commit: ${Y}${CURRENT_COMMIT}${S}\n"
+fi
+
+# --- 2. Cleanup any leftover temp clone ---
 
 if [ -d "${CLONE_DIR}" ]; then
     printf " ${Y}›${S} Removing leftover temp directory ${Y}${CLONE_DIR}${S}...\n"
     rm -rf "${CLONE_DIR}"
 fi
 
-# --- 2. Clone ---
+# --- 3. Clone ---
 
 printf "\n${Y}--- Cloning ${REPOSITORY} ---${S}\n"
 git clone "${REPOSITORY}" "${CLONE_DIR}" --depth 1
@@ -40,7 +55,15 @@ git clone "${REPOSITORY}" "${CLONE_DIR}" --depth 1
 UPSTREAM_COMMIT=$(git -C "${CLONE_DIR}" rev-parse HEAD)
 printf " ${G}✔${S} Cloned at commit: ${Y}${UPSTREAM_COMMIT}${S}\n"
 
-# --- 3. Sync into project root ---
+# --- 4. Compare commits ---
+
+if [ "${CURRENT_COMMIT}" = "${UPSTREAM_COMMIT}" ]; then
+    printf "\n ${G}✔${S} Already up to date at ${G}${UPSTREAM_COMMIT}${S}. Nothing to do.\n\n"
+    rm -rf "${CLONE_DIR}"
+    exit 0
+fi
+
+# --- 5. Sync into project root ---
 
 printf "\n${Y}--- Syncing into project root ---${S}\n"
 
@@ -58,12 +81,12 @@ rsync -av \
 
 printf " ${G}✔${S} dunglas/symfony-docker synced at the project root.\n"
 
-# --- 4. Cleanup temp clone ---
+# --- 6. Cleanup temp clone ---
 
 rm -rf "${CLONE_DIR}"
 printf " ${G}✔${S} Temp directory removed.\n"
 
-# --- 5. Update THIRD_PARTY_LICENSES.md ---
+# --- 7. Update THIRD_PARTY_LICENSES.md ---
 
 printf "\n${Y}--- Updating ${LICENSES_FILE} ---${S}\n"
 
@@ -85,7 +108,7 @@ awk "
 
 printf " ${G}✔${S} Upstream commit updated in ${Y}${LICENSES_FILE}${S}\n"
 
-# --- 6. Git commit ---
+# --- 8. Git commit ---
 
 printf "\n${Y}--- Committing ---${S}\n"
 git add .
