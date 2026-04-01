@@ -72,14 +72,12 @@ if [ ! -f "${LICENSES_FILE}" ]; then
     exit 1
 fi
 
-sed -i "s|^\(\* \*\*Upstream commit:\*\*\).*\(dunglas/symfony-docker\).*|\1 ${UPSTREAM_COMMIT}|" "${LICENSES_FILE}"
-
-# Portable sed: use a temporary file to support both Linux and macOS
+# Portable: use a temporary file to support both Linux and macOS
 TEMP_FILE=$(mktemp)
 awk "
     /## dunglas\/symfony-docker/{found=1}
     found && /\*\*Upstream commit:\*\*/{
-        sub(/\*\*Upstream commit:\*\* .*/, \"** Upstream commit:** ${UPSTREAM_COMMIT}\");
+        sub(/\*\*Upstream commit:\*\* .*/, \"**Upstream commit:** ${UPSTREAM_COMMIT}\");
         found=0
     }
     {print}
