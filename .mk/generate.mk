@@ -11,11 +11,10 @@
 # End of bug fixes     : November 2028
 # End of security fixes: November 2029
 # See https://symfony.com/releases
-SYMFONY_LTS_VERSION       = 7
-SYMFONY_STABLE_VERSION    = 8
-REPOSITORY_SYMFONY_DOCKER = git@github.com:dunglas/symfony-docker.git
-REPOSITORY_SYMFONY_DEMO   = git@github.com:symfony/demo.git
-CLONE_DIR                 = clone
+SYMFONY_LTS_VERSION     = 7
+SYMFONY_STABLE_VERSION  = 8
+REPOSITORY_SYMFONY_DEMO = git@github.com:symfony/demo.git
+CLONE_DIR               = clone
 
 C = $(COMPOSER)
 M = $(MAKE)
@@ -43,7 +42,7 @@ replace_line rl: # INTERNAL - Replace an entire line beginning with a specific p
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(s),, $(error "Please specify the start of the line to match with 's=...'"))
 	$(if $(n),, $(error "Please specify the new line content with 'n=...'"))
-	@# Use $(subst) to automatically escape “&” with “\&” for sed
+	@# Use $(subst) to automatically escape "&" with "\&" for sed
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
 replace_block rb: # INTERNAL - Replace a block in a target file with content from a source file, wrapping it with markers - $ make replace_block m=<marker> t=<target> s=<source>
@@ -97,7 +96,7 @@ kill_current_app: confirm ## Remove all fresh Symfony application files (var/, v
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
-	$(M) clone_symfony_docker
+	$(M) boot
 	$(M) health c=404 t="Welcome to Symfony"
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application generated!\n\n"
@@ -109,7 +108,7 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
-	$(M) clone_symfony_docker
+	$(M) boot
 	$(M) require_orm
 	$(M) require_api
 	$(M) permissions images info
@@ -123,7 +122,7 @@ api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(M) clone_symfony_demo
-	$(M) clone_symfony_docker
+	$(M) boot
 	cp .env.local.demo .env.local
 	$(M) demo_add_sqlite_configuration_before_orm_pack
 	$(C) require symfony/orm-pack
@@ -136,7 +135,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
-	$(M) clone_symfony_docker
+	$(M) boot
 	$(M) require_orm
 	$(M) require_easy_admin
 	$(CONSOLE) make:admin:dashboard --no-interaction
@@ -155,7 +154,7 @@ easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Dock
 
 .PHONY: webapp
 webapp: ## Generate a webapp Symfony application with Docker configuration (stable release)
-	$(M) clone_symfony_docker
+	$(M) boot
 	$(M) require_webapp
 	$(M) permissions images info
 	$(M) health c=404 t="Welcome to Symfony"
@@ -167,19 +166,11 @@ webapp@lts: ## Generate a webapp Symfony application with Docker configuration (
 
 ##
 
-clone_symfony_docker: ## Clone and extract https://github.com/dunglas/symfony-docker files at the root
-	@printf "\n$(Y)--- Clone https://github.com/dunglas/symfony-docker$(S) ---\n"
-ifeq ($(wildcard $(DOCKERFILE)),)
-	@printf "Repository: $(Y)$(REPOSITORY_SYMFONY_DOCKER)$(S)\n"
-	git clone $(REPOSITORY_SYMFONY_DOCKER) $(CLONE_DIR) --depth 1
-	@printf "\n$(Y)--- Extract https://github.com/dunglas/symfony-docker at the root$(S) ---\n"
-	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
-	rm -rf $(CLONE_DIR)
-	@if [ -f LICENSE ]; then \
-		git restore LICENSE; \
-	fi
-	@printf " $(G)✔$(S) dunglas/symfony-docker cloned and extracted at the root.\n\n"
-	$(M) co m="dunglas/symfony-docker cloned and extracted at the root"
+boot: ## Boot the Docker stack from the versioned dunglas/symfony-docker files at the root
+	@printf "\n$(Y)--- Boot Docker stack ---$(S)\n"
+	@printf " $(Y)›$(S) Source: $(Y)THIRD_PARTY_LICENSES.md$(S)\n"
+	@UPSTREAM=$$(grep -A4 "## dunglas/symfony-docker" THIRD_PARTY_LICENSES.md | grep "\*\*Upstream commit:\*\*" | sed 's/.*\*\*Upstream commit:\*\* //'); \
+	printf " $(Y)›$(S) dunglas/symfony-docker upstream commit: $(G)$$UPSTREAM$(S)\n"
 	$(M) restart_force
 	# No file modifications expected after restart (ex: .env.local.demo)
 	git reset --hard
@@ -187,16 +178,16 @@ ifeq ($(wildcard $(DOCKERFILE)),)
 	$(M) compose_activate_bind_mount
 	$(M) docker_entrypoint_clean
 	$(M) restart_build
-else
-	@printf " $(G)✔$(S) https://github.com/dunglas/symfony-docker files already present at the root.\n\n"
-endif
+
+update_symfony_docker: ## Update the vendored dunglas/symfony-docker snapshot at the root
+	.sh/update_symfony_docker.sh
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
-	@printf "\n$(Y)--- Clone https://github.com/symfony/demo$(S) ---\n"
+	@printf "\n$(Y)--- Clone https://github.com/symfony/demo ---$(S)\n"
 ifeq ($(wildcard .env.local.demo),)
 	@printf "Repository: $(Y)$(REPOSITORY_SYMFONY_DEMO)$(S)\n"
 	git clone $(REPOSITORY_SYMFONY_DEMO) $(CLONE_DIR) --depth 1
-	@printf "\n$(Y)--- Extract https://github.com/symfony/demo at the root$(S) ---\n"
+	@printf "\n$(Y)--- Extract https://github.com/symfony/demo at the root ---$(S)\n"
 	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
 	rm -rf $(CLONE_DIR)
 	@if [ -f LICENSE ]; then \
@@ -225,7 +216,7 @@ require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
 require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
 	# FIX: Ban version 6 for the moment to prevent Symfony PropertyInfo crash
 	# symfony/property-info v6 does not support phpdocumentor/reflection-docblock
-    # Please stick to ^5.2 in your composer.json file.
+	# Please stick to ^5.2 in your composer.json file.
 	$(C) require "phpdocumentor/reflection-docblock:^5.2"
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
 	$(C) require symfony/webapp-pack
