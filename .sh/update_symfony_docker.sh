@@ -3,7 +3,7 @@
 # Script: update_symfony_docker.sh
 # Description: Vendors the latest HEAD of dunglas/symfony-docker
 #              directly at the project root, updates the upstream
-#              commit SHA in THIRD_PARTY_LICENSES.md, and creates a
+#              commit SHA in SYMFONY_DOCKER_UPSTREAM, and creates a
 #              git commit for full traceability.
 #
 # Run via Makefile (recommended):
@@ -23,21 +23,18 @@ S='\033[0m'
 
 REPOSITORY="git@github.com:dunglas/symfony-docker.git"
 CLONE_DIR=".symfony-docker-clone"
-LICENSES_FILE="THIRD_PARTY_LICENSES.md"
+UPSTREAM_FILE="SYMFONY_DOCKER_UPSTREAM"
 
 # --- 1. Check current upstream commit ---
 
 printf "\n${Y}--- Checking current upstream commit ---${S}\n"
 
-if [ ! -f "${LICENSES_FILE}" ]; then
-    printf " ${R}⨯${S} ${LICENSES_FILE} not found. Please create it first.\n"
-    exit 1
-fi
-
-CURRENT_COMMIT=$(grep -A4 "## dunglas/symfony-docker" "${LICENSES_FILE}" | grep "\*\*Upstream commit:\*\*" | sed 's/.*\*\*Upstream commit:\*\* //')
-
-if [ -n "${CURRENT_COMMIT}" ]; then
+CURRENT_COMMIT=""
+if [ -f "${UPSTREAM_FILE}" ]; then
+    CURRENT_COMMIT=$(cat "${UPSTREAM_FILE}")
     printf " ${Y}›${S} Current commit: ${Y}${CURRENT_COMMIT}${S}\n"
+else
+    printf " ${Y}›${S} ${UPSTREAM_FILE} not found, first run.\n"
 fi
 
 # --- 2. Cleanup any leftover temp clone ---
@@ -86,27 +83,11 @@ printf " ${G}✔${S} dunglas/symfony-docker synced at the project root.\n"
 rm -rf "${CLONE_DIR}"
 printf " ${G}✔${S} Temp directory removed.\n"
 
-# --- 7. Update THIRD_PARTY_LICENSES.md ---
+# --- 7. Update SYMFONY_DOCKER_UPSTREAM ---
 
-printf "\n${Y}--- Updating ${LICENSES_FILE} ---${S}\n"
-
-if [ ! -f "${LICENSES_FILE}" ]; then
-    printf " ${R}⨯${S} ${LICENSES_FILE} not found. Please create it first.\n"
-    exit 1
-fi
-
-# Portable: use a temporary file to support both Linux and macOS
-TEMP_FILE=$(mktemp)
-awk "
-    /## dunglas\/symfony-docker/{found=1}
-    found && /\*\*Upstream commit:\*\*/{
-        sub(/\*\*Upstream commit:\*\* .*/, \"**Upstream commit:** ${UPSTREAM_COMMIT}\");
-        found=0
-    }
-    {print}
-" "${LICENSES_FILE}" > "${TEMP_FILE}" && mv "${TEMP_FILE}" "${LICENSES_FILE}"
-
-printf " ${G}✔${S} Upstream commit updated in ${Y}${LICENSES_FILE}${S}\n"
+printf "\n${Y}--- Updating ${UPSTREAM_FILE} ---${S}\n"
+echo "${UPSTREAM_COMMIT}" > "${UPSTREAM_FILE}"
+printf " ${G}✔${S} Upstream commit recorded in ${Y}${UPSTREAM_FILE}${S}\n"
 
 # --- 8. Git commit ---
 

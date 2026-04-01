@@ -168,9 +168,8 @@ webapp@lts: ## Generate a webapp Symfony application with Docker configuration (
 
 boot: ## Boot the Docker stack from the versioned dunglas/symfony-docker files at the root
 	@printf "\n$(Y)--- Boot Docker stack ---$(S)\n"
-	@printf " $(Y)›$(S) Source: $(Y)THIRD_PARTY_LICENSES.md$(S)\n"
-	@UPSTREAM=$$(grep -A4 "## dunglas/symfony-docker" THIRD_PARTY_LICENSES.md | grep "\*\*Upstream commit:\*\*" | sed 's/.*\*\*Upstream commit:\*\* //'); \
-	printf " $(Y)›$(S) dunglas/symfony-docker upstream commit: $(G)$$UPSTREAM$(S)\n"
+	@printf " $(Y)›$(S) Source: $(Y)SYMFONY_DOCKER_UPSTREAM$(S)\n"
+	@printf " $(Y)›$(S) dunglas/symfony-docker upstream commit: $(G)$$(cat SYMFONY_DOCKER_UPSTREAM)$(S)\n"
 	$(M) restart_force
 	# No file modifications expected after restart (ex: .env.local.demo)
 	git reset --hard
@@ -333,3 +332,4 @@ yq_update yu: ## Set or update a key's value in a YAML file - $ make yq_update f
 	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(if $(value v),, $(error "Please specify a value with 'v=...'"))
 	$(YQ) --inplace '.$(k) = "$(value v)"' $(f)
+
