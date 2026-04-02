@@ -56,8 +56,7 @@ for FLAVOR in "${FLAVORS[@]}"; do
 
     FLAVOR_START=$(date +%s)
 
-    # Run generation (Enter to accept suggested branch name)
-    if echo "" | make ${FLAVOR} 2>&1; then
+    if NO_INTERACTION=true make ${FLAVOR}; then
         FLAVOR_END=$(date +%s)
         DURATION=$(( FLAVOR_END - FLAVOR_START ))
         MINUTES=$(( DURATION / 60 ))
