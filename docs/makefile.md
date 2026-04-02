@@ -26,9 +26,9 @@
   start                         Start the project and show info (detached mode)
   stop                          Stop the project (down)
 
-  restart                       [Level 1] Standard Restart (triggers: .env, compose.yaml, code changes)
-  restart_build                 [Level 2] Build & Restart (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
-  restart_force                 [Level 3] Force Rebuild & Restart (triggers: Dockerfile, system packages, cache issues)
+  restart                       [Level 1] Standard restart - Reloading containers (triggers: .env, compose.yaml, code changes)
+  build_start                   [Level 2] Build & Start - Updating image with cache (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
+  build_force_start             [Level 3] Force build & Start - Rebuilding from scratch (triggers: Dockerfile, system packages, cache issues)
 
   check_level_1              c1 Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
   check_level_2              c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
@@ -233,7 +233,8 @@
   webapp                        Generate a webapp Symfony application with Docker configuration (stable release)
   webapp@lts                    Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
 
-  clone_symfony_docker          Clone and extract https://github.com/dunglas/symfony-docker files at the root
+  boot                          Boot the Docker stack from the versioned dunglas/symfony-docker files at the root
+  update_symfony_docker         Update the vendored dunglas/symfony-docker snapshot at the root
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root
 
   COMPLETE INSTALLATION

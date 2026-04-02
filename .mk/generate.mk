@@ -70,12 +70,12 @@ update_postgresql_configuration: .env compose.override.yaml # INTERNAL - Execute
 	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/postgresql/compose.override.yaml
 	$(M) co m="update PosgreSQL configuration"
 
-demo_add_sqlite_configuration_before_orm_pack: Dockerfile frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make restart_force
+demo_add_sqlite_configuration_before_orm_pack: Dockerfile frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make build_force_start
 	$(M) ga f=clean/docker-entrypoint.sh.database.patch
 	$(M) rb m=recipes t=Dockerfile s=.block/sqlite/Dockerfile
 	$(M) co m="add SQLite configuration before ORM pack installation"
 
-compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make restart_force
+compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make build_force_start
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(M) co m="update SQLite configuration after ORM pack installation (DATABASE_URL)"
 
@@ -141,7 +141,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	git restore .env.local.demo
 	$(M) co m="composer require symfony/orm-pack"
 	$(M) deep_clean NO_INTERACTION=true
-	$(M) restart_force
+	$(M) build_force_start
 	$(M) health c=200 t="Symfony Demo"
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
@@ -183,12 +183,12 @@ webapp@lts: ## Generate a webapp Symfony application with Docker configuration (
 boot: ## Boot the Docker stack from the versioned dunglas/symfony-docker files at the root
 	@printf "\n$(Y)--- Boot Docker stack ---$(S)\n"
 	@printf " $(Y)›$(S) dunglas/symfony-docker upstream commit: $(G)$$(cat UPSTREAM)$(S)\n"
-	$(M) restart_force
+	$(M) build_force_start
 	# No file modifications expected after restart (ex: .env.local.demo)
 	git reset --hard
 	$(M) compose_use_database_url_var
 	$(M) compose_activate_bind_mount
-	$(M) restart_build
+	$(M) build_start
 
 update_symfony_docker: ## Update the vendored dunglas/symfony-docker snapshot at the root
 	.sh/update_symfony_docker.sh
@@ -235,7 +235,7 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	$(M) update_postgresql_configuration
 	# Running deep_clean is essential to properly take into account the ORM installed by symfony/webapp-pack
 	$(M) deep_clean NO_INTERACTION=true
-	$(M) restart_force
+	$(M) build_force_start
 
 ##
 
@@ -257,7 +257,7 @@ require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.
 	$(M) update_postgresql_configuration
 	# Running deep_clean is essential to properly take into account the ORM installed by symfony/orm-pack
 	$(M) deep_clean NO_INTERACTION=true
-	$(M) restart_force
+	$(M) build_force_start
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(C) require --dev symfony/profiler-pack
@@ -311,7 +311,7 @@ endif
 	$(M) rb m=doctrine/doctrine-bundle t=compose.yaml s=.block/mariadb/compose.yaml
 	$(M) co m="stack updated to MariaDB"
 	$(M) deep_clean NO_INTERACTION=true
-	$(M) restart_force
+	$(M) build_force_start
 	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
 
 ##   YQ

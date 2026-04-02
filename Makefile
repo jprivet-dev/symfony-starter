@@ -297,16 +297,16 @@ stop: down ## Stop the project (down)
 ##
 
 .PHONY: restart
-restart: ## [Level 1] Standard Restart (triggers: .env, compose.yaml, code changes)
-	@printf " $(G)🔄 [Level 1] Standard restart. Reloading containers...$(S)\n"
+restart: ## [Level 1] Standard restart - Reloading containers (triggers: .env, compose.yaml, code changes)
+	@printf " $(G)🔄 [Level 1] Standard restart - Reloading containers...$(S)\n"
 	$(MAKE) stop start
 
-restart_build: ## [Level 2] Build & Restart (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
-	@printf " $(Y)🏗️ [Level 2] Build & Restart. Updating image with cache...$(S)\n"
+build_start: ## [Level 2] Build & Start - Updating image with cache (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
+	@printf " $(Y)🏗️ [Level 2] Build & Start - Updating image with cache...$(S)\n"
 	$(MAKE) build start
 
-restart_force: ## [Level 3] Force Rebuild & Restart (triggers: Dockerfile, system packages, cache issues)
-	@printf " $(R)🏗️ [Level 3] Force Rebuild. Rebuilding from scratch...$(S)\n"
+build_force_start: ## [Level 3] Force build & Start - Rebuilding from scratch (triggers: Dockerfile, system packages, cache issues)
+	@printf " $(R)🏗️ [Level 3] Force build & Start - Rebuilding from scratch...$(S)\n"
 	$(MAKE) build_force start
 
 ##
