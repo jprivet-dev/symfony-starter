@@ -83,7 +83,9 @@ suggest_branch: # INTERNAL - Suggest creating a new branch before generation - $
 	@printf "\n$(Y)--- Branch ---$(S)\n"
 	@printf " $(Y)›$(S) Current branch: $(G)$$(git rev-parse --abbrev-ref HEAD)$(S)\n"
 	@printf " $(Y)›$(S) New branch name [$(G)$(FLAVOR)$(S)] ($(Y)Enter$(S) to accept, $(Y)n$(S) to skip): "; \
-	read BRANCH_NAME; \
+	if [ "$${NO_INTERACTION}" != "true" ]; then \
+		read BRANCH_NAME; \
+	fi; \
 	if [ "$$BRANCH_NAME" = "n" ] || [ "$$BRANCH_NAME" = "N" ]; then \
 		printf " $(Y)›$(S) Skipped. Staying on current branch.\n"; \
 	else \
