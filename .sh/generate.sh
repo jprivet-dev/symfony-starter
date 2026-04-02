@@ -26,9 +26,9 @@ printf " ${Y}›${S} Work branch: ${G}${WORK_BRANCH}${S}\n\n"
 
 FLAVORS=(
     "minimalist"
-#    "minimalist@lts"
-#    "webapp"
-#    "webapp@lts"
+    "minimalist@lts"
+    "webapp"
+    "webapp@lts"
 #    "api"
 #    "api@lts"
 #    "easy_admin"
