@@ -182,7 +182,6 @@ webapp@lts: ## Generate a webapp Symfony application with Docker configuration (
 
 boot: ## Boot the Docker stack from the versioned dunglas/symfony-docker files at the root
 	@printf "\n$(Y)--- Boot Docker stack ---$(S)\n"
-	@printf " $(Y)›$(S) Source: $(Y)UPSTREAM$(S)\n"
 	@printf " $(Y)›$(S) dunglas/symfony-docker upstream commit: $(G)$$(cat UPSTREAM)$(S)\n"
 	$(M) restart_force
 	# No file modifications expected after restart (ex: .env.local.demo)
