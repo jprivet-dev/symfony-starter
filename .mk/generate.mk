@@ -187,12 +187,16 @@ update_symfony_docker: ## Update the vendored dunglas/symfony-docker snapshot at
 skeleton: ## Install symfony/skeleton from the versioned dunglas/symfony-docker files at the root
 	@printf "\n$(Y)--- Install symfony/skeleton ---$(S)\n"
 	@printf " $(Y)›$(S) dunglas/symfony-docker upstream commit: $(G)$$(cat UPSTREAM)$(S)\n"
-	$(M) build_force_start
-	$(M) co m="symfony/skeleton installed"
-	$(M) compose_use_database_url_var
-	$(M) compose_activate_bind_mount
-	$(M) build_start
-	$(M) health c=404 t="Welcome to Symfony"
+	@if [ "$$(cat composer.json)" = "{}" ]; then \
+		$(M) build_force_start; \
+		$(M) co m="symfony/skeleton installed"; \
+		$(M) compose_use_database_url_var; \
+		$(M) compose_activate_bind_mount; \
+		$(M) build_start; \
+		$(M) health c=404 t="Welcome to Symfony"; \
+	else \
+		printf " $(G)✔$(S) symfony/skeleton already installed, skipping.\n"; \
+	fi
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo ---$(S)\n"
