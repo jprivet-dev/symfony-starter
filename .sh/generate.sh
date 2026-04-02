@@ -22,65 +22,82 @@ WORK_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 printf "\n${Y}--- Symfony Starter - Generate All ---${S}\n"
 printf " ${Y}›${S} Work branch: ${G}${WORK_BRANCH}${S}\n\n"
 
-# --- Flavors ---
-
-FLAVORS=(
-    "minimalist"
-    "minimalist@lts"
-    "webapp"
-    "webapp@lts"
-#    "api"
-#    "api@lts"
-#    "easy_admin"
-#    "easy_admin@lts"
-#    "demo"
-)
-
 # --- Results ---
 
 declare -A RESULTS
 declare -A DURATIONS
 HAS_ERROR=0
 
-# --- Generate ---
-
-for FLAVOR in "${FLAVORS[@]}"; do
+# ------------------------------------------------------------------
+# run_flavor <branch_from> <make_command> <branch_name>
+# ------------------------------------------------------------------
+run_flavor() {
+    local BRANCH_FROM="$1"
+    local COMMAND="$2"
+    local BRANCH="$3"
 
     printf "\n${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n"
-    printf " ${Y}›${S} Generating: ${G}${FLAVOR}${S}\n"
+    printf " ${Y}›${S} Generating: ${G}${BRANCH}${S} (from: ${Y}${BRANCH_FROM}${S})\n"
     printf "${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n\n"
 
-    # Return to work branch and clean up
-    git switch "${WORK_BRANCH}"
-    make kill_current_app NO_INTERACTION=true
+    git switch -C "${BRANCH}" "${BRANCH_FROM}"
 
-    FLAVOR_START=$(date +%s)
+    local START=$(date +%s)
 
-    if NO_INTERACTION=true make ${FLAVOR}; then
-        FLAVOR_END=$(date +%s)
-        DURATION=$(( FLAVOR_END - FLAVOR_START ))
-        MINUTES=$(( DURATION / 60 ))
-        SECONDS=$(( DURATION % 60 ))
-        RESULTS["${FLAVOR}"]="ok"
-        DURATIONS["${FLAVOR}"]=$(printf "%02dm %02ds" $MINUTES $SECONDS)
-        printf "\n ${G}✔${S} ${FLAVOR} generated successfully\n"
+    if NO_INTERACTION=true make ${COMMAND}; then
+        local END=$(date +%s)
+        local DURATION=$(( END - START ))
+        RESULTS["${BRANCH}"]="ok"
+        DURATIONS["${BRANCH}"]=$(printf "%02dm %02ds" $(( DURATION / 60 )) $(( DURATION % 60 )))
+        printf "\n ${G}✔${S} ${BRANCH} generated successfully\n"
     else
-        FLAVOR_END=$(date +%s)
-        DURATION=$(( FLAVOR_END - FLAVOR_START ))
-        MINUTES=$(( DURATION / 60 ))
-        SECONDS=$(( DURATION % 60 ))
-        RESULTS["${FLAVOR}"]="error"
-        DURATIONS["${FLAVOR}"]=$(printf "%02dm %02ds" $MINUTES $SECONDS)
+        local END=$(date +%s)
+        local DURATION=$(( END - START ))
+        RESULTS["${BRANCH}"]="error"
+        DURATIONS["${BRANCH}"]=$(printf "%02dm %02ds" $(( DURATION / 60 )) $(( DURATION % 60 )))
         HAS_ERROR=1
-        printf "\n ${R}⨯${S} ${FLAVOR} failed\n"
+        printf "\n ${R}⨯${S} ${BRANCH} failed\n"
     fi
-done
+}
+
+# --- Generate ---
+
+# 1. minimalist from work branch
+run_flavor "${WORK_BRANCH}" "minimalist" "minimalist"
+
+# 2. webapp, api, easy_admin from minimalist
+run_flavor "minimalist" "webapp"      "webapp"
+run_flavor "minimalist" "api"         "api"
+run_flavor "minimalist" "easy_admin"  "easy_admin"
+
+# 3. minimalist@lts from work branch
+run_flavor "${WORK_BRANCH}" "minimalist@lts" "minimalist@lts"
+
+# 4. webapp@lts, api@lts, easy_admin@lts from minimalist@lts
+run_flavor "minimalist@lts" "webapp@lts"     "webapp@lts"
+run_flavor "minimalist@lts" "api@lts"        "api@lts"
+run_flavor "minimalist@lts" "easy_admin@lts" "easy_admin@lts"
+
+# 5. demo from work branch
+run_flavor "${WORK_BRANCH}" "demo" "demo"
 
 # --- Return to work branch ---
 
 git switch "${WORK_BRANCH}"
 
 # --- Report ---
+
+FLAVORS=(
+    "minimalist"
+    "webapp"
+    "api"
+    "easy_admin"
+    "minimalist@lts"
+    "webapp@lts"
+    "api@lts"
+    "easy_admin@lts"
+    "demo"
+)
 
 printf "\n${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n"
 printf " ${Y}Report${S}\n"
