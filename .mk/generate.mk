@@ -77,7 +77,7 @@ demo_add_sqlite_configuration_before_orm_pack: Dockerfile frankenphp/docker-entr
 
 compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make build_force_start
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
-	$(M) co m="update SQLite configuration after ORM pack installation (DATABASE_URL)"
+	$(M) co m="use DATABASE_URL var in compose.yaml"
 
 suggest_branch: # INTERNAL - Suggest creating a new branch before generation - $ make suggest_branch FLAVOR=<flavor>
 	@printf "\n$(Y)--- Branch ---$(S)\n"
@@ -186,6 +186,9 @@ skeleton: ## Install symfony/skeleton from the versioned dunglas/symfony-docker 
 	@printf "\n$(Y)--- Install symfony/skeleton ---$(S)\n"
 	@printf " $(Y)›$(S) dunglas/symfony-docker upstream commit: $(G)$$(cat UPSTREAM)$(S)\n"
 	$(M) build_force_start
+	$(M) compose_use_database_url_var
+	$(M) compose_activate_bind_mount
+	$(M) build_start
 	$(M) co m="symfony/skeleton installed"
 	$(M) health c=404 t="Welcome to Symfony"
 
