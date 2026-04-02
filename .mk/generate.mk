@@ -186,10 +186,10 @@ skeleton: ## Install symfony/skeleton from the versioned dunglas/symfony-docker 
 	@printf "\n$(Y)--- Install symfony/skeleton ---$(S)\n"
 	@printf " $(Y)›$(S) dunglas/symfony-docker upstream commit: $(G)$$(cat UPSTREAM)$(S)\n"
 	$(M) build_force_start
+	$(M) co m="symfony/skeleton installed"
 	$(M) compose_use_database_url_var
 	$(M) compose_activate_bind_mount
 	$(M) build_start
-	$(M) co m="symfony/skeleton installed"
 	$(M) health c=404 t="Welcome to Symfony"
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
