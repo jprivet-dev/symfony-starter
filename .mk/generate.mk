@@ -105,19 +105,19 @@ kill_current_app: confirm ## Remove all fresh Symfony application files (var/, v
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
-	$(M) suggest_branch FLAVOR=minimalist
+	$(M) suggest_branch FLAVOR=$(or $(BRANCH),minimalist)
 	$(M) skeleton
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application generated!\n\n"
 
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist BRANCH=minimalist@lts
 
 ##
 
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
-	$(M) suggest_branch FLAVOR=api
+	$(M) suggest_branch FLAVOR=$(or $(BRANCH),api)
 	$(M) skeleton
 	$(M) require_orm
 	$(M) require_api
@@ -127,11 +127,11 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	@printf " $(G)🎉 Success!$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
 api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api BRANCH=api@lts
 
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
-	$(M) suggest_branch FLAVOR=demo
+	$(M) suggest_branch FLAVOR=$(or $(BRANCH),demo)
 	$(M) clone_symfony_demo
 	$(M) skeleton
 	cp .env.local.demo .env.local
@@ -146,7 +146,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
-	$(M) suggest_branch FLAVOR=easy_admin
+	$(M) suggest_branch FLAVOR=$(or $(BRANCH),easy_admin)
 	$(M) skeleton
 	$(M) require_orm
 	$(M) require_easy_admin
@@ -162,11 +162,11 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	@printf " $(G)🎉 Success!$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
 easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) easy_admin
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) easy_admin BRANCH=easy_admin@lts
 
 .PHONY: webapp
 webapp: ## Generate a webapp Symfony application with Docker configuration (stable release)
-	$(M) suggest_branch FLAVOR=webapp
+	$(M) suggest_branch FLAVOR=$(or $(BRANCH),webapp)
 	$(M) skeleton
 	$(M) require_webapp
 	$(M) permissions images info
@@ -175,7 +175,7 @@ webapp: ## Generate a webapp Symfony application with Docker configuration (stab
 	@printf " $(G)🎉 Success!$(S) Webapp Symfony application generated!\n\n"
 
 webapp@lts: ## Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) webapp
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) webapp BRANCH=webapp@lts
 
 ##
 
