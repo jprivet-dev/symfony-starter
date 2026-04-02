@@ -65,10 +65,6 @@ compose_activate_bind_mount: compose.override.yaml # INTERNAL - Execute after $ 
 	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
 	$(M) co m="activate the bind mount (var/, var/log)"
 
-docker_entrypoint_clean: frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make restart_build
-	$(M) ga f=clean/docker-entrypoint.sh.composer.patch
-	$(M) co m="clean docker-entrypoint.sh"
-
 update_postgresql_configuration: .env compose.override.yaml # INTERNAL - Execute after $ make restart
 	$(M) rb m=doctrine/doctrine-bundle t=.env s=.block/postgresql/.env
 	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/postgresql/compose.override.yaml
@@ -193,7 +189,6 @@ boot: ## Boot the Docker stack from the versioned dunglas/symfony-docker files a
 	git reset --hard
 	$(M) compose_use_database_url_var
 	$(M) compose_activate_bind_mount
-	$(M) docker_entrypoint_clean
 	$(M) restart_build
 
 update_symfony_docker: ## Update the vendored dunglas/symfony-docker snapshot at the root
