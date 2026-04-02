@@ -184,8 +184,7 @@ boot: ## Boot the Docker stack from the versioned dunglas/symfony-docker files a
 	@printf "\n$(Y)--- Boot Docker stack ---$(S)\n"
 	@printf " $(Y)›$(S) dunglas/symfony-docker upstream commit: $(G)$$(cat UPSTREAM)$(S)\n"
 	$(M) build_force_start
-	# No file modifications expected after restart (ex: .env.local.demo)
-	git reset --hard
+	$(M) co m="symfony/skeleton installed"
 	$(M) compose_use_database_url_var
 	$(M) compose_activate_bind_mount
 	$(M) build_start
