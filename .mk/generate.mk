@@ -83,6 +83,19 @@ compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make res
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(M) co m="update SQLite configuration after ORM pack installation (DATABASE_URL)"
 
+suggest_branch: # INTERNAL - Suggest creating a new branch before generation - $ make suggest_branch FLAVOR=<flavor>
+	@printf "\n$(Y)--- Branch ---$(S)\n"
+	@printf " $(Y)›$(S) Current branch: $(G)$$(git rev-parse --abbrev-ref HEAD)$(S)\n"
+	@printf " $(Y)›$(S) New branch name [$(G)$(FLAVOR)$(S)] ($(Y)Enter$(S) to accept, $(Y)n$(S) to skip): "; \
+	read BRANCH_NAME; \
+	if [ "$$BRANCH_NAME" = "n" ] || [ "$$BRANCH_NAME" = "N" ]; then \
+		printf " $(Y)›$(S) Skipped. Staying on current branch.\n"; \
+	else \
+		BRANCH_NAME=$${BRANCH_NAME:-$(FLAVOR)}; \
+		git switch -C "$$BRANCH_NAME"; \
+		printf " $(G)✔$(S) Switched to new branch $(G)$$BRANCH_NAME$(S)\n"; \
+	fi
+
 #
 
 kill_current_app: confirm ## Remove all fresh Symfony application files (var/, vendor/, ...)
@@ -96,6 +109,7 @@ kill_current_app: confirm ## Remove all fresh Symfony application files (var/, v
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
+	$(M) suggest_branch FLAVOR=minimalist
 	$(M) boot
 	$(M) health c=404 t="Welcome to Symfony"
 	$(PRINT_EXECUTION_TIME)
@@ -108,6 +122,7 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
+	$(M) suggest_branch FLAVOR=api
 	$(M) boot
 	$(M) require_orm
 	$(M) require_api
@@ -121,6 +136,7 @@ api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
+	$(M) suggest_branch FLAVOR=demo
 	$(M) clone_symfony_demo
 	$(M) boot
 	cp .env.local.demo .env.local
@@ -135,6 +151,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
+	$(M) suggest_branch FLAVOR=easy_admin
 	$(M) boot
 	$(M) require_orm
 	$(M) require_easy_admin
@@ -154,6 +171,7 @@ easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Dock
 
 .PHONY: webapp
 webapp: ## Generate a webapp Symfony application with Docker configuration (stable release)
+	$(M) suggest_branch FLAVOR=webapp
 	$(M) boot
 	$(M) require_webapp
 	$(M) permissions images info
@@ -332,4 +350,3 @@ yq_update yu: ## Set or update a key's value in a YAML file - $ make yq_update f
 	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(if $(value v),, $(error "Please specify a value with 'v=...'"))
 	$(YQ) --inplace '.$(k) = "$(value v)"' $(f)
-
