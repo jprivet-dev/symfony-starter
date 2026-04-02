@@ -106,8 +106,7 @@ kill_current_app: confirm ## Remove all fresh Symfony application files (var/, v
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
 	$(M) suggest_branch FLAVOR=minimalist
-	$(M) boot
-	$(M) health c=404 t="Welcome to Symfony"
+	$(M) skeleton
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application generated!\n\n"
 
@@ -119,7 +118,7 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
 	$(M) suggest_branch FLAVOR=api
-	$(M) boot
+	$(M) skeleton
 	$(M) require_orm
 	$(M) require_api
 	$(M) permissions images info
@@ -134,7 +133,7 @@ api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(M) suggest_branch FLAVOR=demo
 	$(M) clone_symfony_demo
-	$(M) boot
+	$(M) skeleton
 	cp .env.local.demo .env.local
 	$(M) demo_add_sqlite_configuration_before_orm_pack
 	$(C) require symfony/orm-pack
@@ -148,7 +147,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
 	$(M) suggest_branch FLAVOR=easy_admin
-	$(M) boot
+	$(M) skeleton
 	$(M) require_orm
 	$(M) require_easy_admin
 	$(CONSOLE) make:admin:dashboard --no-interaction
@@ -168,7 +167,7 @@ easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Dock
 .PHONY: webapp
 webapp: ## Generate a webapp Symfony application with Docker configuration (stable release)
 	$(M) suggest_branch FLAVOR=webapp
-	$(M) boot
+	$(M) skeleton
 	$(M) require_webapp
 	$(M) permissions images info
 	$(M) health c=404 t="Welcome to Symfony"
@@ -180,17 +179,15 @@ webapp@lts: ## Generate a webapp Symfony application with Docker configuration (
 
 ##
 
-boot: ## Boot the Docker stack from the versioned dunglas/symfony-docker files at the root
-	@printf "\n$(Y)--- Boot Docker stack ---$(S)\n"
+update_symfony_docker: ## Update the vendored dunglas/symfony-docker snapshot at the root
+	.sh/update_symfony_docker.sh
+
+skeleton: ## Install symfony/skeleton from the versioned dunglas/symfony-docker files at the root
+	@printf "\n$(Y)--- Install symfony/skeleton ---$(S)\n"
 	@printf " $(Y)›$(S) dunglas/symfony-docker upstream commit: $(G)$$(cat UPSTREAM)$(S)\n"
 	$(M) build_force_start
 	$(M) co m="symfony/skeleton installed"
-	$(M) compose_use_database_url_var
-	$(M) compose_activate_bind_mount
-	$(M) build_start
-
-update_symfony_docker: ## Update the vendored dunglas/symfony-docker snapshot at the root
-	.sh/update_symfony_docker.sh
+	$(M) health c=404 t="Welcome to Symfony"
 
 clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
 	@printf "\n$(Y)--- Clone https://github.com/symfony/demo ---$(S)\n"
