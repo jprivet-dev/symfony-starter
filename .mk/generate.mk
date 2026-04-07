@@ -135,9 +135,12 @@ api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
 	$(M) suggest_branch FLAVOR=$(or $(BRANCH),demo)
 	$(M) clone_symfony_demo
-	$(M) skeleton
-	cp .env.local.demo .env.local
+	$(M) build_force_start
+	git restore .env.local.demo
+	$(M) compose_use_database_url_var
+	$(M) compose_activate_bind_mount
 	$(M) demo_add_sqlite_configuration_before_orm_pack
+	$(M) build_start
 	$(C) require symfony/orm-pack
 	git restore .env.local.demo
 	$(M) co m="composer require symfony/orm-pack"
