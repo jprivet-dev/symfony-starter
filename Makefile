@@ -105,14 +105,16 @@ SQLITE_DB_FILE = $(subst sqlite:///%kernel.project_dir%/,,$(SQLITE_DB_ENV))
 # --- DOCKER OPTIONS ---
 
 # See https://github.com/dunglas/symfony-docker/blob/main/docs/options.md
-PROJECT_NAME  ?= $(shell basename $(CURDIR) | tr '[:upper:]' '[:lower:]')
-SERVER_NAME    = $(PROJECT_NAME).localhost
-IMAGES_PREFIX  = $(PROJECT_NAME)-
+PROJECT_NAME ?= $(shell basename $(CURDIR) | tr '[:upper:]' '[:lower:]')
+SERVER_NAME   = $(PROJECT_NAME).localhost
+IMAGES_PREFIX = $(PROJECT_NAME)-
 
+# Port is derived from the project name to avoid conflicts when running multiple instances.
+# Can be overridden in .env.local (e.g. HTTP_PORT=8080)
 # See services.php.ports in compose.yaml
-HTTP_PORT     ?= 8080
-HTTPS_PORT    ?= 8443
-HTTP3_PORT    ?= $(HTTPS_PORT)
+HTTP_PORT  ?= $(shell echo $(PROJECT_NAME) | cksum | awk '{print 8000 + $$1 % 900}')
+HTTPS_PORT ?= $(shell echo $(PROJECT_NAME) | cksum | awk '{print 8400 + $$1 % 99}')
+HTTP3_PORT ?= $(HTTPS_PORT)
 
 # Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
 HTTP_PORT_SUFFIX  = $(if $(HTTP_PORT),:$(HTTP_PORT))
