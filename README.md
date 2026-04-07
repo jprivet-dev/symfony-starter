@@ -137,7 +137,7 @@ You can easily switch between flavors or restart from scratch using the cleanup 
 
 ```shell
 # 1. Nuke the current setup (Containers, Volumes, Source code)
-make kill_current_app
+make clean_app
 
 # 2. Generate a different flavor
 make easy_admin

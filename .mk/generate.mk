@@ -96,7 +96,7 @@ suggest_branch: # INTERNAL - Suggest creating a new branch before generation - $
 
 #
 
-kill_current_app: confirm ## Remove all fresh Symfony application files (var/, vendor/, ...)
+clean_app: confirm ## Remove all fresh Symfony application files (var/, vendor/, ...)
 	-$(M) permissions
 	$(M) deep_clean NO_INTERACTION=true
 	git reset --hard

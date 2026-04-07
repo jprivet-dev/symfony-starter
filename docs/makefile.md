@@ -220,7 +220,7 @@
 
   (to delete this section, delete .mk/generate.mk)
 
-  kill_current_app              Remove all fresh Symfony application files (var/, vendor/, ...)
+  clean_app                     Remove all fresh Symfony application files (var/, vendor/, ...)
 
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
@@ -233,8 +233,8 @@
   webapp                        Generate a webapp Symfony application with Docker configuration (stable release)
   webapp@lts                    Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
 
-  boot                          Boot the Docker stack from the versioned dunglas/symfony-docker files at the root
   update_symfony_docker         Update the vendored dunglas/symfony-docker snapshot at the root
+  skeleton                      Install symfony/skeleton from the versioned dunglas/symfony-docker files at the root
   clone_symfony_demo            Clone and extract https://github.com/symfony/demo files at the root
 
   COMPLETE INSTALLATION
