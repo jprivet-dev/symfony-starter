@@ -75,13 +75,13 @@ generate_flavor() {
 
 # --- Generate ---
 
-generate_flavor "api"
-generate_flavor "api@lts"
-generate_flavor "demo"
-generate_flavor "easy_admin"
-generate_flavor "easy_admin@lts"
-generate_flavor "minimalist"
-generate_flavor "minimalist@lts"
+#generate_flavor "api"
+#generate_flavor "api@lts"
+#generate_flavor "demo"
+#generate_flavor "easy_admin"
+#generate_flavor "easy_admin@lts"
+#generate_flavor "minimalist"
+#generate_flavor "minimalist@lts"
 generate_flavor "webapp"
 generate_flavor "webapp@lts"
 generate_flavor "webapp@mariadb"
