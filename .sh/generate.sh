@@ -18,6 +18,7 @@ Y='\033[33m'
 S='\033[0m'
 
 WORK_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+START_TOTAL=$(date +%s)
 
 BRANCHES=(
     "api"
@@ -94,6 +95,11 @@ NO_INTERACTION=true make clean_app
 
 # --- Report ---
 
+END_TOTAL=$(date +%s)
+DURATION_TOTAL=$(( END_TOTAL - START_TOTAL ))
+MINUTES_TOTAL=$(( DURATION_TOTAL / 60 ))
+SECONDS_TOTAL=$(( DURATION_TOTAL % 60 ))
+
 printf "\n${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n"
 printf " ${Y}Report${S}\n"
 printf "${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n\n"
@@ -109,7 +115,7 @@ for BRANCH in "${BRANCHES[@]}"; do
     fi
 done
 
-printf "\n"
+printf "\n ⏱️  Total generation time: ${Y}%02dm %02ds${S}\n\n" $MINUTES_TOTAL $SECONDS_TOTAL
 
 if [ "${HAS_ERROR}" -eq 0 ]; then
     printf " ${G}✔${S} All flavors generated successfully. Run ${Y}.sh/push.sh${S} to push to origin.\n\n"
