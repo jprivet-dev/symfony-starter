@@ -82,6 +82,8 @@ generate_flavor "webapp"
 generate_flavor "webapp@lts"
 generate_flavor "webapp@mariadb"
 generate_flavor "webapp@mariadb_lts"
+generate_flavor "webapp@sqlite"
+generate_flavor "webapp@sqlite_lts"
 
 generate_flavor "api"
 generate_flavor "api@lts"
