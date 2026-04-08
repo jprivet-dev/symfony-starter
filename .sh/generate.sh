@@ -54,44 +54,44 @@ NO_INTERACTION=true make clean_app
 NO_INTERACTION=true make minimalist
 
 # --- minimalist@lts ---
-git switch "${WORK_BRANCH}"
-NO_INTERACTION=true make clean_app
-NO_INTERACTION=true make minimalist@lts
+#git switch "${WORK_BRANCH}"
+#NO_INTERACTION=true make clean_app
+#NO_INTERACTION=true make minimalist@lts
 
 # --- webapp ---
-git switch "${WORK_BRANCH}"
-NO_INTERACTION=true make clean_app
-NO_INTERACTION=true make webapp
+#git switch "${WORK_BRANCH}"
+#NO_INTERACTION=true make clean_app
+#NO_INTERACTION=true make webapp
 
 # --- webapp@lts ---
-git switch "${WORK_BRANCH}"
-NO_INTERACTION=true make clean_app
-NO_INTERACTION=true make webapp@lts
+#git switch "${WORK_BRANCH}"
+#NO_INTERACTION=true make clean_app
+#NO_INTERACTION=true make webapp@lts
 
 # --- api ---
-git switch "${WORK_BRANCH}"
-NO_INTERACTION=true make clean_app
-NO_INTERACTION=true make api
+#git switch "${WORK_BRANCH}"
+#NO_INTERACTION=true make clean_app
+#NO_INTERACTION=true make api
 
 # --- api@lts ---
-git switch "${WORK_BRANCH}"
-NO_INTERACTION=true make clean_app
-NO_INTERACTION=true make api@lts
+#git switch "${WORK_BRANCH}"
+#NO_INTERACTION=true make clean_app
+#NO_INTERACTION=true make api@lts
 
 # --- easy_admin ---
-git switch "${WORK_BRANCH}"
-NO_INTERACTION=true make clean_app
-NO_INTERACTION=true make easy_admin
+#git switch "${WORK_BRANCH}"
+#NO_INTERACTION=true make clean_app
+#NO_INTERACTION=true make easy_admin
 
 # --- easy_admin@lts ---
-git switch "${WORK_BRANCH}"
-NO_INTERACTION=true make clean_app
-NO_INTERACTION=true make easy_admin@lts
+#git switch "${WORK_BRANCH}"
+#NO_INTERACTION=true make clean_app
+#NO_INTERACTION=true make easy_admin@lts
 
 # --- demo ---
-git switch "${WORK_BRANCH}"
-NO_INTERACTION=true make clean_app
-NO_INTERACTION=true make demo
+#git switch "${WORK_BRANCH}"
+#NO_INTERACTION=true make clean_app
+#NO_INTERACTION=true make demo
 
 # --- Return to work branch ---
 git switch "${WORK_BRANCH}"
