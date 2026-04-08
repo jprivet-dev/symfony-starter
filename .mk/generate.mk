@@ -331,6 +331,7 @@ endif
 	$(M) rb m=doctrine/doctrine-bundle t=Dockerfile s=.block/mariadb/Dockerfile
 	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/mariadb/compose.override.yaml
 	$(M) rb m=doctrine/doctrine-bundle t=compose.yaml s=.block/mariadb/compose.yaml
+	$(M) ya f=compose.yaml k=services.php.depends_on.database.condition v=service_healthy
 	$(M) co m="stack updated to MariaDB"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
