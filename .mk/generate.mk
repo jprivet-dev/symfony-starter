@@ -126,7 +126,7 @@ webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker c
 	@printf " $(G)🎉 Success!$(S) Webapp Symfony application generated!\n\n"
 
 webapp@lts: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) webapp BRANCH=webapp-lts
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) webapp BRANCH=$(or $(BRANCH),webapp-lts)
 
 webapp@mariadb: ## Generate a webapp Symfony application (with MariaDB) with Docker configuration (stable release)
 	$(M) webapp BRANCH=webapp-mariadb
