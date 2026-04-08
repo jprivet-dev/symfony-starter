@@ -89,9 +89,9 @@ NO_INTERACTION=true make minimalist
 #NO_INTERACTION=true make easy_admin@lts
 
 # --- demo ---
-#git switch "${WORK_BRANCH}"
-#NO_INTERACTION=true make clean_app
-#NO_INTERACTION=true make demo
+git switch "${WORK_BRANCH}"
+NO_INTERACTION=true make clean_app
+NO_INTERACTION=true make demo
 
 # --- Return to work branch ---
 git switch "${WORK_BRANCH}"
