@@ -128,19 +128,33 @@ webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker c
 webapp@lts: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) webapp BRANCH=$(or $(BRANCH),webapp-lts)
 
-webapp@mariadb: ## Generate a webapp Symfony application (with MariaDB) with Docker configuration (stable release)
+webapp@mariadb: ## Generate a webapp Symfony application (with MySQL/MariaDB) with Docker configuration (stable release)
 	$(M) webapp BRANCH=webapp-mariadb
 	$(M) switch_to_mariadb
 	$(M) health c=404 t="Welcome to Symfony"
 	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with MariaDB) generated!\n\n"
+	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with MySQL/MariaDB) generated!\n\n"
 
-webapp@mariadb_lts: ## Generate a webapp Symfony application (with MariaDB) with Docker configuration (LTS - long-term support release)
+webapp@mariadb_lts: ## Generate a webapp Symfony application (with MySQL/MariaDB) with Docker configuration (LTS - long-term support release)
 	$(M) webapp@lts BRANCH=webapp-mariadb-lts
 	$(M) switch_to_mariadb
 	$(M) health c=404 t="Welcome to Symfony"
 	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with MariaDB) generated!\n\n"
+	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with MySQL/MariaDB) generated!\n\n"
+
+webapp@sqlite: ## Generate a webapp Symfony application (with SQLite) with Docker configuration (stable release)
+	$(M) webapp BRANCH=webapp-sqlite
+	$(M) switch_to_sqlite
+	$(M) health c=404 t="Welcome to Symfony"
+	$(PRINT_EXECUTION_TIME)
+	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with SQLite) generated!\n\n"
+
+webapp@sqlite_lts: ## Generate a webapp Symfony application (with SQLite) with Docker configuration (LTS - long-term support release)
+	$(M) webapp@lts BRANCH=webapp-sqlite-lts
+	$(M) switch_to_sqlite
+	$(M) health c=404 t="Welcome to Symfony"
+	$(PRINT_EXECUTION_TIME)
+	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with SQLite) generated!\n\n"
 
 ##
 
@@ -332,10 +346,25 @@ endif
 	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/mariadb/compose.override.yaml
 	$(M) rb m=doctrine/doctrine-bundle t=compose.yaml s=.block/mariadb/compose.yaml
 	$(M) ya f=compose.yaml k=services.php.depends_on.database.condition v=service_healthy
-	$(M) co m="stack updated to MariaDB"
+	$(M) co m="stack updated to MySQL/MariaDB"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
-	@printf " $(G)✔$(S) Stack updated to MariaDB!\n"
+	@printf " $(G)✔$(S) Stack updated to MySQL/MariaDB!\n"
+
+switch_to_sqlite: .env Dockerfile compose.override.yaml compose.yaml ## Switch the stack from PostgreSQL to SQLite
+ifeq ($(IS_POSTGRESQL),)
+	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine (with PostgreSQL by default)$(S) with $(G)make require_orm$(S)\n"
+	@exit 1
+endif
+	$(M) permissions
+	$(M) rb m=doctrine/doctrine-bundle t=.env s=.block/sqlite/.env
+	$(M) rb m=doctrine/doctrine-bundle t=Dockerfile s=.block/sqlite/Dockerfile
+	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/sqlite/compose.override.yaml
+	$(M) rb m=doctrine/doctrine-bundle t=compose.yaml s=.block/sqlite/compose.yaml
+	$(M) co m="stack updated to SQLite"
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) build_force_start
+	@printf " $(G)✔$(S) Stack updated to SQLite!\n"
 
 ##   YQ
 
