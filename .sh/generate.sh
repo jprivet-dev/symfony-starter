@@ -67,16 +67,16 @@ run_flavor "${WORK_BRANCH}" "minimalist" "minimalist"
 
 # 2. webapp, api, easy_admin from minimalist
 run_flavor "minimalist" "webapp"      "webapp"
-run_flavor "minimalist" "api"         "api"
-run_flavor "minimalist" "easy_admin"  "easy_admin"
+#run_flavor "minimalist" "api"         "api"
+#run_flavor "minimalist" "easy_admin"  "easy_admin"
 
 # 3. minimalist@lts from work branch
-run_flavor "${WORK_BRANCH}" "minimalist@lts" "minimalist@lts"
+#run_flavor "${WORK_BRANCH}" "minimalist@lts" "minimalist@lts"
 
 # 4. webapp@lts, api@lts, easy_admin@lts from minimalist@lts
-run_flavor "minimalist@lts" "webapp@lts"     "webapp@lts"
-run_flavor "minimalist@lts" "api@lts"        "api@lts"
-run_flavor "minimalist@lts" "easy_admin@lts" "easy_admin@lts"
+#run_flavor "minimalist@lts" "webapp@lts"     "webapp@lts"
+#run_flavor "minimalist@lts" "api@lts"        "api@lts"
+#run_flavor "minimalist@lts" "easy_admin@lts" "easy_admin@lts"
 
 # 5. demo from work branch
 run_flavor "${WORK_BRANCH}" "demo" "demo"
