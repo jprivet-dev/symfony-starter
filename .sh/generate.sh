@@ -20,15 +20,17 @@ S='\033[0m'
 WORK_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 BRANCHES=(
+    "api"
+    "api@lts"
+    "demo"
+    "easy_admin"
+    "easy_admin@lts"
     "minimalist"
     "minimalist@lts"
     "webapp"
     "webapp@lts"
-    "api"
-    "api@lts"
-    "easy_admin"
-    "easy_admin@lts"
-    "demo"
+    "webapp@mariadb"
+    "webapp@mariadb_lts"
 )
 
 declare -A RESULTS
@@ -73,15 +75,17 @@ generate_flavor() {
 
 # --- Generate ---
 
-generate_flavor "minimalist"
-#generate_flavor "minimalist@lts"
-generate_flavor "webapp"
-#generate_flavor "webapp@lts"
-#generate_flavor "api"
-#generate_flavor "api@lts"
-#generate_flavor "easy_admin"
-#generate_flavor "easy_admin@lts"
+generate_flavor "api"
+generate_flavor "api@lts"
 generate_flavor "demo"
+generate_flavor "easy_admin"
+generate_flavor "easy_admin@lts"
+generate_flavor "minimalist"
+generate_flavor "minimalist@lts"
+generate_flavor "webapp"
+generate_flavor "webapp@lts"
+generate_flavor "webapp@mariadb"
+generate_flavor "webapp@mariadb_lts"
 
 # --- Return to work branch ---
 

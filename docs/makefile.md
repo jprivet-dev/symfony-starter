@@ -224,14 +224,16 @@
 
   minimalist                    Generate a minimalist Symfony application with Docker configuration (stable release)
   minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+  webapp                        Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (stable release)
+  webapp@lts                    Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+  webapp@mariadb                Generate a webapp Symfony application (with MariaDB) with Docker configuration (stable release)
+  webapp@mariadb_lts            Generate a webapp Symfony application (with MariaDB) with Docker configuration (LTS - long-term support release)
 
   api                           Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
   api@lts                       Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
   demo                          Generate a Symfony Demo application (with SQLite) with Docker configuration
   easy_admin                    Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
   easy_admin@lts                Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-  webapp                        Generate a webapp Symfony application with Docker configuration (stable release)
-  webapp@lts                    Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
 
   update_symfony_docker         Update the vendored dunglas/symfony-docker snapshot at the root
   skeleton                      Install symfony/skeleton from the versioned dunglas/symfony-docker files at the root
