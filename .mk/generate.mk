@@ -182,6 +182,13 @@ webapp: ## Generate a webapp Symfony application with Docker configuration (stab
 webapp@lts: ## Generate a webapp Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(MAKE) webapp BRANCH=webapp@lts
 
+webapp@mariadb: ## Generate a webapp Symfony application (with MariaDB) with Docker configuration (stable release)
+	$(M) webapp BRANCH=webapp@mariadb NO_INTERACTION=true
+	$(M) switch_to_mariadb
+	$(M) health c=404 t="Welcome to Symfony"
+	$(PRINT_EXECUTION_TIME)
+	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with MariaDB) generated!\n\n"
+
 ##
 
 update_symfony_docker: ## Update the vendored dunglas/symfony-docker snapshot at the root
