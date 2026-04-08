@@ -25,12 +25,14 @@ printf "\n${Y}--- Symfony Starter - Generate All ---${S}\n"
 printf " ${Y}›${S} Work branch: ${G}${WORK_BRANCH}${S}\n\n"
 
 # --- minimalist ---
-#git switch -C minimalist "${WORK_BRANCH}"
-#NO_INTERACTION=true make minimalist
+NO_INTERACTION=true make clean_app
+git switch -C minimalist "${WORK_BRANCH}"
+NO_INTERACTION=true make minimalist
 
 # --- webapp (from minimalist) ---
-#git switch -C webapp minimalist
-#NO_INTERACTION=true make webapp
+NO_INTERACTION=true make clean_app
+git switch -C webapp minimalist
+NO_INTERACTION=true make webapp
 
 # --- api (from minimalist) ---
 #git switch -C api minimalist
@@ -57,10 +59,12 @@ printf " ${Y}›${S} Work branch: ${G}${WORK_BRANCH}${S}\n\n"
 #NO_INTERACTION=true make easy_admin@lts
 
 # --- demo (from work branch) ---
+NO_INTERACTION=true make clean_app
 git switch -C demo "${WORK_BRANCH}"
 NO_INTERACTION=true make demo
 
 # --- Return to work branch ---
 git switch "${WORK_BRANCH}"
+NO_INTERACTION=true make clean_app
 
 printf "\n ${G}✔${S} All flavors generated successfully. Run ${Y}.sh/push.sh${S} to push to origin.\n\n"
