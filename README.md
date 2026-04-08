@@ -24,67 +24,65 @@ cd symfony-starter
 The bare minimum. A clean Symfony skeleton without Docker bloat or ORM pre-configured.  
 *Perfect for: Microservices, Learning, Custom architecture.*
 
-| Database          | Stable                                                              | LTS                      |
-|-------------------|---------------------------------------------------------------------|--------------------------|
-| **🚫 No DB**      | `make minimalist`                                                   | `make minimalist@lts`    |
-| **🐘 PostgreSQL** | `make minimalist`<br>`make require_orm`                             | *Same steps with `@lts`* |
-| **🐬 MariaDB**    | `make minimalist`<br>`make require_orm`<br>`make switch_to_mariadb` | *Same steps with `@lts`* |
+| Database          | Stable                                                               | LTS                      |
+|-------------------|----------------------------------------------------------------------|--------------------------|
+| **🚫 No DB**      | `make minimalist`                                                    | `make minimalist@lts`    |
+| **🐘 PostgreSQL** | `make minimalist`<br>`make require_orm`                              | *Same steps with `@lts`* |
+| **🐬 MariaDB**    | `make minimalist`<br>`make require_orm`<br>`make switch_to_mariadb`  | *Same steps with `@lts`* |
+| **🪶 SQLite**     | `make minimalist`<br>`make require_orm`<br>`make switch_to_sqlite`   | *Same steps with `@lts`* |
 
-> **Source branches:** 
-> * [No DB · Stable](https://github.com/jprivet-dev/symfony-starter/tree/minimalist)
-> * [No DB · LTS](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts)
-> * [PostgreSQL · Stable](https://github.com/jprivet-dev/symfony-starter/tree/minimalist-postgresql)
-> * [PostgreSQL · LTS](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts-postgresql)
-> * [MariaDB · Stable](https://github.com/jprivet-dev/symfony-starter/tree/minimalist-mariadb)
-> * [MariaDB · LTS](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts-mariadb)
+> **Source branches:**
+> * [minimalist](https://github.com/jprivet-dev/symfony-starter/tree/minimalist)
+> * [minimalist-lts](https://github.com/jprivet-dev/symfony-starter/tree/minimalist-lts)
 
 ### Web App
 
 The standard full-stack experience. Includes **Twig**, **AssetMapper**, **Profiler**, and a complete Docker setup.  
 *Perfect for: Traditional Websites, SaaS, MVP.*
 
-| Database          | Stable                                    | LTS                      |
-|-------------------|-------------------------------------------|--------------------------|
-| **🐘 PostgreSQL** | `make webapp`                             | `make webapp@lts`        |
-| **🐬 MariaDB**    | `make webapp`<br>`make switch_to_mariadb` | *Same steps with `@lts`* |
+| Database          | Stable                  | LTS                       |
+|-------------------|-------------------------|---------------------------|
+| **🐘 PostgreSQL** | `make webapp`           | `make webapp@lts`         |
+| **🐬 MariaDB**    | `make webapp@mariadb`   | `make webapp@mariadb_lts` |
+| **🪶 SQLite**     | `make webapp@sqlite`    | `make webapp@sqlite_lts`  |
 
 > **Source branches:**
-> * [PostgreSQL · Stable](https://github.com/jprivet-dev/symfony-starter/tree/webapp)
-> * [PostgreSQL · LTS](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts)
-> * [MariaDB · Stable](https://github.com/jprivet-dev/symfony-starter/tree/webapp-mariadb)
-> * [MariaDB · LTS](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts-mariadb)
+> * [webapp](https://github.com/jprivet-dev/symfony-starter/tree/webapp)
+> * [webapp-lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp-lts)
+> * [webapp-mariadb](https://github.com/jprivet-dev/symfony-starter/tree/webapp-mariadb)
+> * [webapp-mariadb-lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp-mariadb-lts)
+> * [webapp-sqlite](https://github.com/jprivet-dev/symfony-starter/tree/webapp-sqlite)
+> * [webapp-sqlite-lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp-sqlite-lts)
 
 ### API Platform
 
 A headless stack optimized for **API Platform**. No front-end assets, focused on performance and REST/GraphQL.  
 *Perfect for: SPA Backends (React/Vue), Mobile Apps.*
 
-| Database          | Stable                                 | LTS                      |
-|-------------------|----------------------------------------|--------------------------|
-| **🐘 PostgreSQL** | `make api`                             | `make api@lts`           |
-| **🐬 MariaDB**    | `make api`<br>`make switch_to_mariadb` | *Same steps with `@lts`* |
+| Database          | Stable                                  | LTS                      |
+|-------------------|-----------------------------------------|--------------------------|
+| **🐘 PostgreSQL** | `make api`                              | `make api@lts`           |
+| **🐬 MariaDB**    | `make api`<br>`make switch_to_mariadb`  | *Same steps with `@lts`* |
+| **🪶 SQLite**     | `make api`<br>`make switch_to_sqlite`   | *Same steps with `@lts`* |
 
 > **Source branches:**
-> * [PostgreSQL · Stable](https://github.com/jprivet-dev/symfony-starter/tree/api)
-> * [PostgreSQL · LTS](https://github.com/jprivet-dev/symfony-starter/tree/api@lts)
-> * [MariaDB · Stable](https://github.com/jprivet-dev/symfony-starter/tree/api-mariadb)
-> * [MariaDB · LTS](https://github.com/jprivet-dev/symfony-starter/tree/api@lts-mariadb)
+> * [api](https://github.com/jprivet-dev/symfony-starter/tree/api)
+> * [api-lts](https://github.com/jprivet-dev/symfony-starter/tree/api-lts)
 
 ### EasyAdmin
 
 Based on the Web App, but pre-installed with **EasyAdmin** for an instant back-office generation.  
 *Perfect for: Admin Panels, rapid CRUD apps.*
 
-| Database          | Stable                                        | LTS                      |
-|-------------------|-----------------------------------------------|--------------------------|
-| **🐘 PostgreSQL** | `make easy_admin`                             | `make easy_admin@lts`    |
-| **🐬 MariaDB**    | `make easy_admin`<br>`make switch_to_mariadb` | *Same steps with `@lts`* |
+| Database          | Stable                                          | LTS                      |
+|-------------------|-------------------------------------------------|--------------------------|
+| **🐘 PostgreSQL** | `make easy_admin`                               | `make easy_admin@lts`    |
+| **🐬 MariaDB**    | `make easy_admin`<br>`make switch_to_mariadb`   | *Same steps with `@lts`* |
+| **🪶 SQLite**     | `make easy_admin`<br>`make switch_to_sqlite`    | *Same steps with `@lts`* |
 
 > **Source branches:**
-> * [PostgreSQL · Stable](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin)
-> * [PostgreSQL · LTS](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts)
-> * [MariaDB · Stable](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin-mariadb)
-> * [MariaDB · LTS](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts-mariadb)
+> * [easy-admin](https://github.com/jprivet-dev/symfony-starter/tree/easy-admin)
+> * [easy-admin-lts](https://github.com/jprivet-dev/symfony-starter/tree/easy-admin-lts)
 
 ### Demo
 
@@ -94,8 +92,8 @@ The official **Symfony Demo** application. A great reference for best practices.
 |---------------|-------------|
 | **🪶 SQLite** | `make demo` |
 
-> **Source branches:** 
-> * [SQLite · Stable](https://github.com/jprivet-dev/symfony-starter/tree/demo)
+> **Source branches:**
+> * [demo](https://github.com/jprivet-dev/symfony-starter/tree/demo)
 
 ### Contributing Symfony Core environment
 
