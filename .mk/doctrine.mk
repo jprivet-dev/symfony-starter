@@ -83,20 +83,30 @@ phpstorm_config: ## Display database connection details for PhpStorm "Data Sourc
 	@printf "See https://www.jetbrains.com/help/phpstorm/data-sources-and-drivers-dialog.html\n"
 ifneq ($(IS_POSTGRESQL),)
 	@printf "\n$(Y)--- PostgreSQL ---$(S)\n"
-	@printf "Name    : $(POSTGRES_DB)@$(POSTGRES_HOST_PUBLIC)\n"
-	@printf "Host    : $(POSTGRES_HOST_PUBLIC)\n"
-	@printf "User    : $(POSTGRES_USER)\n"
-	@printf "Password: $(POSTGRES_PASSWORD)\n"
-	@printf "Database: $(POSTGRES_DB)\n"
-	@printf "URL     : jdbc:postgresql://$(POSTGRES_HOST_PUBLIC):$(POSTGRES_PORT_PUBLIC)/$(POSTGRES_DB)\n"
+	@printf " $(Y)›$(S) Name           : $(G)$(POSTGRES_DB)@$(POSTGRES_HOST_PUBLIC)$(S)\n"
+	@printf " $(Y)›$(S) Host           : $(G)$(POSTGRES_HOST_PUBLIC)$(S)\n"
+	@printf " $(Y)›$(S) Port           : $(G)$(POSTGRES_PORT_PUBLIC)$(S)\n"
+	@printf " $(Y)›$(S) Authentication : $(G)User & Password$(S)\n"
+	@printf " $(Y)›$(S) User           : $(G)$(POSTGRES_USER)$(S)\n"
+	@printf " $(Y)›$(S) Password       : $(G)$(POSTGRES_PASSWORD)$(S)\n"
+	@printf " $(Y)›$(S) Database       : $(G)$(POSTGRES_DB)$(S)\n"
+	@printf " $(Y)›$(S) URL            : $(G)jdbc:postgresql://$(POSTGRES_HOST_PUBLIC):$(POSTGRES_PORT_PUBLIC)/$(POSTGRES_DB)$(S)\n"
 endif
 ifneq ($(IS_MYSQL),)
 	@printf "\n$(Y)--- MySQL/MariaDB ---$(S)\n"
-	@printf "Name    : $(MARIADB_DATABASE)@$(MARIADB_HOST_PUBLIC)\n"
-	@printf "Host    : $(MARIADB_HOST_PUBLIC)\n"
-	@printf "User    : $(MARIADB_USER)\n"
-	@printf "Password: $(MARIADB_PASSWORD)\n"
-	@printf "Database: $(MARIADB_DATABASE)\n"
-	@printf "URL     : jdbc:mariadb://$(MARIADB_HOST_PUBLIC):$(MARIADB_PORT_PUBLIC)/$(MARIADB_DATABASE)\n"
+	@printf " $(Y)›$(S) Name           : $(G)$(MARIADB_DATABASE)@$(MARIADB_HOST_PUBLIC)$(S)\n"
+	@printf " $(Y)›$(S) Host           : $(G)$(MARIADB_HOST_PUBLIC)$(S)\n"
+	@printf " $(Y)›$(S) Port           : $(G)$(MARIADB_PORT_PUBLIC)$(S)\n"
+	@printf " $(Y)›$(S) Authentication : $(G)User & Password$(S)\n"
+	@printf " $(Y)›$(S) User           : $(G)$(MARIADB_USER)$(S)\n"
+	@printf " $(Y)›$(S) Password       : $(G)$(MARIADB_PASSWORD)$(S)\n"
+	@printf " $(Y)›$(S) Database       : $(G)$(MARIADB_DATABASE)$(S)\n"
+	@printf " $(Y)›$(S) URL            : $(G)jdbc:mariadb://$(MARIADB_HOST_PUBLIC):$(MARIADB_PORT_PUBLIC)/$(MARIADB_DATABASE)$(S)\n"
 endif
+ifneq ($(IS_SQLITE),)
+	@printf "\n$(Y)--- SQLite ---$(S)\n"
+	@printf " $(Y)›$(S) File           : $(G)$(SQLITE_DB_FILE)$(S)\n"
+	@printf " $(Y)›$(S) URL            : $(G)jdbc:sqlite:$(SQLITE_DB_FILE)$(S)\n"
+endif
+	@printf "\n"
 
