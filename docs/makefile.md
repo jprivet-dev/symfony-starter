@@ -93,9 +93,6 @@
   git_hooks_enable              Enable the project's hooks directory
   git_pre_push                  Actions on Git pre-push
 
-  git_apply                  ga Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply f=file.patch
-  git_patch                     Generate a patch from current diff or from hashes - $ make git_patch [h=<hashes>] - Example: $ make git_patch h="abcd123 efgh456"
-
 — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
   permissions                   Fix file permissions (primarily for Linux hosts)
   safe                          Add /app to Git's safe directories within the php container
@@ -226,8 +223,10 @@
   minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
   webapp                        Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (stable release)
   webapp@lts                    Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-  webapp@mariadb                Generate a webapp Symfony application (with MariaDB) with Docker configuration (stable release)
-  webapp@mariadb_lts            Generate a webapp Symfony application (with MariaDB) with Docker configuration (LTS - long-term support release)
+  webapp@mariadb                Generate a webapp Symfony application (with MySQL/MariaDB) with Docker configuration (stable release)
+  webapp@mariadb_lts            Generate a webapp Symfony application (with MySQL/MariaDB) with Docker configuration (LTS - long-term support release)
+  webapp@sqlite                 Generate a webapp Symfony application (with SQLite) with Docker configuration (stable release)
+  webapp@sqlite_lts             Generate a webapp Symfony application (with SQLite) with Docker configuration (LTS - long-term support release)
 
   api                           Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
   api@lts                       Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
@@ -261,6 +260,7 @@
 
   DATABASE
   switch_to_mariadb             Switch the stack from PostgreSQL to MySQL/MariaDB
+  switch_to_sqlite              Switch the stack from PostgreSQL to SQLite
 
   YQ
   yq                            Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor - $ make yq [a=<argument>] - Example: $ make yq a=--help

@@ -66,7 +66,6 @@ TESTS     = tests
 
 NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
 PWD                = $(shell pwd)
-GIT_PATCH          = .patch
 LOCAL_MK           = .mk/local.mk
 BIN_CONSOLE        = bin/console
 BIN_PHPUNIT        = bin/phpunit
@@ -599,18 +598,6 @@ git_hooks_enable: ## Enable the project's hooks directory
 	@printf " $(G)✔$(S) Git hooks enabled.\n"
 
 git_pre_push: c1 ## Actions on Git pre-push
-
-##
-
-git_apply ga: ## Apply a patch to files and/or to the index - $ make git_apply f=<file> - Example: $ make git_apply f=file.patch
-	$(if $(f),, $(error "Please specify a file with 'f=...'"))
-	git apply --verbose $(GIT_PATCH)/$(f)
-	@printf " $(G)✔$(S) Patch $(Y)$(GIT_PATCH)/$(f)$(S) applied.\n"
-
-git_patch: FILE=$(GIT_PATCH)/$(NOW).patch
-git_patch: ## Generate a patch from current diff or from hashes - $ make git_patch [h=<hashes>] - Example: $ make git_patch h="abcd123 efgh456"
-	git diff $(h) >$(FILE)
-	@printf " $(G)✔$(S) The patch is ready at $(Y)$(PWD)/$(FILE)$(S)\n"
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 

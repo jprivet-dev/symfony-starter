@@ -44,11 +44,6 @@ services:
   ###< doctrine/doctrine-bundle ###
 ```
 
-You can apply the above changes with the following patch:
-
-* With Git: `git apply .patch/postgresql-port-mapping.patch`
-* With PhpStorm: **Right-click** on the file and select **Apply Patch...**
-
 ## Connect PhpStorm
 
 1. Open the **Database** tool window (`View > Tool Windows > Database`).
