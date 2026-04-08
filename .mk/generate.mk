@@ -76,6 +76,7 @@ update_postgresql_configuration: .env compose.override.yaml # INTERNAL - Execute
 	$(M) co m="update PosgreSQL configuration"
 
 demo_add_sqlite_configuration_before_orm_pack: Dockerfile frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make build_force_start
+	$(M) cb m=dunglas/symfony-docker t=frankenphp/docker-entrypoint.sh
 	$(M) rb m=recipes t=Dockerfile s=.block/sqlite/Dockerfile
 	$(M) co m="add SQLite configuration before ORM pack installation"
 
