@@ -3,7 +3,8 @@
 # Script: replace_block.sh
 # Description: Replaces a text block delimited by markers in a file
 #              with the content of another file, preserving position.
-# Usage: ./replace_block.sh -m "marker" -t "target_file" -s "source_file" [-i index]
+#              If no source file is provided, the block is cleared.
+# Usage: ./replace_block.sh -m "marker" -t "target_file" [-s "source_file"] [-i index]
 # ------------------------------------------------------------------
 
 # Colors
@@ -13,6 +14,7 @@ NC='\033[0m' # No Color
 
 # Default values
 INDEX=1
+SOURCE=""
 
 # 1. Parse Arguments
 while getopts "m:t:s:i:" opt; do
@@ -30,9 +32,9 @@ if [ -z "$INDEX" ]; then
 fi
 
 # 2. Validation
-if [ -z "$MARKER" ] || [ -z "$TARGET" ] || [ -z "$SOURCE" ]; then
+if [ -z "$MARKER" ] || [ -z "$TARGET" ]; then
     echo -e "${RED}Error: Missing arguments.${NC}"
-    echo "Usage: $0 -m <marker> -t <target> -s <source> [-i <index>]"
+    echo "Usage: $0 -m <marker> -t <target> [-s <source>] [-i <index>]"
     exit 1
 fi
 
@@ -40,14 +42,18 @@ if [ ! -f "$TARGET" ]; then
     echo -e "${RED}Error: Target file '$TARGET' not found.${NC}"; exit 1;
 fi
 
-if [ ! -f "$SOURCE" ]; then
+if [ -n "$SOURCE" ] && [ ! -f "$SOURCE" ]; then
     echo -e "${RED}Error: Source file '$SOURCE' not found.${NC}"; exit 1;
 fi
 
 START_MARKER="###> $MARKER ###"
 END_MARKER="###< $MARKER ###"
 
-echo -e " ${GREEN}📝 Updating block '$MARKER' (Index: $INDEX) in $TARGET...${NC}"
+if [ -n "$SOURCE" ]; then
+    echo -e " ${GREEN}📝 Updating block '$MARKER' (Index: $INDEX) in $TARGET...${NC}"
+else
+    echo -e " ${GREEN}🧹 Clearing block '$MARKER' (Index: $INDEX) in $TARGET...${NC}"
+fi
 
 # 3. Find Line Numbers
 # Find Nth occurrence of the start marker
@@ -77,7 +83,9 @@ head -n $((START_LINE - 1)) "$TARGET" > "$TMP_FILE"
 
 # B. The New Block (Wrapped with markers and indentation)
 echo "${INDENT}${START_MARKER}" >> "$TMP_FILE"
-cat "$SOURCE" >> "$TMP_FILE"
+if [ -n "$SOURCE" ]; then
+    cat "$SOURCE" >> "$TMP_FILE"
+fi
 echo "${INDENT}${END_MARKER}" >> "$TMP_FILE"
 
 # C. Content AFTER the block

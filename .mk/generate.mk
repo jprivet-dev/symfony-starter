@@ -45,11 +45,16 @@ replace_line rl: # INTERNAL - Replace an entire line beginning with a specific p
 	@# Use $(subst) to automatically escape "&" with "\&" for sed
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_block rb: # INTERNAL - Replace a block in a target file with content from a source file, wrapping it with markers - $ make replace_block m=<marker> t=<target> s=<source>
+replace_block rb: # INTERNAL - Replace a block in a target file - $ make replace_block m=<marker> t=<target> s=<source> - Example: $ make replace_block m=doctrine/doctrine-bundle t=.env s=.block/postgresql/.env
 	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
 	$(if $(t),, $(error "Please specify the target with 't=...'"))
 	$(if $(s),, $(error "Please specify the source with 's=...'"))
 	.sh/replace_block.sh -m "$(m)" -t "$(t)" -s "$(s)" -i "$(i)"
+
+clear_block cb: # INTERNAL - Clear a block in a target file - $ make clear_block m=<marker> t=<target> - Example: $ make clear_block m=doctrine/doctrine-bundle t=compose.yaml
+	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
+	$(if $(t),, $(error "Please specify the target with 't=...'"))
+	.sh/replace_block.sh -m "$(m)" -t "$(t)" -i "$(i)"
 
 #
 
@@ -358,8 +363,8 @@ endif
 	$(M) permissions
 	$(M) rb m=doctrine/doctrine-bundle t=.env s=.block/sqlite/.env
 	$(M) rb m=doctrine/doctrine-bundle t=Dockerfile s=.block/sqlite/Dockerfile
-	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/sqlite/compose.override.yaml
-	$(M) rb m=doctrine/doctrine-bundle t=compose.yaml s=.block/sqlite/compose.yaml
+	$(M) cb m=doctrine/doctrine-bundle t=compose.override.yaml
+	$(M) cb m=doctrine/doctrine-bundle t=compose.yaml
 	$(M) co m="stack updated to SQLite"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
