@@ -370,7 +370,7 @@ build_force: build ## Build or rebuild Docker services without cache (force fres
 
 .PHONY: up
 up: ## Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
-	$(UP_ENV) $(COMPOSE) up --remove-orphans $(a)
+	$(UP_ENV) $(COMPOSE) up --wait --remove-orphans $(a)
 	$(MAKE) runtime
 	$(MAKE) permissions
 	$(MAKE) safe
