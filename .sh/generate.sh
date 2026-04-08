@@ -75,7 +75,7 @@ generate_flavor() {
 
 generate_flavor "minimalist"
 #generate_flavor "minimalist@lts"
-#generate_flavor "webapp"
+generate_flavor "webapp"
 #generate_flavor "webapp@lts"
 #generate_flavor "api"
 #generate_flavor "api@lts"
