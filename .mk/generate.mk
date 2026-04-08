@@ -170,7 +170,7 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	$(M) require_orm
 	$(M) require_api
 	$(M) permissions images info
-	$(M) health c=200 t="Hello ApiPlatform"
+	$(M) health c=200 t="Entrypoint"
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
