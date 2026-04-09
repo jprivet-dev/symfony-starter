@@ -21,17 +21,19 @@ WORK_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 START_TOTAL=$(date +%s)
 
 BRANCHES=(
-    "api"
-    "api@lts"
-    "demo"
-    "easy_admin"
-    "easy_admin@lts"
     "minimalist"
-    "minimalist@lts"
+    "minimalist-lts"
     "webapp"
-    "webapp@lts"
-    "webapp@mariadb"
-    "webapp@mariadb_lts"
+    "webapp-lts"
+    "webapp-mariadb"
+    "webapp-mariadb-lts"
+    "webapp-sqlite"
+    "webapp-sqlite-lts"
+    "api"
+    "api-lts"
+    "easy-admin"
+    "easy-admin-lts"
+    "demo"
 )
 
 declare -A RESULTS
@@ -87,9 +89,10 @@ generate_flavor "webapp@sqlite_lts"
 
 generate_flavor "api"
 generate_flavor "api@lts"
-generate_flavor "demo"
 generate_flavor "easy_admin"
 generate_flavor "easy_admin@lts"
+
+generate_flavor "demo"
 
 # --- Return to work branch ---
 

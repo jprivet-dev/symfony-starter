@@ -15,17 +15,21 @@ R='\033[31m'
 Y='\033[33m'
 S='\033[0m'
 
-# --- Flavors ---
+# --- Branches ---
 
-FLAVORS=(
+BRANCHES=(
     "minimalist"
-    "minimalist@lts"
+    "minimalist-lts"
     "webapp"
-    "webapp@lts"
+    "webapp-lts"
+    "webapp-mariadb"
+    "webapp-mariadb-lts"
+    "webapp-sqlite"
+    "webapp-sqlite-lts"
     "api"
-    "api@lts"
-    "easy_admin"
-    "easy_admin@lts"
+    "api-lts"
+    "easy-admin"
+    "easy-admin-lts"
     "demo"
 )
 
@@ -33,12 +37,12 @@ printf "\n${Y}--- Symfony Starter - Push All ---${S}\n\n"
 
 HAS_ERROR=0
 
-for FLAVOR in "${FLAVORS[@]}"; do
-    printf " ${Y}›${S} Pushing ${G}${FLAVOR}${S}...\n"
-    if git push origin "${FLAVOR}" --force; then
-        printf " ${G}✔${S} ${FLAVOR} pushed successfully\n\n"
+for BRANCH in "${BRANCHES[@]}"; do
+    printf " ${Y}›${S} Pushing ${G}${BRANCH}${S}...\n"
+    if git push origin "${BRANCH}" --force; then
+        printf " ${G}✔${S} ${BRANCH} pushed successfully\n\n"
     else
-        printf " ${R}⨯${S} ${FLAVOR} failed to push\n\n"
+        printf " ${R}⨯${S} ${BRANCH} failed to push\n\n"
         HAS_ERROR=1
     fi
 done
