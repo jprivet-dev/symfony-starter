@@ -1,10 +1,10 @@
 # Symfony Starter
 
-**Generate a fully Dockerized Symfony application quickly.**
+**Generate a fully Dockerized Symfony application with a single command.**
 
-Whether you want to instantly test a [Symfony](https://symfony.com/), [API Platform](https://api-platform.com/), [EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle) or [Symfony Demo](https://github.com/symfony/demo) application, validate your **Symfony contributions** in a real environment, or start a **client project** with robust and documented tooling: **[Symfony Starter](https://github.com/jprivet-dev/symfony-starter) is the solution you need**.
+From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform](https://api-platform.com/) or [EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle) stack, [Symfony Starter](https://github.com/jprivet-dev/symfony-starter) handles the entire setup — Docker, database, dependencies — so you can focus on your code from the first minute. You can also use the official [Symfony Demo](https://github.com/symfony/demo) as a reference for best practices.
 
-It leverages the power of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) combined with a powerful Makefile to manage the entire lifecycle.
+Built on top of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) and driven by a powerful Makefile, it covers everything from project initialization to daily development.
 
 |                                                                                                                         |                                                                                                    |
 |:------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------|
@@ -90,17 +90,20 @@ make easy_admin
 If you just want to try a specific configuration without generating it, checkout a source branch directly and start it immediately.
 
 ```shell
-# 1. Switch to the desired branch
+# 1. Fetch all branches (in case the branch was created after the clone)
+git fetch origin
+
+# 2. Switch to the desired branch
 git checkout webapp
 
-# 2. Nuke (only if necessary) the current setup (Containers, Volumes, Source code)
+# 3. Nuke (only if necessary) the current setup (Containers, Volumes, Source code)
 make clean_app
 
-# 3. Install and start
+# 4. Install and start
 make install
 ```
 
-**Available branches :**
+**Available branches:**
 
 * Minimalist:
   * [minimalist](https://github.com/jprivet-dev/symfony-starter/tree/minimalist)
@@ -157,7 +160,7 @@ make contrib_tests a=src/Symfony/Component/HttpKernel
 
 ## Documentation
 
-**Docker & configuration**
+**Docker & Configuration**
 
 * [Caddy - Validate certificates](docs/certificates.md)
 * [Compose - Accessing the `var/` directory](docs/var.md)
