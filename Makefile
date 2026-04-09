@@ -632,9 +632,9 @@ env_files: ## Show env files loaded into this Makefile
 	done
 
 .PHONY: tree
-tree: l ?= 2
+tree: l ?= 3
 tree: ## Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
-	tree -A -L $(l) -F --dirsfirst
+	tree -a -A -L $(l) -F -I '.git' -I '.idea' --dirsfirst
 
 .PHONY: vars
 vars: ## Show key Makefile variables
