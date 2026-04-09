@@ -1,5 +1,9 @@
 # Symfony Starter
 
+![PHP](https://img.shields.io/badge/PHP-8.5-777BB4?logo=php)
+![Symfony](https://img.shields.io/badge/Symfony-8%20%7C%207%20LTS-000000?logo=symfony)
+![dunglas/symfony-docker](https://img.shields.io/badge/dunglas%2Fsymfony--docker-451cdf6b-2088FF?logo=docker)
+
 **Generate a fully Dockerized Symfony application with a single command.**
 
 From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform](https://api-platform.com/) or [EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle) stack, [Symfony Starter](https://github.com/jprivet-dev/symfony-starter) handles the entire setup — Docker, database, dependencies — so you can focus on your code from the first minute. You can also use the official [Symfony Demo](https://github.com/symfony/demo) as a reference for best practices.
