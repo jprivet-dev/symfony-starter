@@ -118,7 +118,7 @@ minimalist: ## Generate a minimalist Symfony application with Docker configurati
 	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application generated!\n\n"
 
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist BRANCH=minimalist-lts
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist BRANCH=minimalist@lts
 
 .PHONY: webapp
 webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (stable release)
@@ -131,31 +131,31 @@ webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker c
 	@printf " $(G)🎉 Success!$(S) Webapp Symfony application generated!\n\n"
 
 webapp@lts: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) webapp BRANCH=$(or $(BRANCH),webapp-lts)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) webapp BRANCH=$(or $(BRANCH),webapp@lts)
 
 webapp@mariadb: ## Generate a webapp Symfony application (with MySQL/MariaDB) with Docker configuration (stable release)
-	$(M) webapp BRANCH=webapp-mariadb
+	$(M) webapp BRANCH=webapp@mariadb
 	$(M) switch_to_mariadb
 	$(M) health c=404 t="Welcome to Symfony"
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with MySQL/MariaDB) generated!\n\n"
 
 webapp@mariadb_lts: ## Generate a webapp Symfony application (with MySQL/MariaDB) with Docker configuration (LTS - long-term support release)
-	$(M) webapp@lts BRANCH=webapp-mariadb-lts
+	$(M) webapp@lts BRANCH=webapp@mariadb_lts
 	$(M) switch_to_mariadb
 	$(M) health c=404 t="Welcome to Symfony"
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with MySQL/MariaDB) generated!\n\n"
 
 webapp@sqlite: ## Generate a webapp Symfony application (with SQLite) with Docker configuration (stable release)
-	$(M) webapp BRANCH=webapp-sqlite
+	$(M) webapp BRANCH=webapp@sqlite
 	$(M) switch_to_sqlite
 	$(M) health c=404 t="Welcome to Symfony"
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with SQLite) generated!\n\n"
 
 webapp@sqlite_lts: ## Generate a webapp Symfony application (with SQLite) with Docker configuration (LTS - long-term support release)
-	$(M) webapp@lts BRANCH=webapp-sqlite-lts
+	$(M) webapp@lts BRANCH=webapp@sqlite_lts
 	$(M) switch_to_sqlite
 	$(M) health c=404 t="Welcome to Symfony"
 	$(PRINT_EXECUTION_TIME)
@@ -175,7 +175,7 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	@printf " $(G)🎉 Success!$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
 api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api BRANCH=api-lts
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api BRANCH=api@lts
 
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
@@ -197,7 +197,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
-	$(M) suggest_branch FLAVOR=$(or $(BRANCH),easy-admin)
+	$(M) suggest_branch FLAVOR=$(or $(BRANCH),easy_admin)
 	$(M) skeleton
 	$(M) require_orm
 	$(M) require_easy_admin
@@ -213,7 +213,7 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	@printf " $(G)🎉 Success!$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
 easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) easy_admin BRANCH=easy-admin-lts
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) easy_admin BRANCH=easy_admin@lts
 
 ##
 
