@@ -7,7 +7,7 @@ Whether you want to instantly test a [Symfony](https://symfony.com/), [API Platf
 It leverages the power of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) combined with a powerful Makefile to manage the entire lifecycle.
 
 |                                                                                                                         |                                                                                                    |
-|-------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
+|:------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------|
 | <strong>[Symfony](https://symfony.com/)</strong><br>![minimalist.png](docs/img/minimalist.png)                          | <strong>[API Platform](https://api-platform.com/)</strong><br>![api.png](docs/img/api.png)         |
 | <strong>[EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle)</strong><br>![easy-admin.png](docs/img/easy-admin.png) | <strong>[Symfony Demo](https://github.com/symfony/demo)</strong><br>![demo.png](docs/img/demo.png) |
 
@@ -27,9 +27,9 @@ cd symfony-starter
 The bare minimum. A clean Symfony skeleton without Docker bloat or ORM pre-configured.  
 *Perfect for: Microservices, Learning, Custom architecture.*
 
-| Database          | Stable                                                              | LTS                                                                 |
-|-------------------|---------------------------------------------------------------------|---------------------------------------------------------------------|
-| **🚫 No DB**      | `make minimalist`                                                   | `make minimalist@lts`                                               |
+| Database          | Stable                                                              | LTS                                                                     |
+|-------------------|---------------------------------------------------------------------|-------------------------------------------------------------------------|
+| **🚫 No DB**      | `make minimalist`                                                   | `make minimalist@lts`                                                   |
 | **🐘 PostgreSQL** | `make minimalist`<br>`make require_orm`                             | `make minimalist@lts`<br>`make require_orm`                             |
 | **🐬 MariaDB**    | `make minimalist`<br>`make require_orm`<br>`make switch_to_mariadb` | `make minimalist@lts`<br>`make require_orm`<br>`make switch_to_mariadb` |
 | **🪶 SQLite**     | `make minimalist`<br>`make require_orm`<br>`make switch_to_sqlite`  | `make minimalist@lts`<br>`make require_orm`<br>`make switch_to_sqlite`  |
