@@ -1,10 +1,15 @@
 # Symfony Starter
 
-**Generate a fully Dockerized Symfony application in seconds.**
+**Generate a fully Dockerized Symfony application in minutes.**
 
-Whether you want to instantly test a **Stable or LTS** version of Symfony, API Platform or EasyAdmin, validate your **framework contributions** in a real environment, or start a **client project** with robust, documented tooling: **Symfony Starter is the solution you need**.
+Whether you want to instantly test a [Symfony](https://symfony.com/), [API Platform](https://api-platform.com/), [EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle) or [Symfony Demo](https://github.com/symfony/demo) application, validate your **Symfony contributions** in a real environment, or start a **client project** with robust and documented tooling: **[Symfony Starter](https://github.com/jprivet-dev/symfony-starter) is the solution you need**.
 
 It leverages the power of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) combined with a powerful Makefile to manage the entire lifecycle.
+
+|                                                                                                                         |                                                                                                    |
+|-------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
+| <strong>[Symfony](https://symfony.com/)</strong><br>![minimalist.png](docs/img/minimalist.png)                          | <strong>[API Platform](https://api-platform.com/)</strong><br>![api.png](docs/img/api.png)         |
+| <strong>[EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle)</strong><br>![easy-admin.png](docs/img/easy-admin.png) | <strong>[Symfony Demo](https://github.com/symfony/demo)</strong><br>![demo.png](docs/img/demo.png) |
 
 ## Prerequisites
 
@@ -17,36 +22,34 @@ git clone git@github.com:jprivet-dev/symfony-starter.git
 cd symfony-starter
 ```
 
-## Generate
-
-### Minimalist
+## Generate a minimalist application
 
 The bare minimum. A clean Symfony skeleton without Docker bloat or ORM pre-configured.  
 *Perfect for: Microservices, Learning, Custom architecture.*
 
-| Database          | Stable                                                               | LTS                      |
-|-------------------|----------------------------------------------------------------------|--------------------------|
-| **🚫 No DB**      | `make minimalist`                                                    | `make minimalist@lts`    |
-| **🐘 PostgreSQL** | `make minimalist`<br>`make require_orm`                              | *Same steps with `@lts`* |
-| **🐬 MariaDB**    | `make minimalist`<br>`make require_orm`<br>`make switch_to_mariadb`  | *Same steps with `@lts`* |
-| **🪶 SQLite**     | `make minimalist`<br>`make require_orm`<br>`make switch_to_sqlite`   | *Same steps with `@lts`* |
+| Database          | Stable                                                              | LTS                                                                 |
+|-------------------|---------------------------------------------------------------------|---------------------------------------------------------------------|
+| **🚫 No DB**      | `make minimalist`                                                   | `make minimalist@lts`                                               |
+| **🐘 PostgreSQL** | `make minimalist`<br>`make require_orm`                             | `make minimalist@lts`<br>`make require_orm`                             |
+| **🐬 MariaDB**    | `make minimalist`<br>`make require_orm`<br>`make switch_to_mariadb` | `make minimalist@lts`<br>`make require_orm`<br>`make switch_to_mariadb` |
+| **🪶 SQLite**     | `make minimalist`<br>`make require_orm`<br>`make switch_to_sqlite`  | `make minimalist@lts`<br>`make require_orm`<br>`make switch_to_sqlite`  |
 
-> **Source branches:**
+> **Source branches examples:**
 > * [minimalist](https://github.com/jprivet-dev/symfony-starter/tree/minimalist)
 > * [minimalist-lts](https://github.com/jprivet-dev/symfony-starter/tree/minimalist-lts)
 
-### Web App
+## Generate a web application
 
 The standard full-stack experience. Includes **Twig**, **AssetMapper**, **Profiler**, and a complete Docker setup.  
 *Perfect for: Traditional Websites, SaaS, MVP.*
 
-| Database          | Stable                  | LTS                       |
-|-------------------|-------------------------|---------------------------|
-| **🐘 PostgreSQL** | `make webapp`           | `make webapp@lts`         |
-| **🐬 MariaDB**    | `make webapp@mariadb`   | `make webapp@mariadb_lts` |
-| **🪶 SQLite**     | `make webapp@sqlite`    | `make webapp@sqlite_lts`  |
+| Database          | Stable                | LTS                       |
+|-------------------|-----------------------|---------------------------|
+| **🐘 PostgreSQL** | `make webapp`         | `make webapp@lts`         |
+| **🐬 MariaDB**    | `make webapp@mariadb` | `make webapp@mariadb_lts` |
+| **🪶 SQLite**     | `make webapp@sqlite`  | `make webapp@sqlite_lts`  |
 
-> **Source branches:**
+> **Source branches examples:**
 > * [webapp](https://github.com/jprivet-dev/symfony-starter/tree/webapp)
 > * [webapp-lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp-lts)
 > * [webapp-mariadb](https://github.com/jprivet-dev/symfony-starter/tree/webapp-mariadb)
@@ -54,37 +57,37 @@ The standard full-stack experience. Includes **Twig**, **AssetMapper**, **Profil
 > * [webapp-sqlite](https://github.com/jprivet-dev/symfony-starter/tree/webapp-sqlite)
 > * [webapp-sqlite-lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp-sqlite-lts)
 
-### API Platform
+## Generate an API Platform project
 
 A headless stack optimized for **API Platform**. No front-end assets, focused on performance and REST/GraphQL.  
 *Perfect for: SPA Backends (React/Vue), Mobile Apps.*
 
-| Database          | Stable                                  | LTS                      |
-|-------------------|-----------------------------------------|--------------------------|
-| **🐘 PostgreSQL** | `make api`                              | `make api@lts`           |
-| **🐬 MariaDB**    | `make api`<br>`make switch_to_mariadb`  | *Same steps with `@lts`* |
-| **🪶 SQLite**     | `make api`<br>`make switch_to_sqlite`   | *Same steps with `@lts`* |
+| Database          | Stable                                 | LTS                                        |
+|-------------------|----------------------------------------|--------------------------------------------|
+| **🐘 PostgreSQL** | `make api`                             | `make api@lts`                             |
+| **🐬 MariaDB**    | `make api`<br>`make switch_to_mariadb` | `make api@lts`<br>`make switch_to_mariadb` |
+| **🪶 SQLite**     | `make api`<br>`make switch_to_sqlite`  | `make api@lts`<br>`make switch_to_sqlite`  |
 
-> **Source branches:**
+> **Source branches examples:**
 > * [api](https://github.com/jprivet-dev/symfony-starter/tree/api)
 > * [api-lts](https://github.com/jprivet-dev/symfony-starter/tree/api-lts)
 
-### EasyAdmin
+## Generate an EasyAdmin project
 
 Based on the Web App, but pre-installed with **EasyAdmin** for an instant back-office generation.  
 *Perfect for: Admin Panels, rapid CRUD apps.*
 
-| Database          | Stable                                          | LTS                      |
-|-------------------|-------------------------------------------------|--------------------------|
-| **🐘 PostgreSQL** | `make easy_admin`                               | `make easy_admin@lts`    |
-| **🐬 MariaDB**    | `make easy_admin`<br>`make switch_to_mariadb`   | *Same steps with `@lts`* |
-| **🪶 SQLite**     | `make easy_admin`<br>`make switch_to_sqlite`    | *Same steps with `@lts`* |
+| Database          | Stable                                        | LTS                                               |
+|-------------------|-----------------------------------------------|---------------------------------------------------|
+| **🐘 PostgreSQL** | `make easy_admin`                             | `make easy_admin@lts`                             |
+| **🐬 MariaDB**    | `make easy_admin`<br>`make switch_to_mariadb` | `make easy_admin@lts`<br>`make switch_to_mariadb` |
+| **🪶 SQLite**     | `make easy_admin`<br>`make switch_to_sqlite`  | `make easy_admin@lts`<br>`make switch_to_sqlite`  |
 
-> **Source branches:**
+> **Source branches examples:**
 > * [easy-admin](https://github.com/jprivet-dev/symfony-starter/tree/easy-admin)
 > * [easy-admin-lts](https://github.com/jprivet-dev/symfony-starter/tree/easy-admin-lts)
 
-### Demo
+## Generate a Symfony Demo project
 
 The official **Symfony Demo** application. A great reference for best practices.
 
@@ -92,18 +95,18 @@ The official **Symfony Demo** application. A great reference for best practices.
 |---------------|-------------|
 | **🪶 SQLite** | `make demo` |
 
-> **Source branches:**
+> **Source branches examples:**
 > * [demo](https://github.com/jprivet-dev/symfony-starter/tree/demo)
 
-### Contributing Symfony Core environment
+## Symfony Contribution environment
 
 Test your pull requests and framework modifications against a running application instantly without complex configuration.
 
-#### 1. Configure
+### 1. Configure
 
 Use `../symfony` (default) or set a custom path via `SYMFONY_MONOREPO` in `.env.local`.
 
-#### 2. Init
+### 2. Init
 
 Easily mount your local `symfony/symfony` repository into the container:
 
@@ -111,7 +114,7 @@ Easily mount your local `symfony/symfony` repository into the container:
 make contrib_init
 ```
 
-#### 3. Link
+### 3. Link
 
 Symlinks your local monorepo into `vendor/`:
 
@@ -119,7 +122,7 @@ Symlinks your local monorepo into `vendor/`:
 make contrib_link
 ```
 
-#### 4. Test
+### 4. Test
 
 Runs unit tests using the Docker runtime:
 
@@ -129,7 +132,7 @@ make contrib_tests a=src/Symfony/Component/HttpKernel
 
 > **[📖 Read the Contribution Guide](docs/contrib.md)**
 
-### Switching Flavors & Cleanup
+## Switching flavors & Cleanup
 
 You can easily switch between flavors or restart from scratch using the cleanup command. This will **delete** the current Symfony application and Docker configuration to allow a fresh generation.
 
@@ -139,22 +142,6 @@ make clean_app
 
 # 2. Generate a different flavor
 make easy_admin
-```
-
-## Snapshot
-
-If you just want to test a specific configuration immediately without waiting for the generation process, checkout the specific branch.
-
-```shell
-# Clone and checkout
-git clone git@github.com:jprivet-dev/symfony-starter.git
-cd symfony-starter
-
-# Switch to the desired flavor
-git checkout webapp
-
-# Install and Start
-make install
 ```
 
 ## Documentation
