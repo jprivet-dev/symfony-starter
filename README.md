@@ -1,149 +1,198 @@
-# Symfony starter
+# Symfony Starter
 
-## Presentation
+![PHP](https://img.shields.io/badge/PHP-8.5-777BB4?logo=php)
+![Symfony](https://img.shields.io/badge/Symfony-8%20%7C%207%20LTS-000000?logo=symfony)
+![dunglas/symfony-docker](https://img.shields.io/badge/dunglas%2Fsymfony--docker-de8af3bd-2088FF?logo=docker)
 
-**Generate a fully Dockerized Symfony application in less than a minute!**
+**Generate a fully Dockerized Symfony application with a single command.**
 
-This project provides a streamlined way to quickly set up a new Symfony application with Docker, leveraging the [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) configuration.
+From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform](https://api-platform.com/) or [EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle) stack, [Symfony Starter](https://github.com/jprivet-dev/symfony-starter) handles the entire setup — Docker, database, dependencies — so you can focus on your code from the first minute. You can also use the official [Symfony Demo](https://github.com/symfony/demo) as a reference for best practices.
 
-## Prerequisites
+Built on top of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) and driven by a powerful Makefile, it covers everything from project initialization to daily development.
+
+|                                                                                                                         |                                                                                                    |
+|:------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------|
+| <strong>[Symfony](https://symfony.com/)</strong><br>![minimalist.png](docs/img/minimalist.png)                          | <strong>[API Platform](https://api-platform.com/)</strong><br>![api.png](docs/img/api.png)         |
+| <strong>[EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle)</strong><br>![easy-admin.png](docs/img/easy-admin.png) | <strong>[Symfony Demo](https://github.com/symfony/demo)</strong><br>![demo.png](docs/img/demo.png) |
+
+## Quick start
 
 Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
-
-## Installation
-
-### 1. Clone this repository
 
 ```shell
 git clone git@github.com:jprivet-dev/symfony-starter.git
 cd symfony-starter
 ```
 
-### 2. Generate a fresh Symfony application at the root
+## Generate a minimalist application
+
+The bare minimum. A clean Symfony skeleton without Docker bloat or ORM pre-configured.  
+*Perfect for: Microservices, Learning, Custom architecture.*
+
+| Database          | Stable                                                              | LTS                                                                     |
+|-------------------|---------------------------------------------------------------------|-------------------------------------------------------------------------|
+| **🚫 No DB**      | `make minimalist`                                                   | `make minimalist@lts`                                                   |
+| **🐘 PostgreSQL** | `make minimalist`<br>`make require_orm`                             | `make minimalist@lts`<br>`make require_orm`                             |
+| **🐬 MariaDB**    | `make minimalist`<br>`make require_orm`<br>`make switch_to_mariadb` | `make minimalist@lts`<br>`make require_orm`<br>`make switch_to_mariadb` |
+| **🪶 SQLite**     | `make minimalist`<br>`make require_orm`<br>`make switch_to_sqlite`  | `make minimalist@lts`<br>`make require_orm`<br>`make switch_to_sqlite`  |
+
+## Generate a webapp
+
+The standard full-stack experience. Includes **Twig**, **AssetMapper**, **Profiler**, and a complete Docker setup.  
+*Perfect for: Traditional Websites, SaaS, MVP.*
+
+| Database          | Stable                | LTS                       |
+|-------------------|-----------------------|---------------------------|
+| **🐘 PostgreSQL** | `make webapp`         | `make webapp@lts`         |
+| **🐬 MariaDB**    | `make webapp@mariadb` | `make webapp@mariadb_lts` |
+| **🪶 SQLite**     | `make webapp@sqlite`  | `make webapp@sqlite_lts`  |
+
+## Generate an API Platform project
+
+A headless stack optimized for **API Platform**. No front-end assets, focused on performance and REST/GraphQL.  
+*Perfect for: SPA Backends (React/Vue), Mobile Apps.*
+
+| Database          | Stable                                 | LTS                                        |
+|-------------------|----------------------------------------|--------------------------------------------|
+| **🐘 PostgreSQL** | `make api`                             | `make api@lts`                             |
+| **🐬 MariaDB**    | `make api`<br>`make switch_to_mariadb` | `make api@lts`<br>`make switch_to_mariadb` |
+| **🪶 SQLite**     | `make api`<br>`make switch_to_sqlite`  | `make api@lts`<br>`make switch_to_sqlite`  |
+
+## Generate an EasyAdmin project
+
+Based on the Web App, but pre-installed with **EasyAdmin** for an instant back-office generation.  
+*Perfect for: Admin Panels, rapid CRUD apps.*
+
+| Database          | Stable                                        | LTS                                               |
+|-------------------|-----------------------------------------------|---------------------------------------------------|
+| **🐘 PostgreSQL** | `make easy_admin`                             | `make easy_admin@lts`                             |
+| **🐬 MariaDB**    | `make easy_admin`<br>`make switch_to_mariadb` | `make easy_admin@lts`<br>`make switch_to_mariadb` |
+| **🪶 SQLite**     | `make easy_admin`<br>`make switch_to_sqlite`  | `make easy_admin@lts`<br>`make switch_to_sqlite`  |
+
+## Generate a Symfony Demo project
+
+The official **Symfony Demo** application. A great reference for best practices.
+
+| Database      | Stable      |
+|---------------|-------------|
+| **🪶 SQLite** | `make demo` |
+
+## Generate from scratch
+
+You can switch between flavors or restart from scratch. This will **delete** the current Symfony application and Docker configuration.
 
 ```shell
-# Minimalist Stable Release
-make minimalist
+# 1. Nuke the current setup (Containers, Volumes, Source code)
+make clean_app
 
-# Minimalist Long-Term Support Release (LTS)
-make minimalist_lts
-
-# Specific Minimalist Version
-SYMFONY_VERSION=6.4.3 make minimalist
+# 2. Generate a different flavor
+make easy_admin
 ```
 
-This will:
+## Use a source branch directly
 
-* Clone `dunglas/symfony-docker` configuration files and extract them to your project root.
-* Build the necessary Docker images and start the containers.
-* Generate a fresh Symfony application inside the container.
-* Eventually add extra packages to give you everything you need to build a web application.
-
-### 3. Access your application
-
-Open `https://symfony-starter.localhost:8443/` in your browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334).
-
-### All in one command
+If you just want to try a specific configuration without generating it, checkout a source branch directly and start it immediately.
 
 ```shell
-# Minimalist Stable Release
-git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist
+# 1. Fetch all branches (in case the branch was created after the clone)
+git fetch origin
 
-# Minimalist Long-Term Support Release (LTS)
-git clone git@github.com:jprivet-dev/symfony-starter.git && cd symfony-starter && make minimalist_lts
+# 2. Switch to the desired branch
+git checkout webapp
+
+# 3. Nuke (only if necessary) the current setup (Containers, Volumes, Source code)
+make clean_app
+
+# 4. Install and start
+make install
 ```
 
-## Generate an app in another existing project
+**Available branches:**
 
-* **Copy this `Makefile` at the root** of your existing project (or a new empty directory).
-* **Follow the same "Installation \> Step 2 & 3"** instructions.
+* Minimalist:
+  * [minimalist](https://github.com/jprivet-dev/symfony-starter/tree/minimalist)
+  * [minimalist@lts](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts)
+* Webapp:
+  * [webapp](https://github.com/jprivet-dev/symfony-starter/tree/webapp)
+  * [webapp@lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts)
+  * [webapp@mariadb](https://github.com/jprivet-dev/symfony-starter/tree/webapp@mariadb)
+  * [webapp@mariadb_lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp@mariadb_lts)
+  * [webapp@sqlite](https://github.com/jprivet-dev/symfony-starter/tree/webapp@sqlite)
+  * [webapp@sqlite_lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp@sqlite_lts)
+* API Platform:
+  * [api](https://github.com/jprivet-dev/symfony-starter/tree/api)
+  * [api@lts](https://github.com/jprivet-dev/symfony-starter/tree/api@lts)
+* EasyAdmin:
+  * [easy_admin](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin)
+  * [easy_admin@lts](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts)
+* Symfony Demo:
+  * [demo](https://github.com/jprivet-dev/symfony-starter/tree/demo)
 
-> The Docker PHP image name and URL are dynamic and use your project's directory name:
-> * **Final Docker PHP image:** `my-project-app-php`
-> * **Final locahost URL:** https://my-project.localhost:8443
-> 
-> You can change this name with `PROJECT_NAME` variable. See [Docker build options](docs/options.md).
+## Contribute to Symfony Core
 
-## Clone and rename the project
+Test your pull requests and framework modifications against a running application instantly without complex configuration.
 
-[Create on GitHub your empty project ](https://github.com/new)(without a `README.md` file), and after :
+### 1. Configure
+
+Use `../symfony` (default) or set a custom path via `SYMFONY_MONOREPO` in `.env.local`.
+
+### 2. Init
+
+Easily mount your local `symfony/symfony` repository into the container:
 
 ```shell
-git clone git@github.com:jprivet-dev/symfony-starter.git my-project
-cd my-project
-
-git remote set-url origin git@github.com:my-github/my-project.git
-git branch -M main
-git push -u origin main
+make contrib_init
 ```
 
-## Cleanup command
+### 3. Link
 
-Stops all Docker containers, removes all Docker-related configuration files copied from `dunglas/symfony-docker` (e.g., `Dockerfile`, `compose.yaml`, `frankenphp/`), and removes all Symfony application files (e.g., `bin/`, `config/`, `src/`, `vendor/`, `composer.json`, `.env`, etc.) :
+Symlinks your local monorepo into `vendor/`:
 
 ```shell
-make remove_all
-
-# Then regenerate the Symfony app (LTS version for example)
-make minimalist_lts
+make contrib_link
 ```
 
-## Daily usage
+### 4. Test
+
+Runs unit tests using the Docker runtime:
 
 ```shell
-make start # Start the project and show info (up_detached & info alias)
-make stop  # Stop the project (down alias)
+make contrib_tests a=src/Symfony/Component/HttpKernel
 ```
 
-> Run `make` to [discover all commands](docs/makefile.md).
+> **[📖 Read the contribution guide](docs/contrib.md)**
 
-## Project structure
+## Documentation
 
-After `make minimalist`, your project structure will look like this (Minimalist Stable Release):
+**Docker & Configuration**
 
-```
-./
-├── bin/                 (*)
-├── config/              (*)
-├── docs/
-├── frankenphp/          (*)
-├── public/              (*)
-├── src/                 (*)
-├── var/                 (*)
-├── vendor/              (*)
-├── compose.override.yaml(*)
-├── compose.prod.yaml    (*)
-├── composer.json        (*)
-├── composer.lock        (*)
-├── compose.yaml         (*)
-├── Dockerfile           (*)
-├── LICENSE
-├── Makefile
-├── README.md
-└── symfony.lock         (*)
-```
-
-**(\*)** Indicates files/directories generated or copied from `dunglas/symfony-docker` or `symfony/skeleton`.
-
-To visualize your structure (requires `tree` command):
-
-```shell
-tree -A -L 1 -F --dirsfirst
-```
-
-## Docs
-
-* [ADR](docs/adr.md)
 * [Caddy - Validate certificates](docs/certificates.md)
 * [Compose - Accessing the `var/` directory](docs/var.md)
 * [Makefile - Discover all commands](docs/makefile.md)
-* [PHP - Quality](docs/quality.md)
-* [PHP - Testing](docs/testing.md)
-* [PhpStorm - Configure a remote PHP interpreter (Docker)](docs/remote-php-interpreter.md)
-* [PhpStorm - Connect it to the running PostgreSQL container](docs/postgre.md)
 * [Symfony - Save your generated application](docs/save.md)
 * [Symfony and Docker - Use build options](docs/options.md)
+
+**Database**
+
+* [PhpStorm - Connect it to PostgreSQL](docs/postgre.md)
+* [PhpStorm - Connect it to MariaDB](docs/mariadb.md)
+* [PhpStorm - Connect it to SQLite](docs/sqlite.md)
+
+**IDE & Quality (DX)**
+
+* [PHP - Quality Tools (PHPStan, CS Fixer, etc.)](docs/quality.md)
+* [PHP - Testing (PHPUnit)](docs/testing.md)
+* [PhpStorm - Configure Remote PHP Interpreter](docs/remote-php-interpreter.md)
+
+**Advanced**
+
+* [ADR (Architecture Decision Records)](docs/adr.md)
+* [Shell Aliases: Seamless Docker Experience](docs/aliases.md)
 * [Troubleshooting](docs/troubleshooting.md)
+
+**Contributing**
+
+* [Contributing to Symfony: Connect Your Local Symfony Repository](docs/contrib.md)
 
 ## Main links
 
@@ -155,6 +204,7 @@ tree -A -L 1 -F --dirsfirst
 
 Feel free to make comments/suggestions to me in the [Git issues section](https://github.com/jprivet-dev/symfony-starter/issues).
 
-## License
+## Credits & License
 
-This project is released under the [**MIT License**](https://github.com/jprivet-dev/symfony-starter/blob/main/LICENSE).
+* Based on [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker).
+* This project is released under the [**MIT License**](https://github.com/jprivet-dev/symfony-starter/blob/main/LICENSE).

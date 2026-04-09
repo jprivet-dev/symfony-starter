@@ -1,0 +1,3 @@
+  database:
+    ports:
+      - "${MARIADB_PORT_PUBLIC:-3306}:${MARIADB_PORT:-3306}"

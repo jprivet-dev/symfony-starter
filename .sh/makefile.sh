@@ -5,9 +5,9 @@
 # making this method more reliable and portable across different systems.
 #
 # Usage:
-#   . scripts/makefile.sh
+#   . .sh/makefile.sh
 # or
-#   source scripts/makefile.sh
+#   source .sh/makefile.sh
 
 # (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET
 G='\033[32m'
@@ -33,7 +33,7 @@ if ! grep -q "${END_MARKER}" "${DOCS_MAKEFILE}"; then
 fi
 
 # Get Makefile help and clean it
-MAKEFILE_HELP=$(make 2>/dev/null | tr -d '\r' | sed 's/\x1b\[[0-9;]*m//g')
+MAKEFILE_HELP=$(make all 2>/dev/null | tr -d '\r' | sed 's/\x1b\[[0-9;]*m//g')
 
 if [ -z "$MAKEFILE_HELP" ]; then
     printf " ${R}⨯${S} Error: Unable to run 'make'. Ensure the Makefile is valid.\n"

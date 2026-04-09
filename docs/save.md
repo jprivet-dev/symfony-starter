@@ -22,9 +22,9 @@ Locate and **delete the following lines** from `frankenphp/docker-entrypoint.sh`
 	fi
 ```
 
-## 2. Remove `GENERATION` blocks from `Makefile`
+## 2. Remove `GENERATE` blocks from `Makefile`
 
-To find the items to remove in the `Makefile` file, search for the word `GENERATION`.
+To find the items to remove in the `Makefile` file, search for the word `GENERATE`.
 
 * You will find variables that are only used for the initial setup: `SYMFONY_LTS_VERSION`, `REPOSITORY`, etc.
 * You will find targets that are only used for the initial setup: `minimalist`, `require_webapp`, `require_api`, etc.

@@ -1,4 +1,4 @@
-# ADR
+# ADR (Architecture Decision Records)
 
 [⬅️ README](../README.md)
 
@@ -16,6 +16,7 @@ Its main purpose is to:
 
 ## Summary
 
+* [Database: port mapping strategy](adr/database-port-mapping.md)
 * [Makefile: target naming convention](adr/makefile-naming.md)
 
 ---
