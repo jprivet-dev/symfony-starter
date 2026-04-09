@@ -89,7 +89,27 @@ printf "\n${Y}--- Updating ${UPSTREAM_FILE} ---${S}\n"
 echo "${UPSTREAM_COMMIT}" > "${UPSTREAM_FILE}"
 printf " ${G}✔${S} Upstream commit recorded in ${Y}${UPSTREAM_FILE}${S}\n"
 
-# --- 8. Git commit ---
+# --- 8. Update README badges ---
+
+printf "\n${Y}--- Updating README badges ---${S}\n"
+
+# Update dunglas/symfony-docker badge
+SHORT_COMMIT=$(echo "${UPSTREAM_COMMIT}" | cut -c1-8)
+TEMP_FILE=$(mktemp)
+sed "s|dunglas%2Fsymfony--docker-[a-f0-9]*-|dunglas%2Fsymfony--docker-${SHORT_COMMIT}-|g" README.md > "${TEMP_FILE}" && mv "${TEMP_FILE}" README.md
+printf " ${G}✔${S} dunglas/symfony-docker badge updated to ${Y}${SHORT_COMMIT}${S}\n"
+
+# Update PHP badge
+PHP_VERSION=$(grep "^FROM dunglas/frankenphp" Dockerfile | grep -oP 'php\K[0-9]+\.[0-9]+')
+if [ -n "${PHP_VERSION}" ]; then
+    TEMP_FILE=$(mktemp)
+    sed "s|PHP-[0-9]*\.[0-9]*-|PHP-${PHP_VERSION}-|g" README.md > "${TEMP_FILE}" && mv "${TEMP_FILE}" README.md
+    printf " ${G}✔${S} PHP badge updated to ${Y}${PHP_VERSION}${S}\n"
+else
+    printf " ${Y}›${S} PHP version not found in Dockerfile, badge not updated.\n"
+fi
+
+# --- 9. Git commit ---
 
 printf "\n${Y}--- Committing ---${S}\n"
 git add .
