@@ -19,17 +19,17 @@ S='\033[0m'
 
 BRANCHES=(
     "minimalist"
-    "minimalist-lts"
+    "minimalist@lts"
     "webapp"
-    "webapp-lts"
-    "webapp-mariadb"
-    "webapp-mariadb-lts"
-    "webapp-sqlite"
-    "webapp-sqlite-lts"
+    "webapp@lts"
+    "webapp@mariadb"
+    "webapp@mariadb_lts"
+    "webapp@sqlite"
+    "webapp@sqlite_lts"
     "api"
-    "api-lts"
-    "easy-admin"
-    "easy-admin-lts"
+    "api@lts"
+    "easy_admin"
+    "easy_admin@lts"
     "demo"
 )
 

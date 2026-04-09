@@ -22,17 +22,17 @@ START_TOTAL=$(date +%s)
 
 BRANCHES=(
     "minimalist"
-    "minimalist-lts"
+    "minimalist@lts"
     "webapp"
-    "webapp-lts"
-    "webapp-mariadb"
-    "webapp-mariadb-lts"
-    "webapp-sqlite"
-    "webapp-sqlite-lts"
+    "webapp@lts"
+    "webapp@mariadb"
+    "webapp@mariadb_lts"
+    "webapp@sqlite"
+    "webapp@sqlite_lts"
     "api"
-    "api-lts"
-    "easy-admin"
-    "easy-admin-lts"
+    "api@lts"
+    "easy_admin"
+    "easy_admin@lts"
     "demo"
 )
 
@@ -86,12 +86,10 @@ generate_flavor "webapp@mariadb"
 generate_flavor "webapp@mariadb_lts"
 generate_flavor "webapp@sqlite"
 generate_flavor "webapp@sqlite_lts"
-
 generate_flavor "api"
 generate_flavor "api@lts"
 generate_flavor "easy_admin"
 generate_flavor "easy_admin@lts"
-
 generate_flavor "demo"
 
 # --- Return to work branch ---
