@@ -171,8 +171,8 @@ make contrib_tests a=src/Symfony/Component/HttpKernel
 **Database**
 
 * [PhpStorm - Connect it to PostgreSQL](docs/postgre.md)
-* Switching to MySQL/MariaDB (Available via Makefile)
-* Switching to SQLite (Available via Makefile)
+* [PhpStorm - Connect it to MariaDB](docs/mariadb.md)
+* [PhpStorm - Connect it to SQLite](docs/sqlite.md)
 
 **IDE & Quality (DX)**
 
