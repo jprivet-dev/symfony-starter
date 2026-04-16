@@ -94,9 +94,9 @@ PHPSTAN_CONFIG    = phpstan.dist.neon
 # --- DATABASE ---
 
 DB_URL_CLEAN   = $(shell echo '$(DATABASE_URL)' | tr -d '"')
-IS_SQLITE      = $(findstring sqlite,$(DB_URL_CLEAN))
 IS_MYSQL       = $(findstring mysql,$(DB_URL_CLEAN))
 IS_POSTGRESQL  = $(findstring postgresql,$(DB_URL_CLEAN))
+IS_SQLITE      = $(findstring sqlite,$(DB_URL_CLEAN))
 
 SQLITE_DB_ENV  = $(subst %kernel.environment%,$(APP_ENV),$(DB_URL_CLEAN))
 SQLITE_DB_FILE = $(subst sqlite:///%kernel.project_dir%/,,$(SQLITE_DB_ENV))
@@ -212,6 +212,7 @@ endif
 CONTAINER_DATABASE        = $(EXEC) database
 CONTAINER_DATABASE_NO_TTY = $(EXEC_NO_TTY) database
 CONTAINER_PHP             = $(EXEC) php
+CONTAINER_PHP_NO_TTY      = $(EXEC_NO_TTY) php
 CONTAINER_PHP_COVERAGE    = $(EXEC) -e XDEBUG_MODE=coverage php
 
 PHP              = $(CONTAINER_PHP) php
@@ -521,6 +522,10 @@ endif
 
 ifneq ($(or $(ALL), $(IS_POSTGRESQL)),)
 include .mk/postgresql.mk
+endif
+
+ifneq ($(or $(ALL), $(IS_SQLITE)),)
+include .mk/sqlite.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(BIN_PHPUNIT))),)

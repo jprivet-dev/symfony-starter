@@ -27,6 +27,6 @@ dump_gz: ## Create a compressed SQL dump (gzip)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
 .PHONY: restore
-restore: confirm db_drop db_create ## Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
+restore: confirm drop create ## Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) <$(f)

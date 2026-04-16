@@ -6,14 +6,15 @@ ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
 	@exit 1
 endif
 
-db_init: _doctrine db_drop db_create migrate ## Drop and create the database and migrate
+db: _doctrine drop create migrate ## Drop and create the database and migrate
 
-db_init@test: a="--env=test"
-db_init@test: _doctrine db_drop db_create migrate ## Drop and create the database and migrate (env=test)
+db@test: a="--env=test"
+db@test: _doctrine drop create migrate ## Drop and create the database and migrate (env=test)
 
 ##
 
-db_drop: _doctrine confirm ## Drop the database [y/N] - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
+.PHONY: drop
+drop: _doctrine confirm ## Drop the database [y/N] - $ make drop [a=<arguments>] - Example: $ make drop a="--env=test"
 ifneq ($(IS_SQLITE),)
 	@printf "$(G)SQLite$(S) detected via environment. Removing $(Y)$(SQLITE_DB_FILE)$(S).\n"
 	rm -rf $(SQLITE_DB_FILE)
@@ -22,7 +23,8 @@ else
 	$(CONSOLE) doctrine:database:drop --if-exists --force $(a)
 endif
 
-db_create: _doctrine ## Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
+.PHONY: create
+create: _doctrine ## Create the database - $ make create [a=<arguments>] - Example: $ make create a="--env=test"
 ifneq ($(IS_SQLITE),)
 	@printf "$(G)SQLite$(S) detected via environment. Ensuring directory exists for $(Y)$(SQLITE_DB_FILE)$(S).\n"
 	$(CONSOLE) doctrine:schema:create $(a)
@@ -36,6 +38,10 @@ endif
 .PHONY: diff
 diff: _doctrine ## Generate a migration by comparing your current database to your mapping information (format the generated SQL) - $ make diff [a=<param>] - Example: $ make diff a="--profile"
 	$(CONSOLE) doctrine:migrations:diff --formatted -v $(a)
+
+.PHONY: dm
+diff_migrate dm: diff migrate ## Generate and execute the migration, and commit it (make diff migrate + git commit)
+	git add migrations/* && git commit -m "feat(migrations): generate a new migration"
 
 .PHONY: execute
 execute: _doctrine ## Execute one or more migration versions up or down manually - $ make execute a=<arguments> - Example: $ make execute a="DoctrineMigrations\Version20240205143239"
