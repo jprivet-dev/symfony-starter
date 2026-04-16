@@ -512,7 +512,6 @@ else
 	$(COMPOSER) update
 endif
 
-.PHONY: update_lock
 update_lock: ## Update only the content hash of composer.lock without updating dependencies
 	$(COMPOSER) update --lock
 
