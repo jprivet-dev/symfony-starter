@@ -19,6 +19,18 @@ Built on top of [dunglas/symfony-docker](https://github.com/dunglas/symfony-dock
 
 Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
 
+### Use as a template (recommended for new projects)
+
+Click **[Use this template](https://github.com/jprivet-dev/symfony-starter/generate)** on GitHub to create a new repository with all Symfony Starter files, then:
+
+```shell
+git clone git@github.com:your-username/your-project.git
+cd your-project
+make webapp
+```
+
+### Clone directly
+
 ```shell
 git clone git@github.com:jprivet-dev/symfony-starter.git
 cd symfony-starter
