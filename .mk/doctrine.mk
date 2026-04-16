@@ -33,6 +33,10 @@ endif
 
 ##
 
+.PHONY: diff
+diff: _doctrine ## Generate a migration by comparing your current database to your mapping information (format the generated SQL) - $ make diff [a=<param>] - Example: $ make diff a="--profile"
+	$(CONSOLE) doctrine:migrations:diff --formatted -v $(a)
+
 .PHONY: execute
 execute: _doctrine ## Execute one or more migration versions up or down manually - $ make execute a=<arguments> - Example: $ make execute a="DoctrineMigrations\Version20240205143239"
 	$(CONSOLE) doctrine:migrations:execute $(a)
@@ -50,7 +54,7 @@ migrate: _doctrine ## Execute a migration to the latest available version (in a 
 	$(CONSOLE) doctrine:migrations:migrate --no-interaction --all-or-nothing $(a)
 
 .PHONY: migration
-migration: ## Create a new migration based on database changes (format the generated SQL)
+migration: _doctrine ## Create (via MakerBundle) a new migration based on database changes (format the generated SQL) - $ make migration [a=<param>] - Example: $ make migration a="--profile"
 	$(CONSOLE) make:migration --formatted -v $(a)
 
 ##

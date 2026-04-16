@@ -110,11 +110,12 @@
   db_drop                       Drop the database [y/N] - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
   db_create                     Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
 
+  diff                          Generate a migration by comparing your current database to your mapping information (format the generated SQL) - $ make diff [a=<param>] - Example: $ make diff a="--profile"
   execute                       Execute one or more migration versions up or down manually - $ make execute a=<arguments> - Example: $ make execute a="DoctrineMigrations\Version20240205143239"
   generate                      Generate a blank migration class
   list                          Display a list of all available migrations and their status
   migrate                       Execute a migration to the latest available version (in a transaction) - $ make migrate [a=<param>] - Example: $ make migrate a="current+3"
-  migration                     Create a new migration based on database changes (format the generated SQL)
+  migration                     Create (via MakerBundle) a new migration based on database changes (format the generated SQL) - $ make migration [a=<param>] - Example: $ make migration a="--profile"
 
   fixtures                      Load fixtures (CAUTION! The load command purges the database) - $ make fixtures [a=<param>] - Example: $ make fixtures a="--append"
   fixtures@test                 Load fixtures (env=test)
