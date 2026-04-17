@@ -7,6 +7,11 @@ sqlite: ## Execute sqlite3 - $ make sqlite [a=<arguments>] - Example: $ make sql
 sqlite_sh: ## Open a SQLite shell on the PHP container
 	$(CONTAINER_PHP) sqlite3 $(SQLITE_DB_FILE)
 
+.PHONY: table
+table: ## Show the content of a table - $ make table n=<name> - Example: $ make table n=user
+	$(if $(n),, $(error "Please specify a table name with 'n=...'"))
+	$(CONTAINER_PHP) sqlite3 $(SQLITE_DB_FILE) "SELECT * FROM $(n);"
+
 .PHONY: tables
 tables: ## Show all tables
 	$(CONTAINER_PHP) sqlite3 $(SQLITE_DB_FILE) ".tables"

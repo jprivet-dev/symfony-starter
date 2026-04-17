@@ -27,7 +27,7 @@ endif
 create: _doctrine ## Create the database - $ make create [a=<arguments>] - Example: $ make create a="--env=test"
 ifneq ($(IS_SQLITE),)
 	@printf "$(G)SQLite$(S) detected via environment. Ensuring directory exists for $(Y)$(SQLITE_DB_FILE)$(S).\n"
-	$(CONSOLE) doctrine:schema:create $(a)
+	mkdir -p $(dir $(SQLITE_DB_FILE))
 else
 	@printf "$(G)Standard SQL$(S) engine detected. Creating database $(Y)$(SQLITE_DB_FILE)$(S)...\n"
 	$(CONSOLE) doctrine:database:create --if-not-exists $(a)
@@ -38,10 +38,6 @@ endif
 .PHONY: diff
 diff: _doctrine ## Generate a migration by comparing your current database to your mapping information (format the generated SQL) - $ make diff [a=<param>] - Example: $ make diff a="--profile"
 	$(CONSOLE) doctrine:migrations:diff --formatted -v $(a)
-
-.PHONY: dm
-diff_migrate dm: diff migrate ## Generate and execute the migration, and commit it (make diff migrate + git commit)
-	git add migrations/* && git commit -m "feat(migrations): generate a new migration"
 
 .PHONY: execute
 execute: _doctrine ## Execute one or more migration versions up or down manually - $ make execute a=<arguments> - Example: $ make execute a="DoctrineMigrations\Version20240205143239"

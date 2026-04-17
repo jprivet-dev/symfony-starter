@@ -7,6 +7,11 @@ psql: ## Execute psql - $ make psql [a=<arguments>] - Example: $ make psql a="-V
 psql_sh: ## Open a shell on the PostgreSQL container
 	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB)
 
+.PHONY: table
+table: ## Show the content of a table - $ make table n=<name> - Example: $ make table n=user
+	$(if $(n),, $(error "Please specify a table name with 'n=...'"))
+	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB) -c "SELECT * FROM $(n);"
+
 .PHONY: tables
 tables: ## Show all tables
 	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB) -c "\dt"
@@ -30,3 +35,4 @@ dump_gz: ## Create a compressed SQL dump (gzip)
 restore: confirm drop create ## Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) <$(f)
+	@printf " $(G)✔$(S) Database successfully restored from $(Y)$(f)$(S)\n"

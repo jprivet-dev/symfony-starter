@@ -520,6 +520,10 @@ ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),)
 include .mk/doctrine.mk
 endif
 
+ifneq ($(or $(ALL), $(IS_MYSQL)),)
+include .mk/mysql.mk
+endif
+
 ifneq ($(or $(ALL), $(IS_POSTGRESQL)),)
 include .mk/postgresql.mk
 endif
@@ -646,7 +650,7 @@ vars: ## Show key Makefile variables
 	@$(foreach var, \
 		USER UNAME_S APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
 		CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE \
-		IS_SQLITE IS_MYSQL IS_POSTGRESQL CONTRIB_ACTIVE, \
+		IS_MYSQL IS_POSTGRESQL IS_SQLITE CONTRIB_ACTIVE, \
 		printf "%-15s : %s\n" "${var}" "${${var}}"; \
 	)
 
