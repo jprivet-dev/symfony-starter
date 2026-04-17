@@ -198,7 +198,7 @@ make contrib_tests a=src/Symfony/Component/HttpKernel
 
 ### ADR (Architecture Decision Records)
 
-* [What is an ADR (Architecture Decision Records)?](docs/adr/adr.md)
+* [What is an ADR (Architecture Decision Records)?](docs/adr/what-is-an-adr.md)
 * [Database: port mapping strategy](docs/adr/database-port-mapping.md)
 * [Makefile: target naming convention](docs/adr/makefile-naming.md)
 
