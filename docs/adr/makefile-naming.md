@@ -1,6 +1,6 @@
 # Makefile: target naming convention
 
-[⬅️ ADR](../adr.md)
+[⬅️ README](../../README.md)
 
 ---
 
@@ -56,4 +56,4 @@ The increased efficiency and seamless copy/paste experience enabled by double-cl
 
 ---
 
-[⬅️ ADR](../adr.md)
+[⬅️ README](../../README.md)

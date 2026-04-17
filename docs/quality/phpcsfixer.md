@@ -1,6 +1,6 @@
 # PHP CS Fixer
 
-[⬅️ Quality](../quality.md)
+[⬅️ README](../../README.md)
 
 ---
 
@@ -34,4 +34,4 @@ composer require --dev friendsofphp/php-cs-fixer
 
 ---
 
-[⬅️ Quality](../quality.md)
+[⬅️ README](../../README.md)

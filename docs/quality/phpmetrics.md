@@ -1,6 +1,6 @@
 # PhpMetrics
 
-[⬅️ Quality](../quality.md)
+[⬅️ README](../../README.md)
 
 ---
 
@@ -28,6 +28,6 @@ composer require --dev phpmetrics/phpmetrics:2.8.1 --with-all-dependencies
 
 ---
 
-[⬅️ Quality](../quality.md)
+[⬅️ README](../../README.md)
 
 

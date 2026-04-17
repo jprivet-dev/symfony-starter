@@ -1,6 +1,6 @@
 # Docker and Git - "detected dubious ownership in repository"
 
-[⬅️ Troubleshooting](../troubleshooting.md)
+[⬅️ README](../../README.md)
 
 ---
 
@@ -29,4 +29,4 @@ This will execute the necessary `git config` command inside your `php` Docker se
 
 ---
 
-[⬅️ Troubleshooting](../troubleshooting.md)
+[⬅️ README](../../README.md)

@@ -1,6 +1,6 @@
 # PhpStorm - Connect it to the SQLite database
 
-[⬅️ README](../README.md)
+[⬅️ README](../../README.md)
 
 ---
 
@@ -41,4 +41,4 @@ make phpstorm_config
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ README](../../README.md)

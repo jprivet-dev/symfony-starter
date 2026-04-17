@@ -104,13 +104,14 @@
   vars                          Show key Makefile variables
 
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
-  db_init                       Drop and create the database and migrate
-  db_init@test                  Drop and create the database and migrate (env=test)
+  db                            Drop and create the database and migrate
+  db@test                       Drop and create the database and migrate (env=test)
 
-  db_drop                       Drop the database [y/N] - $ make db_drop [a=<arguments>] - Example: $ make db_drop a="--env=test"
-  db_create                     Create the database - $ make db_create [a=<arguments>] - Example: $ make db_create a="--env=test"
+  drop                          Drop the database [y/N] - $ make drop [a=<arguments>] - Example: $ make drop a="--env=test"
+  create                        Create the database - $ make create [a=<arguments>] - Example: $ make create a="--env=test"
 
   diff                          Generate a migration by comparing your current database to your mapping information (format the generated SQL) - $ make diff [a=<param>] - Example: $ make diff a="--profile"
+  diff_migrate               dm Generate and execute the migration, and commit it (make diff migrate + git commit)
   execute                       Execute one or more migration versions up or down manually - $ make execute a=<arguments> - Example: $ make execute a="DoctrineMigrations\Version20240205143239"
   generate                      Generate a blank migration class
   list                          Display a list of all available migrations and their status
@@ -129,6 +130,15 @@
 — POSTGRESQL 🛢️ ————————————————————————————————————————————————————————————
   psql                          Execute psql - $ make psql [a=<arguments>] - Example: $ make psql a="-V"
   psql_sh                       Open a shell on the PostgreSQL container
+  tables                        Show all tables
+
+  dump                          Create a SQL dump
+  dump_gz                       Create a compressed SQL dump (gzip)
+  restore                       Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
+
+— SQLITE 🛢️ ————————————————————————————————————————————————————————————————
+  sqlite                        Execute sqlite3 - $ make sqlite [a=<arguments>] - Example: $ make sqlite a="-version"
+  sqlite_sh                     Open a SQLite shell on the PHP container
   tables                        Show all tables
 
   dump                          Create a SQL dump

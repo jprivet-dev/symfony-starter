@@ -1,6 +1,6 @@
 # Linux - Editing permissions
 
-[⬅️ Troubleshooting](../troubleshooting.md)
+[⬅️ README](../../README.md)
 
 ---
 
@@ -32,4 +32,4 @@ This command recursively changes the ownership of all files and directories in y
 
 ---
 
-[⬅️ Troubleshooting](../troubleshooting.md)
+[⬅️ README](../../README.md)

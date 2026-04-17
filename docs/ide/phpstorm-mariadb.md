@@ -1,12 +1,21 @@
-# PhpStorm - Connect it to the running PostgreSQL container
+# PhpStorm - Connect it to the running MariaDB container
 
-[⬅️ README](../README.md)
+[⬅️ README](../../README.md)
 
 ---
 
 ## About
 
-**PostgreSQL** is an **Object-Relational Database Management System (ORDBMS)**, meaning it combines traditional relational database features (like SQL, ACID properties) with object-oriented concepts (such as inheritance and function overloading). It is known for its strong standards compliance, reliability, and data integrity.
+**MariaDB** is an open-source relational database management system, originally forked from MySQL. It is fully compatible with MySQL and is known for its performance, reliability, and rich feature set. It uses the same SQL syntax and client libraries as MySQL.
+
+## Switch to MariaDB
+
+To switch your stack from PostgreSQL to MariaDB, run:
+
+```shell
+make require_orm # only if necessay
+make switch_to_mariadb
+```
 
 ## Get connection details
 
@@ -21,10 +30,10 @@ make phpstorm_config
 ## Connect PhpStorm
 
 1. Open the **Database** tool window (`View > Tool Windows > Database`).
-2. Click the `+` icon in the toolbar, navigate to **Data Source**, and select **PostgreSQL**.
+2. Click the `+` icon in the toolbar, navigate to **Data Source**, and select **MariaDB**.
 3. In the right pane, use the following settings under the **General** tab:
    * **Host**: `127.0.0.1`
-   * **Port**: `5432`
+   * **Port**: `3306`
    * **User**: `app`
    * **Password**: `!ChangeMe!`
    * **Database**: `app`
@@ -33,9 +42,9 @@ make phpstorm_config
 
 ## Links
 
-* https://www.postgresql.org/
-* https://www.jetbrains.com/help/phpstorm/postgresql.html
+* https://mariadb.org/
+* https://www.jetbrains.com/help/phpstorm/mariadb.html
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ README](../../README.md)

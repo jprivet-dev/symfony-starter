@@ -1,6 +1,6 @@
 # PHPStan
 
-[⬅️ Quality](../quality.md)
+[⬅️ README](../../README.md)
 
 ---
 
@@ -80,5 +80,5 @@ Looking for a solution...
 
 ---
 
-[⬅️ Quality](../quality.md)
+[⬅️ README](../../README.md)
 

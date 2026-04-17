@@ -1,6 +1,6 @@
 # PHP_CodeSniffer
 
-[⬅️ Quality](../quality.md)
+[⬅️ README](../../README.md)
 
 ---
 
@@ -19,4 +19,4 @@ PHP_CodeSniffer is a set of two PHP scripts:
 
 ---
 
-[⬅️ Quality](../quality.md)
+[⬅️ README](../../README.md)

@@ -1,6 +1,6 @@
 # Twig CS Fixer
 
-[⬅️ Quality](../quality.md)
+[⬅️ README](../../README.md)
 
 ---
 
@@ -24,4 +24,4 @@ TODO
 
 ---
 
-[⬅️ Quality](../quality.md)
+[⬅️ README](../../README.md)

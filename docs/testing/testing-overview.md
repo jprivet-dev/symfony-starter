@@ -1,6 +1,6 @@
-# Overview
+# Testing overview
 
-[⬅️ Testing](../testing.md)
+[⬅️ README](../../README.md)
 
 ---
 
@@ -86,4 +86,4 @@ class SmokeTest extends WebTestCase
 
 ---
 
-[⬅️ Testing](../testing.md)
+[⬅️ README](../../README.md)

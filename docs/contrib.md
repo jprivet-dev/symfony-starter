@@ -1,4 +1,4 @@
-# Contributing to Symfony: Connect Your Local Symfony Repository
+# Contributing to Symfony: Connect your local Symfony repository
 
 [⬅️ README](../README.md)
 

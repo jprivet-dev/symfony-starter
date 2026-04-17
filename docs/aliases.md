@@ -1,6 +1,6 @@
 # Shell Aliases: Seamless Docker Experience
 
-[⬅️ Back to README](../README.md)
+[⬅️ README](../README.md)
 
 ---
 
@@ -72,4 +72,4 @@ To remove them, you have two options:
 
 ---
 
-[⬅️ Back to README](../README.md)
+[⬅️ README](../README.md)

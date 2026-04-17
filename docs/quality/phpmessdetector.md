@@ -1,6 +1,6 @@
 # PHP Mess Detector
 
-[⬅️ Quality](../quality.md)
+[⬅️ README](../../README.md)
 
 ---
 
@@ -85,4 +85,4 @@ Solution - Exclude the `MissingImport` rule in `phpmd.xml`:
 
 ---
 
-[⬅️ Quality](../quality.md)
+[⬅️ README](../../README.md)
