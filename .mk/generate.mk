@@ -282,19 +282,15 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 
 require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
 	$(C) require symfony/asset-mapper symfony/asset symfony/twig-pack
-	$(M) co m="composer require symfony/asset-mapper symfony/asset symfony/twig-pack"
-
-require_bootstrap: _assets ## Install Bootstrap - https://getbootstrap.com/
-	$(CONSOLE) importmap:require bootstrap
-	$(M) co m="bin/console importmap:require bootstrap"
+	$(M) co m="Install AssetMapper"
 
 require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
 	$(C) require --dev symfony/maker-bundle
-	$(M) co m="composer require --dev symfony/maker-bundle"
+	$(M) co m="Install MakerBundle"
 
 require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
 	$(C) require symfony/orm-pack
-	$(M) co m="composer require symfony/orm-pack"
+	$(M) co m="Install Doctrine"
 	$(M) update_postgresql_configuration
 	# Running deep_clean is essential to properly take into account the ORM installed by symfony/orm-pack
 	$(M) deep_clean NO_INTERACTION=true
@@ -302,25 +298,25 @@ require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(C) require --dev symfony/profiler-pack
-	$(M) co m="composer require --dev symfony/profiler-pack"
+	$(M) co m="Install Profiler"
 
 require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
 	$(C) require --dev symfony/test-pack
-	$(M) co m="composer require --dev symfony/test-pack"
+	$(M) co m="Install PHPUnit"
 
 require_translation: ## Install Translation - https://symfony.com/doc/current/translation.html
 	$(C) require symfony/translation
-	$(M) co m="composer require symfony/translation"
+	$(M) co m="Install Translation"
 
 ##
 
 require_phpcsfixer: ## Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
 	$(C) require --dev friendsofphp/php-cs-fixer
-	$(M) co m="composer require --dev friendsofphp/php-cs-fixer"
+	$(M) co m="Install PHP CS Fixer"
 
 require_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
 	$(C) require --dev phpmd/phpmd
-	$(M) co m="composer require --dev phpmd/phpmd"
+	$(M) co m="Install PHP Mess Detector"
 
 require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website/
 	$(C) require --dev phpmetrics/phpmetrics
@@ -332,11 +328,23 @@ require_phpstan: ## Install PHPStan - https://phpstan.org/
 		phpstan/phpstan-symfony \
 		phpstan/phpstan-doctrine \
 		phpstan/phpstan-phpunit
-	$(M) co m="composer require --dev phpstan/phpstan (+ symfony, doctrine & phpunit)"
+	$(M) co m="Install PHPStan (+ symfony, doctrine & phpunit)"
 
 require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
 	$(C) require --dev vincentlanglet/twig-cs-fixer
-	$(M) co m="composer require --dev vincentlanglet/twig-cs-fixer"
+	$(M) co m="Install Twig CS Fixer"
+
+##
+
+require_bootstrap: _assets ## Install Bootstrap - https://getbootstrap.com/
+	$(CONSOLE) importmap:require bootstrap
+	$(M) co m="Install Bootstrap"
+
+require_tailwind: _assets ## Install Tailwind CSS - https://tailwindcss.com/
+	$(C) require symfonycasts/tailwind-bundle
+	$(M) co m="Install Tailwind CSS"
+	$(CONSOLE) tailwind:init
+	$(M) co m="Initialize Tailwind CSS"
 
 ##   DATABASE
 

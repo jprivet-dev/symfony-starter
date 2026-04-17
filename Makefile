@@ -81,6 +81,7 @@ VENDOR_PHPMD       = vendor/bin/phpmd
 VENDOR_PHPMETRICS  = vendor/bin/phpmetrics
 VENDOR_PHPSTAN     = vendor/bin/phpstan
 VENDOR_PROFILER    = vendor/symfony/web-profiler-bundle
+VENDOR_TAILWIND    = vendor/symfonycasts/tailwind-bundle
 VENDOR_TRANSLATION = vendor/symfony/translation
 VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 
@@ -518,18 +519,6 @@ update_lock: ## Update only the content hash of composer.lock without updating d
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),)
 include .mk/doctrine.mk
-endif
-
-ifneq ($(or $(ALL), $(IS_MYSQL)),)
-include .mk/mysql.mk
-endif
-
-ifneq ($(or $(ALL), $(IS_POSTGRESQL)),)
-include .mk/postgresql.mk
-endif
-
-ifneq ($(or $(ALL), $(IS_SQLITE)),)
-include .mk/sqlite.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(BIN_PHPUNIT))),)

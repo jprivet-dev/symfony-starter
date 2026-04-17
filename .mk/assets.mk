@@ -11,8 +11,13 @@ assets: _assets ## Generate all assets
 	@printf "\n$(Y)--- Assets (env: $(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
 	$(MAKE) importmap_install
+ifneq ($(wildcard $(VENDOR_TAILWIND)),)
+	$(MAKE) tailwind_minify
+endif
 else
-	$(MAKE) asset_map_compile
+ifneq ($(wildcard $(VENDOR_TAILWIND)),)
+	$(MAKE) tailwind_build
+endif
 endif
 
 ##
@@ -45,3 +50,7 @@ importmap_require: _assets ## Require JavaScript packages
 
 importmap_update: _assets ## Update JavaScript packages to their latest versions
 	$(CONSOLE) importmap:update
+
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_TAILWIND))),)
+include .mk/assets_tailwind.mk
+endif

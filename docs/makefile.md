@@ -111,7 +111,6 @@
   create                        Create the database - $ make create [a=<arguments>] - Example: $ make create a="--env=test"
 
   diff                          Generate a migration by comparing your current database to your mapping information (format the generated SQL) - $ make diff [a=<param>] - Example: $ make diff a="--profile"
-  diff_migrate               dm Generate and execute the migration, and commit it (make diff migrate + git commit)
   execute                       Execute one or more migration versions up or down manually - $ make execute a=<arguments> - Example: $ make execute a="DoctrineMigrations\Version20240205143239"
   generate                      Generate a blank migration class
   list                          Display a list of all available migrations and their status
@@ -130,6 +129,17 @@
 — POSTGRESQL 🛢️ ————————————————————————————————————————————————————————————
   psql                          Execute psql - $ make psql [a=<arguments>] - Example: $ make psql a="-V"
   psql_sh                       Open a shell on the PostgreSQL container
+  table                         Show the content of a table - $ make table n=<name> - Example: $ make table n=user
+  tables                        Show all tables
+
+  dump                          Create a SQL dump
+  dump_gz                       Create a compressed SQL dump (gzip)
+  restore                       Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
+
+— MYSQL 🛢️ —————————————————————————————————————————————————————————————————
+  mysql                         Execute mysql - $ make mysql [a=<arguments>] - Example: $ make mysql a="-V"
+  mysql_sh                      Open a shell on the MySQL/MariaDB container
+  table                         Show the content of a table - $ make table n=<name> - Example: $ make table n=user
   tables                        Show all tables
 
   dump                          Create a SQL dump
@@ -139,6 +149,7 @@
 — SQLITE 🛢️ ————————————————————————————————————————————————————————————————
   sqlite                        Execute sqlite3 - $ make sqlite [a=<arguments>] - Example: $ make sqlite a="-version"
   sqlite_sh                     Open a SQLite shell on the PHP container
+  table                         Show the content of a table - $ make table n=<name> - Example: $ make table n=user
   tables                        Show all tables
 
   dump                          Create a SQL dump
@@ -189,6 +200,13 @@
   importmap_remove              Remove JavaScript packages
   importmap_require             Require JavaScript packages
   importmap_update              Update JavaScript packages to their latest versions
+
+  tailwind_init                 Initializes Tailwind CSS for your project
+  tailwind_clear                Clear var/tailwind directory
+  tailwind_build                Build the Tailwind CSS assets - $ make tailwind_build [a=<arguments>] - Example: $ make tailwind_build a=--help
+  tailwind_watch             w  Watch for changes and rebuild automatically.
+  tailwind_minify               Minify the output CSS.
+  tailwind_debug                See the full config from TailwindBundle
 
 — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
   extract                       Extract translation strings from templates
@@ -256,7 +274,6 @@
   require_webapp                Install a web application - https://symfony.com/doc/current/setup.html
 
   require_asset_mapper          Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-  require_bootstrap             Install Bootstrap - https://getbootstrap.com/
   require_maker_bundle          Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
   require_orm                   Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
   require_profiler              Install Profiler - https://symfony.com/doc/current/profiler.html
@@ -268,6 +285,9 @@
   require_phpmetrics            Install PHPMetrics - https://phpmetrics.github.io/website/
   require_phpstan               Install PHPStan - https://phpstan.org/
   require_twigcsfixer           Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
+
+  require_bootstrap             Install Bootstrap - https://getbootstrap.com/
+  require_tailwind              Install Tailwind CSS - https://tailwindcss.com/
 
   DATABASE
   switch_to_mariadb             Switch the stack from PostgreSQL to MySQL/MariaDB
