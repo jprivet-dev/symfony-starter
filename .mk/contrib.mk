@@ -24,17 +24,17 @@ contrib_unlink: ## Restore original vendors (rollback links) - $ make contrib_un
 contrib_install: ## Install Composer packages in a repository - $ make contrib_install f=<folder> - Example: $ make contrib_install f=symfony
 	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
 	@printf "🧙 Install Composer packages in $(Y)/$(f)$(S)\n"
-	$(BASH_COMMAND) "cd /$(f) && composer install"
+	$(COMPOSER) install --working-dir=/$(f)
 
 contrib_clean: ## Remove vendor and lock file from a repository - $ make contrib_clean f=<folder> - Example: $ make contrib_clean f=symfony
 	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
-	$(BASH_COMMAND) "rm -fr /$(f)/vendor && rm -f /$(f)/composer.lock"
+	$(PHP) rm -fr /$(f)/vendor /$(f)/composer.lock
 
 ##
 
 contrib_tests: ## Run PHPUnit tests in a repository - $ make contrib_tests f=<folder> [a=<arguments>] - Example: $ make contrib_tests f=symfony a="src/Symfony/Bundle/FrameworkBundle"
 	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
-	$(BASH_COMMAND) "cd /$(f) && ./phpunit $(a)"
+	$(PHP) /$(f)/phpunit $(a)
 
 contrib_tests_www_data: ## Run PHPUnit tests as www-data user - $ make contrib_tests_www_data f=<folder> [a=<arguments>]
 	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
@@ -42,4 +42,4 @@ contrib_tests_www_data: ## Run PHPUnit tests as www-data user - $ make contrib_t
 
 contrib_tests_clean: ## Clean PHPUnit cache and temporary files - $ make contrib_tests_clean f=<folder> - Example: $ make contrib_tests_clean f=symfony
 	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
-	$(BASH_COMMAND) "rm -fr /tmp/* && rm -f /$(f)/.phpunit.result.cache"
+	$(PHP) rm -fr /tmp/* /$(f)/.phpunit.result.cache
