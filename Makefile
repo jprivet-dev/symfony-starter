@@ -375,8 +375,8 @@ deep_clean: confirm ## [Danger] Remove containers, volumes, networks and images,
 
 ##
 
-.PHONY: config
-config: ## Parse, resolve, and render compose file in canonical format
+.PHONY: canonical
+canonical: ## Parse, resolve, and render compose file in canonical format
 	$(UP_ENV) $(COMPOSE) config
 
 .PHONY: images
