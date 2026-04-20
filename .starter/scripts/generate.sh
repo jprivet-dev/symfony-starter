@@ -22,19 +22,19 @@ START_TOTAL=$(date +%s)
 LOGS_DIR=".starter/scripts/logs"
 
 BRANCHES=(
-    "minimalist"
-    "minimalist_lts"
-    "webapp"
+#    "minimalist"
+#    "minimalist_lts"
+#    "webapp"
     "webapp_lts"
-    "webapp_mariadb"
+#    "webapp_mariadb"
     "webapp_mariadb_lts"
-    "webapp_sqlite"
-    "webapp_sqlite_lts"
-    "api"
-    "api_lts"
-    "easy_admin"
-    "easy_admin_lts"
-    "demo"
+#    "webapp_sqlite"
+#    "webapp_sqlite_lts"
+#    "api"
+#    "api_lts"
+#    "easy_admin"
+#    "easy_admin_lts"
+#    "demo"
 )
 
 # ------------------------------------------------------------------
