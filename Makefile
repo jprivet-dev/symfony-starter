@@ -472,16 +472,21 @@ require: ## Add required packages to your composer.json and installs them - $ ma
 	$(COMPOSER) require $(a)
 
 .PHONY: update
-update: ## Update Composer packages - $ make update [a=<arguments>] - Example: $ make update a="phpunit/phpunit"
+update: ## Update Composer packages - $ make update [a=<arguments>] - Example: $ make update a="symfony/monolog-bundle"
 	@printf "\n$(Y)--- Composer Update (env: $(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
-	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
+	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader $(a)
 else
-	$(COMPOSER) update
+	$(COMPOSER) update $(a)
 endif
 
 update_lock: ## Update only the content hash of composer.lock without updating dependencies
 	$(COMPOSER) update --lock
+
+.PHONY: config
+config: ## Run composer config - $ make config k=<key> [v=<value>] - Example: $ make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
+	$(COMPOSER) config $(if $(v),$(k) '$(v)',--unset $(k))
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),)
 include .mk/doctrine.mk
