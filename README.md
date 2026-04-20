@@ -17,16 +17,16 @@ Built on top of [dunglas/symfony-docker](https://github.com/dunglas/symfony-dock
 
 ## Quick start
 
-> Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
+1. Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
 
-Clone the project:
+2. Clone the project:
 
 ```shell
 git clone git@github.com:jprivet-dev/symfony-starter.git
 cd symfony-starter
 ```
 
-And generate:
+3. And generate...
 
 | Application     | Stable            | LTS                   | Database      |
 |-----------------|-------------------|-----------------------|---------------|
@@ -38,7 +38,7 @@ And generate:
 
 ## Switch to another DB
 
-> By default, PostgreSQL is used. Run one of the following commands after generation to switch to another database.
+> By default, **🐘 PostgreSQL** is used. Run one of the following commands after generation to switch to another database.
 
 | Application     | 🐬 MariaDB                                     | 🪶 SQLite                                     |
 |-----------------|------------------------------------------------|-----------------------------------------------|
