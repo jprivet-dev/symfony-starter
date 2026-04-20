@@ -1,6 +1,6 @@
 # What is an ADR (Architecture Decision Records)?
 
-[⬅️ README](README.md)
+[⬅️ README](../README.md)
 
 ---
 
@@ -14,4 +14,4 @@ Its main purpose is to:
 
 ---
 
-[⬅️ README](README.md)
+[⬅️ README](../README.md)

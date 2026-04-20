@@ -1,6 +1,6 @@
 # Database: port mapping strategy
 
-[⬅️ README](README.md)
+[⬅️ README](../README.md)
 
 ---
 
@@ -58,4 +58,4 @@ The `.block/` directory contains one folder per database engine (`postgresql/`, 
 
 ---
 
-[⬅️ README](README.md)
+[⬅️ README](../README.md)

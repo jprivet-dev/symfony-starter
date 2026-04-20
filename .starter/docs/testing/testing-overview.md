@@ -78,7 +78,7 @@ class SmokeTest extends WebTestCase
 
 * https://symfony.com/doc/current/testing.html
 * https://symfonycasts.com/screencast/phpunit-integration/integration-test
-* https://github.com/dunglas/symfony-docker/blob/main/docs/xdebug.md
+* https://github.com/dunglas/symfony-docker/blob/docs/xdebug.md
 * https://pguso.medium.com/how-to-write-unit-tests-in-symfony-0a3cf12bcfd2
 * https://stackoverflow.com/questions/9470795/using-the-arrange-act-assert-pattern-with-integration-tests
 * https://symfony.com/doc/current/best_practices.html#smoke-test-your-urls

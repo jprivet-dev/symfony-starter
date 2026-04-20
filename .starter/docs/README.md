@@ -5,12 +5,12 @@
 ---
 
 * Main
-  * [Caddy - Validate certificates](main/certificates.md)
-  * [Compose - Accessing the `var/` directory](main/var.md)
-  * [Makefile - Discover all commands](main/makefile.md)
-  * [Symfony - Save your generated application](main/save.md)
-  * [Symfony and Docker - Use build options](main/options.md)
-  * [Shell Aliases: Seamless Docker Experience](main/aliases.md)
+  * [Caddy - Validate certificates](certificates.md)
+  * [Compose - Accessing the `var/` directory](var.md)
+  * [Makefile - Discover all commands](makefile.md)
+  * [Symfony - Save your generated application](save.md)
+  * [Symfony and Docker - Use build options](options.md)
+  * [Shell Aliases: Seamless Docker Experience](aliases.md)
 * IDE configuration
   * [PhpStorm - Configure a remote PHP interpreter (Docker)](ide/phpstorm-remote-php-interpreter.md)
   * [PhpStorm - Configure inspections](ide/phpstorm-inspections.md)

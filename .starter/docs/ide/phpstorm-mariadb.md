@@ -1,6 +1,6 @@
 # PhpStorm - Connect it to the running MariaDB container
 
-[⬅️ README](README.md)
+[⬅️ README](../README.md)
 
 ---
 
