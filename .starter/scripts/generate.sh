@@ -19,21 +19,22 @@ S='\033[0m'
 
 WORK_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 START_TOTAL=$(date +%s)
+LOGS_DIR=".starter/scripts/logs"
 
 BRANCHES=(
-#    "minimalist"
-#    "minimalist_lts"
-#    "webapp"
+    "minimalist"
+    "minimalist_lts"
+    "webapp"
     "webapp_lts"
-#    "webapp_mariadb"
+    "webapp_mariadb"
     "webapp_mariadb_lts"
-#    "webapp_sqlite"
-#    "webapp_sqlite_lts"
-#    "api"
-#    "api_lts"
-#    "easy_admin"
-#    "easy_admin_lts"
-#    "demo"
+    "webapp_sqlite"
+    "webapp_sqlite_lts"
+    "api"
+    "api_lts"
+    "easy_admin"
+    "easy_admin_lts"
+    "demo"
 )
 
 # ------------------------------------------------------------------
@@ -146,6 +147,7 @@ generate_require_branch() {
 generate_flavor() {
     local BRANCH="$1"
     local FUNC="generate_flavor_${BRANCH}"
+    local LOG_FILE="${LOGS_DIR}/${BRANCH}.log"
 
     printf "\n${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n"
     printf " ${Y}›${S} Generating: ${G}${BRANCH}${S}\n"
@@ -158,13 +160,14 @@ generate_flavor() {
         return
     fi
 
-    if ${FUNC}; then
+    if ${FUNC} 2>"${LOG_FILE}"; then
         RESULTS["${BRANCH}"]="ok"
+        rm -f "${LOG_FILE}"
         printf "\n ${G}✔${S} ${BRANCH} generated successfully\n"
     else
         RESULTS["${BRANCH}"]="error"
         HAS_ERROR=1
-        printf "\n ${R}⨯${S} ${BRANCH} failed\n"
+        printf "\n ${R}⨯${S} ${BRANCH} failed — see ${Y}${LOG_FILE}${S}\n"
     fi
 }
 
@@ -172,6 +175,8 @@ generate_flavor() {
 
 declare -A RESULTS
 HAS_ERROR=0
+
+mkdir -p "${LOGS_DIR}"
 
 printf "\n${Y}--- Symfony Starter - Generate All ---${S}\n"
 printf " ${Y}›${S} Work branch: ${G}${WORK_BRANCH}${S}\n\n"
@@ -212,7 +217,12 @@ for BRANCH in "${BRANCHES[@]}"; do
     if [ "${STATUS}" = "ok" ]; then
         printf " ${G}✔${S} ${BRANCH}\n"
     elif [ "${STATUS}" = "error" ]; then
-        printf " ${R}⨯${S} ${BRANCH}\n"
+        LOG_FILE="${LOGS_DIR}/${BRANCH}.log"
+        printf " ${R}⨯${S} ${BRANCH}"
+        if [ -f "${LOG_FILE}" ]; then
+            printf " — see ${Y}${LOG_FILE}${S}"
+        fi
+        printf "\n"
     else
         printf " ${Y}›${S} ${BRANCH} (skipped)\n"
     fi
