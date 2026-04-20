@@ -5,7 +5,7 @@
 #              respective branches.
 #
 # Usage:
-#   bash .sh/generate.sh
+#   bash .starter/scripts/generate.sh
 #
 # The script starts from the current branch (your work branch).
 # Make sure you are on the right branch before running this script.
@@ -221,8 +221,8 @@ done
 printf "\n ⏱️  Total generation time: ${Y}%02dm %02ds${S}\n\n" $MINUTES_TOTAL $SECONDS_TOTAL
 
 if [ "${HAS_ERROR}" -eq 0 ]; then
-    printf " ${G}✔${S} All flavors generated successfully. Run ${Y}.sh/push.sh${S} to push to origin.\n\n"
+    printf " ${G}✔${S} All flavors generated successfully. Run ${Y}.starter/scripts/push.sh${S} to push to origin.\n\n"
 else
-    printf " ${R}⨯${S} Some generations failed. Fix errors before running ${Y}.sh/push.sh${S}.\n\n"
+    printf " ${R}⨯${S} Some generations failed. Fix errors before running ${Y}.starter/scripts/push.sh${S}.\n\n"
     exit 1
 fi

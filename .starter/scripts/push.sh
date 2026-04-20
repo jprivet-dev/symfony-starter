@@ -4,9 +4,9 @@
 # Description: Push all Symfony Starter flavor branches to origin.
 #
 # Usage:
-#   bash .sh/push.sh
+#   bash .starter/scripts/push.sh
 #
-# Run this script only after a successful .sh/generate.sh.
+# Run this script only after a successful .starter/scripts/generate.sh.
 # ------------------------------------------------------------------
 
 # (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET

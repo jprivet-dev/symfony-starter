@@ -49,12 +49,12 @@ replace_block rb: # INTERNAL - Replace a block in a target file - $ make replace
 	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
 	$(if $(t),, $(error "Please specify the target with 't=...'"))
 	$(if $(s),, $(error "Please specify the source with 's=...'"))
-	.sh/replace_block.sh -m "$(m)" -t "$(t)" -s "$(s)" -i "$(i)"
+	.starter/scripts/replace_block.sh -m "$(m)" -t "$(t)" -s "$(s)" -i "$(i)"
 
 clear_block cb: # INTERNAL - Clear a block in a target file - $ make clear_block m=<marker> t=<target> - Example: $ make clear_block m=doctrine/doctrine-bundle t=compose.yaml
 	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
 	$(if $(t),, $(error "Please specify the target with 't=...'"))
-	.sh/replace_block.sh -m "$(m)" -t "$(t)" -i "$(i)"
+	.starter/scripts/replace_block.sh -m "$(m)" -t "$(t)" -i "$(i)"
 
 #
 
@@ -190,7 +190,7 @@ easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Dock
 ##
 
 update_symfony_docker: ## Update the vendored dunglas/symfony-docker snapshot at the root
-	.sh/update_symfony_docker.sh
+	.starter/scripts/update_symfony_docker.sh
 
 skeleton: ## Install symfony/skeleton from the versioned dunglas/symfony-docker files at the root
 	@printf "\n$(Y)--- Install symfony/skeleton ---$(S)\n"

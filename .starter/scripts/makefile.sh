@@ -5,9 +5,9 @@
 # making this method more reliable and portable across different systems.
 #
 # Usage:
-#   . .sh/makefile.sh
+#   . .starter/scripts/makefile.sh
 # or
-#   source .sh/makefile.sh
+#   source .starter/scripts/makefile.sh
 
 # (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET
 G='\033[32m'

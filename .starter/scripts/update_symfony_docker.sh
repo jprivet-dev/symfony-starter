@@ -10,7 +10,7 @@
 #   make update_symfony_docker
 #
 # Or directly:
-#   .sh/update_symfony_docker.sh
+#   .starter/scripts/update_symfony_docker.sh
 # ------------------------------------------------------------------
 
 set -e
