@@ -18,8 +18,8 @@ S='\033[0m'
 # Define markers and files
 START_MARKER="<!-- MAKEFILE_COMMANDS_START -->"
 END_MARKER="<!-- MAKEFILE_COMMANDS_END -->"
-DOCS_MAKEFILE="docs/makefile.md"
-TEMP_MAKEFILE="docs/makefile_readme.md"
+DOCS_MAKEFILE=".starter/docs/makefile.md"
+TEMP_MAKEFILE=".starter/docs/makefile_readme.md"
 
 # Check if markers are present
 if ! grep -q "${START_MARKER}" "${DOCS_MAKEFILE}"; then
