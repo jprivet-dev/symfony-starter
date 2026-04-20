@@ -23,7 +23,8 @@ Add the Docker volume and rebuild:
 
 ```shell
 make contrib_volume f=symfony
-make build up_detached
+make build
+make up_detached
 ```
 
 Install Symfony's own dependencies:
@@ -38,7 +39,7 @@ Link the monorepo into your application's vendors:
 make contrib_link f=symfony
 ```
 
-### Develop & test
+### Develop & Test
 
 Modify files in `../symfony/src/` — changes are immediately reflected in the application.
 
@@ -46,7 +47,7 @@ Run the framework tests inside the container:
 
 ```shell
 # Run tests for a specific component
-make contrib_tests f=symfony a=src/Symfony/Component/HttpKernel
+make contrib_tests f=symfony a="src/Symfony/Component/HttpKernel"
 ```
 
 Clean PHPUnit cache if needed:
@@ -60,21 +61,6 @@ make contrib_tests_clean f=symfony
 ```shell
 make contrib_unlink f=symfony
 ```
-
-### Submit your contribution
-
-Manage your Git branches as usual on your host machine:
-
-```shell
-cd ../symfony
-git checkout -b fix/my-issue
-# ... commit your changes ...
-git push origin fix/my-issue
-```
-
-Then open a Pull Request on [github.com/symfony/symfony](https://github.com/symfony/symfony).
-
-> See the [official contribution guide](https://symfony.com/doc/current/contributing/code/pull_requests.html) for more details.
 
 ---
 
@@ -97,7 +83,8 @@ Add the Docker volume and rebuild:
 
 ```shell
 make contrib_volume f=monolog-bundle
-make build up_detached
+make build
+make up_detached
 ```
 
 Install the bundle's own dependencies:
@@ -109,11 +96,11 @@ make contrib_install f=monolog-bundle
 Tell Composer to use your local fork instead of the Packagist version:
 
 ```shell
-$(COMPOSER) config repositories.monolog-bundle '{"type": "path", "url": "/monolog-bundle"}'
-$(COMPOSER) update symfony/monolog-bundle
+make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
+make update a="symfony/monolog-bundle"
 ```
 
-### Develop & test
+### Develop & Test
 
 Modify files in `../monolog-bundle/` — changes are immediately reflected in the application.
 
@@ -134,22 +121,33 @@ make contrib_tests_clean f=monolog-bundle
 Remove the local Composer repository and restore the original package:
 
 ```shell
-$(COMPOSER) config --unset repositories.monolog-bundle
-$(COMPOSER) update symfony/monolog-bundle
+make config k=repositories.monolog-bundle
+make update a="symfony/monolog-bundle"
 ```
 
-### Submit your contribution
+---
 
-Manage your Git branches as usual on your host machine:
+## Submit your contribution
+
+Manage your Git branches as usual on your host machine and open a Pull Request on the official repository.
 
 ```shell
+# For symfony/symfony
+cd ../symfony
+git checkout -b fix/my-issue
+# ... commit your changes ...
+git push origin fix/my-issue
+```
+
+```shell
+# For symfony/monolog-bundle
 cd ../monolog-bundle
 git checkout -b fix/my-issue
 # ... commit your changes ...
 git push origin fix/my-issue
 ```
 
-Then open a Pull Request on [github.com/symfony/monolog-bundle](https://github.com/symfony/monolog-bundle).
+> See the [official contribution guide](https://symfony.com/doc/current/contributing/code/pull_requests.html) for more details.
 
 ---
 
