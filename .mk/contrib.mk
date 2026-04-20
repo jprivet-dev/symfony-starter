@@ -3,103 +3,43 @@
 ##   (to delete this section, delete .mk/contrib.mk)
 ##
 
-CONTRIB_INTERNAL_PATH     = /symfony
-CONTRIB_DEFAULT_PATH      = ../symfony
-CONTRIB_PATH              = $(or $(SYMFONY_MONOREPO),$(CONTRIB_DEFAULT_PATH))
-CONTRIB_INTERNAL_COMPOSER = $(CONTRIB_INTERNAL_PATH)/composer.json
-
-CONTRIB_CURRENT_BRANCH    = $(shell git rev-parse --abbrev-ref HEAD)
-CONTRIB_MONOREPO_BRANCH   = $(shell git -C $(CONTRIB_PATH) rev-parse --abbrev-ref HEAD 2>/dev/null || echo "Unknown (git error)")
-
-_monorepo: # INTERNAL - Check if the your Symfony monorepo is correctly mounted
-ifeq ($(wildcard $(CONTRIB_PATH)),)
-	@printf " $(R)❌ Error: $(CONTRIB_PATH) does not exist on your machine.$(S)\n"
-	@printf " $(Y)›$(S) Check $(Y)CONTRIB_MONOREPO_LOCAL_PATH$(S) in your $(G).env.local$(S) file if you don't use $(G)$(CONTRIB_DEFAULT_PATH)$(S) by default.\n"
-	@exit 1
-endif
-	@$(BASH_COMMAND) "test -f $(CONTRIB_INTERNAL_COMPOSER)" \
-		|| (printf " $(R)❌ Error: Volume not mounted in Docker.$(S)\n" \
-		&& printf " $(Y)›$(S) The directory $(Y)$(CONTRIB_INTERNAL_PATH)$(S) is missing inside the container.\n" \
-		&& printf " $(Y)›$(S) Run $(G)make contrib_init$(S) to add the volume in your $(Y)compose.override.yaml$(S) file.\n" \
-		&& exit 1)
-
-.PHONY: c
-contrib c: _monorepo ## Check if the your Symfony monorepo is correctly mounted
-	@printf " $(G)✔ All is good!$(S) The Docker volume $(Y)$(CONTRIB_INTERNAL_PATH)$(S) is configured and connected to $(Y)$(CONTRIB_PATH).$(S)\n"
-	@printf " $(Y)›$(S) Current branch : $(Y)$(CONTRIB_CURRENT_BRANCH)$(S)\n"
-	@printf " $(Y)›$(S) Monorepo branch: $(Y)$(CONTRIB_MONOREPO_BRANCH)$(S)\n"
-
-contrib_init: ## Configure Docker volume for Symfony contribution (updates compose.override.yaml)
-	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='$${SYMFONY_MONOREPO:-../symfony}:/symfony'
-	$(MAKE) commit m="use volume to $(CONTRIB_INTERNAL_PATH) with SYMFONY_MONOREPO var in compose.override.yaml"
-	$(MAKE) build up_detached
-	@echo " $(G)✔ Docker for Symfony contribution configured...$(S)"
+contrib_volume: ## Add a Docker volume for a repository - $ make contrib_volume f=<folder> - Example: $ make contrib_volume f=symfony
+	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
+	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='../$(f):/$(f)'
 
 ##
 
-contrib_link: _monorepo ## Link the your Symfony monorepo to the project (replace vendors with symlinks)
-	$(PHP) $(CONTRIB_INTERNAL_PATH)/link /app
-	@printf "🔗 Local Symfony repository linked to $(Y)$(SYMFONY_MONOREPO)$(S)\n"
+contrib_link: ## Link the Symfony monorepo to the project (replace vendors with symlinks) - $ make contrib_link f=<folder> - Example: $ make contrib_link f=symfony
+	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
+	$(PHP) /$(f)/link /app
+	@printf "🔗 Local repository $(Y)/$(f)$(S) linked to the project\n"
 
-contrib_unlink: _monorepo ## Restore original vendors (rollback links)
-	$(PHP) $(CONTRIB_INTERNAL_PATH)/link /app --rollback
-	@printf "🔙 Original vendors restored (detached from $(Y)$(SYMFONY_MONOREPO)$(S))\n"
-
-##
-
-contrib_install: _monorepo ## Install Composer packages in the your Symfony monorepo
-	@printf "🧙 Install Composer packages in $(Y)$(SYMFONY_MONOREPO)$(S)\n"
-	$(BASH_COMMAND) "cd $(CONTRIB_INTERNAL_PATH) && composer install"
-
-contrib_clean: _monorepo ## Remove vendor and lock file from the your Symfony monorepo
-	$(BASH_COMMAND) "rm -fr $(CONTRIB_INTERNAL_PATH)/vendor && rm -f $(CONTRIB_INTERNAL_PATH)/composer.lock"
+contrib_unlink: ## Restore original vendors (rollback links) - $ make contrib_unlink f=<folder> - Example: $ make contrib_unlink f=symfony
+	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
+	$(PHP) /$(f)/link /app --rollback
+	@printf "🔙 Original vendors restored (detached from $(Y)/$(f)$(S))\n"
 
 ##
 
-contrib_tests: _monorepo ## Run PHPUnit tests in the your Symfony monorepo - $ make contrib_tests [a=<arguments>] - Example: $ make contrib_tests a="src/Symfony/Bundle/FrameworkBundle"
-	$(BASH_COMMAND) "cd $(CONTRIB_INTERNAL_PATH) && ./phpunit $(a)"
+contrib_install: ## Install Composer packages in a repository - $ make contrib_install f=<folder> - Example: $ make contrib_install f=symfony
+	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
+	@printf "🧙 Install Composer packages in $(Y)/$(f)$(S)\n"
+	$(BASH_COMMAND) "cd /$(f) && composer install"
 
-contrib_tests_www_data: ## Run PHPUnit tests in the your Symfony monorepo as www-data user - $ make contrib_tests_www_data [a=<arguments>] - Example: $ make contrib_tests_www_data a="src/Symfony/Bundle/FrameworkBundle"
-	FORCE_WWW_DATA_USER=true $(MAKE) contrib_tests
-
-contrib_tests_clean: _monorepo ## Clean PHPUnit cache and temporary files in the your Symfony monorepo
-	$(BASH_COMMAND) "rm -fr /tmp/* && rm -f $(CONTRIB_INTERNAL_PATH)/.phpunit.result.cache"
-
-##
-
-doctrine_bridge: a=src/Symfony/Bridge/Doctrine
-doctrine_bridge: contrib_tests ## Run PHPUnit tests for the Doctrine Bridge
-
-monolog_bridge: a=src/Symfony/Bridge/Monolog
-monolog_bridge: contrib_tests ## Run PHPUnit tests for the Monolog Bridge
-
-phpunit_bridge: a=src/Symfony/Bridge/PhpUnit
-phpunit_bridge: contrib_tests ## Run PHPUnit tests for the PhpUnit Bridge
-
-psr_http_message_bridge: a=src/Symfony/Bridge/PsrHttpMessage
-psr_http_message_bridge: contrib_tests ## Run PHPUnit tests for the PsrHttpMessage Bridge
-
-twig_bridge: a=src/Symfony/Bridge/Twig
-twig_bridge: contrib_tests ## Run PHPUnit tests for the Twig Bridge
+contrib_clean: ## Remove vendor and lock file from a repository - $ make contrib_clean f=<folder> - Example: $ make contrib_clean f=symfony
+	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
+	$(BASH_COMMAND) "rm -fr /$(f)/vendor && rm -f /$(f)/composer.lock"
 
 ##
 
-debug_bundle: a=src/Symfony/Bundle/DebugBundle
-debug_bundle: contrib_tests ## Run PHPUnit tests for the DebugBundle
+contrib_tests: ## Run PHPUnit tests in a repository - $ make contrib_tests f=<folder> [a=<arguments>] - Example: $ make contrib_tests f=symfony a="src/Symfony/Bundle/FrameworkBundle"
+	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
+	$(BASH_COMMAND) "cd /$(f) && ./phpunit $(a)"
 
-framework_bundle: a=src/Symfony/Bundle/FrameworkBundle
-framework_bundle: contrib_tests ## Run PHPUnit tests for the FrameworkBundle
+contrib_tests_www_data: ## Run PHPUnit tests as www-data user - $ make contrib_tests_www_data f=<folder> [a=<arguments>]
+	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
+	FORCE_WWW_DATA_USER=true $(MAKE) contrib_tests f=$(f) a=$(a)
 
-security_bundle: a=src/Symfony/Bundle/SecurityBundle
-security_bundle: contrib_tests ## Run PHPUnit tests for the SecurityBundle
-
-twig_bundle: a=src/Symfony/Bundle/TwigBundle
-twig_bundle: contrib_tests ## Run PHPUnit tests for the TwigBundle
-
-web_profiler_bundle: a=src/Symfony/Bundle/WebProfilerBundle
-web_profiler_bundle: contrib_tests ## Run PHPUnit tests for the WebProfilerBundle
-
-##
-
-dependency_injection: a=src/Symfony/Component/DependencyInjection
-dependency_injection: contrib_tests ## Run PHPUnit tests for the DependencyInjection Component (Sample command: You can add any other necessary commands to this contrib.mk file)
+contrib_tests_clean: ## Clean PHPUnit cache and temporary files - $ make contrib_tests_clean f=<folder> - Example: $ make contrib_tests_clean f=symfony
+	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
+	$(BASH_COMMAND) "rm -fr /tmp/* && rm -f /$(f)/.phpunit.result.cache"
