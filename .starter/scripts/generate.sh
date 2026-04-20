@@ -22,19 +22,19 @@ START_TOTAL=$(date +%s)
 LOGS_DIR=".starter/scripts/logs"
 
 BRANCHES=(
-#    "minimalist"
-#    "minimalist@lts"
-#    "webapp"
+    "minimalist"
+    "minimalist@lts"
+    "webapp"
+    "webapp@mariadb"
+    "webapp@sqlite"
     "webapp@lts"
-#    "webapp@mariadb"
-    "webapp@mariadb_lts"
-#    "webapp@sqlite"
-#    "webapp@sqlite_lts"
-#    "api"
-#    "api@lts"
-#    "easy_admin"
-#    "easy_admin@lts"
-#    "demo"
+    "webapp@lts_mariadb"
+    "webapp@lts_sqlite"
+    "api"
+    "api@lts"
+    "easy_admin"
+    "easy_admin@lts"
+    "demo"
 )
 
 # ------------------------------------------------------------------
@@ -59,23 +59,9 @@ generate_flavor_webapp() {
     NO_INTERACTION=true make webapp
 }
 
-generate_flavor_webapp_lts() {
-    git switch "${WORK_BRANCH}"
-    NO_INTERACTION=true make clean_app
-    NO_INTERACTION=true make webapp@lts
-}
-
 generate_flavor_webapp_mariadb() {
     git switch "${WORK_BRANCH}"
-    NO_INTERACTION=true make webapp
-    make switch_to_mariadb
-    make health_welcome_to_symfony
-}
-
-generate_flavor_webapp_mariadb_lts() {
-    git switch "${WORK_BRANCH}"
-    NO_INTERACTION=true make clean_app
-    NO_INTERACTION=true make webapp@lts
+    NO_INTERACTION=true make webapp BRANCH=webapp@mariadb
     make switch_to_mariadb
     make health_welcome_to_symfony
 }
@@ -83,15 +69,29 @@ generate_flavor_webapp_mariadb_lts() {
 generate_flavor_webapp_sqlite() {
     git switch "${WORK_BRANCH}"
     NO_INTERACTION=true make clean_app
-    NO_INTERACTION=true make webapp
+    NO_INTERACTION=true make webapp BRANCH=webapp@sqlite
     make switch_to_sqlite
     make health_welcome_to_symfony
 }
 
-generate_flavor_webapp_sqlite_lts() {
+generate_flavor_webapp_lts() {
     git switch "${WORK_BRANCH}"
     NO_INTERACTION=true make clean_app
     NO_INTERACTION=true make webapp@lts
+}
+
+generate_flavor_webapp_lts_mariadb() {
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make webapp@lts BRANCH=webapp@lts_mariadb
+    make switch_to_mariadb
+    make health_welcome_to_symfony
+}
+
+generate_flavor_webapp_lts_sqlite() {
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make webapp@lts BRANCH=webapp@lts_sqlite
     make switch_to_sqlite
     make health_welcome_to_symfony
 }

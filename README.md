@@ -72,12 +72,12 @@ make install        # 4. Install and start
 
 | Application     | Stable                                                                               | LTS                                                                                          | Database      |
 |-----------------|--------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|---------------|
-| 🌱 Minimalist   | [minimalist](https://github.com/jprivet-dev/symfony-starter/tree/minimalist)         | [minimalist_lts](https://github.com/jprivet-dev/symfony-starter/tree/minimalist_lts)         | 🚫 No DB      |
-| 🌍 Webapp       | [webapp](https://github.com/jprivet-dev/symfony-starter/tree/webapp)                 | [webapp_lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp_lts)                 | 🐘 PostgreSQL |
-|                 | [webapp_mariadb](https://github.com/jprivet-dev/symfony-starter/tree/webapp_mariadb) | [webapp_mariadb_lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp_mariadb_lts) | 🐬 MariaDB    |
-|                 | [webapp_sqlite](https://github.com/jprivet-dev/symfony-starter/tree/webapp_sqlite)   | [webapp_sqlite_lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp_sqlite_lts)   | 🪶 SQLite     |
-| 🔌 API Platform | [api](https://github.com/jprivet-dev/symfony-starter/tree/api)                       | [api_lts](https://github.com/jprivet-dev/symfony-starter/tree/api_lts)                       | 🐘 PostgreSQL |
-| ⚡ EasyAdmin     | [easy_admin](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin)         | [easy_admin_lts](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin_lts)         | 🐘 PostgreSQL |
+| 🌱 Minimalist   | [minimalist](https://github.com/jprivet-dev/symfony-starter/tree/minimalist)         | [minimalist@lts](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts)         | 🚫 No DB      |
+| 🌍 Webapp       | [webapp](https://github.com/jprivet-dev/symfony-starter/tree/webapp)                 | [webapp@lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts)                 | 🐘 PostgreSQL |
+|                 | [webapp@mariadb](https://github.com/jprivet-dev/symfony-starter/tree/webapp@mariadb) | [webapp@lts_mariadb](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts_mariadb) | 🐬 MariaDB    |
+|                 | [webapp@sqlite](https://github.com/jprivet-dev/symfony-starter/tree/webapp@sqlite)   | [webapp@lts_sqlite](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts_sqlite)   | 🪶 SQLite     |
+| 🔌 API Platform | [api](https://github.com/jprivet-dev/symfony-starter/tree/api)                       | [api@lts](https://github.com/jprivet-dev/symfony-starter/tree/api@lts)                       | 🐘 PostgreSQL |
+| ⚡ EasyAdmin     | [easy_admin](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin)         | [easy_admin@lts](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts)         | 🐘 PostgreSQL |
 | 🎓 Demo         | [demo](https://github.com/jprivet-dev/symfony-starter/tree/demo)                     | —                                                                                            | 🪶 SQLite     |
 
 ## Documentation
