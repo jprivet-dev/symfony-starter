@@ -126,40 +126,12 @@ webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker c
 	$(M) skeleton
 	$(M) require_webapp
 	$(M) permissions images info
-	$(M) health c=404 t="Welcome to Symfony"
+	$(M) health_welcome_to_symfony
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Webapp Symfony application generated!\n\n"
 
 webapp@lts: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) webapp BRANCH=$(or $(BRANCH),webapp@lts)
-
-webapp@mariadb: ## Generate a webapp Symfony application (with MySQL/MariaDB) with Docker configuration (stable release)
-	$(M) webapp BRANCH=webapp@mariadb
-	$(M) switch_to_mariadb
-	$(M) health c=404 t="Welcome to Symfony"
-	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with MySQL/MariaDB) generated!\n\n"
-
-webapp@mariadb_lts: ## Generate a webapp Symfony application (with MySQL/MariaDB) with Docker configuration (LTS - long-term support release)
-	$(M) webapp@lts BRANCH=webapp@mariadb_lts
-	$(M) switch_to_mariadb
-	$(M) health c=404 t="Welcome to Symfony"
-	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with MySQL/MariaDB) generated!\n\n"
-
-webapp@sqlite: ## Generate a webapp Symfony application (with SQLite) with Docker configuration (stable release)
-	$(M) webapp BRANCH=webapp@sqlite
-	$(M) switch_to_sqlite
-	$(M) health c=404 t="Welcome to Symfony"
-	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with SQLite) generated!\n\n"
-
-webapp@sqlite_lts: ## Generate a webapp Symfony application (with SQLite) with Docker configuration (LTS - long-term support release)
-	$(M) webapp@lts BRANCH=webapp@sqlite_lts
-	$(M) switch_to_sqlite
-	$(M) health c=404 t="Welcome to Symfony"
-	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)🎉 Success!$(S) Webapp Symfony application (with SQLite) generated!\n\n"
 
 ##
 
@@ -170,7 +142,7 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	$(M) require_orm
 	$(M) require_api
 	$(M) permissions images info
-	$(M) health c=200 t="Entrypoint"
+	$(M) health_entrypoint
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
@@ -192,7 +164,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(M) co m="composer require symfony/orm-pack"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
-	$(M) health c=200 t="Symfony Demo"
+	$(M) health_symfony_demo
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
@@ -208,7 +180,7 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(M) cache_clear
 	$(M) cache_clear
 	$(M) permissions images info
-	$(M) health c=200 t="Welcome to EasyAdmin"
+	$(M) health_welcome_to_easy_admin
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
@@ -229,7 +201,7 @@ skeleton: ## Install symfony/skeleton from the versioned dunglas/symfony-docker 
 		$(M) compose_use_database_url_var; \
 		$(M) compose_activate_bind_mount; \
 		$(M) build_start; \
-		$(M) health c=404 t="Welcome to Symfony"; \
+		$(M) health_welcome_to_symfony; \
 	else \
 		printf " $(G)✔$(S) symfony/skeleton already installed, skipping.\n"; \
 	fi
@@ -345,6 +317,52 @@ require_tailwind: _assets ## Install Tailwind CSS - https://tailwindcss.com/
 	$(M) co m="Install Tailwind CSS"
 	$(CONSOLE) tailwind:init
 	$(M) co m="Initialize Tailwind CSS"
+
+##
+
+health: c ?= 200
+health: ## Check the website and database connection (via Doctrine) - $ make health [c=<status_code>] [t=<text>] - Example: $ make health c=404 t="Welcome to Symfony"
+	@printf "\n$(Y)--- Check Health ---$(S)\n"
+	@EXIT_CODE=0; \
+	STATUS_CODE=$$(curl -k -L -s -o /dev/null -w "%{http_code}" $(LOCALHOST_MAIN)); \
+	if [ "$${STATUS_CODE}" -eq $(c) ]; then \
+		printf " $(G)✔ HTTP status OK (Expecting $(c)) - $(LOCALHOST_MAIN)$(S)\n"; \
+	else \
+		printf " $(R)✘ HTTP status failed (Expecting $(c) - Got $${STATUS_CODE}) - $(LOCALHOST_MAIN)$(S)\n"; \
+		EXIT_CODE=1; \
+	fi; \
+	if [ -n "$(t)" ]; then \
+		if curl -k -L -s $(LOCALHOST_MAIN) | grep -q "$(t)"; then \
+			printf " $(G)✔ Content found (Searching for '$(t)') - $(LOCALHOST_MAIN)$(S)\n"; \
+		else \
+			printf " $(R)✘ Content missing (Searching for '$(t)') - $(LOCALHOST_MAIN)$(S)\n"; \
+			EXIT_CODE=1; \
+		fi; \
+	fi; \
+	if [ ! -e "$(VENDOR_DOCTRINE)" ]; then \
+		printf " $(Y)› Database connection skipped (Doctrine not installed)$(S)\n"; \
+	else \
+		if $(CONSOLE) dbal:run-sql "SELECT 1" > /dev/null 2>&1; then \
+			printf " $(G)✔ Database connection OK$(S)\n"; \
+		else \
+			printf " $(R)✘ Database connection Failed$(S)\n"; \
+			EXIT_CODE=1; \
+		fi; \
+	fi; \
+	printf "\n"; \
+	exit $${EXIT_CODE}
+
+health_entrypoint: # INTERNAL
+	$(M) health c=200 t="Entrypoint"
+
+health_symfony_demo: # INTERNAL
+	$(M) health c=200 t="Symfony Demo"
+
+health_welcome_to_easy_admin: # INTERNAL
+	$(M) health c=200 t="Welcome to EasyAdmin"
+
+health_welcome_to_symfony: # INTERNAL
+	$(M) health c=404 t="Welcome to Symfony"
 
 ##   DATABASE
 

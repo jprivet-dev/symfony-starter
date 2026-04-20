@@ -34,8 +34,6 @@
   check_level_2              c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
   tests                      t  Run all tests
 
-  health                        Check the website and database connection (via Doctrine) - $ make health [c=<status_code>] [t=<text>] - Example: $ make health c=404 t="Welcome to Symfony"
-
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
   build                         Build or rebuild Docker services using cache - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
   build_force                   Build or rebuild Docker services without cache (force fresh install)
@@ -252,10 +250,6 @@
   minimalist@lts                Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
   webapp                        Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (stable release)
   webapp@lts                    Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-  webapp@mariadb                Generate a webapp Symfony application (with MySQL/MariaDB) with Docker configuration (stable release)
-  webapp@mariadb_lts            Generate a webapp Symfony application (with MySQL/MariaDB) with Docker configuration (LTS - long-term support release)
-  webapp@sqlite                 Generate a webapp Symfony application (with SQLite) with Docker configuration (stable release)
-  webapp@sqlite_lts             Generate a webapp Symfony application (with SQLite) with Docker configuration (LTS - long-term support release)
 
   api                           Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
   api@lts                       Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
@@ -288,6 +282,8 @@
 
   require_bootstrap             Install Bootstrap - https://getbootstrap.com/
   require_tailwind              Install Tailwind CSS - https://tailwindcss.com/
+
+  health                        Check the website and database connection (via Doctrine) - $ make health [c=<status_code>] [t=<text>] - Example: $ make health c=404 t="Welcome to Symfony"
 
   DATABASE
   switch_to_mariadb             Switch the stack from PostgreSQL to MySQL/MariaDB

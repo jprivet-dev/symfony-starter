@@ -111,20 +111,20 @@ make install
 
 * Minimalist:
   * [minimalist](https://github.com/jprivet-dev/symfony-starter/tree/minimalist)
-  * [minimalist@lts](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts)
+  * [minimalist_lts](https://github.com/jprivet-dev/symfony-starter/tree/minimalist_lts)
 * Webapp:
   * [webapp](https://github.com/jprivet-dev/symfony-starter/tree/webapp)
-  * [webapp@lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts)
-  * [webapp@mariadb](https://github.com/jprivet-dev/symfony-starter/tree/webapp@mariadb)
-  * [webapp@mariadb_lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp@mariadb_lts)
-  * [webapp@sqlite](https://github.com/jprivet-dev/symfony-starter/tree/webapp@sqlite)
-  * [webapp@sqlite_lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp@sqlite_lts)
+  * [webapp_lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp_lts)
+  * [webapp_mariadb](https://github.com/jprivet-dev/symfony-starter/tree/webapp_mariadb)
+  * [webapp_mariadb_lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp_mariadb_lts)
+  * [webapp_sqlite](https://github.com/jprivet-dev/symfony-starter/tree/webapp_sqlite)
+  * [webapp_sqlite_lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp_sqlite_lts)
 * API Platform:
   * [api](https://github.com/jprivet-dev/symfony-starter/tree/api)
-  * [api@lts](https://github.com/jprivet-dev/symfony-starter/tree/api@lts)
+  * [api_lts](https://github.com/jprivet-dev/symfony-starter/tree/api_lts)
 * EasyAdmin:
   * [easy_admin](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin)
-  * [easy_admin@lts](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts)
+  * [easy_admin_lts](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin_lts)
 * Symfony Demo:
   * [demo](https://github.com/jprivet-dev/symfony-starter/tree/demo)
 

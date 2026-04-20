@@ -22,19 +22,153 @@ START_TOTAL=$(date +%s)
 
 BRANCHES=(
     "minimalist"
-    "minimalist@lts"
+    "minimalist_lts"
     "webapp"
-    "webapp@lts"
-    "webapp@mariadb"
-    "webapp@mariadb_lts"
-    "webapp@sqlite"
-    "webapp@sqlite_lts"
+    "webapp_lts"
+    "webapp_mariadb"
+    "webapp_mariadb_lts"
+    "webapp_sqlite"
+    "webapp_sqlite_lts"
     "api"
-    "api@lts"
+    "api_lts"
     "easy_admin"
-    "easy_admin@lts"
+    "easy_admin_lts"
     "demo"
 )
+
+# ------------------------------------------------------------------
+# Flavor functions — one per branch
+# ------------------------------------------------------------------
+
+generate_flavor_minimalist() {
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make minimalist
+}
+
+generate_flavor_minimalist_lts() {
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make minimalist@lts
+}
+
+generate_flavor_webapp() {
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make webapp
+}
+
+generate_flavor_webapp_lts() {
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make webapp@lts
+}
+
+generate_flavor_webapp_mariadb() {
+    generate_require_branch "webapp" || return 1
+    git switch -C webapp_mariadb webapp
+    NO_INTERACTION=true make switch_to_mariadb
+    NO_INTERACTION=true make health_welcome_to_symfony
+}
+
+generate_flavor_webapp_mariadb_lts() {
+    generate_require_branch "webapp_lts" || return 1
+    git switch -C webapp_mariadb_lts webapp_lts
+    NO_INTERACTION=true make switch_to_mariadb
+    NO_INTERACTION=true make health_welcome_to_symfony
+}
+
+generate_flavor_webapp_sqlite() {
+    generate_require_branch "webapp" || return 1
+    git switch -C webapp_sqlite webapp
+    NO_INTERACTION=true make switch_to_sqlite
+    NO_INTERACTION=true make health_welcome_to_symfony
+}
+
+generate_flavor_webapp_sqlite_lts() {
+    generate_require_branch "webapp_lts" || return 1
+    git switch -C webapp_sqlite_lts webapp_lts
+    NO_INTERACTION=true make switch_to_sqlite
+    NO_INTERACTION=true make health_welcome_to_symfony
+}
+
+generate_flavor_api() {
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make api
+}
+
+generate_flavor_api_lts() {
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make api@lts
+}
+
+generate_flavor_easy_admin() {
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make easy_admin
+}
+
+generate_flavor_easy_admin_lts() {
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make easy_admin@lts
+}
+
+generate_flavor_demo() {
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make demo
+}
+
+# ------------------------------------------------------------------
+# generate_require_branch <branch>
+# Check that a base branch exists before deriving from it
+# ------------------------------------------------------------------
+
+generate_require_branch() {
+    local BRANCH="$1"
+    if ! git show-ref --verify --quiet refs/heads/"${BRANCH}"; then
+        printf " ${R}⨯${S} Base branch ${Y}${BRANCH}${S} does not exist or failed. Skipping.\n"
+        return 1
+    fi
+    if [ "${RESULTS[${BRANCH}]}" != "ok" ]; then
+        printf " ${R}⨯${S} Base branch ${Y}${BRANCH}${S} did not generate successfully. Skipping.\n"
+        return 1
+    fi
+}
+
+# ------------------------------------------------------------------
+# generate_flavor <branch>
+# ------------------------------------------------------------------
+
+generate_flavor() {
+    local BRANCH="$1"
+    local FUNC="generate_flavor_${BRANCH}"
+
+    printf "\n${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n"
+    printf " ${Y}›${S} Generating: ${G}${BRANCH}${S}\n"
+    printf "${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n\n"
+
+    if ! declare -f "${FUNC}" > /dev/null; then
+        printf " ${R}⨯${S} No function defined for branch ${Y}${BRANCH}${S}\n"
+        RESULTS["${BRANCH}"]="error"
+        HAS_ERROR=1
+        return
+    fi
+
+    if ${FUNC}; then
+        RESULTS["${BRANCH}"]="ok"
+        printf "\n ${G}✔${S} ${BRANCH} generated successfully\n"
+    else
+        RESULTS["${BRANCH}"]="error"
+        HAS_ERROR=1
+        printf "\n ${R}⨯${S} ${BRANCH} failed\n"
+    fi
+}
+
+# ------------------------------------------------------------------
 
 declare -A RESULTS
 HAS_ERROR=0
@@ -52,50 +186,15 @@ for BRANCH in "${BRANCHES[@]}"; do
     fi
 done
 
-# ------------------------------------------------------------------
-# generate_flavor <flavor>
-# ------------------------------------------------------------------
-
-generate_flavor() {
-    local FLAVOR="$1"
-
-    printf "\n${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n"
-    printf " ${Y}›${S} Generating: ${G}${FLAVOR}${S}\n"
-    printf "${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n\n"
-
-    git switch "${WORK_BRANCH}"
-    NO_INTERACTION=true make clean_app
-
-    if NO_INTERACTION=true make ${FLAVOR}; then
-        RESULTS["${FLAVOR}"]="ok"
-        printf "\n ${G}✔${S} ${FLAVOR} generated successfully\n"
-    else
-        RESULTS["${FLAVOR}"]="error"
-        HAS_ERROR=1
-        printf "\n ${R}⨯${S} ${FLAVOR} failed\n"
-    fi
-}
-
 # --- Generate ---
 
-generate_flavor "minimalist"
-generate_flavor "minimalist@lts"
-generate_flavor "webapp"
-generate_flavor "webapp@lts"
-generate_flavor "webapp@mariadb"
-generate_flavor "webapp@mariadb_lts"
-generate_flavor "webapp@sqlite"
-generate_flavor "webapp@sqlite_lts"
-generate_flavor "api"
-generate_flavor "api@lts"
-generate_flavor "easy_admin"
-generate_flavor "easy_admin@lts"
-generate_flavor "demo"
+for BRANCH in "${BRANCHES[@]}"; do
+    generate_flavor "${BRANCH}"
+done
 
 # --- Return to work branch ---
 
 git switch "${WORK_BRANCH}"
-NO_INTERACTION=true make clean_app
 
 # --- Report ---
 
