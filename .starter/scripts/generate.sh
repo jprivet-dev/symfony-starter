@@ -22,19 +22,19 @@ START_TOTAL=$(date +%s)
 LOGS_DIR=".starter/scripts/logs"
 
 BRANCHES=(
-#    "minimalist"
-#    "minimalist_lts"
-#    "webapp"
+    #    "minimalist"
+    #    "minimalist_lts"
+    #    "webapp"
     "webapp_lts"
-#    "webapp_mariadb"
+    #    "webapp_mariadb"
     "webapp_mariadb_lts"
-#    "webapp_sqlite"
-#    "webapp_sqlite_lts"
-#    "api"
-#    "api_lts"
-#    "easy_admin"
-#    "easy_admin_lts"
-#    "demo"
+    #    "webapp_sqlite"
+    #    "webapp_sqlite_lts"
+    #    "api"
+    #    "api_lts"
+    #    "easy_admin"
+    #    "easy_admin_lts"
+    #    "demo"
 )
 
 # ------------------------------------------------------------------
@@ -153,17 +153,16 @@ generate_flavor() {
     printf " ${Y}›${S} Generating: ${G}${BRANCH}${S}\n"
     printf "${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n\n"
 
-    if ! declare -f "${FUNC}" > /dev/null; then
+    if ! declare -f "${FUNC}" >/dev/null; then
         printf " ${R}⨯${S} No function defined for branch ${Y}${BRANCH}${S}\n"
         RESULTS["${BRANCH}"]="error"
         HAS_ERROR=1
         return
     fi
 
-    if ${FUNC} 2>"${LOG_FILE}"; then
+    if ${FUNC} >"${LOG_FILE}" 2>&1; then
         RESULTS["${BRANCH}"]="ok"
-        rm -f "${LOG_FILE}"
-        printf "\n ${G}✔${S} ${BRANCH} generated successfully\n"
+        printf "\n ${G}✔${S} ${BRANCH} generated successfully — see ${Y}${LOG_FILE}${S}\n"
     else
         RESULTS["${BRANCH}"]="error"
         HAS_ERROR=1
@@ -204,9 +203,9 @@ git switch "${WORK_BRANCH}"
 # --- Report ---
 
 END_TOTAL=$(date +%s)
-DURATION_TOTAL=$(( END_TOTAL - START_TOTAL ))
-MINUTES_TOTAL=$(( DURATION_TOTAL / 60 ))
-SECONDS_TOTAL=$(( DURATION_TOTAL % 60 ))
+DURATION_TOTAL=$((END_TOTAL - START_TOTAL))
+MINUTES_TOTAL=$((DURATION_TOTAL / 60))
+SECONDS_TOTAL=$((DURATION_TOTAL % 60))
 
 printf "\n${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n"
 printf " ${Y}Report${S}\n"
@@ -215,14 +214,9 @@ printf "${Y}━━━━━━━━━━━━━━━━━━━━━━�
 for BRANCH in "${BRANCHES[@]}"; do
     STATUS="${RESULTS[${BRANCH}]}"
     if [ "${STATUS}" = "ok" ]; then
-        printf " ${G}✔${S} ${BRANCH}\n"
+        printf " ${G}✔${S} ${BRANCH} — ${Y}${LOGS_DIR}/${BRANCH}.log${S}\n"
     elif [ "${STATUS}" = "error" ]; then
-        LOG_FILE="${LOGS_DIR}/${BRANCH}.log"
-        printf " ${R}⨯${S} ${BRANCH}"
-        if [ -f "${LOG_FILE}" ]; then
-            printf " — see ${Y}${LOG_FILE}${S}"
-        fi
-        printf "\n"
+        printf " ${R}⨯${S} ${BRANCH} — ${Y}${LOGS_DIR}/${BRANCH}.log${S}\n"
     else
         printf " ${Y}›${S} ${BRANCH} (skipped)\n"
     fi
