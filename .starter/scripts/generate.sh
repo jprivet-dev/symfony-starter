@@ -22,19 +22,19 @@ START_TOTAL=$(date +%s)
 LOGS_DIR=".starter/scripts/logs"
 
 BRANCHES=(
-    #    "minimalist"
-    #    "minimalist_lts"
-    #    "webapp"
-    "webapp_lts"
-    #    "webapp_mariadb"
-    "webapp_mariadb_lts"
-    #    "webapp_sqlite"
-    #    "webapp_sqlite_lts"
-    #    "api"
-    #    "api_lts"
-    #    "easy_admin"
-    #    "easy_admin_lts"
-    #    "demo"
+#    "minimalist"
+#    "minimalist@lts"
+#    "webapp"
+    "webapp@lts"
+#    "webapp@mariadb"
+    "webapp@mariadb_lts"
+#    "webapp@sqlite"
+#    "webapp@sqlite_lts"
+#    "api"
+#    "api@lts"
+#    "easy_admin"
+#    "easy_admin@lts"
+#    "demo"
 )
 
 # ------------------------------------------------------------------
@@ -67,28 +67,28 @@ generate_flavor_webapp_lts() {
 
 generate_flavor_webapp_mariadb() {
     generate_require_branch "webapp" || return 1
-    git switch -C webapp_mariadb webapp
+    git switch -C webapp@mariadb webapp
     make switch_to_mariadb
     make health_welcome_to_symfony
 }
 
 generate_flavor_webapp_mariadb_lts() {
-    generate_require_branch "webapp_lts" || return 1
-    git switch -C webapp_mariadb_lts webapp_lts
+    generate_require_branch "webapp@lts" || return 1
+    git switch -C webapp@mariadb_lts webapp_lts
     make switch_to_mariadb
     make health_welcome_to_symfony
 }
 
 generate_flavor_webapp_sqlite() {
     generate_require_branch "webapp" || return 1
-    git switch -C webapp_sqlite webapp
+    git switch -C webapp@sqlite webapp
     make switch_to_sqlite
     make health_welcome_to_symfony
 }
 
 generate_flavor_webapp_sqlite_lts() {
-    generate_require_branch "webapp_lts" || return 1
-    git switch -C webapp_sqlite_lts webapp_lts
+    generate_require_branch "webapp@lts" || return 1
+    git switch -C webapp@sqlite_lts webapp_lts
     make switch_to_sqlite
     make health_welcome_to_symfony
 }
@@ -146,7 +146,8 @@ generate_require_branch() {
 
 generate_flavor() {
     local BRANCH="$1"
-    local FUNC="generate_flavor_${BRANCH}"
+    local FUNC="generate_flavor_${BRANCH//@/_}"
+    FUNC="${FUNC//-/_}"
     local LOG_FILE="${LOGS_DIR}/${BRANCH}.log"
 
     printf "\n${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n"
