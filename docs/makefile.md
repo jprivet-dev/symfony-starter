@@ -76,8 +76,9 @@
   outdated                      Show a list of installed packages that have updates available, including their latest version
   remove                        Remove a package from the require or require-dev - $ make remove [a=<arguments>] - Example: $ make remove a="phpunit/phpunit"
   require                       Add required packages to your composer.json and installs them - $ make require [a=<arguments>] - Example: $ make require a="--dev phpunit/phpunit"
-  update                        Update Composer packages - $ make update [a=<arguments>] - Example: $ make update a="phpunit/phpunit"
+  update                        Update Composer packages - $ make update [a=<arguments>] - Example: $ make update a="symfony/monolog-bundle"
   update_lock                   Update only the content hash of composer.lock without updating dependencies
+  config                        Run composer config - $ make config k=<key> [v=<value>] - Example: $ make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
 
 — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
   certificates                  Install the Caddy TLS certificate to the trust store
@@ -213,32 +214,17 @@
 
   (to delete this section, delete .mk/contrib.mk)
 
-  contrib                    c  Check if the your Symfony monorepo is correctly mounted
-  contrib_init                  Configure Docker volume for Symfony contribution (updates compose.override.yaml)
+  contrib_volume                Add a Docker volume for a repository - $ make contrib_volume f=<folder> - Example: $ make contrib_volume f=symfony
 
-  contrib_link                  Link the your Symfony monorepo to the project (replace vendors with symlinks)
-  contrib_unlink                Restore original vendors (rollback links)
+  contrib_link                  Link the Symfony monorepo to the project (replace vendors with symlinks) - $ make contrib_link f=<folder> - Example: $ make contrib_link f=symfony
+  contrib_unlink                Restore original vendors (rollback links) - $ make contrib_unlink f=<folder> - Example: $ make contrib_unlink f=symfony
 
-  contrib_install               Install Composer packages in the your Symfony monorepo
-  contrib_clean                 Remove vendor and lock file from the your Symfony monorepo
+  contrib_install               Install Composer packages in a repository - $ make contrib_install f=<folder> - Example: $ make contrib_install f=symfony
+  contrib_clean                 Remove vendor and lock file from a repository - $ make contrib_clean f=<folder> - Example: $ make contrib_clean f=symfony
 
-  contrib_tests                 Run PHPUnit tests in the your Symfony monorepo - $ make contrib_tests [a=<arguments>] - Example: $ make contrib_tests a="src/Symfony/Bundle/FrameworkBundle"
-  contrib_tests_www_data        Run PHPUnit tests in the your Symfony monorepo as www-data user - $ make contrib_tests_www_data [a=<arguments>] - Example: $ make contrib_tests_www_data a="src/Symfony/Bundle/FrameworkBundle"
-  contrib_tests_clean           Clean PHPUnit cache and temporary files in the your Symfony monorepo
-
-  doctrine_bridge               Run PHPUnit tests for the Doctrine Bridge
-  monolog_bridge                Run PHPUnit tests for the Monolog Bridge
-  phpunit_bridge                Run PHPUnit tests for the PhpUnit Bridge
-  psr_http_message_bridge       Run PHPUnit tests for the PsrHttpMessage Bridge
-  twig_bridge                   Run PHPUnit tests for the Twig Bridge
-
-  debug_bundle                  Run PHPUnit tests for the DebugBundle
-  framework_bundle              Run PHPUnit tests for the FrameworkBundle
-  security_bundle               Run PHPUnit tests for the SecurityBundle
-  twig_bundle                   Run PHPUnit tests for the TwigBundle
-  web_profiler_bundle           Run PHPUnit tests for the WebProfilerBundle
-
-  dependency_injection          Run PHPUnit tests for the DependencyInjection Component (Sample command: You can add any other necessary commands to this contrib.mk file)
+  contrib_tests                 Run PHPUnit tests in a repository - $ make contrib_tests f=<folder> [a=<arguments>] - Example: $ make contrib_tests f=symfony a="src/Symfony/Bundle/FrameworkBundle"
+  contrib_tests_www_data        Run PHPUnit tests as www-data user - $ make contrib_tests_www_data f=<folder> [a=<arguments>]
+  contrib_tests_clean           Clean PHPUnit cache and temporary files - $ make contrib_tests_clean f=<folder> - Example: $ make contrib_tests_clean f=symfony
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
