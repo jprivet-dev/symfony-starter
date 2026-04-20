@@ -66,29 +66,32 @@ generate_flavor_webapp_lts() {
 }
 
 generate_flavor_webapp_mariadb() {
-    generate_require_branch "webapp" || return 1
-    git switch -C webapp@mariadb webapp
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make webapp
     make switch_to_mariadb
     make health_welcome_to_symfony
 }
 
 generate_flavor_webapp_mariadb_lts() {
-    generate_require_branch "webapp@lts" || return 1
-    git switch -C webapp@mariadb_lts webapp_lts
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make webapp@lts
     make switch_to_mariadb
     make health_welcome_to_symfony
 }
 
 generate_flavor_webapp_sqlite() {
-    generate_require_branch "webapp" || return 1
-    git switch -C webapp@sqlite webapp
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make webapp
     make switch_to_sqlite
     make health_welcome_to_symfony
 }
 
 generate_flavor_webapp_sqlite_lts() {
-    generate_require_branch "webapp@lts" || return 1
-    git switch -C webapp@sqlite_lts webapp_lts
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make webapp@lts
     make switch_to_sqlite
     make health_welcome_to_symfony
 }
@@ -121,23 +124,6 @@ generate_flavor_demo() {
     git switch "${WORK_BRANCH}"
     NO_INTERACTION=true make clean_app
     NO_INTERACTION=true make demo
-}
-
-# ------------------------------------------------------------------
-# generate_require_branch <branch>
-# Check that a base branch exists before deriving from it
-# ------------------------------------------------------------------
-
-generate_require_branch() {
-    local BRANCH="$1"
-    if ! git show-ref --verify --quiet refs/heads/"${BRANCH}"; then
-        printf " ${R}⨯${S} Base branch ${Y}${BRANCH}${S} does not exist or failed. Skipping.\n"
-        return 1
-    fi
-    if [ "${RESULTS[${BRANCH}]}" != "ok" ]; then
-        printf " ${R}⨯${S} Base branch ${Y}${BRANCH}${S} did not generate successfully. Skipping.\n"
-        return 1
-    fi
 }
 
 # ------------------------------------------------------------------
