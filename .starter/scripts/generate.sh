@@ -61,6 +61,7 @@ generate_flavor_webapp() {
 
 generate_flavor_webapp_mariadb() {
     git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
     NO_INTERACTION=true make webapp BRANCH=webapp@mariadb
     make switch_to_mariadb
     make health_welcome_to_symfony
