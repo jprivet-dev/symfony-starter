@@ -45,7 +45,7 @@ replace_line rl: # INTERNAL - Replace an entire line beginning with a specific p
 	@# Use $(subst) to automatically escape "&" with "\&" for sed
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_block rb: # INTERNAL - Replace a block in a target file - $ make replace_block m=<marker> t=<target> s=<source> - Example: $ make replace_block m=doctrine/doctrine-bundle t=.env s=.block/postgresql/.env
+replace_block rb: # INTERNAL - Replace a block in a target file - $ make replace_block m=<marker> t=<target> s=<source> - Example: $ make replace_block m=doctrine/doctrine-bundle t=.env s=.starter/block/postgresql/.env
 	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
 	$(if $(t),, $(error "Please specify the target with 't=...'"))
 	$(if $(s),, $(error "Please specify the source with 's=...'"))
@@ -71,13 +71,13 @@ compose_activate_bind_mount: compose.override.yaml # INTERNAL - Execute after $ 
 	$(M) co m="activate the bind mount (var/, var/log)"
 
 update_postgresql_configuration: .env compose.override.yaml # INTERNAL - Execute after $ make restart
-	$(M) rb m=doctrine/doctrine-bundle t=.env s=.block/postgresql/.env
-	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/postgresql/compose.override.yaml
+	$(M) rb m=doctrine/doctrine-bundle t=.env s=.starter/block/postgresql/.env
+	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.starter/block/postgresql/compose.override.yaml
 	$(M) co m="update PosgreSQL configuration"
 
 demo_add_sqlite_configuration_before_orm_pack: Dockerfile frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make build_force_start
 	$(M) cb m=dunglas/symfony-docker t=frankenphp/docker-entrypoint.sh
-	$(M) rb m=recipes t=Dockerfile s=.block/sqlite/Dockerfile
+	$(M) rb m=recipes t=Dockerfile s=.starter/block/sqlite/Dockerfile
 	$(M) co m="add SQLite configuration before ORM pack installation"
 
 compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make build_force_start
@@ -372,10 +372,10 @@ ifeq ($(IS_POSTGRESQL),)
 	@exit 1
 endif
 	$(M) permissions
-	$(M) rb m=doctrine/doctrine-bundle t=.env s=.block/mariadb/.env
-	$(M) rb m=doctrine/doctrine-bundle t=Dockerfile s=.block/mariadb/Dockerfile
-	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.block/mariadb/compose.override.yaml
-	$(M) rb m=doctrine/doctrine-bundle t=compose.yaml s=.block/mariadb/compose.yaml
+	$(M) rb m=doctrine/doctrine-bundle t=.env s=.starter/block/mariadb/.env
+	$(M) rb m=doctrine/doctrine-bundle t=Dockerfile s=.starter/block/mariadb/Dockerfile
+	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.starter/block/mariadb/compose.override.yaml
+	$(M) rb m=doctrine/doctrine-bundle t=compose.yaml s=.starter/block/mariadb/compose.yaml
 	$(M) ya f=compose.yaml k=services.php.depends_on.database.condition v=service_healthy
 	$(M) co m="stack updated to MySQL/MariaDB"
 	$(M) deep_clean NO_INTERACTION=true
@@ -388,8 +388,8 @@ ifeq ($(IS_POSTGRESQL),)
 	@exit 1
 endif
 	$(M) permissions
-	$(M) rb m=doctrine/doctrine-bundle t=.env s=.block/sqlite/.env
-	$(M) rb m=doctrine/doctrine-bundle t=Dockerfile s=.block/sqlite/Dockerfile
+	$(M) rb m=doctrine/doctrine-bundle t=.env s=.starter/block/sqlite/.env
+	$(M) rb m=doctrine/doctrine-bundle t=Dockerfile s=.starter/block/sqlite/Dockerfile
 	$(M) cb m=doctrine/doctrine-bundle t=compose.override.yaml
 	$(M) cb m=doctrine/doctrine-bundle t=compose.yaml
 	$(M) co m="stack updated to SQLite"

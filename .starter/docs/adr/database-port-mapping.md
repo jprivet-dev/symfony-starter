@@ -40,13 +40,13 @@ services:
       - "5432:5432" # Explicit mapping: Host port 5432 -> Container port 5432
 ```
 
-### 3. Use `.block/<db>/` files to manage port mapping per database
+### 3. Use `.starter/block/<db>/` files to manage port mapping per database
 
 Provide a dedicated block file for each database engine that includes the correct port mapping. These blocks are injected into `compose.override.yaml` via the `make switch_to_<db>` commands.
 
 ## Decision outcome
 
-> **Option 3 is chosen:** Use `.block/<db>/` files to manage port mapping per database engine.
+> **Option 3 is chosen:** Use `.starter/block/<db>/` files to manage port mapping per database engine.
 
 This approach ensures that:
 
@@ -54,7 +54,7 @@ This approach ensures that:
 * Developers can always connect from their host machine using a predictable address.
 * The configuration is centralized and consistent across all database engines.
 
-The `.block/` directory contains one folder per database engine (`postgresql/`, `mariadb/`, `sqlite/`), each with the appropriate `compose.override.yaml` fragment injected by the `make switch_to_<db>` command.
+The `.starter/block/` directory contains one folder per database engine (`postgresql/`, `mariadb/`, `sqlite/`), each with the appropriate `compose.override.yaml` fragment injected by the `make switch_to_<db>` command.
 
 ---
 
