@@ -66,7 +66,7 @@ TESTS     = tests
 
 NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
 PWD                = $(shell pwd)
-LOCAL_MK           = .mk/local.mk
+LOCAL_MK           = make/local.mk
 BIN_CONSOLE        = bin/console
 BIN_PHPUNIT        = bin/phpunit
 COMPOSER_JSON      = composer.json
@@ -81,6 +81,7 @@ VENDOR_PHPMD       = vendor/bin/phpmd
 VENDOR_PHPMETRICS  = vendor/bin/phpmetrics
 VENDOR_PHPSTAN     = vendor/bin/phpstan
 VENDOR_PROFILER    = vendor/symfony/web-profiler-bundle
+VENDOR_TAILWIND    = vendor/symfonycasts/tailwind-bundle
 VENDOR_TRANSLATION = vendor/symfony/translation
 VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
 
@@ -94,9 +95,9 @@ PHPSTAN_CONFIG    = phpstan.dist.neon
 # --- DATABASE ---
 
 DB_URL_CLEAN   = $(shell echo '$(DATABASE_URL)' | tr -d '"')
-IS_SQLITE      = $(findstring sqlite,$(DB_URL_CLEAN))
 IS_MYSQL       = $(findstring mysql,$(DB_URL_CLEAN))
 IS_POSTGRESQL  = $(findstring postgresql,$(DB_URL_CLEAN))
+IS_SQLITE      = $(findstring sqlite,$(DB_URL_CLEAN))
 
 SQLITE_DB_ENV  = $(subst %kernel.environment%,$(APP_ENV),$(DB_URL_CLEAN))
 SQLITE_DB_FILE = $(subst sqlite:///%kernel.project_dir%/,,$(SQLITE_DB_ENV))
@@ -212,6 +213,7 @@ endif
 CONTAINER_DATABASE        = $(EXEC) database
 CONTAINER_DATABASE_NO_TTY = $(EXEC_NO_TTY) database
 CONTAINER_PHP             = $(EXEC) php
+CONTAINER_PHP_NO_TTY      = $(EXEC_NO_TTY) php
 CONTAINER_PHP_COVERAGE    = $(EXEC) -e XDEBUG_MODE=coverage php
 
 PHP              = $(CONTAINER_PHP) php
@@ -230,7 +232,7 @@ PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 # --- EXTEND THE MAIN MAKEFILE ---
 
 ifneq ($(APP_ENV),prod)
--include $(sort $(wildcard .mk/*local.mk))
+-include $(sort $(wildcard make/*local.mk))
 endif
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
@@ -321,40 +323,6 @@ check_level_2 c2: composer_validate validate lint phpunit ## Check everything be
 .PHONY: tests t
 tests t: db_init@test fixtures@test phpunit ## Run all tests
 
-##
-
-health: c ?= 200
-health: ## Check the website and database connection (via Doctrine) - $ make health [c=<status_code>] [t=<text>] - Example: $ make health c=404 t="Welcome to Symfony"
-	@printf "\n$(Y)--- Check Health ---$(S)\n"
-	@EXIT_CODE=0; \
-	STATUS_CODE=$$(curl -k -L -s -o /dev/null -w "%{http_code}" $(LOCALHOST_MAIN)); \
-	if [ "$${STATUS_CODE}" -eq $(c) ]; then \
-		printf " $(G)✔ HTTP status OK (Expecting $(c)) - $(LOCALHOST_MAIN)$(S)\n"; \
-	else \
-		printf " $(R)✘ HTTP status failed (Expecting $(c) - Got $${STATUS_CODE}) - $(LOCALHOST_MAIN)$(S)\n"; \
-		EXIT_CODE=1; \
-	fi; \
-	if [ -n "$(t)" ]; then \
-		if curl -k -L -s $(LOCALHOST_MAIN) | grep -q "$(t)"; then \
-			printf " $(G)✔ Content found (Searching for '$(t)') - $(LOCALHOST_MAIN)$(S)\n"; \
-		else \
-			printf " $(R)✘ Content missing (Searching for '$(t)') - $(LOCALHOST_MAIN)$(S)\n"; \
-			EXIT_CODE=1; \
-		fi; \
-	fi; \
-	if [ ! -e "$(VENDOR_DOCTRINE)" ]; then \
-		printf " $(Y)› Database connection skipped (Doctrine not installed)$(S)\n"; \
-	else \
-		if $(CONSOLE) dbal:run-sql "SELECT 1" > /dev/null 2>&1; then \
-			printf " $(G)✔ Database connection OK$(S)\n"; \
-		else \
-			printf " $(R)✘ Database connection Failed$(S)\n"; \
-			EXIT_CODE=1; \
-		fi; \
-	fi; \
-	printf "\n"; \
-	exit $${EXIT_CODE}
-
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: build
@@ -407,8 +375,8 @@ deep_clean: confirm ## [Danger] Remove containers, volumes, networks and images,
 
 ##
 
-.PHONY: config
-config: ## Parse, resolve, and render compose file in canonical format
+.PHONY: canonical
+canonical: ## Parse, resolve, and render compose file in canonical format
 	$(UP_ENV) $(COMPOSE) config
 
 .PHONY: images
@@ -504,40 +472,40 @@ require: ## Add required packages to your composer.json and installs them - $ ma
 	$(COMPOSER) require $(a)
 
 .PHONY: update
-update: ## Update Composer packages - $ make update [a=<arguments>] - Example: $ make update a="phpunit/phpunit"
+update: ## Update Composer packages - $ make update [a=<arguments>] - Example: $ make update a="symfony/monolog-bundle"
 	@printf "\n$(Y)--- Composer Update (env: $(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
-	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
+	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader $(a)
 else
-	$(COMPOSER) update
+	$(COMPOSER) update $(a)
 endif
 
-.PHONY: update_lock
 update_lock: ## Update only the content hash of composer.lock without updating dependencies
 	$(COMPOSER) update --lock
 
-ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),)
-include .mk/doctrine.mk
-endif
+.PHONY: config
+config: ## Run composer config - $ make config k=<key> [v=<value>] - Example: $ make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
+	$(COMPOSER) config $(if $(v),$(k) '$(v)',--unset $(k))
 
-ifneq ($(or $(ALL), $(IS_POSTGRESQL)),)
-include .mk/postgresql.mk
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),)
+include make/doctrine.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(BIN_PHPUNIT))),)
-include .mk/phpunit.mk
+include make/phpunit.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)), $(wildcard $(VENDOR_PHPMETRICS)), $(wildcard $(VENDOR_PHPSTAN)), $(wildcard $(VENDOR_TWIGCSFIXER))),)
-include .mk/quality.mk
+include make/quality.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_ASSETS))),)
-include .mk/assets.mk
+include make/assets.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_TRANSLATION))),)
-include .mk/translation.mk
+include make/translation.mk
 endif
 
 ## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
@@ -642,7 +610,7 @@ vars: ## Show key Makefile variables
 	@$(foreach var, \
 		USER UNAME_S APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
 		CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE \
-		IS_SQLITE IS_MYSQL IS_POSTGRESQL CONTRIB_ACTIVE, \
+		IS_MYSQL IS_POSTGRESQL IS_SQLITE CONTRIB_ACTIVE, \
 		printf "%-15s : %s\n" "${var}" "${${var}}"; \
 	)
 
@@ -664,7 +632,7 @@ runtime: # INTERNAL - Check if vendor/autoload_runtime.php is ready yet
 	@sleep 1
 
 ifeq ($(or $(ALL), $(CONTRIB_ACTIVE)),true)
-include .mk/contrib.mk
+include make/contrib.mk
 endif
 
-include .mk/generate.mk
+include make/generate.mk
