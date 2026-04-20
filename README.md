@@ -6,14 +6,14 @@
 
 **Generate a fully Dockerized Symfony application with a single command.**
 
-From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform](https://api-platform.com/) or [EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle) stack, [Symfony Starter](https://github.com/jprivet-dev/symfony-starter) handles the entire setup — Docker, database, dependencies — so you can focus on your code from the first minute. You can also use the official [Symfony Demo](https://github.com/symfony/demo) as a reference for best practices.
+From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform](https://api-platform.com/) or [EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle) stack, [Symfony Starter](https://github.com/jprivet-dev/symfony-starter) handles the entire setup — Docker, database, dependencies — so you can focus on your code from the first minute. You can also use the official [Symfony Demo](https://github.com/symfony/demo) as a reference for best practices, or [contribute to Symfony Core](.starter/docs/contrib.md) in a real Docker environment.
 
 Built on top of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) and driven by a powerful Makefile, it covers everything from project initialization to daily development.
 
 |                                                                                                                         |                                                                                                    |
 |:------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------|
-| <strong>[Symfony](https://symfony.com/)</strong><br>![minimalist.png](docs/img/minimalist.png)                          | <strong>[API Platform](https://api-platform.com/)</strong><br>![api.png](docs/img/api.png)         |
-| <strong>[EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle)</strong><br>![easy-admin.png](docs/img/easy-admin.png) | <strong>[Symfony Demo](https://github.com/symfony/demo)</strong><br>![demo.png](docs/img/demo.png) |
+| <strong>[Symfony](https://symfony.com/)</strong><br>![minimalist.png](.starter/docs/img/minimalist.png)                          | <strong>[API Platform](https://api-platform.com/)</strong><br>![api.png](.starter/docs/img/api.png)         |
+| <strong>[EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle)</strong><br>![easy-admin.png](.starter/docs/img/easy-admin.png) | <strong>[Symfony Demo](https://github.com/symfony/demo)</strong><br>![demo.png](.starter/docs/img/demo.png) |
 
 ## Quick start
 
@@ -79,17 +79,6 @@ make install        # 4. Install and start
 | 🔌 API Platform | [api](https://github.com/jprivet-dev/symfony-starter/tree/api)                       | [api_lts](https://github.com/jprivet-dev/symfony-starter/tree/api_lts)                       | 🐘 PostgreSQL |
 | ⚡ EasyAdmin     | [easy_admin](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin)         | [easy_admin_lts](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin_lts)         | 🐘 PostgreSQL |
 | 🎓 Demo         | [demo](https://github.com/jprivet-dev/symfony-starter/tree/demo)                     | —                                                                                            | 🪶 SQLite     |
-
-## Contribute to Symfony Core
-
-Test your pull requests and framework modifications against a running application instantly without complex configuration.
-
-* Use `../symfony` (default) or set a custom path via `SYMFONY_MONOREPO` in `.env.local`.
-* Easily mount your local `symfony/symfony` repository into the container: `make contrib_init`
-* Symlinks your local monorepo into `vendor/`: `make contrib_link`
-* Runs unit tests using the Docker runtime: `make contrib_tests a=src/Symfony/Component/HttpKernel`
-
-> **[📖 Read the contribution guide](docs/contrib.md)**
 
 ## Documentation
 
