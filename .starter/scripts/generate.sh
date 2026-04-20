@@ -21,19 +21,19 @@ WORK_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 START_TOTAL=$(date +%s)
 
 BRANCHES=(
-    "minimalist"
-    "minimalist_lts"
-    "webapp"
+#    "minimalist"
+#    "minimalist_lts"
+#    "webapp"
     "webapp_lts"
-    "webapp_mariadb"
+#    "webapp_mariadb"
     "webapp_mariadb_lts"
-    "webapp_sqlite"
-    "webapp_sqlite_lts"
-    "api"
-    "api_lts"
-    "easy_admin"
-    "easy_admin_lts"
-    "demo"
+#    "webapp_sqlite"
+#    "webapp_sqlite_lts"
+#    "api"
+#    "api_lts"
+#    "easy_admin"
+#    "easy_admin_lts"
+#    "demo"
 )
 
 # ------------------------------------------------------------------
@@ -67,29 +67,29 @@ generate_flavor_webapp_lts() {
 generate_flavor_webapp_mariadb() {
     generate_require_branch "webapp" || return 1
     git switch -C webapp_mariadb webapp
-    NO_INTERACTION=true make switch_to_mariadb
-    NO_INTERACTION=true make health_welcome_to_symfony
+    make switch_to_mariadb
+    make health_welcome_to_symfony
 }
 
 generate_flavor_webapp_mariadb_lts() {
     generate_require_branch "webapp_lts" || return 1
     git switch -C webapp_mariadb_lts webapp_lts
-    NO_INTERACTION=true make switch_to_mariadb
-    NO_INTERACTION=true make health_welcome_to_symfony
+    make switch_to_mariadb
+    make health_welcome_to_symfony
 }
 
 generate_flavor_webapp_sqlite() {
     generate_require_branch "webapp" || return 1
     git switch -C webapp_sqlite webapp
-    NO_INTERACTION=true make switch_to_sqlite
-    NO_INTERACTION=true make health_welcome_to_symfony
+    make switch_to_sqlite
+    make health_welcome_to_symfony
 }
 
 generate_flavor_webapp_sqlite_lts() {
     generate_require_branch "webapp_lts" || return 1
     git switch -C webapp_sqlite_lts webapp_lts
-    NO_INTERACTION=true make switch_to_sqlite
-    NO_INTERACTION=true make health_welcome_to_symfony
+    make switch_to_sqlite
+    make health_welcome_to_symfony
 }
 
 generate_flavor_api() {
