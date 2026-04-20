@@ -66,7 +66,7 @@ TESTS     = tests
 
 NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
 PWD                = $(shell pwd)
-LOCAL_MK           = .mk/local.mk
+LOCAL_MK           = make/local.mk
 BIN_CONSOLE        = bin/console
 BIN_PHPUNIT        = bin/phpunit
 COMPOSER_JSON      = composer.json
@@ -232,7 +232,7 @@ PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 # --- EXTEND THE MAIN MAKEFILE ---
 
 ifneq ($(APP_ENV),prod)
--include $(sort $(wildcard .mk/*local.mk))
+-include $(sort $(wildcard make/*local.mk))
 endif
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
@@ -489,23 +489,23 @@ config: ## Run composer config - $ make config k=<key> [v=<value>] - Example: $ 
 	$(COMPOSER) config $(if $(v),$(k) '$(v)',--unset $(k))
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),)
-include .mk/doctrine.mk
+include make/doctrine.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(BIN_PHPUNIT))),)
-include .mk/phpunit.mk
+include make/phpunit.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)), $(wildcard $(VENDOR_PHPMETRICS)), $(wildcard $(VENDOR_PHPSTAN)), $(wildcard $(VENDOR_TWIGCSFIXER))),)
-include .mk/quality.mk
+include make/quality.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_ASSETS))),)
-include .mk/assets.mk
+include make/assets.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_TRANSLATION))),)
-include .mk/translation.mk
+include make/translation.mk
 endif
 
 ## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
@@ -632,7 +632,7 @@ runtime: # INTERNAL - Check if vendor/autoload_runtime.php is ready yet
 	@sleep 1
 
 ifeq ($(or $(ALL), $(CONTRIB_ACTIVE)),true)
-include .mk/contrib.mk
+include make/contrib.mk
 endif
 
-include .mk/generate.mk
+include make/generate.mk

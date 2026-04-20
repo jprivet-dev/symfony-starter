@@ -212,7 +212,7 @@
 
 — SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
 
-  (to delete this section, delete .mk/contrib.mk)
+  (to delete this section, delete make/contrib.mk)
 
   contrib_volume                Add a Docker volume for a repository - $ make contrib_volume f=<folder> - Example: $ make contrib_volume f=symfony
 
@@ -228,7 +228,7 @@
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
-  (to delete this section, delete .mk/generate.mk)
+  (to delete this section, delete make/generate.mk)
 
   clean_app                     Remove all fresh Symfony application files (var/, vendor/, ...)
 

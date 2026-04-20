@@ -1,8 +1,8 @@
 #
 # EXTENDS THE MAIN MAKEFILE WITH YOUR OWN LOCAL MAKEFILE
 #
-# - To activate it, copy ".mk/local.mk.dist" to ".mk/local.mk".
-# - All ".mk/*local.mk" files EXTEND the main Makefile and are IGNORED by Git.
+# - To activate it, copy "make/local.mk.dist" to "make/local.mk".
+# - All "make/*local.mk" files EXTEND the main Makefile and are IGNORED by Git.
 # - Use here only commands specific to your local setup.
 # - DO NOT use your local commands in the main Makefile: your commands are ONLY available when APP_ENV=dev.
 # - You can use here all commands and variables from the main Makefile.

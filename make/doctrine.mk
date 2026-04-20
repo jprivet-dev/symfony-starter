@@ -118,13 +118,13 @@ endif
 
 
 ifneq ($(or $(ALL), $(IS_POSTGRESQL)),)
-include .mk/doctrine_postgresql.mk
+include make/doctrine_postgresql.mk
 endif
 
 ifneq ($(or $(ALL), $(IS_MYSQL)),)
-include .mk/doctrine_mysql.mk
+include make/doctrine_mysql.mk
 endif
 
 ifneq ($(or $(ALL), $(IS_SQLITE)),)
-include .mk/doctrine_sqlite.mk
+include make/doctrine_sqlite.mk
 endif

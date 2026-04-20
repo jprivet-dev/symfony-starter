@@ -52,5 +52,5 @@ importmap_update: _assets ## Update JavaScript packages to their latest versions
 	$(CONSOLE) importmap:update
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_TAILWIND))),)
-include .mk/assets_tailwind.mk
+include make/assets_tailwind.mk
 endif
