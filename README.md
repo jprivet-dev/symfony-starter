@@ -93,41 +93,7 @@ Test your pull requests and framework modifications against a running applicatio
 
 ## Documentation
 
-* Main
-  * [Caddy - Validate certificates](docs/certificates.md)
-  * [Compose - Accessing the `var/` directory](docs/var.md)
-  * [Makefile - Discover all commands](docs/makefile.md)
-  * [Symfony - Save your generated application](docs/save.md)
-  * [Symfony and Docker - Use build options](docs/options.md)
-  * [Shell Aliases: Seamless Docker Experience](docs/aliases.md)
-* IDE configuration
-  * [PhpStorm - Configure a remote PHP interpreter (Docker)](docs/ide/phpstorm-remote-php-interpreter.md)
-  * [PhpStorm - Configure inspections](docs/ide/phpstorm-inspections.md)
-  * [PhpStorm - Connect it to the running PostgreSQL container](docs/ide/phpstorm-postgre.md)
-  * [PhpStorm - Connect it to the running MariaDB container](docs/ide/phpstorm-mariadb.md)
-  * [PhpStorm - Connect it to the SQLite database](docs/ide/phpstorm-sqlite.md)
-* Quality
-  * [PHP_CodeSniffer](docs/quality/phpcodesniffer.md)
-  * [PHP CS Fixer](docs/quality/phpcsfixer.md)
-  * [PHP Mess Detector](docs/quality/phpmessdetector.md)
-  * [PhpMetrics](docs/quality/phpmetrics.md)
-  * [PHPStan](docs/quality/phpstan.md)
-  * [Twig CS Fixer](docs/quality/twigcsfixer.md)
-* Testing
-  * [Testing overview](docs/testing/testing-overview.md)
-  * PHPUnit *(TODO)*
-  * Behat *(TODO)*
-* ADR (Architecture Decision Records)
-  * [What is an ADR?](docs/adr/what-is-an-adr.md)
-  * [Database: port mapping strategy](docs/adr/database-port-mapping.md)
-  * [Makefile: target naming convention](docs/adr/makefile-naming.md)
-* Troubleshooting
-  * [Linux - Editing permissions](docs/troubleshooting/editing-permissions-on-linux.md)
-  * [Docker - "address already in use" or "port is already allocated"](docs/troubleshooting/address-already-in-use.md)
-  * [Docker - "container is unhealthy" after `docker compose up`](docs/troubleshooting/unhealthy.md)
-  * [Docker and Git - "detected dubious ownership in repository"](docs/troubleshooting/dubious-ownership.md)
-* Contributing
-  * [Contributing to Symfony: Connect your local Symfony repository](docs/contrib.md)
+📖 [Browse the full documentation](.starter/docs/README.md)
 
 ## Main links
 
