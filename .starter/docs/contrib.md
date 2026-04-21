@@ -86,11 +86,14 @@ make build
 make up_detached
 ```
 
-Install the bundle's dependencies and link the local version:
+Link the local version and install the bundle's dependencies:
 
 ```shell
-make contrib_install d=monolog-bundle
 make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
+git add .
+git commit -m "Install symfony/monolog-bundle:4.x-dev"
+
+make contrib_install d=monolog-bundle
 ```
 
 > **Note:** Composer expects a version following the `[branch-name]-dev` pattern (e.g., if your local branch is `4.x`, use `4.x-dev`).
