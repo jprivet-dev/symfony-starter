@@ -80,28 +80,6 @@
   update_lock                   Update only the content hash of composer.lock without updating dependencies
   config                        Run composer config - $ make config k=<key> [v=<value>] - Example: $ make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
 
-— CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
-  certificates                  Install the Caddy TLS certificate to the trust store
-  certificates_export           Export the Caddy root certificate from the container to the host
-  hosts                         Add the server name to /etc/hosts file
-
-— GIT 🐙 ———————————————————————————————————————————————————————————————————
-  git_hooks_init                Initialize the project's hooks directory (set GIT_HOOKS var)
-
-  git_hooks_disable             Disable the project's hooks directory
-  git_hooks_enable              Enable the project's hooks directory
-  git_pre_push                  Actions on Git pre-push
-
-— TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
-  permissions                   Fix file permissions (primarily for Linux hosts)
-  safe                          Add configured directories to Git's safe directories
-
-— UTILITIES 🛠️ —————————————————————————————————————————————————————————————
-  aliases                       Show aliases info and loading instructions
-  env_files                     Show env files loaded into this Makefile
-  tree                          Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
-  vars                          Show key Makefile variables
-
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
   db                            Drop and create the database and migrate
   db@test                       Drop and create the database and migrate (env=test)
@@ -216,6 +194,28 @@
 
 — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
   extract                       Extract translation strings from templates
+
+— CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
+  certificates                  Install the Caddy TLS certificate to the trust store
+  certificates_export           Export the Caddy root certificate from the container to the host
+  hosts                         Add the server name to /etc/hosts file
+
+— GIT 🐙 ———————————————————————————————————————————————————————————————————
+  git_hooks_init                Initialize the project's hooks directory (set GIT_HOOKS var)
+
+  git_hooks_disable             Disable the project's hooks directory
+  git_hooks_enable              Enable the project's hooks directory
+  git_pre_push                  Actions on Git pre-push
+
+— TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
+  permissions                   Fix file permissions (primarily for Linux hosts)
+  safe                          Add configured directories to Git's safe directories
+
+— UTILITIES 🛠️ —————————————————————————————————————————————————————————————
+  aliases                       Show aliases info and loading instructions
+  env_files                     Show env files loaded into this Makefile
+  tree                          Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
+  vars                          Show key Makefile variables
 
 — SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
 
