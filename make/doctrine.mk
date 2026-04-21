@@ -2,7 +2,7 @@
 
 _doctrine:
 ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine$(S) with $(G)make require_doctrine$(S)\n"
+	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine$(S) with $(G)make require_orm$(S)\n"
 	@exit 1
 endif
 

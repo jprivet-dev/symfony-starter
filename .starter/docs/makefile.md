@@ -155,6 +155,13 @@
   dump_gz                       Create a compressed SQL dump (gzip)
   restore                       Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
 
+— MONOLOG 📝 ———————————————————————————————————————————————————————————————
+  monolog                       Dump the current configuration for MonologBundle (current APP_ENV)
+  monolog@prod                  Dump the current configuration for MonologBundle (PROD)
+
+  monolog_default               Dump the default configuration for MonologBundle
+  monolog_default_xml           Dump the default configuration for MonologBundle (XML format)
+
 — PHPUNIT ✅ ———————————————————————————————————————————————————————————————
   phpunit                    p  Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
   phpunit_log                   Exporting PHPUnit terminal output to a log file

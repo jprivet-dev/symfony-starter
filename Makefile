@@ -74,6 +74,7 @@ VENDOR_ASSETS      = vendor/symfony/asset-mapper
 VENDOR_DOCTRINE    = vendor/doctrine
 VENDOR_EASYADMIN   = vendor/easycorp/easyadmin-bundle
 VENDOR_MAILER      = vendor/symfony/mailer
+VENDOR_MONOLOG     = vendor/symfony/monolog-bundle
 VENDOR_PHPCSFIXER  = vendor/bin/php-cs-fixer
 VENDOR_PHPMD       = vendor/bin/phpmd
 VENDOR_PHPMETRICS  = vendor/bin/phpmetrics
@@ -487,6 +488,10 @@ config: ## Run composer config - $ make config k=<key> [v=<value>] - Example: $ 
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),)
 include make/doctrine.mk
+endif
+
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_MONOLOG))),)
+include make/monolog.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(BIN_PHPUNIT))),)
