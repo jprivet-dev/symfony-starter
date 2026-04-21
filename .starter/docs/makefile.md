@@ -47,7 +47,7 @@
 
   deep_clean                    [Danger] Remove containers, volumes, networks and images, including orphans (triggers: webapp-pack, database, branch switch) [y/N]
 
-  config                        Parse, resolve, and render compose file in canonical format
+  canonical                     Parse, resolve, and render compose file in canonical format
   images                        List images used by the current containers
   logs                          View logs (follow mode)
 
@@ -94,7 +94,7 @@
 
 — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
   permissions                   Fix file permissions (primarily for Linux hosts)
-  safe                          Add /app to Git's safe directories within the php container
+  safe                          Add configured directories to Git's safe directories
 
 — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
   aliases                       Show aliases info and loading instructions
@@ -214,17 +214,17 @@
 
   (to delete this section, delete make/contrib.mk)
 
-  contrib_volume                Add a Docker volume for a repository - $ make contrib_volume f=<folder> - Example: $ make contrib_volume f=symfony
+  contrib_directory             Add a Docker volume for a repository - $ make contrib_directory d=<directory> - Example: $ make contrib_directory d=symfony
 
-  contrib_link                  Link the Symfony monorepo to the project (replace vendors with symlinks) - $ make contrib_link f=<folder> - Example: $ make contrib_link f=symfony
-  contrib_unlink                Restore original vendors (rollback links) - $ make contrib_unlink f=<folder> - Example: $ make contrib_unlink f=symfony
+  contrib_link                  Link the Symfony monorepo to the project (replace vendors with symlinks) - $ make contrib_link d=<directory> - Example: $ make contrib_link d=symfony
+  contrib_unlink                Restore original vendors (rollback links) - $ make contrib_unlink d=<directory> - Example: $ make contrib_unlink d=symfony
 
-  contrib_install               Install Composer packages in a repository - $ make contrib_install f=<folder> - Example: $ make contrib_install f=symfony
-  contrib_clean                 Remove vendor and lock file from a repository - $ make contrib_clean f=<folder> - Example: $ make contrib_clean f=symfony
+  contrib_install               Install Composer packages in a repository - $ make contrib_install d=<directory> - Example: $ make contrib_install d=symfony
+  contrib_clean                 Remove vendor and lock file from a repository - $ make contrib_clean d=<directory> - Example: $ make contrib_clean d=symfony
 
-  contrib_tests                 Run PHPUnit tests in a repository - $ make contrib_tests f=<folder> [a=<arguments>] - Example: $ make contrib_tests f=symfony a="src/Symfony/Bundle/FrameworkBundle"
-  contrib_tests_www_data        Run PHPUnit tests as www-data user - $ make contrib_tests_www_data f=<folder> [a=<arguments>]
-  contrib_tests_clean           Clean PHPUnit cache and temporary files - $ make contrib_tests_clean f=<folder> - Example: $ make contrib_tests_clean f=symfony
+  contrib_tests                 Run PHPUnit tests in a repository - $ make contrib_tests d=<directory> [a=<arguments>] - Example: $ make contrib_tests d=symfony a="src/Symfony/Bundle/FrameworkBundle"
+  contrib_tests_www_data        Run PHPUnit tests as www-data user - $ make contrib_tests_www_data d=<directory> [a=<arguments>]
+  contrib_tests_clean           Clean PHPUnit cache and temporary files - $ make contrib_tests_clean d=<directory> - Example: $ make contrib_tests_clean d=symfony
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 

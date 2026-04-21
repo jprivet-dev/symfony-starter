@@ -22,7 +22,7 @@ git clone git@github.com:YOUR_USERNAME/symfony.git ../symfony
 Add the Docker volume and rebuild:
 
 ```shell
-make contrib_volume f=symfony
+make contrib_directory d=symfony
 make build
 make up_detached
 ```
@@ -30,13 +30,13 @@ make up_detached
 Install Symfony's own dependencies:
 
 ```shell
-make contrib_install f=symfony
+make contrib_install d=symfony
 ```
 
 Link the monorepo into your application's vendors:
 
 ```shell
-make contrib_link f=symfony
+make contrib_link d=symfony
 ```
 
 ### Develop & Test
@@ -47,19 +47,19 @@ Run the framework tests inside the container:
 
 ```shell
 # Run tests for a specific component
-make contrib_tests f=symfony a="src/Symfony/Component/HttpKernel"
+make contrib_tests d=symfony a=src/Symfony/Component/HttpKernel
 ```
 
 Clean PHPUnit cache if needed:
 
 ```shell
-make contrib_tests_clean f=symfony
+make contrib_tests_clean d=symfony
 ```
 
 ### Revert
 
 ```shell
-make contrib_unlink f=symfony
+make contrib_unlink d=symfony
 ```
 
 ---
@@ -82,7 +82,7 @@ git clone git@github.com:YOUR_USERNAME/monolog-bundle.git ../monolog-bundle
 Add the Docker volume and rebuild:
 
 ```shell
-make contrib_volume f=monolog-bundle
+make contrib_directory d=monolog-bundle
 make build
 make up_detached
 ```
@@ -90,7 +90,7 @@ make up_detached
 Install the bundle's own dependencies:
 
 ```shell
-make contrib_install f=monolog-bundle
+make contrib_install d=monolog-bundle
 ```
 
 Tell Composer to use your local fork instead of the Packagist version:
@@ -107,13 +107,13 @@ Modify files in `../monolog-bundle/` — changes are immediately reflected in th
 Run the bundle tests inside the container:
 
 ```shell
-make contrib_tests f=monolog-bundle
+make contrib_tests d=monolog-bundle
 ```
 
 Clean PHPUnit cache if needed:
 
 ```shell
-make contrib_tests_clean f=monolog-bundle
+make contrib_tests_clean d=monolog-bundle
 ```
 
 ### Revert
@@ -156,8 +156,8 @@ git push origin fix/my-issue
 To remove vendors and lock files from a local repository to save space:
 
 ```shell
-make contrib_clean f=symfony
-make contrib_clean f=monolog-bundle
+make contrib_clean d=symfony
+make contrib_clean d=monolog-bundle
 ```
 
 ---

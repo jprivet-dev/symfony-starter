@@ -3,44 +3,44 @@
 ##   (to delete this section, delete make/contrib.mk)
 ##
 
-contrib_volume: ## Add a Docker volume for a repository - $ make contrib_volume f=<folder> - Example: $ make contrib_volume f=symfony
-	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
-	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='../$(f):/$(f)'
-	@sed -i'' "s|^SAFE_DIRECTORIES = .*|& /$(f)|" Makefile
+contrib_directory: ## Add a Docker volume for a directory - $ make contrib_directory d=<directory> - Example: $ make contrib_directory d=symfony
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='../$(d):/$(d)'
+	@sed -i'' "s|^SAFE_DIRECTORIES = .*|& /$(d)|" Makefile
 
 ##
 
-contrib_link: ## Link the Symfony monorepo to the project (replace vendors with symlinks) - $ make contrib_link f=<folder> - Example: $ make contrib_link f=symfony
-	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
-	$(PHP) /$(f)/link /app
-	@printf "🔗 Local repository $(Y)/$(f)$(S) linked to the project\n"
+contrib_link: ## Link a local directory to the project (replace vendors with symlinks) - $ make contrib_link d=<directory> - Example: $ make contrib_link d=symfony
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	$(PHP) /$(d)/link /app
+	@printf "🔗 Local directory $(Y)/$(d)$(S) linked to the project\n"
 
-contrib_unlink: ## Restore original vendors (rollback links) - $ make contrib_unlink f=<folder> - Example: $ make contrib_unlink f=symfony
-	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
-	$(PHP) /$(f)/link /app --rollback
-	@printf "🔙 Original vendors restored (detached from $(Y)/$(f)$(S))\n"
-
-##
-
-contrib_install: ## Install Composer packages in a repository - $ make contrib_install f=<folder> - Example: $ make contrib_install f=symfony
-	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
-	@printf "🧙 Install Composer packages in $(Y)/$(f)$(S)\n"
-	$(COMPOSER) install --working-dir=/$(f)
-
-contrib_clean: ## Remove vendor and lock file from a repository - $ make contrib_clean f=<folder> - Example: $ make contrib_clean f=symfony
-	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
-	$(PHP) rm -fr /$(f)/vendor /$(f)/composer.lock
+contrib_unlink: ## Restore original vendors (rollback links from a directory) - $ make contrib_unlink d=<directory> - Example: $ make contrib_unlink d=symfony
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	$(PHP) /$(d)/link /app --rollback
+	@printf "🔙 Original vendors restored (detached from $(Y)/$(d)$(S))\n"
 
 ##
 
-contrib_tests: ## Run PHPUnit tests in a repository - $ make contrib_tests f=<folder> [a=<arguments>] - Example: $ make contrib_tests f=symfony a="src/Symfony/Bundle/FrameworkBundle"
-	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
-	$(PHP) /$(f)/phpunit $(a)
+contrib_install: ## Install Composer packages in a directory - $ make contrib_install d=<directory> - Example: $ make contrib_install d=symfony
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	@printf "🧙 Install Composer packages in $(Y)/$(d)$(S)\n"
+	$(COMPOSER) install --working-dir=/$(d)
 
-contrib_tests_www_data: ## Run PHPUnit tests as www-data user - $ make contrib_tests_www_data f=<folder> [a=<arguments>]
-	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
-	FORCE_WWW_DATA_USER=true $(MAKE) contrib_tests f=$(f) a=$(a)
+contrib_clean: ## Remove vendor and lock file from a directory - $ make contrib_clean d=<directory> - Example: $ make contrib_clean d=symfony
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	$(PHP) rm -fr /$(d)/vendor /$(d)/composer.lock
 
-contrib_tests_clean: ## Clean PHPUnit cache and temporary files - $ make contrib_tests_clean f=<folder> - Example: $ make contrib_tests_clean f=symfony
-	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
-	$(PHP) rm -fr /tmp/* /$(f)/.phpunit.result.cache
+##
+
+contrib_tests: ## Run PHPUnit tests in a directory - $ make contrib_tests d=<directory> [a=<arguments>] - Example: $ make contrib_tests d=symfony a="src/Symfony/Bundle/FrameworkBundle"
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	$(PHP) /$(d)/phpunit $(a)
+
+contrib_tests_www_data: ## Run PHPUnit tests in a directory as www-data user - $ make contrib_tests_www_data d=<directory> [a=<arguments>]
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	FORCE_WWW_DATA_USER=true $(MAKE) contrib_tests d=$(d) a=$(a)
+
+contrib_tests_clean: ## Clean PHPUnit cache and temporary files in a directory - $ make contrib_tests_clean d=<directory> - Example: $ make contrib_tests_clean d=symfony
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	$(PHP) rm -fr /tmp/* /$(d)/.phpunit.result.cache
