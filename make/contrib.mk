@@ -3,11 +3,18 @@
 ##   (to delete this section, delete make/contrib.mk)
 ##
 
-contrib_directory: ## Add a Docker volume for a directory - $ make contrib_directory d=<directory> - Example: $ make contrib_directory d=symfony
+contrib_volume: ## Add a Docker volume for a directory - $ make contrib_volume d=<directory> - Example: $ make contrib_volume d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='../$(d):/$(d)'
-	$(COMPOSER) config repositories.$(d) '{"type": "path", "url": "../$(d)", "options": {"symlink": true}}'
 	@sed -i'' "s|^SAFE_DIRECTORIES = .*|& /$(d)|" Makefile
+
+contrib_repo: ## Add a path repository to composer.json - $ make contrib_repo d=<directory> - Example: $ make contrib_repo d=monolog-bundle
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	$(COMPOSER) config repositories.$(d) '{"type": "path", "url": "../$(d)", "options": {"symlink": true}}'
+
+contrib_remove_repo: ## Remove a path repository to composer.json - $ make contrib_remove_repo d=<directory> - Example: $ make contrib_remove_repo d=monolog-bundle
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	$(COMPOSER) config --unset repositories.$(d)
 
 ##
 

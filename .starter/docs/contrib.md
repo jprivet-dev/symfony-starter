@@ -22,7 +22,7 @@ git clone git@github.com:YOUR_USERNAME/symfony.git ../symfony
 Add the Docker volume and rebuild:
 
 ```shell
-make contrib_directory d=symfony
+make contrib_volume d=symfony
 git commit -am "Add a Docker volume for the symfony directory"
 
 make build
@@ -78,7 +78,7 @@ git clone git@github.com:YOUR_USERNAME/monolog-bundle.git ../monolog-bundle
 Add the Docker volume and rebuild:
 
 ```shell
-make contrib_directory d=monolog-bundle
+make contrib_volume d=monolog-bundle
 git commit -am "Add a Docker volume for the monolog-bundle directory"
 
 make build

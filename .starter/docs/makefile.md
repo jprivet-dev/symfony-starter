@@ -214,17 +214,19 @@
 
   (to delete this section, delete make/contrib.mk)
 
-  contrib_directory             Add a Docker volume for a repository - $ make contrib_directory d=<directory> - Example: $ make contrib_directory d=symfony
+  contrib_volume                Add a Docker volume for a directory - $ make contrib_volume d=<directory> - Example: $ make contrib_volume d=symfony
+  contrib_repo                  Add a path repository to composer.json - $ make contrib_repo d=<directory> - Example: $ make contrib_repo d=monolog-bundle
+  contrib_remove_repo           Remove a path repository to composer.json - $ make contrib_remove_repo d=<directory> - Example: $ make contrib_remove_repo d=monolog-bundle
 
-  contrib_link                  Link the Symfony monorepo to the project (replace vendors with symlinks) - $ make contrib_link d=<directory> - Example: $ make contrib_link d=symfony
-  contrib_unlink                Restore original vendors (rollback links) - $ make contrib_unlink d=<directory> - Example: $ make contrib_unlink d=symfony
+  contrib_link                  Link a local directory to the project (replace vendors with symlinks) - $ make contrib_link d=<directory> - Example: $ make contrib_link d=symfony
+  contrib_unlink                Restore original vendors (rollback links from a directory) - $ make contrib_unlink d=<directory> - Example: $ make contrib_unlink d=symfony
 
-  contrib_install               Install Composer packages in a repository - $ make contrib_install d=<directory> - Example: $ make contrib_install d=symfony
-  contrib_clean                 Remove vendor and lock file from a repository - $ make contrib_clean d=<directory> - Example: $ make contrib_clean d=symfony
+  contrib_install               Install Composer packages in a directory - $ make contrib_install d=<directory> - Example: $ make contrib_install d=symfony
+  contrib_clean                 Remove vendor and lock file from a directory - $ make contrib_clean d=<directory> - Example: $ make contrib_clean d=symfony
 
-  contrib_tests                 Run PHPUnit tests in a repository - $ make contrib_tests d=<directory> [a=<arguments>] - Example: $ make contrib_tests d=symfony a="src/Symfony/Bundle/FrameworkBundle"
-  contrib_tests_www_data        Run PHPUnit tests as www-data user - $ make contrib_tests_www_data d=<directory> [a=<arguments>]
-  contrib_tests_clean           Clean PHPUnit cache and temporary files - $ make contrib_tests_clean d=<directory> - Example: $ make contrib_tests_clean d=symfony
+  contrib_tests                 Run PHPUnit tests in a directory - $ make contrib_tests d=<directory> [a=<arguments>] - Example: $ make contrib_tests d=symfony a="src/Symfony/Bundle/FrameworkBundle"
+  contrib_tests_www_data        Run PHPUnit tests in a directory as www-data user - $ make contrib_tests_www_data d=<directory> [a=<arguments>]
+  contrib_tests_clean           Clean PHPUnit cache and temporary files in a directory - $ make contrib_tests_clean d=<directory> - Example: $ make contrib_tests_clean d=symfony
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
