@@ -23,14 +23,10 @@ Add the Docker volume and rebuild:
 
 ```shell
 make contrib_directory d=symfony
+git commit -am "Add a Docker volume for the symfony directory"
+
 make build
 make up_detached
-```
-
-Install Symfony's own dependencies:
-
-```shell
-make contrib_install d=symfony
 ```
 
 Link the monorepo into your application's vendors:
@@ -83,21 +79,25 @@ Add the Docker volume and rebuild:
 
 ```shell
 make contrib_directory d=monolog-bundle
+git commit -am "Add a Docker volume for the monolog-bundle directory"
+
 make build
 make up_detached
 ```
 
-Install the bundle's own dependencies:
+Link the local version to your project:
+
+
+```shell
+make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
+```
+
+> **Note:** Composer expects a version following the `[branch-name]-dev` pattern (e.g., if your local branch is `4.x`, use `4.x-dev`).
+
+And install the bundle's dependencies:
 
 ```shell
 make contrib_install d=monolog-bundle
-```
-
-Tell Composer to use your local fork instead of the Packagist version:
-
-```shell
-make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
-make update a="symfony/monolog-bundle"
 ```
 
 ### Develop & Test
@@ -121,7 +121,7 @@ make contrib_tests_clean d=monolog-bundle
 Remove the local Composer repository and restore the original package:
 
 ```shell
-make config k=repositories.monolog-bundle
+make config k=repositories.path_monolog
 make update a="symfony/monolog-bundle"
 ```
 
@@ -163,3 +163,4 @@ make contrib_clean d=monolog-bundle
 ---
 
 [⬅️ README](README.md)
+```
