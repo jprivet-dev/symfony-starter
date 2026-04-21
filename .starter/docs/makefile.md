@@ -134,11 +134,9 @@
   restore                       Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
 
 — MONOLOG 📝 ———————————————————————————————————————————————————————————————
-  monolog                       Dump the current configuration for MonologBundle (current APP_ENV)
-  monolog@prod                  Dump the current configuration for MonologBundle (PROD)
-
-  monolog_default               Dump the default configuration for MonologBundle
-  monolog_default_xml           Dump the default configuration for MonologBundle (XML format)
+  monolog                       Export the Monolog current configuration (debug:config) to a YAML file
+  monolog@prod                  Export the Monolog current configuration (debug:config) to a YAML file (PROD)
+  monolog_default               Export the Monolog default configuration (config:dump-reference) to a YAML file
 
 — PHPUNIT ✅ ———————————————————————————————————————————————————————————————
   phpunit                    p  Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
