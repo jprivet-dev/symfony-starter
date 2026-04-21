@@ -6,6 +6,7 @@
 contrib_volume: ## Add a Docker volume for a repository - $ make contrib_volume f=<folder> - Example: $ make contrib_volume f=symfony
 	$(if $(f),, $(error "Please specify a folder name with 'f=...'"))
 	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='../$(f):/$(f)'
+	@sed -i'' "s|^SAFE_DIRECTORIES = .*|& /$(f)|" Makefile
 
 ##
 
