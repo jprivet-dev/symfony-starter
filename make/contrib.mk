@@ -6,6 +6,7 @@
 contrib_directory: ## Add a Docker volume for a directory - $ make contrib_directory d=<directory> - Example: $ make contrib_directory d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='../$(d):/$(d)'
+	$(COMPOSER) config repositories.$(d) '{"type": "path", "url": "../$(d)", "options": {"symlink": true}}'
 	@sed -i'' "s|^SAFE_DIRECTORIES = .*|& /$(d)|" Makefile
 
 ##
