@@ -43,7 +43,7 @@ contrib_clean: ## Remove vendor and lock file from a directory - $ make contrib_
 
 contrib_tests: ## Run PHPUnit tests in a directory - $ make contrib_tests d=<directory> [a=<arguments>] - Example: $ make contrib_tests d=symfony a="src/Symfony/Bundle/FrameworkBundle"
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
-	$(PHP) /$(d)/phpunit $(a)
+	$(PHP) /$(d)/vendor/bin/phpunit -c /$(d)/phpunit.xml.dist $(a)
 
 contrib_tests_www_data: ## Run PHPUnit tests in a directory as www-data user - $ make contrib_tests_www_data d=<directory> [a=<arguments>]
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
