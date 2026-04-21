@@ -50,13 +50,11 @@ GIT_HOOKS = off
 # See https://github.com/mikefarah/yq
 YQ = docker run --rm --user "$(USER)" -v "$(PWD)":/workdir -w /workdir mikefarah/yq
 
-# --- SYMFONY MONOREPO ---
+# --- GIT SAFE DIRECTORIES ---
 
-CONTRIB_ACTIVE :=
-
-ifneq ($(origin SYMFONY_MONOREPO),undefined)
-    CONTRIB_ACTIVE := true
-endif
+# Directories to trust in Git within the PHP container.
+# Add your local contribution volumes here (e.g., /symfony, /monolog-bundle).
+SAFE_DIRECTORIES = /app
 
 # --- FILES & DIRECTORIES ---
 
@@ -137,7 +135,6 @@ $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
 #$(eval $(call append,XDEBUG_MODE))
-#$(eval $(call append,SYMFONY_MONOREPO))
 
 # --- LOCALHOST ---
 
@@ -580,11 +577,9 @@ else
 endif
 
 .PHONY: safe
-safe: ## Add /app to Git's safe directories within the php container
-	$(COMPOSE) exec php git config --global --add safe.directory /app
-ifeq ($(CONTRIB_ACTIVE),true)
-	$(COMPOSE) exec php git config --global --add safe.directory /symfony
-endif
+safe: ## Add configured directories to Git's safe directories
+	$(foreach dir, $(SAFE_DIRECTORIES), $(CONTAINER_PHP) git config --global --add safe.directory $(dir);)
+	@printf " $(G)✔$(S) Git safe directories updated: $(Y)$(SAFE_DIRECTORIES)$(S)\n"
 
 ## — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
 
@@ -610,7 +605,7 @@ vars: ## Show key Makefile variables
 	@$(foreach var, \
 		USER UNAME_S APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
 		CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE \
-		IS_MYSQL IS_POSTGRESQL IS_SQLITE CONTRIB_ACTIVE, \
+		IS_MYSQL IS_POSTGRESQL IS_SQLITE, \
 		printf "%-15s : %s\n" "${var}" "${${var}}"; \
 	)
 
@@ -631,8 +626,6 @@ runtime: # INTERNAL - Check if vendor/autoload_runtime.php is ready yet
 	@printf " $(G)✔$(S) Symfony Runtime is ready!\n"
 	@sleep 1
 
-ifeq ($(or $(ALL), $(CONTRIB_ACTIVE)),true)
 include make/contrib.mk
-endif
 
 include make/generate.mk
