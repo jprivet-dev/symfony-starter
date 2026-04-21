@@ -75,30 +75,25 @@ git clone git@github.com:YOUR_USERNAME/monolog-bundle.git ../monolog-bundle
 
 ### Setup
 
-Add the Docker volume and rebuild:
+Add the Docker volume and register the path repository:
 
 ```shell
 make contrib_volume d=monolog-bundle
-git commit -am "Add a Docker volume for the monolog-bundle directory"
+make contrib_repo d=monolog-bundle
+git commit -am "Add a Docker volume and repo for the monolog-bundle"
 
 make build
 make up_detached
 ```
 
-Link the local version to your project:
-
+Install the bundle's dependencies and link the local version:
 
 ```shell
+make contrib_install d=monolog-bundle
 make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
 ```
 
 > **Note:** Composer expects a version following the `[branch-name]-dev` pattern (e.g., if your local branch is `4.x`, use `4.x-dev`).
-
-And install the bundle's dependencies:
-
-```shell
-make contrib_install d=monolog-bundle
-```
 
 ### Develop & Test
 
@@ -121,7 +116,7 @@ make contrib_tests_clean d=monolog-bundle
 Remove the local Composer repository and restore the original package:
 
 ```shell
-make config k=repositories.path_monolog
+make contrib_remove_repo d=monolog-bundle
 make update a="symfony/monolog-bundle"
 ```
 
@@ -163,4 +158,3 @@ make contrib_clean d=monolog-bundle
 ---
 
 [⬅️ README](README.md)
-```
