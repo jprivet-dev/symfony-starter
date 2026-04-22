@@ -235,31 +235,25 @@ endif
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
 
-# Print self-documented Makefile:
-# $ make
-# $ make help
-
 .DEFAULT_GOAL = help
 .PHONY: help
 help: f ?=
-help: ## Display this help message with available commands - $ make [f=<filter>] - $ make f=restart
-	@grep -E '(^[.a-zA-Z_-]+[^:]+:.*##.*?$$)|(^#{2})' $(MAKEFILE_LIST) | awk -v filter="$(f)" 'BEGIN {FS = "## "}; { \
+help: ## Display this help message with available commands
+	@printf "Usage: make $(G)<target>$(S)\n"
+	@printf "       make $(G)f=<find>$(S)\n"
+	@grep -E '(^[.a-zA-Z_-]+[^:]+:.*##.*?$$)|(^#{2})' $(MAKEFILE_LIST) | awk -v find="$(f)" 'BEGIN {FS = "## "}; { \
 		split($$1, line, ":"); targets=line[2]; description=$$2; \
-		if (filter == "") { \
+		if (find == "") { \
 			if (targets == "##") { printf "\033[33m%s\n", ""; } \
 			else if (targets == "" && description != "") { printf "\033[33m\n%s\n", description; } \
 			else if (targets != "" && description != "") { split(targets, parts, " "); target=parts[1]; alias=parts[2]; printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; } \
-		} else if (targets != "" && description != "" && (index(tolower(targets), tolower(filter)) || index(tolower(description), tolower(filter)))) { \
+		} else if (targets != "" && description != "" && (index(tolower(targets), tolower(find)) || index(tolower(description), tolower(find)))) { \
 			split(targets, parts, " "); target=parts[1]; alias=parts[2]; printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; \
 		} \
 	}'
 	@echo
 
-.PHONY: all
-all: ## See the full catalog of commands available in the Starter Kit (including inactive ones)
-	@$(MAKE) help ALL=true
-
-## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
+##
 
 .PHONY: install
 install: up_detached ## Start the project, install dependencies and show info
