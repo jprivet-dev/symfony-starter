@@ -45,7 +45,7 @@ contrib_install: ## Install Composer packages in a directory | d=<dir> | d=symfo
 
 contrib_clean: ## Remove vendor and lock file from a directory | d=<dir> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
-	$(PHP) rm -fr /$(d)/vendor /$(d)/composer.lock
+	$(CONTAINER_PHP) rm -fr /$(d)/vendor /$(d)/composer.lock
 
 ##
 
