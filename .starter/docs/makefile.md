@@ -4,22 +4,17 @@
 
 ---
 
-> **Tip: A Dynamic Makefile**
->
-> This project uses a modular Makefile system. Commands are loaded **dynamically** based on the components currently installed in your project.
->
-> * Run `make` (or `make help`) to see **context-sensitive commands** (only those relevant to your current environment).
-> * Run `make all` to see the **full catalog** of commands available in the Starter Kit (including inactive ones).
+This project uses a modular Makefile system. Commands are **loaded dynamically based on the components currently installed** in your project.
 
 <!-- MAKEFILE_COMMANDS_START -->
 
 ```
+Usage: make <target>
+       make f=<find>
 
 — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
-  help                          Display this help message with available commands - $ make [f=<filter>] - $ make f=restart
-  all                           See the full catalog of commands available in the Starter Kit (including inactive ones)
+  help                          Display this help message with available commands
 
-— PROJECT 🚀 ———————————————————————————————————————————————————————————————
   install                       Start the project, install dependencies and show info
   info                          Show project access info
 
@@ -223,14 +218,15 @@
   contrib_repo                  Add a path repository to composer.json - $ make contrib_repo d=<directory> - Example: $ make contrib_repo d=monolog-bundle
   contrib_remove_repo           Remove a path repository to composer.json - $ make contrib_remove_repo d=<directory> - Example: $ make contrib_remove_repo d=monolog-bundle
 
+  contrib_dockerfile            Inject PHP extensions for contribution into Dockerfile
   contrib_link                  Link a local directory to the project (replace vendors with symlinks) - $ make contrib_link d=<directory> - Example: $ make contrib_link d=symfony
   contrib_unlink                Restore original vendors (rollback links from a directory) - $ make contrib_unlink d=<directory> - Example: $ make contrib_unlink d=symfony
 
   contrib_install               Install Composer packages in a directory - $ make contrib_install d=<directory> - Example: $ make contrib_install d=symfony
   contrib_clean                 Remove vendor and lock file from a directory - $ make contrib_clean d=<directory> - Example: $ make contrib_clean d=symfony
 
-  contrib_tests                 Run PHPUnit tests in a directory - $ make contrib_tests d=<directory> [a=<arguments>] - Example: $ make contrib_tests d=symfony a="src/Symfony/Bundle/FrameworkBundle"
-  contrib_tests_www_data        Run PHPUnit tests in a directory as www-data user - $ make contrib_tests_www_data d=<directory> [a=<arguments>]
+  contrib_tests                 Run PHPUnit tests in a directory - $ make contrib_tests d=<directory> [a=<arguments>] - Example: $ make contrib_tests d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle
+  contrib_tests_www_data        Run PHPUnit tests in a directory as www-data - $ make contrib_tests_www_data d=<directory> [a=<arguments>] - Example: $ make contrib_tests_www_data d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle
   contrib_tests_clean           Clean PHPUnit cache and temporary files in a directory - $ make contrib_tests_clean d=<directory> - Example: $ make contrib_tests_clean d=symfony
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
