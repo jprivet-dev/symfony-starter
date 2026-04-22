@@ -49,7 +49,7 @@ contrib_clean: ## Remove vendor and lock file from a directory - $ make contrib_
 
 ##
 
-contrib_tests: ## Run PHPUnit tests in a directory - $ make contrib_tests d=<directory> [a=<arguments>]
+contrib_tests: contrib_tests_clean ## Run PHPUnit tests in a directory - $ make contrib_tests d=<directory> [a=<arguments>]
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@# Execute tests with pre-defined environment variables to prevent unnecessary re-installation/compilation
 	@if docker compose exec php [ -f "/$(d)/phpunit" ]; then \
