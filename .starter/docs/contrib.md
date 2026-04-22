@@ -39,23 +39,35 @@ make contrib_link d=symfony
 
 Modify files in `../symfony/src/` — changes are immediately reflected in the application.
 
-Run the framework tests inside the container:
+Before running tests, ensure all dependencies are installed within the monorepo:
 
-```shell
+```bash
+make contrib_install d=symfony
+```
+
+Run the framework tests inside the container using absolute paths from the container's root:
+
+```bash
 # Run tests for a specific component
-make contrib_tests d=symfony a=src/Symfony/Component/HttpKernel
+make contrib_tests d=symfony a="/symfony/src/Symfony/Component/HttpKernel"
+
+# Run tests for all Bridge components
+make contrib_tests d=symfony a="/symfony/src/Symfony/Bridge"
+
+# Run tests for all Bundle components
+make contrib_tests d=symfony a="/symfony/src/Symfony/Bundle"
+
+# Run tests for all Components
+make contrib_tests d=symfony a="/symfony/src/Symfony/Component"
 ```
 
-Clean PHPUnit cache if needed:
+> **Pro-tip:** When running large test suites, you can exclude specific groups that require additional infrastructure (like Redis) by appending the argument:
+> `make contrib_tests d=symfony a="/symfony/src/Symfony/Bundle --exclude-group=redis"`
 
-```shell
+Clean PHPUnit cache and temporary files if needed (recommended before running large suites):
+
+```bash
 make contrib_tests_clean d=symfony
-```
-
-### Revert
-
-```shell
-make contrib_unlink d=symfony
 ```
 
 ---
@@ -86,14 +98,12 @@ make build
 make up_detached
 ```
 
-Link the local version and install the bundle's dependencies:
+Link the local version:
 
 ```shell
 make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
 git add .
 git commit -m "Install symfony/monolog-bundle:4.x-dev"
-
-make contrib_install d=monolog-bundle
 ```
 
 > **Note:** Composer expects a version following the `[branch-name]-dev` pattern (e.g., if your local branch is `4.x`, use `4.x-dev`).
@@ -101,6 +111,12 @@ make contrib_install d=monolog-bundle
 ### Develop & Test
 
 Modify files in `../monolog-bundle/` — changes are immediately reflected in the application.
+
+Before running tests, ensure all dependencies are installed within the repo:
+
+```bash
+make contrib_install d=monolog-bundle
+```
 
 Run the bundle tests inside the container:
 
