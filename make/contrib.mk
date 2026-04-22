@@ -51,13 +51,13 @@ contrib_clean: ## Remove vendor and lock file from a directory - $ make contrib_
 
 contrib_tests: ## Run PHPUnit tests in a directory - $ make contrib_tests d=<directory> [a=<arguments>]
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
-	@# Check for the binary from inside the container
+	@# Execute tests with pre-defined environment variables to prevent unnecessary re-installation/compilation
 	@if docker compose exec php [ -f "/$(d)/phpunit" ]; then \
 		echo "$(G)🧙 Running PHPUnit via root phpunit binary$(S)"; \
-		$(PHP) /$(d)/phpunit -c /$(d)/phpunit.xml.dist $(a); \
+		docker compose exec -e SYMFONY_DEPRECATIONS_HELPER=weak -e COMPOSER_ALLOW_SUPERUSER=1 php /$(d)/phpunit -c /$(d)/phpunit.xml.dist $(a); \
 	elif docker compose exec php [ -f "/$(d)/vendor/bin/phpunit" ]; then \
 		echo "$(G)🧙 Running PHPUnit via vendor/bin/phpunit$(S)"; \
-		$(PHP) /$(d)/vendor/bin/phpunit -c /$(d)/phpunit.xml.dist $(a); \
+		docker compose exec -e SYMFONY_DEPRECATIONS_HELPER=weak -e COMPOSER_ALLOW_SUPERUSER=1 php /$(d)/vendor/bin/phpunit -c /$(d)/phpunit.xml.dist $(a); \
 	else \
 		echo "$(R)✘ PHPUnit binary not found in /$(d) inside the container$(S)"; \
 		exit 1; \
