@@ -351,8 +351,6 @@ kill: ## Remove containers and networks (keep database data)
 kill_all: confirm ## Remove containers, networks AND VOLUMES (database destroyed)
 	$(COMPOSE) down --remove-orphans --volumes
 
-##
-
 deep_clean: confirm ## [Danger] Remove containers, volumes, networks and images, including orphans (triggers: webapp-pack, database, branch switch) [y/N]
 	@printf "🔥 $(Y)Cleaning Docker environment for $(PROJECT_NAME) (if file exists)...$(S)\n"
 	-$(COMPOSE) down --volumes --rmi local --remove-orphans 2>/dev/null || true
@@ -472,7 +470,7 @@ else
 	$(COMPOSER) update $(a)
 endif
 
-update_lock: ## Update only the content hash of composer.lock without updating dependencies
+hash: ## Update only the content hash of composer.lock without updating dependencies
 	$(COMPOSER) update --lock
 
 .PHONY: config

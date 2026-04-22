@@ -39,7 +39,6 @@ Usage: make <target>
   down                          Stop the containers
   kill                          Remove containers and networks (keep database data)
   kill_all                      Remove containers, networks AND VOLUMES (database destroyed)
-
   deep_clean                    [Danger] Remove containers, volumes, networks and images, including orphans (triggers: webapp-pack, database, branch switch) [y/N]
 
   canonical                     Parse, resolve, and render compose file in canonical format
@@ -72,7 +71,7 @@ Usage: make <target>
   remove                        Remove a package from the require or require-dev - $ make remove [a=<arguments>] - Example: $ make remove a="phpunit/phpunit"
   require                       Add required packages to your composer.json and installs them - $ make require [a=<arguments>] - Example: $ make require a="--dev phpunit/phpunit"
   update                        Update Composer packages - $ make update [a=<arguments>] - Example: $ make update a="symfony/monolog-bundle"
-  update_lock                   Update only the content hash of composer.lock without updating dependencies
+  hash                          Update only the content hash of composer.lock without updating dependencies
   config                        Run composer config - $ make config k=<key> [v=<value>] - Example: $ make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
 
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
