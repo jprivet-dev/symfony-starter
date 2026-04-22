@@ -1,7 +1,7 @@
 ## — POSTGRESQL 🛢️ ————————————————————————————————————————————————————————————
 
 .PHONY: psql
-psql: ## Execute psql | [a=<arguments>] | a="-V"
+psql: ## Execute psql | [a=<args>] | a="-V"
 	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB) $(a)
 
 psql_sh: ## Open a shell on the PostgreSQL container

@@ -17,7 +17,7 @@ ifeq ($(wildcard $(VENDOR_PHPCSFIXER)),)
 endif
 
 .PHONY: phpcsfixer
-phpcsfixer: _phpcsfixer ## Run PHP CS Fixer | [a=<arguments>] | a=list
+phpcsfixer: _phpcsfixer ## Run PHP CS Fixer | [a=<args>] | a=list
 	$(PHPCSFIXER) $(a)
 
 phpcsfixer_fix: _phpcsfixer ## Fix code style
@@ -36,7 +36,7 @@ ifeq ($(wildcard $(VENDOR_PHPMD)),)
 endif
 
 .PHONY: phpmd
-phpmd: _phpmd ## Run PHP Mess Detector | [a=<arguments>] | a="src ansi cleancode"
+phpmd: _phpmd ## Run PHP Mess Detector | [a=<args>] | a="src ansi cleancode"
 	$(PHPMD) $(a)
 
 phpmd_lint: _phpmd ## Run PHP Mess Detector with all rules
@@ -67,13 +67,13 @@ ifeq ($(wildcard $(VENDOR_PHPSTAN)),)
 endif
 
 .PHONY: phpstan
-phpstan: _phpstan ## Run PHPStan | [a=<arguments>] | a="src tests"
+phpstan: _phpstan ## Run PHPStan | [a=<args>] | a="src tests"
 	$(PHPSTAN) $(a)
 
-phpstan_baseline: _phpstan ## Generate PHPStan baseline | [a=<arguments>] | a="src tests"
+phpstan_baseline: _phpstan ## Generate PHPStan baseline | [a=<args>] | a="src tests"
 	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a) --generate-baseline $(PHPSTAN_BASELINE)
 
-phpstan_lint: _phpstan ## Run PHPStan analyse | [a=<arguments>] | a="src tests"
+phpstan_lint: _phpstan ## Run PHPStan analyse | [a=<args>] | a="src tests"
 	@printf "\n$(Y)--- PHPStan [LINT] ---$(S)\n"
 	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a)
 
@@ -86,7 +86,7 @@ ifeq ($(wildcard $(VENDOR_TWIGCSFIXER)),)
 endif
 
 .PHONY: twigcsfixer
-twigcsfixer: _twigcsfixer ## Run Twig CS Fixer | [a=<arguments>] | a="lint /path/to/code"
+twigcsfixer: _twigcsfixer ## Run Twig CS Fixer | [a=<args>] | a="lint /path/to/code"
 	$(TWIGCSFIXER) $(a)
 
 twigcsfixer_fix: _twigcsfixer ## Fix Twig style

@@ -1,7 +1,7 @@
 ## — MYSQL 🛢️ —————————————————————————————————————————————————————————————————
 
 .PHONY: mysql
-mysql: ## Execute mysql | [a=<arguments>] | a="-V"
+mysql: ## Execute mysql | [a=<args>] | a="-V"
 	$(CONTAINER_DATABASE) mysql -u $(MARIADB_USER) -p$(MARIADB_PASSWORD) $(MARIADB_DATABASE) $(a)
 
 mysql_sh: ## Open a shell on the MySQL/MariaDB container

@@ -320,7 +320,7 @@ tests t: db_init@test fixtures@test phpunit ## Run all tests
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: build
-build: ## Build or rebuild Docker services using cache | [a=<arguments>] | a=--no-cache
+build: ## Build or rebuild Docker services using cache | [a=<args>] | a=--no-cache
 	$(COMPOSE) build $(a)
 
 .PHONY: build_force
@@ -330,7 +330,7 @@ build_force: build ## Build or rebuild Docker services without cache (force fres
 ##
 
 .PHONY: up
-up: ## Start the containers | [a=<arguments>] | a=-d
+up: ## Start the containers | [a=<args>] | a=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans $(a)
 	$(MAKE) runtime
 	$(MAKE) permissions
@@ -415,12 +415,12 @@ routes: ## Display current routes with assigned controllers and aliases
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
 
 .PHONY: php
-php: ## Run PHP command | [a=<arguments>] | a=--version
+php: ## Run PHP command | [a=<args>] | a=--version
 	$(PHP) $(a)
 
 ##
 
-php_command: ## Run a command inside the PHP container | [a=<arguments>] | a="ls -al"
+php_command: ## Run a command inside the PHP container | [a=<args>] | a="ls -al"
 	$(BASH_COMMAND) "$(a)"
 
 php_env: ## Display all environment variables set within the PHP container
@@ -433,7 +433,7 @@ php_sh sh: ## Connect to the PHP container shell
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
 .PHONY: composer
-composer: ## Run composer command | [a=<arguments>] | a="require --dev phpunit/phpunit"
+composer: ## Run composer command | [a=<args>] | a="require --dev phpunit/phpunit"
 	$(COMPOSER) $(a)
 
 .PHONY: i
@@ -465,15 +465,15 @@ outdated: ## Show a list of installed packages that have updates available, incl
 	$(COMPOSER) outdated
 
 .PHONY: remove
-remove: ## Remove a package from the require or require-dev | [a=<arguments>] | a="phpunit/phpunit"
+remove: ## Remove a package from the require or require-dev | [a=<args>] | a="phpunit/phpunit"
 	$(COMPOSER) remove $(a)
 
 .PHONY: require
-require: ## Add required packages to your composer.json and installs them | [a=<arguments>] | a="--dev phpunit/phpunit"
+require: ## Add required packages to your composer.json and installs them | [a=<args>] | a="--dev phpunit/phpunit"
 	$(COMPOSER) require $(a)
 
 .PHONY: update
-update: ## Update Composer packages | [a=<arguments>] | a="symfony/monolog-bundle"
+update: ## Update Composer packages | [a=<args>] | a="symfony/monolog-bundle"
 	@printf "\n$(Y)--- Composer Update (env: $(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader $(a)

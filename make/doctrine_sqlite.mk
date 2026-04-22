@@ -1,7 +1,7 @@
 ## — SQLITE 🛢️ ————————————————————————————————————————————————————————————————
 
 .PHONY: sqlite
-sqlite: ## Execute sqlite3 | [a=<arguments>] | a="-version"
+sqlite: ## Execute sqlite3 | [a=<args>] | a="-version"
 	$(CONTAINER_PHP) sqlite3 $(SQLITE_DB_FILE) $(a)
 
 sqlite_sh: ## Open a SQLite shell on the PHP container

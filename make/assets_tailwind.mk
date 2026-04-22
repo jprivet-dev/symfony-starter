@@ -6,7 +6,7 @@ tailwind_init: ## Initializes Tailwind CSS for your project
 tailwind_clear: ## Clear var/tailwind directory
 	$(COMPOSE) run --rm php rm -rf ./var/tailwind
 
-tailwind_build: ## Build the Tailwind CSS assets | [a=<arguments>] | a=--help
+tailwind_build: ## Build the Tailwind CSS assets | [a=<args>] | a=--help
 	$(CONSOLE) tailwind:build -v $(a)
 
 tailwind_watch w: a=--watch

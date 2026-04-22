@@ -30,10 +30,10 @@ Usage: make <target>
   tests                                t  Run all tests
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
-  build [a=<arguments>]                   Build or rebuild Docker services using cache (e.g. make build a=--no-cache)
+  build [a=<args>]                        Build or rebuild Docker services using cache (e.g. make build a=--no-cache)
   build_force                             Build or rebuild Docker services without cache (force fresh install)
 
-  up [a=<arguments>]                      Start the containers (e.g. make up a=-d)
+  up [a=<args>]                           Start the containers (e.g. make up a=-d)
   up_detached                             Start the containers (wait for services to be running|healthy - detached mode)
 
   down                                    Stop the containers
@@ -56,49 +56,49 @@ Usage: make <target>
   routes                                  Display current routes with assigned controllers and aliases
 
 — PHP 🐘 ———————————————————————————————————————————————————————————————————
-  php [a=<arguments>]                     Run PHP command (e.g. make php a=--version)
+  php [a=<args>]                          Run PHP command (e.g. make php a=--version)
 
-  php_command [a=<arguments>]             Run a command inside the PHP container (e.g. make php_command a="ls -al")
+  php_command [a=<args>]                  Run a command inside the PHP container (e.g. make php_command a="ls -al")
   php_env                                 Display all environment variables set within the PHP container
   php_sh                               sh Connect to the PHP container shell
 
 — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
-  composer [a=<arguments>]                Run composer command (e.g. make composer a="require --dev phpunit/phpunit")
+  composer [a=<args>]                     Run composer command (e.g. make composer a="require --dev phpunit/phpunit")
   composer_install                     i  Install Composer packages
   composer_validate                       Check if lock file is up to date (even when config.lock is false)
 
   config k=<key> [v=<value>]              Run composer config (e.g. make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}')
   hash                                    Update only the content hash of composer.lock without updating dependencies
   outdated                                Show a list of installed packages that have updates available, including their latest version
-  remove [a=<arguments>]                  Remove a package from the require or require-dev (e.g. make remove a="phpunit/phpunit")
-  require [a=<arguments>]                 Add required packages to your composer.json and installs them (e.g. make require a="--dev phpunit/phpunit")
-  update [a=<arguments>]                  Update Composer packages (e.g. make update a="symfony/monolog-bundle")
+  remove [a=<args>]                       Remove a package from the require or require-dev (e.g. make remove a="phpunit/phpunit")
+  require [a=<args>]                      Add required packages to your composer.json and installs them (e.g. make require a="--dev phpunit/phpunit")
+  update [a=<args>]                       Update Composer packages (e.g. make update a="symfony/monolog-bundle")
 
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
   db                                      Drop and create the database and migrate
   db@test                                 Drop and create the database and migrate (env=test)
 
-  drop [a=<arguments>]                    Drop the database [y/N] (e.g. make drop a="--env=test")
-  create [a=<arguments>]                  Create the database (e.g. make create a="--env=test")
+  drop [a=<args>]                         Drop the database [y/N] (e.g. make drop a="--env=test")
+  create [a=<args>]                       Create the database (e.g. make create a="--env=test")
 
-  diff [a=<param>]                        Generate a migration by comparing your current database to your mapping information (format the generated SQL) (e.g. make diff a="--profile")
-  execute a=<arguments>                   Execute one or more migration versions up or down manually (e.g. make execute a="DoctrineMigrations\Version20240205143239")
+  diff [a=<args>]                         Generate a migration by comparing your current database to your mapping information (format the generated SQL) (e.g. make diff a="--profile")
+  execute a=<args>                        Execute one or more migration versions up or down manually (e.g. make execute a="DoctrineMigrations\Version20240205143239")
   generate                                Generate a blank migration class
   list                                    Display a list of all available migrations and their status
-  migrate [a=<param>]                     Execute a migration to the latest available version (in a transaction) (e.g. make migrate a="current+3")
-  migration [a=<param>]                   Create (via MakerBundle) a new migration based on database changes (format the generated SQL) (e.g. make migration a="--profile")
+  migrate [a=<args>]                      Execute a migration to the latest available version (in a transaction) (e.g. make migrate a="current+3")
+  migration [a=<args>]                    Create (via MakerBundle) a new migration based on database changes (format the generated SQL) (e.g. make migration a="--profile")
 
-  fixtures [a=<param>]                    Load fixtures (CAUTION! The load command purges the database) (e.g. make fixtures a="--append")
+  fixtures [a=<args>]                     Load fixtures (CAUTION! The load command purges the database) (e.g. make fixtures a="--append")
   fixtures@test                           Load fixtures (env=test)
   sql [q=<query>]                         Execute the given SQL query and output the results (e.g. make sql q="SELECT * FROM user")
   update_dump                             Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
   update_force                            Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
-  validate [a=<arguments>]                Validate the mapping files (e.g. make validate a="--env=test")
+  validate [a=<args>]                     Validate the mapping files (e.g. make validate a="--env=test")
 
   phpstorm_config                         Display database connection details for PhpStorm "Data Sources and Drivers" dialog
 
 — POSTGRESQL 🛢️ ————————————————————————————————————————————————————————————
-  psql [a=<arguments>]                    Execute psql (e.g. make psql a="-V")
+  psql [a=<args>]                         Execute psql (e.g. make psql a="-V")
   psql_sh                                 Open a shell on the PostgreSQL container
   table n=<name>                          Show the content of a table (e.g. make table n=user)
   tables                                  Show all tables
@@ -108,7 +108,7 @@ Usage: make <target>
   restore f=<file>                        Restore a dump (CAUTION! The command purges the database) [y/N] (e.g. make restore f="build/dumps/dump.sql")
 
 — MYSQL 🛢️ —————————————————————————————————————————————————————————————————
-  mysql [a=<arguments>]                   Execute mysql (e.g. make mysql a="-V")
+  mysql [a=<args>]                        Execute mysql (e.g. make mysql a="-V")
   mysql_sh                                Open a shell on the MySQL/MariaDB container
   table n=<name>                          Show the content of a table (e.g. make table n=user)
   tables                                  Show all tables
@@ -118,7 +118,7 @@ Usage: make <target>
   restore f=<file>                        Restore a dump (CAUTION! The command purges the database) [y/N] (e.g. make restore f="build/dumps/dump.sql")
 
 — SQLITE 🛢️ ————————————————————————————————————————————————————————————————
-  sqlite [a=<arguments>]                  Execute sqlite3 (e.g. make sqlite a="-version")
+  sqlite [a=<args>]                       Execute sqlite3 (e.g. make sqlite a="-version")
   sqlite_sh                               Open a SQLite shell on the PHP container
   table n=<name>                          Show the content of a table (e.g. make table n=user)
   tables                                  Show all tables
@@ -133,11 +133,11 @@ Usage: make <target>
   monolog_default                         Export the Monolog default configuration (config:dump-reference) to a YAML file
 
 — PHPUNIT ✅ ———————————————————————————————————————————————————————————————
-  phpunit [a=<arguments>]              p  Run PHPUnit (e.g. make phpunit a="tests/myTest.php")
+  phpunit [a=<args>]                   p  Run PHPUnit (e.g. make phpunit a="tests/myTest.php")
   phpunit_log                             Exporting PHPUnit terminal output to a log file
 
-  coverage [a=<arguments>]                Generate code coverage report in HTML format (e.g. make coverage a="tests/myTest.php")
-  dox [a=<arguments>]                     Report test execution progress in TestDox format (e.g. make dox a="tests/myTest.php")
+  coverage [a=<args>]                     Generate code coverage report in HTML format (e.g. make coverage a="tests/myTest.php")
+  dox [a=<args>]                          Report test execution progress in TestDox format (e.g. make dox a="tests/myTest.php")
   dox_html                                Report test execution progress in TestDox format and export it to an HTML file
   dox_text                                Report test execution progress in TestDox format and export it to a text file
   xdebug_version                          Xdebug version number
@@ -146,20 +146,20 @@ Usage: make <target>
   fix                                     Fix with all linters
   lint                                    Run all linters (stop on failure)
 
-  phpcsfixer [a=<arguments>]              Run PHP CS Fixer (e.g. make phpcsfixer a=list)
+  phpcsfixer [a=<args>]                   Run PHP CS Fixer (e.g. make phpcsfixer a=list)
   phpcsfixer_fix                          Fix code style
   phpcsfixer_lint                         Check code style
 
-  phpmd [a=<arguments>]                   Run PHP Mess Detector (e.g. make phpmd a="src ansi cleancode")
+  phpmd [a=<args>]                        Run PHP Mess Detector (e.g. make phpmd a="src ansi cleancode")
   phpmd_lint                              Run PHP Mess Detector with all rules
 
   phpmetrics_report                       Run PHPMetrics and generate detailed report
 
-  phpstan [a=<arguments>]                 Run PHPStan (e.g. make phpstan a="src tests")
-  phpstan_baseline [a=<arguments>]        Generate PHPStan baseline (e.g. make phpstan_baseline a="src tests")
-  phpstan_lint [a=<arguments>]            Run PHPStan analyse (e.g. make phpstan_lint a="src tests")
+  phpstan [a=<args>]                      Run PHPStan (e.g. make phpstan a="src tests")
+  phpstan_baseline [a=<args>]             Generate PHPStan baseline (e.g. make phpstan_baseline a="src tests")
+  phpstan_lint [a=<args>]                 Run PHPStan analyse (e.g. make phpstan_lint a="src tests")
 
-  twigcsfixer [a=<arguments>]             Run Twig CS Fixer (e.g. make twigcsfixer a="lint /path/to/code")
+  twigcsfixer [a=<args>]                  Run Twig CS Fixer (e.g. make twigcsfixer a="lint /path/to/code")
   twigcsfixer_fix                         Fix Twig style
   twigcsfixer_lint                        Check Twig style
 
@@ -179,7 +179,7 @@ Usage: make <target>
 
   tailwind_init                           Initializes Tailwind CSS for your project
   tailwind_clear                          Clear var/tailwind directory
-  tailwind_build [a=<arguments>]          Build the Tailwind CSS assets (e.g. make tailwind_build a=--help)
+  tailwind_build [a=<args>]               Build the Tailwind CSS assets (e.g. make tailwind_build a=--help)
   tailwind_watch                       w  Watch for changes and rebuild automatically.
   tailwind_minify                         Minify the output CSS.
   tailwind_debug                          See the full config from TailwindBundle
@@ -213,19 +213,19 @@ Usage: make <target>
 
   (to delete this section, delete make/contrib.mk)
 
-  contrib_volume d=<directory>            Add a Docker volume for a directory (e.g. make contrib_volume d=symfony)
-  contrib_repo d=<directory>              Add a path repository to composer.json (e.g. make contrib_repo d=monolog-bundle)
-  contrib_remove_repo d=<directory>       Remove a path repository to composer.json (e.g. make contrib_remove_repo d=monolog-bundle)
+  contrib_volume d=<dir>                  Add a Docker volume for a directory (e.g. make contrib_volume d=symfony)
+  contrib_repo d=<dir>                    Add a path repository to composer.json (e.g. make contrib_repo d=monolog-bundle)
+  contrib_remove_repo d=<dir>             Remove a path repository to composer.json (e.g. make contrib_remove_repo d=monolog-bundle)
 
   contrib_dockerfile                      Inject PHP extensions for contribution into Dockerfile
-  contrib_link d=<directory>              Link a local directory to the project (replace vendors with symlinks) (e.g. make contrib_link d=symfony)
-  contrib_unlink d=<directory>            Restore original vendors (rollback links from a directory) (e.g. make contrib_unlink d=symfony)
+  contrib_link d=<dir>                    Link a local directory to the project (replace vendors with symlinks) (e.g. make contrib_link d=symfony)
+  contrib_unlink d=<dir>                  Restore original vendors (rollback links from a directory) (e.g. make contrib_unlink d=symfony)
 
-  contrib_install d=<directory>           Install Composer packages in a directory (e.g. make contrib_install d=symfony)
-  contrib_clean d=<directory>             Remove vendor and lock file from a directory (e.g. make contrib_clean d=symfony)
+  contrib_install d=<dir>                 Install Composer packages in a directory (e.g. make contrib_install d=symfony)
+  contrib_clean d=<dir>                   Remove vendor and lock file from a directory (e.g. make contrib_clean d=symfony)
 
-  contrib_tests d=<directory> [a=<arguments>]    Run PHPUnit tests in a directory (e.g. make contrib_tests d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle)
-  contrib_tests_clean d=<directory>       Clean PHPUnit cache and temporary files in a directory (e.g. make contrib_tests_clean d=symfony)
+  contrib_tests d=<dir> [a=<args>]        Run PHPUnit tests in a directory (e.g. make contrib_tests d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle)
+  contrib_tests_clean d=<dir>             Clean PHPUnit cache and temporary files in a directory (e.g. make contrib_tests_clean d=symfony)
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
