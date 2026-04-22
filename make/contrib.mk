@@ -18,6 +18,14 @@ contrib_remove_repo: ## Remove a path repository to composer.json - $ make contr
 
 ##
 
+contrib_dockerfile: ## Inject PHP extensions for contribution into Dockerfile
+	$(M) permissions
+	$(M) rb m=recipes t=Dockerfile s=.starter/block/contrib/Dockerfile
+	$(M) co m="Enable contribution PHP extensions (xsl, etc.)"
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) build_force_start
+	@printf " $(G)✔$(S) Enable contribution PHP extensions (xsl, etc.)\n"
+
 contrib_link: ## Link a local directory to the project (replace vendors with symlinks) - $ make contrib_link d=<directory> - Example: $ make contrib_link d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(PHP) /$(d)/link /app
