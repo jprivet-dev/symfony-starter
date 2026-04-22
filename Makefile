@@ -242,15 +242,21 @@ help: ## Display this help message with available commands
 	@printf "Usage: make $(G)<target>$(S)\n"
 	@printf "       make $(G)f=<find>$(S)\n"
 	@grep -E '(^[.a-zA-Z_-]+[^:]+:.*##.*?$$)|(^#{2})' $(MAKEFILE_LIST) | awk -v find="$(f)" 'BEGIN {FS = "## "}; { \
-		split($$1, line, ":"); targets=line[2]; description=$$2; \
-		if (find == "") { \
-			if (targets == "##") { printf "\033[33m%s\n", ""; } \
-			else if (targets == "" && description != "") { printf "\033[33m\n%s\n", description; } \
-			else if (targets != "" && description != "") { split(targets, parts, " "); target=parts[1]; alias=parts[2]; printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; } \
-		} else if (targets != "" && description != "" && (index(tolower(targets), tolower(find)) || index(tolower(description), tolower(find)))) { \
-			split(targets, parts, " "); target=parts[1]; alias=parts[2]; printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; \
-		} \
-	}'
+       split($$1, line, ":"); targets=line[2]; description=$$2; \
+       if (find == "") { \
+          if (targets == "##") { printf "\033[33m%s\n", ""; } \
+          else if (targets == "" && description != "") { printf "\033[33m\n%s\n", description; } \
+          else if (targets != "" && description != "") { \
+             split(targets, parts, " "); target=parts[1]; alias=parts[2]; pos = index(description, " - $$"); \
+             if (pos > 0) { printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\033[36m%s\033[0m\n", target, alias, substr(description, 1, pos-1), substr(description, pos); \
+             } else { printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; } \
+          } \
+       } else if (targets != "" && description != "" && (index(tolower(targets), tolower(find)) || index(tolower(description), tolower(find)))) { \
+          split(targets, parts, " "); target=parts[1]; alias=parts[2]; pos = index(description, " - $$"); \
+          if (pos > 0) { printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\033[36m%s\033[0m\n", target, alias, substr(description, 1, pos-1), substr(description, pos); \
+          } else { printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; } \
+       } \
+    }'
 	@echo
 
 ##
