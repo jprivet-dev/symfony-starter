@@ -69,4 +69,4 @@ contrib_tests_www_data: ## Run PHPUnit tests in a directory as www-data user - $
 
 contrib_tests_clean: ## Clean PHPUnit cache and temporary files in a directory - $ make contrib_tests_clean d=<directory> - Example: $ make contrib_tests_clean d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
-	$(PHP) rm -fr /tmp/* /$(d)/.phpunit.result.cache
+	docker compose exec -u 0 php rm -fr /tmp/* /$(d)/.phpunit.result.cache /$(d)/var/cache/*
