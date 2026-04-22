@@ -67,12 +67,12 @@ Usage: make <target>
   composer_install           i  Install Composer packages
   composer_validate             Check if lock file is up to date (even when config.lock is false)
 
+  config                        Run composer config - $ make config k=<key> [v=<value>] - Example: $ make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
+  hash                          Update only the content hash of composer.lock without updating dependencies
   outdated                      Show a list of installed packages that have updates available, including their latest version
   remove                        Remove a package from the require or require-dev - $ make remove [a=<arguments>] - Example: $ make remove a="phpunit/phpunit"
   require                       Add required packages to your composer.json and installs them - $ make require [a=<arguments>] - Example: $ make require a="--dev phpunit/phpunit"
   update                        Update Composer packages - $ make update [a=<arguments>] - Example: $ make update a="symfony/monolog-bundle"
-  hash                          Update only the content hash of composer.lock without updating dependencies
-  config                        Run composer config - $ make config k=<key> [v=<value>] - Example: $ make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
 
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
   db                            Drop and create the database and migrate

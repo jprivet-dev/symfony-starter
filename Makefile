@@ -449,6 +449,15 @@ composer_validate: ## Check if lock file is up to date (even when config.lock is
 
 ##
 
+.PHONY: config
+config: ## Run composer config - $ make config k=<key> [v=<value>] - Example: $ make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
+	$(COMPOSER) config $(if $(v),$(k) '$(v)',--unset $(k))
+
+.PHONY: hash
+hash: ## Update only the content hash of composer.lock without updating dependencies
+	$(COMPOSER) update --lock
+
 .PHONY: outdated
 outdated: ## Show a list of installed packages that have updates available, including their latest version
 	$(COMPOSER) outdated
@@ -469,14 +478,6 @@ ifeq ($(APP_ENV),prod)
 else
 	$(COMPOSER) update $(a)
 endif
-
-hash: ## Update only the content hash of composer.lock without updating dependencies
-	$(COMPOSER) update --lock
-
-.PHONY: config
-config: ## Run composer config - $ make config k=<key> [v=<value>] - Example: $ make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
-	$(if $(k),, $(error "Please specify a key with 'k=...'"))
-	$(COMPOSER) config $(if $(v),$(k) '$(v)',--unset $(k))
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),)
 include make/doctrine.mk
