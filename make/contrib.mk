@@ -3,16 +3,16 @@
 ##   (to delete this section, delete make/contrib.mk)
 ##
 
-contrib_volume: ## Add a Docker volume for a directory - $ make contrib_volume d=<directory> - Example: $ make contrib_volume d=symfony
+contrib_volume: ## Add a Docker volume for a directory | d=<directory> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='../$(d):/$(d)'
 	@sed -i'' "s|^SAFE_DIRECTORIES = .*|& /$(d)|" Makefile
 
-contrib_repo: ## Add a path repository to composer.json - $ make contrib_repo d=<directory> - Example: $ make contrib_repo d=monolog-bundle
+contrib_repo: ## Add a path repository to composer.json | d=<directory> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(COMPOSER) config repositories.$(d) '{"type": "path", "url": "../$(d)", "options": {"symlink": true}}'
 
-contrib_remove_repo: ## Remove a path repository to composer.json - $ make contrib_remove_repo d=<directory> - Example: $ make contrib_remove_repo d=monolog-bundle
+contrib_remove_repo: ## Remove a path repository to composer.json | d=<directory> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(COMPOSER) config --unset repositories.$(d)
 
@@ -26,30 +26,30 @@ contrib_dockerfile: ## Inject PHP extensions for contribution into Dockerfile
 	$(M) build_force_start
 	@printf " $(G)✔$(S) Enable contribution PHP extensions (xsl, etc.)\n"
 
-contrib_link: ## Link a local directory to the project (replace vendors with symlinks) - $ make contrib_link d=<directory> - Example: $ make contrib_link d=symfony
+contrib_link: ## Link a local directory to the project (replace vendors with symlinks) | d=<directory> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(PHP) /$(d)/link /app
 	@printf "🔗 Local directory $(Y)/$(d)$(S) linked to the project\n"
 
-contrib_unlink: ## Restore original vendors (rollback links from a directory) - $ make contrib_unlink d=<directory> - Example: $ make contrib_unlink d=symfony
+contrib_unlink: ## Restore original vendors (rollback links from a directory) | d=<directory> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(PHP) /$(d)/link /app --rollback
 	@printf "🔙 Original vendors restored (detached from $(Y)/$(d)$(S))\n"
 
 ##
 
-contrib_install: ## Install Composer packages in a directory - $ make contrib_install d=<directory> - Example: $ make contrib_install d=symfony
+contrib_install: ## Install Composer packages in a directory | d=<directory> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@printf "🧙 Install Composer packages in $(Y)/$(d)$(S)\n"
 	$(COMPOSER) install --working-dir=/$(d)
 
-contrib_clean: ## Remove vendor and lock file from a directory - $ make contrib_clean d=<directory> - Example: $ make contrib_clean d=symfony
+contrib_clean: ## Remove vendor and lock file from a directory | d=<directory> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(PHP) rm -fr /$(d)/vendor /$(d)/composer.lock
 
 ##
 
-contrib_tests: contrib_tests_clean ## Run PHPUnit tests in a directory - $ make contrib_tests d=<directory> [a=<arguments>] - Example: $ make contrib_tests d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle
+contrib_tests: contrib_tests_clean ## Run PHPUnit tests in a directory | d=<directory> [a=<arguments>] | d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@if docker compose exec php [ -f "/$(d)/phpunit" ]; then \
 		echo "$(G)🧙 Running PHPUnit via root phpunit binary$(S)"; \
@@ -62,7 +62,7 @@ contrib_tests: contrib_tests_clean ## Run PHPUnit tests in a directory - $ make 
 		exit 1; \
 	fi
 
-contrib_tests_www_data: contrib_tests_clean ## Run PHPUnit tests in a directory as www-data - $ make contrib_tests_www_data d=<directory> [a=<arguments>] - Example: $ make contrib_tests_www_data d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle
+contrib_tests_www_data: contrib_tests_clean ## Run PHPUnit tests in a directory as www-data | d=<directory> [a=<arguments>] | d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@if docker compose exec php [ -f "/$(d)/phpunit" ]; then \
 		echo "$(G)🧙 Running PHPUnit via root phpunit binary (www-data)$(S)"; \
@@ -75,6 +75,6 @@ contrib_tests_www_data: contrib_tests_clean ## Run PHPUnit tests in a directory 
 		exit 1; \
 	fi
 
-contrib_tests_clean: ## Clean PHPUnit cache and temporary files in a directory - $ make contrib_tests_clean d=<directory> - Example: $ make contrib_tests_clean d=symfony
+contrib_tests_clean: ## Clean PHPUnit cache and temporary files in a directory | d=<directory> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	docker compose exec -u 0 php rm -fr /tmp/* /$(d)/.phpunit.result.cache /$(d)/var/cache/*

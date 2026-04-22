@@ -32,26 +32,26 @@ endef
 #
 
 .PHONY: replace
-replace rp: # INTERNAL - Replace a string in a file - $ make replace f=<file> o=<old_string> n=<new_string> - Example: $ make replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
+replace rp: # INTERNAL - Replace a string in a file | f=<file> o=<old_string> n=<new_string> | f=Dockerfile o=pdo_pgsql n=pdo_mysql
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(o),, $(error "Please specify the old string with 'o=...'"))
 	$(if $(n),, $(error "Please specify the new string with 'n=...'"))
 	@sed "s|$(o)|$(n)|g" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_line rl: # INTERNAL - Replace an entire line beginning with a specific pattern - $ make replace f=<file> s=<start> n=<value> - Example: $ make replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
+replace_line rl: # INTERNAL - Replace an entire line beginning with a specific pattern | f=<file> s=<start> n=<value> | f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(s),, $(error "Please specify the start of the line to match with 's=...'"))
 	$(if $(n),, $(error "Please specify the new line content with 'n=...'"))
 	@# Use $(subst) to automatically escape "&" with "\&" for sed
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_block rb: # INTERNAL - Replace a block in a target file - $ make replace_block m=<marker> t=<target> s=<source> - Example: $ make replace_block m=doctrine/doctrine-bundle t=.env s=.starter/block/postgresql/.env
+replace_block rb: # INTERNAL - Replace a block in a target file | m=<marker> t=<target> s=<source> | m=doctrine/doctrine-bundle t=.env s=.starter/block/postgresql/.env
 	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
 	$(if $(t),, $(error "Please specify the target with 't=...'"))
 	$(if $(s),, $(error "Please specify the source with 's=...'"))
 	.starter/scripts/replace_block.sh -m "$(m)" -t "$(t)" -s "$(s)" -i "$(i)"
 
-clear_block cb: # INTERNAL - Clear a block in a target file - $ make clear_block m=<marker> t=<target> - Example: $ make clear_block m=doctrine/doctrine-bundle t=compose.yaml
+clear_block cb: # INTERNAL - Clear a block in a target file | m=<marker> t=<target> | m=doctrine/doctrine-bundle t=compose.yaml
 	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
 	$(if $(t),, $(error "Please specify the target with 't=...'"))
 	.starter/scripts/replace_block.sh -m "$(m)" -t "$(t)" -i "$(i)"
@@ -84,7 +84,7 @@ compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make bui
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(M) co m="use DATABASE_URL var in compose.yaml"
 
-suggest_branch: # INTERNAL - Suggest creating a new branch before generation - $ make suggest_branch FLAVOR=<flavor>
+suggest_branch: # INTERNAL - Suggest creating a new branch before generation | FLAVOR=<flavor>
 	@printf "\n$(Y)--- Branch ---$(S)\n"
 	@printf " $(Y)›$(S) Current branch: $(G)$$(git rev-parse --abbrev-ref HEAD)$(S)\n"
 	@printf " $(Y)›$(S) New branch name [$(G)$(FLAVOR)$(S)] ($(Y)Enter$(S) to accept, $(Y)n$(S) to skip): "; \
@@ -321,7 +321,7 @@ require_tailwind: _assets ## Install Tailwind CSS - https://tailwindcss.com/
 ##
 
 health: c ?= 200
-health: ## Check the website and database connection (via Doctrine) - $ make health [c=<status_code>] [t=<text>] - Example: $ make health c=404 t="Welcome to Symfony"
+health: ## Check the website and database connection (via Doctrine) | [c=<status_code>] [t=<text>] | c=404 t="Welcome to Symfony"
 	@printf "\n$(Y)--- Check Health ---$(S)\n"
 	@EXIT_CODE=0; \
 	STATUS_CODE=$$(curl -k -L -s -o /dev/null -w "%{http_code}" $(LOCALHOST_MAIN)); \
@@ -399,30 +399,30 @@ endif
 
 ##   YQ
 
-yq: ## Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor - $ make yq [a=<argument>] - Example: $ make yq a=--help
+yq: ## Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor | [a=<argument>] | a=--help
 	$(YQ) $(a)
 
-yq_add ya: ## Append a value to an array key in a YAML file - $ make yq_add f=<file> k=<key> v=<value> - Example: $ make yq_add f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway
+yq_add ya: ## Append a value to an array key in a YAML file | f=<file> k=<key> v=<value> | f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(if $(value v),, $(error "Please specify a value with 'v=...'"))
 	$(YQ) --inplace '.$(k) += "$(value v)"' $(f)
 
-yq_clear yc: ## Clear a key's value in a YAML file (sets it to empty string) - $ make yq_clear f=<file> k=<key> - Example: $ make yq_clear f=compose.yaml k=services.php.extra_hosts
+yq_clear yc: ## Clear a key's value in a YAML file (sets it to empty string) | f=<file> k=<key> | f=compose.yaml k=services.php.extra_hosts
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(YQ) --inplace '.$(k) = ""' $(f)
 
-yq_delete yd: ## Delete a key from a YAML file - $ make yq_delete f=<file> k=<key> - Example: $ make yq_delete f=compose.yaml k=services.php.extra_hosts
+yq_delete yd: ## Delete a key from a YAML file | f=<file> k=<key> | f=compose.yaml k=services.php.extra_hosts
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(YQ) --inplace 'del(.$(k))' $(f)
 
-yq_print: ## Print contents of a file as idiomatic YAML with colors - $ make yq_print f=<file> - Example: $ make yq_print f=compose.yaml
+yq_print: ## Print contents of a file as idiomatic YAML with colors | f=<file> | f=compose.yaml
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(YQ) --prettyPrint --colors --output-format yaml $(f)
 
-yq_update yu: ## Set or update a key's value in a YAML file - $ make yq_update f=<file> - Example: $ make yq_add f=compose.yaml k=services.php.build.target v=frankenphp_prod
+yq_update yu: ## Set or update a key's value in a YAML file | f=<file> | f=compose.yaml k=services.php.build.target v=frankenphp_prod
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(if $(value v),, $(error "Please specify a value with 'v=...'"))

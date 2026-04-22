@@ -1,14 +1,14 @@
 ## — POSTGRESQL 🛢️ ————————————————————————————————————————————————————————————
 
 .PHONY: psql
-psql: ## Execute psql - $ make psql [a=<arguments>] - Example: $ make psql a="-V"
+psql: ## Execute psql | [a=<arguments>] | a="-V"
 	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB) $(a)
 
 psql_sh: ## Open a shell on the PostgreSQL container
 	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB)
 
 .PHONY: table
-table: ## Show the content of a table - $ make table n=<name> - Example: $ make table n=user
+table: ## Show the content of a table | n=<name> | n=user
 	$(if $(n),, $(error "Please specify a table name with 'n=...'"))
 	$(CONTAINER_DATABASE) psql -U $(POSTGRES_USER) $(POSTGRES_DB) -c "SELECT * FROM $(n);"
 
@@ -32,7 +32,7 @@ dump_gz: ## Create a compressed SQL dump (gzip)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
 .PHONY: restore
-restore: confirm drop create ## Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
+restore: confirm drop create ## Restore a dump (CAUTION! The command purges the database) [y/N] | f=<file> | f="build/dumps/dump.sql"
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(CONTAINER_DATABASE_NO_TTY) psql -U $(POSTGRES_USER) $(POSTGRES_DB) <$(f)
 	@printf " $(G)✔$(S) Database successfully restored from $(Y)$(f)$(S)\n"

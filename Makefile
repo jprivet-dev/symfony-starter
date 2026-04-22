@@ -320,7 +320,7 @@ tests t: db_init@test fixtures@test phpunit ## Run all tests
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: build
-build: ## Build or rebuild Docker services using cache - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
+build: ## Build or rebuild Docker services using cache | [a=<arguments>] | a=--no-cache
 	$(COMPOSE) build $(a)
 
 .PHONY: build_force
@@ -330,7 +330,7 @@ build_force: build ## Build or rebuild Docker services without cache (force fres
 ##
 
 .PHONY: up
-up: ## Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
+up: ## Start the containers | [a=<arguments>] | a=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans $(a)
 	$(MAKE) runtime
 	$(MAKE) permissions
@@ -415,12 +415,12 @@ routes: ## Display current routes with assigned controllers and aliases
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
 
 .PHONY: php
-php: ## Run PHP command - $ make php [a=<arguments>]- Example: $ make php a=--version
+php: ## Run PHP command | [a=<arguments>] | a=--version
 	$(PHP) $(a)
 
 ##
 
-php_command: ## Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
+php_command: ## Run a command inside the PHP container | [a=<arguments>] | a="ls -al"
 	$(BASH_COMMAND) "$(a)"
 
 php_env: ## Display all environment variables set within the PHP container
@@ -433,7 +433,7 @@ php_sh sh: ## Connect to the PHP container shell
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
 .PHONY: composer
-composer: ## Run composer command - $ make composer [a=<arguments>] - Example: $ make composer a="require --dev phpunit/phpunit"
+composer: ## Run composer command | [a=<arguments>] | a="require --dev phpunit/phpunit"
 	$(COMPOSER) $(a)
 
 .PHONY: i
@@ -452,7 +452,7 @@ composer_validate: ## Check if lock file is up to date (even when config.lock is
 ##
 
 .PHONY: config
-config: ## Run composer config - $ make config k=<key> [v=<value>] - Example: $ make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
+config: ## Run composer config | k=<key> [v=<value>] | k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
 	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(COMPOSER) config $(if $(v),$(k) '$(v)',--unset $(k))
 
@@ -465,15 +465,15 @@ outdated: ## Show a list of installed packages that have updates available, incl
 	$(COMPOSER) outdated
 
 .PHONY: remove
-remove: ## Remove a package from the require or require-dev - $ make remove [a=<arguments>] - Example: $ make remove a="phpunit/phpunit"
+remove: ## Remove a package from the require or require-dev | [a=<arguments>] | a="phpunit/phpunit"
 	$(COMPOSER) remove $(a)
 
 .PHONY: require
-require: ## Add required packages to your composer.json and installs them - $ make require [a=<arguments>] - Example: $ make require a="--dev phpunit/phpunit"
+require: ## Add required packages to your composer.json and installs them | [a=<arguments>] | a="--dev phpunit/phpunit"
 	$(COMPOSER) require $(a)
 
 .PHONY: update
-update: ## Update Composer packages - $ make update [a=<arguments>] - Example: $ make update a="symfony/monolog-bundle"
+update: ## Update Composer packages | [a=<arguments>] | a="symfony/monolog-bundle"
 	@printf "\n$(Y)--- Composer Update (env: $(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader $(a)
