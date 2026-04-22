@@ -242,10 +242,10 @@ help: ## Display this help message with available commands
 	@printf "Usage: make $(G)<target>$(S)\n"
 	@printf "       make $(G)f=<find>$(S)\n"
 	@grep -E '(^[.a-zA-Z_-]+[^:]+:.*##.*?$$)|(^#{2})' $(MAKEFILE_LIST) | awk -v find="$(f)" 'BEGIN {FS = "## "}\
-	function show(targets, description) {\
-		split(targets, parts, " "); target=parts[1]; alias=parts[2]; pos=index(description, " - $$");\
-		if (pos > 0) printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\033[36m%s\033[0m\n", target, alias, substr(description, 1, pos-1), substr(description, pos);\
-		else         printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description;\
+	function show(targets, description,    parts, target, alias, n, fields, params, example) {\
+		split(targets, parts, " "); target = parts[1]; alias = parts[2];\
+		n = split(description, fields, / \| /); params = (n >= 2) ? " " fields[2] : ""; example = (n >= 3) ? " (e.g. make " target " " fields[3] ")" : "";\
+		printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\033[36m%s\033[0m\n", target params, alias, fields[1], example;\
 	} {\
 		split($$1, line, ":"); targets=line[2]; description=$$2;\
 		if      (find == "" && targets == "##")                    printf "\033[33m%s\n", "";\
@@ -383,11 +383,11 @@ logs: ## View logs (follow mode)
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
 .PHONY: symfony sf
-symfony sf: ## Run any Symfony console command | [c=<command>] | e.g. make symfony c=cache:clear
+symfony sf: ## Run any Symfony console command | [c=<command>] | c=cache:clear
 	$(CONSOLE) $(c)
 
 .PHONY: console
-console: ## Symfony console alias | [c=<command>] | e.g. make symfony c=cache:clear
+console: ## Symfony console alias | [c=<command>] | c=cache:clear
 	$(CONSOLE) $(c)
 
 ##
