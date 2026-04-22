@@ -49,7 +49,7 @@ contrib_clean: ## Remove vendor and lock file from a directory - $ make contrib_
 
 ##
 
-contrib_tests: contrib_tests_clean ## Run PHPUnit tests in a directory - $ make contrib_tests d=<directory> [a=<arguments>]
+contrib_tests: contrib_tests_clean ## Run PHPUnit tests in a directory - $ make contrib_tests d=<directory> [a=<arguments>] - Example: $ make contrib_tests d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@if docker compose exec php [ -f "/$(d)/phpunit" ]; then \
 		echo "$(G)🧙 Running PHPUnit via root phpunit binary$(S)"; \
@@ -62,7 +62,7 @@ contrib_tests: contrib_tests_clean ## Run PHPUnit tests in a directory - $ make 
 		exit 1; \
 	fi
 
-contrib_tests_www_data: contrib_tests_clean ## Run PHPUnit tests as www-data - $ make contrib_tests_www_data d=<directory> [a=<arguments>]
+contrib_tests_www_data: contrib_tests_clean ## Run PHPUnit tests in a directory as www-data - $ make contrib_tests_www_data d=<directory> [a=<arguments>] - Example: $ make contrib_tests_www_data d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@if docker compose exec php [ -f "/$(d)/phpunit" ]; then \
 		echo "$(G)🧙 Running PHPUnit via root phpunit binary (www-data)$(S)"; \
