@@ -225,7 +225,6 @@ Usage: make <target>
   contrib_clean d=<directory>             Remove vendor and lock file from a directory (e.g. make contrib_clean d=symfony)
 
   contrib_tests d=<directory> [a=<arguments>]    Run PHPUnit tests in a directory (e.g. make contrib_tests d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle)
-  contrib_tests_www_data d=<directory> [a=<arguments>]    Run PHPUnit tests in a directory as www-data (e.g. make contrib_tests_www_data d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle)
   contrib_tests_clean d=<directory>       Clean PHPUnit cache and temporary files in a directory (e.g. make contrib_tests_clean d=symfony)
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————

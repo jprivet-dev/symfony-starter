@@ -62,19 +62,6 @@ contrib_tests: contrib_tests_clean ## Run PHPUnit tests in a directory | d=<dire
 		exit 1; \
 	fi
 
-contrib_tests_www_data: contrib_tests_clean ## Run PHPUnit tests in a directory as www-data | d=<directory> [a=<arguments>] | d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle
-	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
-	@if docker compose exec php [ -f "/$(d)/phpunit" ]; then \
-		echo "$(G)🧙 Running PHPUnit via root phpunit binary (www-data)$(S)"; \
-		docker compose exec -u www-data -e SYMFONY_DEPRECATIONS_HELPER=weak php /$(d)/phpunit -c /$(d)/phpunit.xml.dist --display-skipped $(a); \
-	elif docker compose exec php [ -f "/$(d)/vendor/bin/phpunit" ]; then \
-		echo "$(G)🧙 Running PHPUnit via vendor/bin/phpunit (www-data)$(S)"; \
-		docker compose exec -u www-data -e SYMFONY_DEPRECATIONS_HELPER=weak php /$(d)/vendor/bin/phpunit -c /$(d)/phpunit.xml.dist --display-skipped $(a); \
-	else \
-		echo "$(R)✘ PHPUnit binary not found in /$(d) inside the container$(S)"; \
-		exit 1; \
-	fi
-
 contrib_tests_clean: ## Clean PHPUnit cache and temporary files in a directory | d=<directory> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	docker compose exec -u 0 php rm -fr /tmp/* /$(d)/.phpunit.result.cache /$(d)/var/cache/*
