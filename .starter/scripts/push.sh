@@ -18,6 +18,7 @@ S='\033[0m'
 # --- Branches ---
 
 BRANCHES=(
+    "minimalist@6x"
     "minimalist"
     "minimalist@lts"
     "webapp"
