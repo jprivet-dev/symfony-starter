@@ -189,6 +189,28 @@ easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Dock
 
 ##
 
+.PHONY: contrib
+contrib: ## Generate a minimalist Symfony application with Docker configuration for contribution (stable release)
+	$(M) suggest_branch FLAVOR=$(or $(BRANCH),contrib)
+ifneq ($(filter 6.%,$(SYMFONY_VERSION)),)
+	git apply .starter/patch/symfony6-frankenphp.patch
+	git commit -am "🤖 [starter] fix: restore Symfony 6 compatibility with FrankenPHP worker mode"
+endif
+	$(M) skeleton
+	$(M) contrib_dockerfile
+	$(M) permissions images info
+	$(M) health_welcome_to_symfony
+	$(PRINT_EXECUTION_TIME)
+	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application (for contribution) generated!\n\n"
+
+contrib@lts: ## Generate a minimalist Symfony application with Docker configuration for contribution (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) contrib BRANCH=$(or $(BRANCH),contrib@lts)
+
+contrib@6x: ## Generate a minimalist Symfony 6.x application with Docker configuration for contribution
+	SYMFONY_VERSION=6.* $(M) contrib BRANCH=$(or $(BRANCH),contrib@6x)
+
+##
+
 update_symfony_docker: ## Update the vendored dunglas/symfony-docker snapshot at the root
 	.starter/scripts/update_symfony_docker.sh
 
