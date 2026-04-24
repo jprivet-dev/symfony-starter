@@ -228,6 +228,10 @@ PHPMD            = $(PHP) -d error_reporting="E_ALL & ~E_DEPRECATED" $(VENDOR_PH
 TWIGCSFIXER      = $(PHP) $(VENDOR_TWIGCSFIXER)
 PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 
+# --- REQUIRES ---
+
+include make/requires.mk
+
 # --- EXTEND THE MAIN MAKEFILE ---
 
 ifneq ($(APP_ENV),prod)

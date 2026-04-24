@@ -1,11 +1,5 @@
 ## — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
 
-_doctrine:
-ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine$(S) with $(G)make require_orm$(S)\n"
-	@exit 1
-endif
-
 db: _doctrine drop create migrate ## Drop and create the database and migrate
 
 db@test: a="--env=test"

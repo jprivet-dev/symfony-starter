@@ -1,11 +1,5 @@
 ## — PHPUNIT ✅ ———————————————————————————————————————————————————————————————
 
-_phpunit:
-ifeq ($(wildcard $(BIN_PHPUNIT)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)PHPUnit$(S) with $(G)make require_test_pack$(S)\n"
-	@exit 1
-endif
-
 .PHONY: phpunit p
 phpunit p: _phpunit ## Run PHPUnit | [a=<args>] | a="tests/myTest.php"
 	@printf "\n$(Y)--- PHPUnit ---$(S)\n"

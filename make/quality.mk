@@ -10,12 +10,6 @@ lint: phpcsfixer_lint phpstan_lint phpmd_lint twigcsfixer_lint ## Run all linter
 
 ##
 
-_phpcsfixer:
-ifeq ($(wildcard $(VENDOR_PHPCSFIXER)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)PHP CS Fixer$(S) with $(G)make require_phpcsfixer$(S)\n"
-	@exit 1
-endif
-
 .PHONY: phpcsfixer
 phpcsfixer: _phpcsfixer ## Run PHP CS Fixer | [a=<args>] | a=list
 	$(PHPCSFIXER) $(a)
@@ -29,12 +23,6 @@ phpcsfixer_lint: _phpcsfixer ## Check code style
 
 ##
 
-_phpmd:
-ifeq ($(wildcard $(VENDOR_PHPMD)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)PHP Mess Detector$(S) with $(G)make require_phpmd$(S)\n"
-	@exit 1
-endif
-
 .PHONY: phpmd
 phpmd: _phpmd ## Run PHP Mess Detector | [a=<args>] | a="src ansi cleancode"
 	$(PHPMD) $(a)
@@ -45,12 +33,6 @@ phpmd_lint: _phpmd ## Run PHP Mess Detector with all rules
 
 ##
 
-_phpmetrics:
-ifeq ($(wildcard $(VENDOR_PHPMETRICS)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)PHPMetrics$(S) with $(G)make require_phpmetrics$(S)\n"
-	@exit 1
-endif
-
 phpmetrics_report: DIR = $(BUILD)/phpmetrics/phpmetrics-$(NOW)
 phpmetrics_report: _phpmetrics ## Run PHPMetrics and generate detailed report
 	@printf "\n$(Y)--- PHPMetrics Report ---$(S)\n"
@@ -59,12 +41,6 @@ phpmetrics_report: _phpmetrics ## Run PHPMetrics and generate detailed report
 	@printf " $(G)✔$(S) PHPMetrics report is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
 
 ##
-
-_phpstan:
-ifeq ($(wildcard $(VENDOR_PHPSTAN)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)PHPStan$(S) with $(G)make require_phpstan$(S)\n"
-	@exit 1
-endif
 
 .PHONY: phpstan
 phpstan: _phpstan ## Run PHPStan | [a=<args>] | a="src tests"
@@ -78,12 +54,6 @@ phpstan_lint: _phpstan ## Run PHPStan analyse | [a=<args>] | a="src tests"
 	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a)
 
 ##
-
-_twigcsfixer:
-ifeq ($(wildcard $(VENDOR_TWIGCSFIXER)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)Twig CS Fixer$(S) with $(G)make require_twigcsfixer$(S)\n"
-	@exit 1
-endif
 
 .PHONY: twigcsfixer
 twigcsfixer: _twigcsfixer ## Run Twig CS Fixer | [a=<args>] | a="lint /path/to/code"

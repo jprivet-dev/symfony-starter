@@ -1,11 +1,5 @@
 ## — MONOLOG 📝 ———————————————————————————————————————————————————————————————
 
-_monolog:
-ifeq ($(wildcard $(VENDOR_MONOLOG)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)MonologBundle$(S)\n"
-	@exit 1
-endif
-
 monolog: FILE = $(BUILD)/monolog/monolog-current-config-$(APP_ENV)-$(NOW).yaml
 monolog: _monolog ## Export the Monolog current configuration (debug:config) to a YAML file
 	mkdir -p $(BUILD)/monolog
