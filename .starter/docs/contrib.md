@@ -22,8 +22,8 @@ git clone git@github.com:YOUR_USERNAME/symfony.git ../symfony
 Add the Docker volume and rebuild:
 
 ```shell
-make contrib_volume d=symfony
-git commit -am "Add a Docker volume for the symfony directory"
+make monorepo_volume
+git commit -am "Add a Docker volume for the Symfony monorepo"
 
 make build
 make up_detached
@@ -32,7 +32,7 @@ make up_detached
 Link the monorepo into your application's vendors:
 
 ```shell
-make contrib_link d=symfony
+make monorepo_link
 ```
 
 ### Develop & Test
@@ -42,26 +42,26 @@ Modify files in `../symfony/src/` — changes are immediately reflected in the a
 Before running tests, ensure all dependencies are installed within the monorepo:
 
 ```bash
-make contrib_install d=symfony
+make monorepo_install
 ```
 
 Run the framework tests inside the container using absolute paths from the container's root:
 
 ```bash
 # Run tests for a specific component
-make contrib_tests d=symfony a="/symfony/src/Symfony/Component/HttpKernel"
+make monorepo_tests a="/symfony/src/Symfony/Component/HttpKernel"
 ```
 
 **Pro-tip:** When running large test suites, you can exclude specific groups that require additional infrastructure (like Redis) by appending the argument:
 
 ```bash
-make contrib_tests d=symfony a="/symfony/src/Symfony/Bundle --exclude-group=redis"
+make monorepo_tests a="/symfony/src/Symfony/Bundle --exclude-group=redis"
 ```
 
 Clean PHPUnit cache and temporary files if needed (recommended before running large suites):
 
 ```bash
-make contrib_tests_clean d=symfony
+make monorepo_tests_clean
 ```
 
 ### Personal shortcuts (local customization)
@@ -76,41 +76,41 @@ If you are working frequently on specific components, you can create your own sh
 2. Add your custom commands to `make/local.mk`. These will automatically appear in `make help`. Here are some useful examples you can use:
 
 ```makefile
-contrib_tests_bridge: ## Run tests for all Bridge components
-	make contrib_tests d=symfony a="/symfony/src/Symfony/Bridge"
+monorepo_tests_bridge: ## Run tests for all Bridge components
+	make monorepo_tests a="/symfony/src/Symfony/Bridge"
 
-contrib_tests_bundle: ## Run tests for all Bundle components
-	make contrib_tests d=symfony a="/symfony/src/Symfony/Bundle"
+monorepo_tests_bundle: ## Run tests for all Bundle components
+	make monorepo_tests a="/symfony/src/Symfony/Bundle"
 
-contrib_tests_component: ## Run tests for all Components
-	make contrib_tests d=symfony a="/symfony/src/Symfony/Component"
+monorepo_tests_component: ## Run tests for all Components
+	make monorepo_tests a="/symfony/src/Symfony/Component"
 
-contrib_tests_di: ## Run tests for DependencyInjection: Testing service container compilation and resolution
-	make contrib_tests d=symfony a="/symfony/src/Symfony/Component/DependencyInjection"
+monorepo_tests_di: ## Run tests for DependencyInjection: Testing service container compilation and resolution
+	make monorepo_tests a="/symfony/src/Symfony/Component/DependencyInjection"
 
-contrib_tests_doctrine: ## Run tests for DoctrineBridge: Verifying integration between Symfony and Doctrine
-	make contrib_tests d=symfony a="/symfony/src/Symfony/Bridge/Doctrine"
+monorepo_tests_doctrine: ## Run tests for DoctrineBridge: Verifying integration between Symfony and Doctrine
+	make monorepo_tests a="/symfony/src/Symfony/Bridge/Doctrine"
 
-contrib_tests_eventdispatcher: ## Run tests for EventDispatcher: Testing the communication layer between components
-	make contrib_tests d=symfony a="/symfony/src/Symfony/Component/EventDispatcher"
+monorepo_tests_eventdispatcher: ## Run tests for EventDispatcher: Testing the communication layer between components
+	make monorepo_tests a="/symfony/src/Symfony/Component/EventDispatcher"
 
-contrib_tests_form: ## Run tests for Form: Testing complex mapping, validation, and rendering logic
-	make contrib_tests d=symfony a="/symfony/src/Symfony/Component/Form"
+monorepo_tests_form: ## Run tests for Form: Testing complex mapping, validation, and rendering logic
+	make monorepo_tests a="/symfony/src/Symfony/Component/Form"
 
-contrib_tests_httpfoundation: ## Run tests for HttpFoundation: Verifying HTTP request/response standards and logic
-	make contrib_tests d=symfony a="/symfony/src/Symfony/Component/HttpFoundation"
+monorepo_tests_httpfoundation: ## Run tests for HttpFoundation: Verifying HTTP request/response standards and logic
+	make monorepo_tests a="/symfony/src/Symfony/Component/HttpFoundation"
 
-contrib_tests_httpkernel: ## Run tests for HttpKernel: The central engine managing the request lifecycle
-	make contrib_tests d=symfony a="/symfony/src/Symfony/Component/HttpKernel"
+monorepo_tests_httpkernel: ## Run tests for HttpKernel: The central engine managing the request lifecycle
+	make monorepo_tests a="/symfony/src/Symfony/Component/HttpKernel"
 
-contrib_tests_routing: ## Run tests for Routing: Validating URL matching and generation
-	make contrib_tests d=symfony a="/symfony/src/Symfony/Component/Routing"
+monorepo_tests_routing: ## Run tests for Routing: Validating URL matching and generation
+	make monorepo_tests a="/symfony/src/Symfony/Component/Routing"
 
-contrib_tests_security: ## Run tests for SecurityBundle: Testing authentication, firewalls, and authorization
-	make contrib_tests d=symfony a="/symfony/src/Symfony/Bundle/SecurityBundle"
+monorepo_tests_security: ## Run tests for SecurityBundle: Testing authentication, firewalls, and authorization
+	make monorepo_tests a="/symfony/src/Symfony/Bundle/SecurityBundle"
 
-contrib_tests_twig: ## Run tests for TwigBridge: Validating Twig extensions and integration with components
-	make contrib_tests d=symfony a="/symfony/src/Symfony/Bridge/Twig"
+monorepo_tests_twig: ## Run tests for TwigBridge: Validating Twig extensions and integration with components
+	make monorepo_tests a="/symfony/src/Symfony/Bridge/Twig"
 ```
 
 > **Note:** The `make/local.mk` file is ignored by Git. This is the perfect place to experiment with new commands before potentially proposing them as a permanent addition to the project.
@@ -136,7 +136,7 @@ Add the Docker volume and register the path repository:
 
 ```shell
 make contrib_volume d=monolog-bundle
-make contrib_repo d=monolog-bundle
+make contrib_add_repo d=monolog-bundle
 git commit -am "Add a Docker volume and repo for the monolog-bundle"
 
 make build
@@ -215,7 +215,7 @@ git push origin fix/my-issue
 To remove vendors and lock files from a local repository to save space:
 
 ```shell
-make contrib_clean d=symfony
+make monorepo_clean
 make contrib_clean d=monolog-bundle
 ```
 
