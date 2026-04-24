@@ -213,19 +213,23 @@ Usage: make <target>
 
   (to delete this section, delete make/contrib.mk)
 
-  contrib_volume d=<dir>                  Add a Docker volume for a directory (e.g. make contrib_volume d=symfony)
-  contrib_repo d=<dir>                    Add a path repository to composer.json (e.g. make contrib_repo d=monolog-bundle)
-  contrib_remove_repo d=<dir>             Remove a path repository to composer.json (e.g. make contrib_remove_repo d=monolog-bundle)
-
   contrib_dockerfile                      Inject PHP extensions for contribution into Dockerfile
-  contrib_link d=<dir>                    Link a local directory to the project (replace vendors with symlinks) (e.g. make contrib_link d=symfony)
-  contrib_unlink d=<dir>                  Restore original vendors (rollback links from a directory) (e.g. make contrib_unlink d=symfony)
 
+  contrib_volume d=<dir>                  Add a Docker volume for a directory (e.g. make contrib_volume d=symfony)
+  contrib_add_repo d=<dir>                Add a path repository to composer.json (e.g. make contrib_add_repo d=monolog-bundle)
+  contrib_remove_repo d=<dir>             Remove a path repository to composer.json (e.g. make contrib_remove_repo d=monolog-bundle)
   contrib_install d=<dir>                 Install Composer packages in a directory (e.g. make contrib_install d=symfony)
   contrib_clean d=<dir>                   Remove vendor and lock file from a directory (e.g. make contrib_clean d=symfony)
-
   contrib_tests d=<dir> [a=<args>]        Run PHPUnit tests in a directory (e.g. make contrib_tests d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle)
   contrib_tests_clean d=<dir>             Clean PHPUnit cache and temporary files in a directory (e.g. make contrib_tests_clean d=symfony)
+
+  monorepo_volume                         Add a Docker volume for the Symfony monorepo
+  monorepo_link                           Link the Symfony monorepo to the project (replace vendors with symlinks)
+  monorepo_unlink                         Restore original vendors (rollback links from the Symfony monorepo)
+  monorepo_install                        Install Composer packages in the Symfony monorepo
+  monorepo_clean                          Remove vendor and lock file from the Symfony monorepo
+  monorepo_tests [a=<args>]               Run PHPUnit tests in the Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
+  monorepo_tests_clean                    Clean PHPUnit cache and temporary files the Symfony monorepo
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
@@ -243,6 +247,10 @@ Usage: make <target>
   demo                                    Generate a Symfony Demo application (with SQLite) with Docker configuration
   easy_admin                              Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
   easy_admin@lts                          Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+
+  contrib                                 Generate a minimalist Symfony application with Docker configuration for contribution (stable release)
+  contrib@lts                             Generate a minimalist Symfony application with Docker configuration for contribution (LTS - long-term support release)
+  contrib@6x                              Generate a minimalist Symfony 6.x application with Docker configuration for contribution
 
   update_symfony_docker                   Update the vendored dunglas/symfony-docker snapshot at the root
   skeleton                                Install symfony/skeleton from the versioned dunglas/symfony-docker files at the root
