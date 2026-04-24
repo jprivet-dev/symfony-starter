@@ -161,17 +161,18 @@ endif
 #
 # To enable local overrides for infrastructure variables (like ports, versions),
 # we explicitly build the --env-file chain.
-ifneq ($(wildcard .env),)
-ENV_FILES += --env-file .env
-endif
-ifneq ($(wildcard .env.local),)
-ENV_FILES += --env-file .env.local
-endif
-ifneq ($(wildcard .env.$(APP_ENV)),)
-ENV_FILES += --env-file .env.$(APP_ENV)
-endif
-ifneq ($(wildcard .env.$(APP_ENV).local),)
-ENV_FILES += --env-file .env.$(APP_ENV).local
+
+define add_env_file
+$(if $(wildcard $(1)),$(if $(shell cat $(1)),--env-file $(1)))
+endef
+
+ENV_FILES += $(call add_env_file,.env.local)
+ENV_FILES += $(call add_env_file,.env.$(APP_ENV))
+ENV_FILES += $(call add_env_file,.env.$(APP_ENV).local)
+
+# .env is loaded by Docker by default, only add it explicitly if overrides are active
+ifneq ($(ENV_FILES),)
+ENV_FILES := $(if $(wildcard .env),--env-file .env) $(ENV_FILES)
 endif
 
 # --- DOCKER COMMANDS ---
