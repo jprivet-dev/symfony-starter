@@ -22,7 +22,6 @@ START_TOTAL=$(date +%s)
 LOGS_DIR=".starter/scripts/logs"
 
 BRANCHES=(
-    "minimalist@6x"
     "minimalist"
     "minimalist@lts"
     "webapp"
@@ -36,24 +35,12 @@ BRANCHES=(
     "easy_admin"
     "easy_admin@lts"
     "demo"
+    "contrib@6x"
 )
 
 # ------------------------------------------------------------------
 # Flavor functions — one per branch
 # ------------------------------------------------------------------
-
-generate_flavor_minimalist_6x() {
-    git switch "${WORK_BRANCH}"
-    NO_INTERACTION=true make clean_app
-
-    git switch -C symfony6-frankenphp-patch
-    git apply .starter/patch/symfony6-frankenphp.patch
-    git commit -am "🤖 [starter] fix: restore Symfony 6 compatibility with FrankenPHP worker mode"
-
-    NO_INTERACTION=true make SYMFONY_VERSION=6.* minimalist BRANCH=minimalist@6x
-
-    git branch -D symfony6-frankenphp-patch
-}
 
 generate_flavor_minimalist() {
     git switch "${WORK_BRANCH}"
@@ -139,6 +126,12 @@ generate_flavor_demo() {
     git switch "${WORK_BRANCH}"
     NO_INTERACTION=true make clean_app
     NO_INTERACTION=true make demo
+}
+
+generate_flavor_contrib_6x() {
+    git switch "${WORK_BRANCH}"
+    NO_INTERACTION=true make clean_app
+    NO_INTERACTION=true make contrib@6x
 }
 
 # ------------------------------------------------------------------

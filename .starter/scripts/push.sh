@@ -18,7 +18,6 @@ S='\033[0m'
 # --- Branches ---
 
 BRANCHES=(
-    "minimalist@6x"
     "minimalist"
     "minimalist@lts"
     "webapp"
@@ -32,6 +31,7 @@ BRANCHES=(
     "easy_admin"
     "easy_admin@lts"
     "demo"
+    "contrib@6x"
 )
 
 printf "\n${Y}--- Symfony Starter - Push All ---${S}\n\n"
