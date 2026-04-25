@@ -31,6 +31,7 @@ BRANCHES=(
     "easy_admin"
     "easy_admin@lts"
     "demo"
+    "contrib@6x"
 )
 
 printf "\n${Y}--- Symfony Starter - Push All ---${S}\n\n"

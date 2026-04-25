@@ -1,11 +1,5 @@
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 
-_assets:
-ifeq ($(wildcard $(VENDOR_ASSETS)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)AssetMapper$(S) with $(G)make require_asset_mapper$(S)\n"
-	@exit 1
-endif
-
 .PHONY: assets
 assets: _assets ## Generate all assets
 	@printf "\n$(Y)--- Assets (env: $(APP_ENV)) ---$(S)\n"

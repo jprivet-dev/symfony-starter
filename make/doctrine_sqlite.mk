@@ -1,14 +1,14 @@
 ## — SQLITE 🛢️ ————————————————————————————————————————————————————————————————
 
 .PHONY: sqlite
-sqlite: ## Execute sqlite3 - $ make sqlite [a=<arguments>] - Example: $ make sqlite a="-version"
+sqlite: ## Execute sqlite3 | [a=<args>] | a="-version"
 	$(CONTAINER_PHP) sqlite3 $(SQLITE_DB_FILE) $(a)
 
 sqlite_sh: ## Open a SQLite shell on the PHP container
 	$(CONTAINER_PHP) sqlite3 $(SQLITE_DB_FILE)
 
 .PHONY: table
-table: ## Show the content of a table - $ make table n=<name> - Example: $ make table n=user
+table: ## Show the content of a table | n=<name> | n=user
 	$(if $(n),, $(error "Please specify a table name with 'n=...'"))
 	$(CONTAINER_PHP) sqlite3 $(SQLITE_DB_FILE) "SELECT * FROM $(n);"
 
@@ -32,7 +32,7 @@ dump_gz: ## Create a compressed SQL dump (gzip)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
 .PHONY: restore
-restore: confirm ## Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
+restore: confirm ## Restore a dump (CAUTION! The command purges the database) [y/N] | f=<file> | f="build/dumps/dump.sql"
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	rm -f $(SQLITE_DB_FILE)
 	$(CONTAINER_PHP_NO_TTY) sqlite3 $(SQLITE_DB_FILE) < $(f)

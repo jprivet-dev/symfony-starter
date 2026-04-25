@@ -1,13 +1,7 @@
 ## — PHPUNIT ✅ ———————————————————————————————————————————————————————————————
 
-_phpunit:
-ifeq ($(wildcard $(BIN_PHPUNIT)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)PHPUnit$(S) with $(G)make require_test_pack$(S)\n"
-	@exit 1
-endif
-
 .PHONY: phpunit p
-phpunit p: _phpunit ## Run PHPUnit - $ make phpunit [a=<arguments>] - Example: $ make phpunit a="tests/myTest.php"
+phpunit p: _phpunit ## Run PHPUnit | [a=<args>] | a="tests/myTest.php"
 	@printf "\n$(Y)--- PHPUnit ---$(S)\n"
 	$(PHPUNIT) $(a)
 
@@ -21,14 +15,14 @@ phpunit_log: _phpunit ## Exporting PHPUnit terminal output to a log file
 
 .PHONY: coverage
 coverage: DIR = $(BUILD)/coverage/coverage-$(NOW)
-coverage: _phpunit ## Generate code coverage report in HTML format - $ make coverage [a=<arguments>] - Example: $ make coverage a="tests/myTest.php"
+coverage: _phpunit ## Generate code coverage report in HTML format | [a=<args>] | a="tests/myTest.php"
 	@printf "\n$(Y)--- PHPUnit Coverage ---$(S)\n"
 	mkdir -p $(BUILD)/coverage
 	-$(PHPUNIT_COVERAGE) --coverage-html $(DIR) $(a)
 	@printf " $(G)✔$(S) Coverage is ready at $(Y)$(PWD)/$(DIR)/index.html$(S)\n"
 
 .PHONY: dox
-dox: _phpunit ## Report test execution progress in TestDox format - $ make dox [a=<arguments>] - Example: $ make dox a="tests/myTest.php"
+dox: _phpunit ## Report test execution progress in TestDox format | [a=<args>] | a="tests/myTest.php"
 	@printf "\n$(Y)--- PHPUnit TestDox ---$(S)\n"
 	$(PHPUNIT) --testdox $(a)
 

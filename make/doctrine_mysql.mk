@@ -1,14 +1,14 @@
 ## — MYSQL 🛢️ —————————————————————————————————————————————————————————————————
 
 .PHONY: mysql
-mysql: ## Execute mysql - $ make mysql [a=<arguments>] - Example: $ make mysql a="-V"
+mysql: ## Execute mysql | [a=<args>] | a="-V"
 	$(CONTAINER_DATABASE) mysql -u $(MARIADB_USER) -p$(MARIADB_PASSWORD) $(MARIADB_DATABASE) $(a)
 
 mysql_sh: ## Open a shell on the MySQL/MariaDB container
 	$(CONTAINER_DATABASE) mysql -u $(MARIADB_USER) -p$(MARIADB_PASSWORD) $(MARIADB_DATABASE)
 
 .PHONY: table
-table: ## Show the content of a table - $ make table n=<name> - Example: $ make table n=user
+table: ## Show the content of a table | n=<name> | n=user
 	$(if $(n),, $(error "Please specify a table name with 'n=...'"))
 	$(CONTAINER_DATABASE) mysql -u $(MARIADB_USER) -p$(MARIADB_PASSWORD) $(MARIADB_DATABASE) -e "SELECT * FROM $(n);"
 
@@ -32,7 +32,7 @@ dump_gz: ## Create a compressed SQL dump (gzip)
 	@printf " $(G)✔$(S) Database successfully dumped to $(Y)$(FILE)$(S)\n"
 
 .PHONY: restore
-restore: confirm drop create ## Restore a dump (CAUTION! The command purges the database) [y/N] - $ make restore f=<file> - Example: $ make restore f="build/dumps/dump.sql"
+restore: confirm drop create ## Restore a dump (CAUTION! The command purges the database) [y/N] | f=<file> | f="build/dumps/dump.sql"
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(CONTAINER_DATABASE_NO_TTY) mysql -u $(MARIADB_USER) -p$(MARIADB_PASSWORD) $(MARIADB_DATABASE) <$(f)
 	@printf " $(G)✔$(S) Database successfully restored from $(Y)$(f)$(S)\n"

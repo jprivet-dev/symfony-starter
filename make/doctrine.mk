@@ -1,11 +1,5 @@
 ## — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
 
-_doctrine:
-ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
-	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine$(S) with $(G)make require_doctrine$(S)\n"
-	@exit 1
-endif
-
 db: _doctrine drop create migrate ## Drop and create the database and migrate
 
 db@test: a="--env=test"
@@ -14,7 +8,7 @@ db@test: _doctrine drop create migrate ## Drop and create the database and migra
 ##
 
 .PHONY: drop
-drop: _doctrine confirm ## Drop the database [y/N] - $ make drop [a=<arguments>] - Example: $ make drop a="--env=test"
+drop: _doctrine confirm ## Drop the database [y/N] | [a=<args>] | a="--env=test"
 ifneq ($(IS_SQLITE),)
 	@printf "$(G)SQLite$(S) detected via environment. Removing $(Y)$(SQLITE_DB_FILE)$(S).\n"
 	rm -rf $(SQLITE_DB_FILE)
@@ -24,7 +18,7 @@ else
 endif
 
 .PHONY: create
-create: _doctrine ## Create the database - $ make create [a=<arguments>] - Example: $ make create a="--env=test"
+create: _doctrine ## Create the database | [a=<args>] | a="--env=test"
 ifneq ($(IS_SQLITE),)
 	@printf "$(G)SQLite$(S) detected via environment. Ensuring directory exists for $(Y)$(SQLITE_DB_FILE)$(S).\n"
 	mkdir -p $(dir $(SQLITE_DB_FILE))
@@ -36,11 +30,11 @@ endif
 ##
 
 .PHONY: diff
-diff: _doctrine ## Generate a migration by comparing your current database to your mapping information (format the generated SQL) - $ make diff [a=<param>] - Example: $ make diff a="--profile"
+diff: _doctrine ## Generate a migration by comparing your current database to your mapping information (format the generated SQL) | [a=<args>] | a="--profile"
 	$(CONSOLE) doctrine:migrations:diff --formatted -v $(a)
 
 .PHONY: execute
-execute: _doctrine ## Execute one or more migration versions up or down manually - $ make execute a=<arguments> - Example: $ make execute a="DoctrineMigrations\Version20240205143239"
+execute: _doctrine ## Execute one or more migration versions up or down manually | a=<args> | a="DoctrineMigrations\Version20240205143239"
 	$(CONSOLE) doctrine:migrations:execute $(a)
 
 .PHONY: generate
@@ -52,24 +46,24 @@ list: _doctrine ## Display a list of all available migrations and their status
 	$(CONSOLE) doctrine:migrations:list
 
 .PHONY: migrate
-migrate: _doctrine ## Execute a migration to the latest available version (in a transaction) - $ make migrate [a=<param>] - Example: $ make migrate a="current+3"
+migrate: _doctrine ## Execute a migration to the latest available version (in a transaction) | [a=<args>] | a="current+3"
 	$(CONSOLE) doctrine:migrations:migrate --no-interaction --all-or-nothing $(a)
 
 .PHONY: migration
-migration: _doctrine ## Create (via MakerBundle) a new migration based on database changes (format the generated SQL) - $ make migration [a=<param>] - Example: $ make migration a="--profile"
+migration: _doctrine ## Create (via MakerBundle) a new migration based on database changes (format the generated SQL) | [a=<args>] | a="--profile"
 	$(CONSOLE) make:migration --formatted -v $(a)
 
 ##
 
 .PHONY: fixtures
-fixtures: _doctrine ## Load fixtures (CAUTION! The load command purges the database) - $ make fixtures [a=<param>] - Example: $ make fixtures a="--append"
+fixtures: _doctrine ## Load fixtures (CAUTION! The load command purges the database) | [a=<args>] | a="--append"
 	$(CONSOLE) doctrine:fixtures:load -n $(a)
 
 fixtures@test: a="--env=test"
 fixtures@test: _doctrine fixtures ## Load fixtures (env=test)
 
 .PHONY: sql
-sql: _doctrine ## Execute the given SQL query and output the results - $ make sql [q=<query>] - Example: $ make sql q="SELECT * FROM user"
+sql: _doctrine ## Execute the given SQL query and output the results | [q=<query>] | q="SELECT * FROM user"
 	$(CONSOLE) doctrine:query:sql "$(q)"
 
 update_dump: _doctrine ## Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
@@ -79,7 +73,7 @@ update_force: _doctrine ## Execute the generated SQL needed to synchronize the d
 	$(CONSOLE) doctrine:schema:update --force
 
 .PHONY: validate
-validate: _doctrine ## Validate the mapping files - $ make validate [a=<arguments>] - Example: $ make validate a="--env=test"
+validate: _doctrine ## Validate the mapping files | [a=<args>] | a="--env=test"
 	@printf "\n$(Y)--- Doctrine Schema Validate ---$(S)\n"
 	$(CONSOLE) doctrine:schema:validate -v $(a)
 

@@ -32,26 +32,26 @@ endef
 #
 
 .PHONY: replace
-replace rp: # INTERNAL - Replace a string in a file - $ make replace f=<file> o=<old_string> n=<new_string> - Example: $ make replace f=Dockerfile o=pdo_pgsql n=pdo_mysql
+replace rp: # INTERNAL - Replace a string in a file | f=<file> o=<old_string> n=<new_string> | f=Dockerfile o=pdo_pgsql n=pdo_mysql
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(o),, $(error "Please specify the old string with 'o=...'"))
 	$(if $(n),, $(error "Please specify the new string with 'n=...'"))
 	@sed "s|$(o)|$(n)|g" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_line rl: # INTERNAL - Replace an entire line beginning with a specific pattern - $ make replace f=<file> s=<start> n=<value> - Example: $ make replace_line f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
+replace_line rl: # INTERNAL - Replace an entire line beginning with a specific pattern | f=<file> s=<start> n=<value> | f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(s),, $(error "Please specify the start of the line to match with 's=...'"))
 	$(if $(n),, $(error "Please specify the new line content with 'n=...'"))
 	@# Use $(subst) to automatically escape "&" with "\&" for sed
 	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
 
-replace_block rb: # INTERNAL - Replace a block in a target file - $ make replace_block m=<marker> t=<target> s=<source> - Example: $ make replace_block m=doctrine/doctrine-bundle t=.env s=.starter/block/postgresql/.env
+replace_block rb: # INTERNAL - Replace a block in a target file | m=<marker> t=<target> s=<source> | m=doctrine/doctrine-bundle t=.env s=.starter/block/postgresql/.env
 	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
 	$(if $(t),, $(error "Please specify the target with 't=...'"))
 	$(if $(s),, $(error "Please specify the source with 's=...'"))
 	.starter/scripts/replace_block.sh -m "$(m)" -t "$(t)" -s "$(s)" -i "$(i)"
 
-clear_block cb: # INTERNAL - Clear a block in a target file - $ make clear_block m=<marker> t=<target> - Example: $ make clear_block m=doctrine/doctrine-bundle t=compose.yaml
+clear_block cb: # INTERNAL - Clear a block in a target file | m=<marker> t=<target> | m=doctrine/doctrine-bundle t=compose.yaml
 	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
 	$(if $(t),, $(error "Please specify the target with 't=...'"))
 	.starter/scripts/replace_block.sh -m "$(m)" -t "$(t)" -i "$(i)"
@@ -84,10 +84,10 @@ compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make bui
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(M) co m="use DATABASE_URL var in compose.yaml"
 
-suggest_branch: # INTERNAL - Suggest creating a new branch before generation - $ make suggest_branch FLAVOR=<flavor>
+suggest_orphan_branch: # INTERNAL - Suggest creating a new orphan branch before generation | FLAVOR=<flavor>
 	@printf "\n$(Y)--- Branch ---$(S)\n"
 	@printf " $(Y)›$(S) Current branch: $(G)$$(git rev-parse --abbrev-ref HEAD)$(S)\n"
-	@printf " $(Y)›$(S) New branch name [$(G)$(FLAVOR)$(S)] ($(Y)Enter$(S) to accept, $(Y)n$(S) to skip): "; \
+	@printf " $(Y)›$(S) New orphan branch name [$(G)$(FLAVOR)$(S)] — starts with a single \"First commit\" ($(Y)Enter$(S) to accept, $(Y)n$(S) to skip): "; \
 	if [ "$${NO_INTERACTION}" != "true" ]; then \
 		read BRANCH_NAME; \
 	fi; \
@@ -95,8 +95,10 @@ suggest_branch: # INTERNAL - Suggest creating a new branch before generation - $
 		printf " $(Y)›$(S) Skipped. Staying on current branch.\n"; \
 	else \
 		BRANCH_NAME=$${BRANCH_NAME:-$(FLAVOR)}; \
-		git switch -C "$$BRANCH_NAME"; \
-		printf " $(G)✔$(S) Switched to new branch $(G)$$BRANCH_NAME$(S)\n"; \
+		git branch -D "$$BRANCH_NAME" 2>/dev/null || true; \
+		git checkout --orphan "$$BRANCH_NAME"; \
+		$(M) co m="Initial commit"; \
+		printf " $(G)✔$(S) Orphan branch $(G)$$BRANCH_NAME$(S) created with a fresh history\n"; \
 	fi
 
 #
@@ -112,7 +114,7 @@ clean_app: confirm ## Remove all fresh Symfony application files (var/, vendor/,
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
-	$(M) suggest_branch FLAVOR=$(or $(BRANCH),minimalist)
+	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),minimalist)
 	$(M) skeleton
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application generated!\n\n"
@@ -122,7 +124,7 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 
 .PHONY: webapp
 webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (stable release)
-	$(M) suggest_branch FLAVOR=$(or $(BRANCH),webapp)
+	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),webapp)
 	$(M) skeleton
 	$(M) require_webapp
 	$(M) permissions images info
@@ -137,7 +139,7 @@ webapp@lts: ## Generate a webapp Symfony application (with PostgreSQL) with Dock
 
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
-	$(M) suggest_branch FLAVOR=$(or $(BRANCH),api)
+	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),api)
 	$(M) skeleton
 	$(M) require_orm
 	$(M) require_api
@@ -151,7 +153,7 @@ api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
-	$(M) suggest_branch FLAVOR=$(or $(BRANCH),demo)
+	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),demo)
 	$(M) clone_symfony_demo
 	$(M) build_force_start
 	git restore .env.local.demo
@@ -169,7 +171,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
-	$(M) suggest_branch FLAVOR=$(or $(BRANCH),easy_admin)
+	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),easy_admin)
 	$(M) skeleton
 	$(M) require_orm
 	$(M) require_easy_admin
@@ -186,6 +188,28 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 
 easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) easy_admin BRANCH=easy_admin@lts
+
+##
+
+.PHONY: contrib
+contrib: ## Generate a minimalist Symfony application with Docker configuration for contribution (stable release)
+	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),contrib)
+ifneq ($(filter 6.%,$(SYMFONY_VERSION)),)
+	git apply .starter/patch/symfony6-frankenphp.patch
+	git commit -am "🤖 [starter] fix: restore Symfony 6 compatibility with FrankenPHP worker mode"
+endif
+	$(M) skeleton
+	$(M) contrib_dockerfile
+	$(M) permissions images info
+	$(M) health_welcome_to_symfony
+	$(PRINT_EXECUTION_TIME)
+	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application (for contribution) generated!\n\n"
+
+contrib@lts: ## Generate a minimalist Symfony application with Docker configuration for contribution (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) contrib BRANCH=$(or $(BRANCH),contrib@lts)
+
+contrib@6x: ## Generate a minimalist Symfony 6.x application with Docker configuration for contribution
+	SYMFONY_VERSION=6.* $(M) contrib BRANCH=$(or $(BRANCH),contrib@6x)
 
 ##
 
@@ -321,7 +345,7 @@ require_tailwind: _assets ## Install Tailwind CSS - https://tailwindcss.com/
 ##
 
 health: c ?= 200
-health: ## Check the website and database connection (via Doctrine) - $ make health [c=<status_code>] [t=<text>] - Example: $ make health c=404 t="Welcome to Symfony"
+health: ## Check the website and database connection (via Doctrine) | [c=<status_code>] [t=<text>] | c=404 t="Welcome to Symfony"
 	@printf "\n$(Y)--- Check Health ---$(S)\n"
 	@EXIT_CODE=0; \
 	STATUS_CODE=$$(curl -k -L -s -o /dev/null -w "%{http_code}" $(LOCALHOST_MAIN)); \
@@ -399,30 +423,30 @@ endif
 
 ##   YQ
 
-yq: ## Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor - $ make yq [a=<argument>] - Example: $ make yq a=--help
+yq: ## Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor | [a=<argument>] | a=--help
 	$(YQ) $(a)
 
-yq_add ya: ## Append a value to an array key in a YAML file - $ make yq_add f=<file> k=<key> v=<value> - Example: $ make yq_add f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway
+yq_add ya: ## Append a value to an array key in a YAML file | f=<file> k=<key> v=<value> | f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(if $(value v),, $(error "Please specify a value with 'v=...'"))
 	$(YQ) --inplace '.$(k) += "$(value v)"' $(f)
 
-yq_clear yc: ## Clear a key's value in a YAML file (sets it to empty string) - $ make yq_clear f=<file> k=<key> - Example: $ make yq_clear f=compose.yaml k=services.php.extra_hosts
+yq_clear yc: ## Clear a key's value in a YAML file (sets it to empty string) | f=<file> k=<key> | f=compose.yaml k=services.php.extra_hosts
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(YQ) --inplace '.$(k) = ""' $(f)
 
-yq_delete yd: ## Delete a key from a YAML file - $ make yq_delete f=<file> k=<key> - Example: $ make yq_delete f=compose.yaml k=services.php.extra_hosts
+yq_delete yd: ## Delete a key from a YAML file | f=<file> k=<key> | f=compose.yaml k=services.php.extra_hosts
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(YQ) --inplace 'del(.$(k))' $(f)
 
-yq_print: ## Print contents of a file as idiomatic YAML with colors - $ make yq_print f=<file> - Example: $ make yq_print f=compose.yaml
+yq_print: ## Print contents of a file as idiomatic YAML with colors | f=<file> | f=compose.yaml
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(YQ) --prettyPrint --colors --output-format yaml $(f)
 
-yq_update yu: ## Set or update a key's value in a YAML file - $ make yq_update f=<file> - Example: $ make yq_add f=compose.yaml k=services.php.build.target v=frankenphp_prod
+yq_update yu: ## Set or update a key's value in a YAML file | f=<file> | f=compose.yaml k=services.php.build.target v=frankenphp_prod
 	$(if $(f),, $(error "Please specify a file with 'f=...'"))
 	$(if $(k),, $(error "Please specify a key with 'k=...'"))
 	$(if $(value v),, $(error "Please specify a value with 'v=...'"))

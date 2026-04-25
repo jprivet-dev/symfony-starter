@@ -22,45 +22,98 @@ git clone git@github.com:YOUR_USERNAME/symfony.git ../symfony
 Add the Docker volume and rebuild:
 
 ```shell
-make contrib_volume f=symfony
+make monorepo_volume
+git commit -am "Add a Docker volume for the Symfony monorepo"
+
 make build
 make up_detached
-```
-
-Install Symfony's own dependencies:
-
-```shell
-make contrib_install f=symfony
 ```
 
 Link the monorepo into your application's vendors:
 
 ```shell
-make contrib_link f=symfony
+make monorepo_link
 ```
 
 ### Develop & Test
 
 Modify files in `../symfony/src/` — changes are immediately reflected in the application.
 
-Run the framework tests inside the container:
+Before running tests, ensure all dependencies are installed within the monorepo:
 
-```shell
+```bash
+make monorepo_install
+```
+
+Run the framework tests inside the container using absolute paths from the container's root:
+
+```bash
 # Run tests for a specific component
-make contrib_tests f=symfony a="src/Symfony/Component/HttpKernel"
+make monorepo_tests a="/symfony/src/Symfony/Component/HttpKernel"
 ```
 
-Clean PHPUnit cache if needed:
+**Pro-tip:** When running large test suites, you can exclude specific groups that require additional infrastructure (like Redis) by appending the argument:
 
-```shell
-make contrib_tests_clean f=symfony
+```bash
+make monorepo_tests a="/symfony/src/Symfony/Bundle --exclude-group=redis"
 ```
 
-### Revert
+Clean PHPUnit cache and temporary files if needed (recommended before running large suites):
 
-```shell
-make contrib_unlink f=symfony
+```bash
+make monorepo_tests_clean
 ```
+
+### Personal shortcuts (local customization)
+
+If you are working frequently on specific components, you can create your own shortcuts. The starter includes a mechanism to load local Makefile rules that are not committed to the repository.
+
+1. Create your local Makefile:
+   ```bash
+   cp make/local.mk.dist make/local.mk
+   ```
+
+2. Add your custom commands to `make/local.mk`. These will automatically appear in `make help`. Here are some useful examples you can use:
+
+```makefile
+monorepo_tests_bridge: ## Run tests for all Bridge components
+	make monorepo_tests a="/symfony/src/Symfony/Bridge"
+
+monorepo_tests_bundle: ## Run tests for all Bundle components
+	make monorepo_tests a="/symfony/src/Symfony/Bundle"
+
+monorepo_tests_component: ## Run tests for all Components
+	make monorepo_tests a="/symfony/src/Symfony/Component"
+
+monorepo_tests_di: ## Run tests for DependencyInjection: Testing service container compilation and resolution
+	make monorepo_tests a="/symfony/src/Symfony/Component/DependencyInjection"
+
+monorepo_tests_doctrine: ## Run tests for DoctrineBridge: Verifying integration between Symfony and Doctrine
+	make monorepo_tests a="/symfony/src/Symfony/Bridge/Doctrine"
+
+monorepo_tests_eventdispatcher: ## Run tests for EventDispatcher: Testing the communication layer between components
+	make monorepo_tests a="/symfony/src/Symfony/Component/EventDispatcher"
+
+monorepo_tests_form: ## Run tests for Form: Testing complex mapping, validation, and rendering logic
+	make monorepo_tests a="/symfony/src/Symfony/Component/Form"
+
+monorepo_tests_httpfoundation: ## Run tests for HttpFoundation: Verifying HTTP request/response standards and logic
+	make monorepo_tests a="/symfony/src/Symfony/Component/HttpFoundation"
+
+monorepo_tests_httpkernel: ## Run tests for HttpKernel: The central engine managing the request lifecycle
+	make monorepo_tests a="/symfony/src/Symfony/Component/HttpKernel"
+
+monorepo_tests_routing: ## Run tests for Routing: Validating URL matching and generation
+	make monorepo_tests a="/symfony/src/Symfony/Component/Routing"
+
+monorepo_tests_security: ## Run tests for SecurityBundle: Testing authentication, firewalls, and authorization
+	make monorepo_tests a="/symfony/src/Symfony/Bundle/SecurityBundle"
+
+monorepo_tests_twig: ## Run tests for TwigBridge: Validating Twig extensions and integration with components
+	make monorepo_tests a="/symfony/src/Symfony/Bridge/Twig"
+```
+
+> **Note:** The `make/local.mk` file is ignored by Git. This is the perfect place to experiment with new commands before potentially proposing them as a permanent addition to the project.
 
 ---
 
@@ -79,41 +132,47 @@ git clone git@github.com:YOUR_USERNAME/monolog-bundle.git ../monolog-bundle
 
 ### Setup
 
-Add the Docker volume and rebuild:
+Add the Docker volume and register the path repository:
 
 ```shell
-make contrib_volume f=monolog-bundle
+make contrib_volume d=monolog-bundle
+make contrib_add_repo d=monolog-bundle
+git commit -am "Add a Docker volume and repo for the monolog-bundle"
+
 make build
 make up_detached
 ```
 
-Install the bundle's own dependencies:
+Link the local version:
 
 ```shell
-make contrib_install f=monolog-bundle
+make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
+git add .
+git commit -m "Install symfony/monolog-bundle:4.x-dev"
 ```
 
-Tell Composer to use your local fork instead of the Packagist version:
-
-```shell
-make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
-make update a="symfony/monolog-bundle"
-```
+> **Note:** Composer expects a version following the `[branch-name]-dev` pattern (e.g., if your local branch is `4.x`, use `4.x-dev`).
 
 ### Develop & Test
 
 Modify files in `../monolog-bundle/` — changes are immediately reflected in the application.
 
+Before running tests, ensure all dependencies are installed within the repo:
+
+```bash
+make contrib_install d=monolog-bundle
+```
+
 Run the bundle tests inside the container:
 
 ```shell
-make contrib_tests f=monolog-bundle
+make contrib_tests d=monolog-bundle
 ```
 
 Clean PHPUnit cache if needed:
 
 ```shell
-make contrib_tests_clean f=monolog-bundle
+make contrib_tests_clean d=monolog-bundle
 ```
 
 ### Revert
@@ -121,7 +180,7 @@ make contrib_tests_clean f=monolog-bundle
 Remove the local Composer repository and restore the original package:
 
 ```shell
-make config k=repositories.monolog-bundle
+make contrib_remove_repo d=monolog-bundle
 make update a="symfony/monolog-bundle"
 ```
 
@@ -156,8 +215,8 @@ git push origin fix/my-issue
 To remove vendors and lock files from a local repository to save space:
 
 ```shell
-make contrib_clean f=symfony
-make contrib_clean f=monolog-bundle
+make monorepo_clean
+make contrib_clean d=monolog-bundle
 ```
 
 ---

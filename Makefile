@@ -50,13 +50,11 @@ GIT_HOOKS = off
 # See https://github.com/mikefarah/yq
 YQ = docker run --rm --user "$(USER)" -v "$(PWD)":/workdir -w /workdir mikefarah/yq
 
-# --- SYMFONY MONOREPO ---
+# --- GIT SAFE DIRECTORIES ---
 
-CONTRIB_ACTIVE :=
-
-ifneq ($(origin SYMFONY_MONOREPO),undefined)
-    CONTRIB_ACTIVE := true
-endif
+# Directories to trust in Git within the PHP container.
+# Add your local contribution volumes here (e.g., /symfony, /monolog-bundle).
+SAFE_DIRECTORIES = /app
 
 # --- FILES & DIRECTORIES ---
 
@@ -76,6 +74,7 @@ VENDOR_ASSETS      = vendor/symfony/asset-mapper
 VENDOR_DOCTRINE    = vendor/doctrine
 VENDOR_EASYADMIN   = vendor/easycorp/easyadmin-bundle
 VENDOR_MAILER      = vendor/symfony/mailer
+VENDOR_MONOLOG     = vendor/symfony/monolog-bundle
 VENDOR_PHPCSFIXER  = vendor/bin/php-cs-fixer
 VENDOR_PHPMD       = vendor/bin/phpmd
 VENDOR_PHPMETRICS  = vendor/bin/phpmetrics
@@ -137,7 +136,6 @@ $(eval $(call append,HTTP_PORT))
 $(eval $(call append,HTTPS_PORT))
 $(eval $(call append,HTTP3_PORT))
 #$(eval $(call append,XDEBUG_MODE))
-#$(eval $(call append,SYMFONY_MONOREPO))
 
 # --- LOCALHOST ---
 
@@ -163,17 +161,18 @@ endif
 #
 # To enable local overrides for infrastructure variables (like ports, versions),
 # we explicitly build the --env-file chain.
-ifneq ($(wildcard .env),)
-ENV_FILES += --env-file .env
-endif
-ifneq ($(wildcard .env.local),)
-ENV_FILES += --env-file .env.local
-endif
-ifneq ($(wildcard .env.$(APP_ENV)),)
-ENV_FILES += --env-file .env.$(APP_ENV)
-endif
-ifneq ($(wildcard .env.$(APP_ENV).local),)
-ENV_FILES += --env-file .env.$(APP_ENV).local
+
+define add_env_file
+$(if $(wildcard $(1)),$(if $(shell cat $(1)),--env-file $(1)))
+endef
+
+ENV_FILES += $(call add_env_file,.env.local)
+ENV_FILES += $(call add_env_file,.env.$(APP_ENV))
+ENV_FILES += $(call add_env_file,.env.$(APP_ENV).local)
+
+# .env is loaded by Docker by default, only add it explicitly if overrides are active
+ifneq ($(ENV_FILES),)
+ENV_FILES := $(if $(wildcard .env),--env-file .env) $(ENV_FILES)
 endif
 
 # --- DOCKER COMMANDS ---
@@ -229,6 +228,10 @@ PHPMD            = $(PHP) -d error_reporting="E_ALL & ~E_DEPRECATED" $(VENDOR_PH
 TWIGCSFIXER      = $(PHP) $(VENDOR_TWIGCSFIXER)
 PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 
+# --- REQUIRES ---
+
+include make/requires.mk
+
 # --- EXTEND THE MAIN MAKEFILE ---
 
 ifneq ($(APP_ENV),prod)
@@ -237,31 +240,27 @@ endif
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
 
-# Print self-documented Makefile:
-# $ make
-# $ make help
-
 .DEFAULT_GOAL = help
 .PHONY: help
 help: f ?=
-help: ## Display this help message with available commands - $ make [f=<filter>] - $ make f=restart
-	@grep -E '(^[.a-zA-Z_-]+[^:]+:.*##.*?$$)|(^#{2})' $(MAKEFILE_LIST) | awk -v filter="$(f)" 'BEGIN {FS = "## "}; { \
-		split($$1, line, ":"); targets=line[2]; description=$$2; \
-		if (filter == "") { \
-			if (targets == "##") { printf "\033[33m%s\n", ""; } \
-			else if (targets == "" && description != "") { printf "\033[33m\n%s\n", description; } \
-			else if (targets != "" && description != "") { split(targets, parts, " "); target=parts[1]; alias=parts[2]; printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; } \
-		} else if (targets != "" && description != "" && (index(tolower(targets), tolower(filter)) || index(tolower(description), tolower(filter)))) { \
-			split(targets, parts, " "); target=parts[1]; alias=parts[2]; printf "\033[32m  %-26s \033[34m%-2s \033[0m%s\n", target, alias, description; \
-		} \
+help: ## Display this help message with available commands
+	@printf "Usage: make $(G)<target>$(S)\n"
+	@printf "       make $(G)f=<find>$(S)\n"
+	@grep -E '(^[.a-zA-Z_-]+[^:]+:.*##.*?$$)|(^#{2})' $(MAKEFILE_LIST) | awk -v find="$(f)" 'BEGIN {FS = "## "}\
+	function show(targets, description) {\
+		split(targets, parts, " "); target = parts[1]; alias = parts[2];\
+		n = split(description, fields, / \| /); params = (n >= 2) ? " " fields[2] : ""; example = (n >= 3) ? " (e.g. make " target " " fields[3] ")" : "";\
+		printf "\033[32m  %-36s \033[35m%-2s \033[0m%s\033[36m%s\033[0m\n", target params, alias, fields[1], example;\
+	} {\
+		split($$1, line, ":"); targets=line[2]; description=$$2;\
+		if      (find == "" && targets == "##")                    printf "\033[33m%s\n", "";\
+		else if (find == "" && targets == "" && description != "") printf "\033[33m\n%s\n", description;\
+		else if (find == "" && targets != "" && description != "") show(targets, description);\
+		else if (targets != "" && description != "" && (index(tolower(targets), tolower(find)) || index(tolower(description), tolower(find)))) show(targets, description);\
 	}'
 	@echo
 
-.PHONY: all
-all: ## See the full catalog of commands available in the Starter Kit (including inactive ones)
-	@$(MAKE) help ALL=true
-
-## — PROJECT 🚀 ———————————————————————————————————————————————————————————————
+##
 
 .PHONY: install
 install: up_detached ## Start the project, install dependencies and show info
@@ -326,7 +325,7 @@ tests t: db_init@test fixtures@test phpunit ## Run all tests
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
 .PHONY: build
-build: ## Build or rebuild Docker services using cache - $ make build [a=<arguments>] - Example: $ make build a=--no-cache
+build: ## Build or rebuild Docker services using cache | [a=<args>] | a=--no-cache
 	$(COMPOSE) build $(a)
 
 .PHONY: build_force
@@ -336,7 +335,7 @@ build_force: build ## Build or rebuild Docker services without cache (force fres
 ##
 
 .PHONY: up
-up: ## Start the containers - $ make up [a=<arguments>] - Example: $ make up a=-d
+up: ## Start the containers | [a=<args>] | a=-d
 	$(UP_ENV) $(COMPOSE) up --remove-orphans $(a)
 	$(MAKE) runtime
 	$(MAKE) permissions
@@ -358,8 +357,6 @@ kill: ## Remove containers and networks (keep database data)
 .PHONY: kill_all
 kill_all: confirm ## Remove containers, networks AND VOLUMES (database destroyed)
 	$(COMPOSE) down --remove-orphans --volumes
-
-##
 
 deep_clean: confirm ## [Danger] Remove containers, volumes, networks and images, including orphans (triggers: webapp-pack, database, branch switch) [y/N]
 	@printf "🔥 $(Y)Cleaning Docker environment for $(PROJECT_NAME) (if file exists)...$(S)\n"
@@ -391,11 +388,11 @@ logs: ## View logs (follow mode)
 ## — SYMFONY 🎵 ———————————————————————————————————————————————————————————————
 
 .PHONY: symfony sf
-symfony sf: console ## Run any Symfony console command - $ make symfony [c=<command>]- Example: $ make symfony c=cache:clear
+symfony sf: ## Run any Symfony console command | [c=<command>] | c=cache:clear
 	$(CONSOLE) $(c)
 
 .PHONY: console
-console: ## Symfony console alias - $ make console [c=<command>]- Example: $ make console c=cache:clear
+console: ## Symfony console alias | [c=<command>] | c=cache:clear
 	$(CONSOLE) $(c)
 
 ##
@@ -423,12 +420,12 @@ routes: ## Display current routes with assigned controllers and aliases
 ## — PHP 🐘 ———————————————————————————————————————————————————————————————————
 
 .PHONY: php
-php: ## Run PHP command - $ make php [a=<arguments>]- Example: $ make php a=--version
+php: ## Run PHP command | [a=<args>] | a=--version
 	$(PHP) $(a)
 
 ##
 
-php_command: ## Run a command inside the PHP container - $ make php_command [a=<arguments>]- Example: $ make php_command a="ls -al"
+php_command: ## Run a command inside the PHP container | [a=<args>] | a="ls -al"
 	$(BASH_COMMAND) "$(a)"
 
 php_env: ## Display all environment variables set within the PHP container
@@ -441,7 +438,7 @@ php_sh sh: ## Connect to the PHP container shell
 ## — COMPOSER 🧙 ——————————————————————————————————————————————————————————————
 
 .PHONY: composer
-composer: ## Run composer command - $ make composer [a=<arguments>] - Example: $ make composer a="require --dev phpunit/phpunit"
+composer: ## Run composer command | [a=<args>] | a="require --dev phpunit/phpunit"
 	$(COMPOSER) $(a)
 
 .PHONY: i
@@ -459,20 +456,29 @@ composer_validate: ## Check if lock file is up to date (even when config.lock is
 
 ##
 
+.PHONY: config
+config: ## Run composer config | k=<key> [v=<value>] | k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
+	$(COMPOSER) config $(if $(v),$(k) '$(v)',--unset $(k))
+
+.PHONY: hash
+hash: ## Update only the content hash of composer.lock without updating dependencies
+	$(COMPOSER) update --lock
+
 .PHONY: outdated
 outdated: ## Show a list of installed packages that have updates available, including their latest version
 	$(COMPOSER) outdated
 
 .PHONY: remove
-remove: ## Remove a package from the require or require-dev - $ make remove [a=<arguments>] - Example: $ make remove a="phpunit/phpunit"
+remove: ## Remove a package from the require or require-dev | [a=<args>] | a="phpunit/phpunit"
 	$(COMPOSER) remove $(a)
 
 .PHONY: require
-require: ## Add required packages to your composer.json and installs them - $ make require [a=<arguments>] - Example: $ make require a="--dev phpunit/phpunit"
+require: ## Add required packages to your composer.json and installs them | [a=<args>] | a="--dev phpunit/phpunit"
 	$(COMPOSER) require $(a)
 
 .PHONY: update
-update: ## Update Composer packages - $ make update [a=<arguments>] - Example: $ make update a="symfony/monolog-bundle"
+update: ## Update Composer packages | [a=<args>] | a="symfony/monolog-bundle"
 	@printf "\n$(Y)--- Composer Update (env: $(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader $(a)
@@ -480,16 +486,12 @@ else
 	$(COMPOSER) update $(a)
 endif
 
-update_lock: ## Update only the content hash of composer.lock without updating dependencies
-	$(COMPOSER) update --lock
-
-.PHONY: config
-config: ## Run composer config - $ make config k=<key> [v=<value>] - Example: $ make config k=repositories.monolog-bundle v='{"type": "path", "url": "/monolog-bundle"}'
-	$(if $(k),, $(error "Please specify a key with 'k=...'"))
-	$(COMPOSER) config $(if $(v),$(k) '$(v)',--unset $(k))
-
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),)
 include make/doctrine.mk
+endif
+
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_MONOLOG))),)
+include make/monolog.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(BIN_PHPUNIT))),)
@@ -508,131 +510,8 @@ ifneq ($(or $(ALL), $(wildcard $(VENDOR_TRANSLATION))),)
 include make/translation.mk
 endif
 
-## — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
+include make/end.mk
 
-.PHONY: certificates
-certificates: ## Install the Caddy TLS certificate to the trust store
-	@printf "\n$(Y)--- Copying the Caddy certificate to trust store ---$(S)\n"
-	@if [ ! -f /tmp/caddy_root.crt ]; then \
-		$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" >/tmp/caddy_root.crt; \
-	fi
-ifeq ($(UNAME_S),Darwin)
-	@printf " $(Y)› OS: macOS$(S)\n"
-	@sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain /tmp/caddy_root.crt
-	@rm /tmp/caddy_root.crt
-else ifeq ($(UNAME_S),Linux)
-	@printf " $(Y)› OS: Linux$(S)\n"
-	@sudo cp /tmp/caddy_root.crt /usr/local/share/ca-certificates/caddy_root.crt
-	@sudo update-ca-certificates
-	@rm /tmp/caddy_root.crt
-endif
-	@printf " $(G)✔$(S) The Caddy root certificate has been added to the trust store.\n"
+-include make/contrib.mk
 
-certificates_export: FILE=$(BUILD)/tls/root.crt
-certificates_export: ## Export the Caddy root certificate from the container to the host
-	mkdir -p $(BUILD)/tls
-	@$(CONTAINER_PHP) sh -c "cat /data/caddy/pki/authorities/local/root.crt" >$(FILE)
-	@printf " $(G)✔$(S) The Caddy root certificate has been exported to $(Y)$(FILE)$(S).\n"
-	@printf " $(Y)›$(S) You may need to manually import this certificate into your browser's trust store:\n"
-	@printf "    - $(Y)Chrome/Brave:$(S) Go to chrome://settings/certificates and import the file '$(FILE)' under 'Authorities'.\n"
-	@printf "    - $(Y)Firefox:$(S) Go to about:preferences#privacy, click 'View Certificates...' and import '$(FILE)' under 'Authorities'.\n"
-
-.PHONY: hosts
-hosts: ## Add the server name to /etc/hosts file
-	@if ! grep -q "$(SERVER_NAME)" /etc/hosts; then \
-		echo "127.0.0.1 $(SERVER_NAME)" | sudo tee -a /etc/hosts >/dev/null; \
-		printf " $(G)✔$(S) \"$(SERVER_NAME)\" added to /etc/hosts.\n"; \
-	else \
-		printf " $(G)✔$(S) \"$(SERVER_NAME)\" already exists in /etc/hosts.\n"; \
-	fi
-
-## — GIT 🐙 ———————————————————————————————————————————————————————————————————
-
-git_hooks_init: ## Initialize the project's hooks directory (set GIT_HOOKS var)
-ifeq ($(GIT_HOOKS),on)
-	$(MAKE) git_hooks_enable
-else
-	$(MAKE) git_hooks_disable
-endif
-
-##
-
-git_hooks_disable: ## Disable the project's hooks directory
-	-git config --unset core.hooksPath
-	@printf " $(R)⨯$(S) Git hooks disabled.\n"
-
-git_hooks_enable: ## Enable the project's hooks directory
-	-git config core.hooksPath hooks/
-	@printf " $(G)✔$(S) Git hooks enabled.\n"
-
-git_pre_push: c1 ## Actions on Git pre-push
-
-## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
-
-.PHONY: permissions
-permissions: ## Fix file permissions (primarily for Linux hosts)
-	@printf "\n$(Y)--- Permissions ---$(S)\n"
-ifeq ($(UNAME_S),Linux)
-	$(COMPOSE) run --rm php chown -R $(USER) .
-	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER)$(S) of the project files.\n"
-else
-	@printf " $(Y)›$(S) 'make permissions' is typically not needed on $(UNAME_S).\n"
-endif
-
-.PHONY: safe
-safe: ## Add /app to Git's safe directories within the php container
-	$(COMPOSE) exec php git config --global --add safe.directory /app
-ifeq ($(CONTRIB_ACTIVE),true)
-	$(COMPOSE) exec php git config --global --add safe.directory /symfony
-endif
-
-## — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
-
-.PHONY: aliases
-aliases: ## Show aliases info and loading instructions
-	@printf "To load aliases, run:\n  $(Y). aliases$(S)\nor:\n  $(Y)console aliases$(S)\n";
-
-env_files: ## Show env files loaded into this Makefile
-	@printf "\n$(Y)--- Symfony Env Files ---$(S)\n"
-	@printf "Files loaded into this Makefile (in order of decreasing priority) $(Y)[APP_ENV=$(APP_ENV)]$(S):\n\n"
-	@for file in .env.$(APP_ENV).local .env.$(APP_ENV) .env.local .env; do \
-		if [ -f "$${file}" ]; then printf "$(G)✔$(S) $${file}\n"; else printf "$(R)⨯$(S) $${file}\n"; fi; \
-	done
-
-.PHONY: tree
-tree: l ?= 3
-tree: ## Visualize your structure (requires `tree` command) - $ make tree [l=<level>] - Example: $ make tree l=1
-	tree -a -A -L $(l) -F -I '.git' -I '.idea' --dirsfirst
-
-.PHONY: vars
-vars: ## Show key Makefile variables
-	@printf "\n$(Y)--- Vars ---$(S)\n"
-	@$(foreach var, \
-		USER UNAME_S APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
-		CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE \
-		IS_MYSQL IS_POSTGRESQL IS_SQLITE CONTRIB_ACTIVE, \
-		printf "%-15s : %s\n" "${var}" "${${var}}"; \
-	)
-
-# —— INTERNAL (HIDDEN) 🚧‍️ ——————————————————————————————————————————————————————————————
-
-PHONY: confirm
-confirm: # INTERNAL - Display a confirmation before continuing [y/N]
-	@if [ "$${NO_INTERACTION}" = "true" ]; then exit 0; fi; \
-	printf "$(G)Do you want to continue?$(S) [$(Y)y/N$(S)]: " && read answer && [ $${answer:-N} = y ]
-
-PHONY: runtime
-runtime: # INTERNAL - Check if vendor/autoload_runtime.php is ready yet
-	@printf "\nWaiting for Symfony Runtime...\n"
-	@until $(CONTAINER_PHP) ls vendor/autoload_runtime.php >/dev/null 2>&1; do \
-		printf " $(R)⨯$(S) The vendor file is not ready yet. Pause 3 seconds...\n"; \
-		sleep 3; \
-	done
-	@printf " $(G)✔$(S) Symfony Runtime is ready!\n"
-	@sleep 1
-
-ifeq ($(or $(ALL), $(CONTRIB_ACTIVE)),true)
-include make/contrib.mk
-endif
-
-include make/generate.mk
+-include make/generate.mk
