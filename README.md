@@ -2,7 +2,7 @@
 
 ![PHP](https://img.shields.io/badge/PHP-8.5-777BB4?logo=php)
 ![Symfony](https://img.shields.io/badge/Symfony-8%20%7C%207%20LTS-000000?logo=symfony)
-![dunglas/symfony-docker](https://img.shields.io/badge/dunglas%2Fsymfony--docker-de8af3bd-2088FF?logo=docker)
+![dunglas/symfony-docker](https://img.shields.io/badge/dunglas%2Fsymfony--docker-777be58d-2088FF?logo=docker)
 
 **Generate a fully Dockerized Symfony application with a single command.**
 
