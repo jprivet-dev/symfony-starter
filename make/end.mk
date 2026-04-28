@@ -55,7 +55,7 @@ git_hooks_enable: ## Enable the project's hooks directory
 	-git config core.hooksPath hooks/
 	@printf " $(G)✔$(S) Git hooks enabled.\n"
 
-git_pre_push: c1 ## Actions on Git pre-push
+git_pre_push: check_push ## Actions on Git pre-push
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
