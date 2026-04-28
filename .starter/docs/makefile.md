@@ -25,8 +25,9 @@ Usage: make <target>
   build_start                             [Level 2] Build & Start - Updating image with cache (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
   build_force_start                       [Level 3] Force build & Start - Rebuilding from scratch (triggers: Dockerfile, system packages, cache issues)
 
-  check_level_1                        c1 Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
-  check_level_2                        c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
+  check                                   Check everything before you deliver - Composer, Doctrine validation, linters, ... (no stop on failure)
+  check_all                               Check everything before you deliver - check + tests (no stop on failure)
+  check_push                              Check on git push (stop on failure)
   tests                                t  Run all tests
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
@@ -215,6 +216,7 @@ Usage: make <target>
 
   contrib_dockerfile                      Inject PHP extensions required for contribution into Dockerfile (xsl, etc.)
 
+  bundle_status d=<dir>                   Show current branch for reproducer and a local repository
   bundle_volume d=<dir>                   Add a Docker volume for a local repository (e.g. make bundle_volume d=symfony)
   bundle_add d=<dir>                      Register a path repository in composer.json (e.g. make bundle_add d=monolog-bundle)
   bundle_remove d=<dir>                   Unregister a path repository from composer.json (e.g. make bundle_remove d=monolog-bundle)

@@ -313,11 +313,23 @@ build_force_start: ## [Level 3] Force build & Start - Rebuilding from scratch (t
 
 ##
 
-.PHONY: c1
-check_level_1 c1: composer_validate validate lint ## Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
+check:  ## Check everything before you deliver - Composer, Doctrine validation, linters, ... (no stop on failure)
+	@printf " $(Y)›$(S) 💡 Tip: enrich $(G)check$(S) in Makefile as your project matures\n"
+	-$(MAKE) composer_validate
+	@#-$(MAKE) validate         # Doctrine mapping validation
+	@#-$(MAKE) lint             # Twig, YAML, container linters (phpcsfixer, twigcsfixer, phpstan)
+	@#-$(MAKE) phpstan_lint     # Static analysis only
 
-.PHONY: c2
-check_level_2 c2: composer_validate validate lint phpunit ## Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
+check_all: check ## Check everything before you deliver - check + tests (no stop on failure)
+	@#-$(MAKE) tests            # Full test suite (better left to CI)
+
+check_push: ## Check on git push (stop on failure)
+	@printf " $(Y)›$(S) 💡 Tip: enrich $(G)check_push$(S) in Makefile as your project matures\n"
+	$(MAKE) composer_validate
+	@#$(MAKE) validate         # Doctrine mapping validation
+	@#$(MAKE) lint             # Twig, YAML, container linters (phpcsfixer, twigcsfixer, phpstan)
+	@#$(MAKE) phpstan_lint     # Static analysis only
+	@#$(MAKE) tests            # Full test suite (better left to CI)
 
 .PHONY: tests t
 tests t: db_init@test fixtures@test phpunit ## Run all tests
