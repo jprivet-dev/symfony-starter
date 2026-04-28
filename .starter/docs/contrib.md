@@ -126,7 +126,7 @@ make contrib@lts
 
 ```shell
 make bundle_volume d=monolog-bundle
-make bundle_add_repo d=monolog-bundle
+make bundle_add d=monolog-bundle
 git commit -am "Add the Docker volume and register the path repository"
 
 make build up_detached
@@ -169,7 +169,7 @@ make bundle_tests_clean d=monolog-bundle
 > published version of the package, remove the local path repository.
 
 ```shell
-make bundle_remove_repo d=monolog-bundle
+make bundle_remove d=monolog-bundle
 make update a=symfony/monolog-bundle
 ```
 
