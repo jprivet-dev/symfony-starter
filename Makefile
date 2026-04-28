@@ -43,7 +43,7 @@ endif
 
 # --- GIT ---
 
-GIT_HOOKS = off
+GIT_HOOKS ?= off
 
 # --- YQ ---
 
