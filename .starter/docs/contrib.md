@@ -81,7 +81,8 @@ additional infrastructure (e.g. Redis or RabbitMQ), by appending the `--exclude-
 make monorepo_tests a="/symfony/src/Symfony/Bundle --exclude-group=redis"
 ```
 
-If needed, clean the PHPUnit cache and temporary files before running large suites:
+PHPUnit cache and temporary files are automatically cleaned before each test run.
+If you need to clean them manually:
 
 ```shell
 make monorepo_tests_clean
@@ -157,7 +158,8 @@ make bundle_install d=monolog-bundle
 make bundle_tests d=monolog-bundle
 ```
 
-If needed, clean the PHPUnit cache and temporary files before running large suites:
+PHPUnit cache and temporary files are automatically cleaned before each test run.
+If you need to clean them manually:
 
 ```shell
 make bundle_tests_clean d=monolog-bundle
