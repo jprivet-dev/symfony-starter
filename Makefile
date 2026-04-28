@@ -169,6 +169,7 @@ endef
 ENV_FILES += $(call add_env_file,.env.local)
 ENV_FILES += $(call add_env_file,.env.$(APP_ENV))
 ENV_FILES += $(call add_env_file,.env.$(APP_ENV).local)
+ENV_FILES := $(strip $(ENV_FILES))
 
 # .env is loaded by Docker by default, only add it explicitly if overrides are active
 ifneq ($(ENV_FILES),)
@@ -183,7 +184,7 @@ ifndef COMPOSE_V2
 $(warning [WARNING] Docker Compose CLI plugin is required but is not available on your system)
 endif
 
-COMPOSE = docker compose $(ENV_FILES)
+COMPOSE = $(strip docker compose $(ENV_FILES))
 
 # In a first step, you can test the application's production behavior in a development environment by setting APP_ENV=prod.
 # To test the full Docker production setup (e.g., optimized images, production-specific configurations), you can also add USE_COMPOSE_PROD_YAML=true.
