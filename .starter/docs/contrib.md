@@ -125,8 +125,8 @@ make contrib@lts
 ### 3. Add the Docker volume and register the path repository
 
 ```shell
-make contrib_volume d=monolog-bundle
-make contrib_add_repo d=monolog-bundle
+make bundle_volume d=monolog-bundle
+make bundle_add_repo d=monolog-bundle
 git commit -am "Add the Docker volume and register the path repository"
 
 make build up_detached
@@ -148,19 +148,19 @@ git add . && git commit -m "Install symfony/monolog-bundle:4.x-dev"
 ### 5. Install the external dependencies used during the tests
 
 ```shell
-make contrib_install d=monolog-bundle
+make bundle_install d=monolog-bundle
 ```
 
 ### 6. Run the tests for the first time to verify everything is working
 
 ```shell
-make contrib_tests d=monolog-bundle
+make bundle_tests d=monolog-bundle
 ```
 
 If needed, clean the PHPUnit cache and temporary files before running large suites:
 
 ```shell
-make contrib_tests_clean d=monolog-bundle
+make bundle_tests_clean d=monolog-bundle
 ```
 
 ### 7. Revert: remove the path repository and restore the published package
@@ -169,7 +169,7 @@ make contrib_tests_clean d=monolog-bundle
 > published version of the package, remove the local path repository.
 
 ```shell
-make contrib_remove_repo d=monolog-bundle
+make bundle_remove_repo d=monolog-bundle
 make update a=symfony/monolog-bundle
 ```
 
@@ -189,40 +189,40 @@ cp make/local.mk.dist make/local.mk
 These will automatically appear in `make help`. Here are some useful examples you can use:
 
 ```makefile
-tests_bridge: ## Run tests for all Bridge components
+monorepo_tests_bridge: ## Run tests for all Bridge components
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Bridge"
 
-tests_bundle: ## Run tests for all Bundle components
+monorepo_tests_bundle: ## Run tests for all Bundle components
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Bundle"
 
-tests_component: ## Run tests for all Components
+monorepo_tests_component: ## Run tests for all Components
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component"
 
-tests_di: ## Run tests for DependencyInjection
+monorepo_tests_di: ## Run tests for DependencyInjection
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component/DependencyInjection"
 
-tests_doctrine: ## Run tests for DoctrineBridge
+monorepo_tests_doctrine: ## Run tests for DoctrineBridge
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Bridge/Doctrine"
 
-tests_eventdispatcher: ## Run tests for EventDispatcher
+monorepo_tests_eventdispatcher: ## Run tests for EventDispatcher
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component/EventDispatcher"
 
-tests_form: ## Run tests for Form
+monorepo_tests_form: ## Run tests for Form
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component/Form"
 
-tests_httpfoundation: ## Run tests for HttpFoundation
+monorepo_tests_httpfoundation: ## Run tests for HttpFoundation
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component/HttpFoundation"
 
-tests_httpkernel: ## Run tests for HttpKernel
+monorepo_tests_httpkernel: ## Run tests for HttpKernel
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component/HttpKernel"
 
-tests_routing: ## Run tests for Routing
+monorepo_tests_routing: ## Run tests for Routing
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component/Routing"
 
-tests_security: ## Run tests for SecurityBundle
+monorepo_tests_security: ## Run tests for SecurityBundle
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Bundle/SecurityBundle"
 
-tests_twig: ## Run tests for TwigBridge
+monorepo_tests_twig: ## Run tests for TwigBridge
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Bridge/Twig"
 ```
 
