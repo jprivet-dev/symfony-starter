@@ -213,23 +213,23 @@ Usage: make <target>
 
   (to delete this section, delete make/contrib.mk)
 
-  contrib_dockerfile                      Inject PHP extensions for contribution into Dockerfile
+  contrib_dockerfile                      Inject PHP extensions required for contribution into Dockerfile (xsl, etc.)
 
-  contrib_volume d=<dir>                  Add a Docker volume for a directory (e.g. make contrib_volume d=symfony)
-  contrib_add_repo d=<dir>                Add a path repository to composer.json (e.g. make contrib_add_repo d=monolog-bundle)
-  contrib_remove_repo d=<dir>             Remove a path repository to composer.json (e.g. make contrib_remove_repo d=monolog-bundle)
-  contrib_install d=<dir>                 Install Composer packages in a directory (e.g. make contrib_install d=symfony)
-  contrib_clean d=<dir>                   Remove vendor and lock file from a directory (e.g. make contrib_clean d=symfony)
-  contrib_tests d=<dir> [a=<args>]        Run PHPUnit tests in a directory (e.g. make contrib_tests d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle)
-  contrib_tests_clean d=<dir>             Clean PHPUnit cache and temporary files in a directory (e.g. make contrib_tests_clean d=symfony)
+  bundle_volume d=<dir>                   Add a Docker volume for a local repository (e.g. make bundle_volume d=symfony)
+  bundle_add d=<dir>                      Register a path repository in composer.json (e.g. make bundle_add d=monolog-bundle)
+  bundle_remove d=<dir>                   Unregister a path repository from composer.json (e.g. make bundle_remove d=monolog-bundle)
+  bundle_install d=<dir>                  Install external dependencies used during the tests (e.g. make bundle_install d=symfony)
+  bundle_clean d=<dir>                    Remove vendor and lock file from a local repository (e.g. make bundle_clean d=symfony)
+  bundle_tests d=<dir> [a=<args>]         Run PHPUnit tests in a local repository (e.g. make bundle_tests d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle)
+  bundle_tests_clean d=<dir>              Clean PHPUnit cache and temporary files in a local repository (e.g. make bundle_tests_clean d=symfony)
 
   monorepo_volume                         Add a Docker volume for the Symfony monorepo
-  monorepo_link                           Link the Symfony monorepo to the project (replace vendors with symlinks)
-  monorepo_unlink                         Restore original vendors (rollback links from the Symfony monorepo)
-  monorepo_install                        Install Composer packages in the Symfony monorepo
+  monorepo_link                           Replace vendors with symlinks to the Symfony monorepo
+  monorepo_unlink                         Restore original vendors (rollback symlinks to the Symfony monorepo)
+  monorepo_install                        Install external dependencies used during the tests in the Symfony monorepo
   monorepo_clean                          Remove vendor and lock file from the Symfony monorepo
   monorepo_tests [a=<args>]               Run PHPUnit tests in the Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
-  monorepo_tests_clean                    Clean PHPUnit cache and temporary files the Symfony monorepo
+  monorepo_tests_clean                    Clean PHPUnit cache and temporary files in the Symfony monorepo
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
