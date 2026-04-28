@@ -22,12 +22,19 @@ _bundle: # INTERNAL
 		exit 1; \
 	fi
 
-bundle_volume: _bundle ## Add a Docker volume for a local repository | d=<dir> | d=symfony
+bundle_status: _bundle ## Show current branch for reproducer and a local repository | d=<dir>
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	@printf "$(Y)%-25s  %s$(S)\n" "REPOSITORY" "BRANCH"
+	@printf "%-25s  %s\n" "$(PROJECT_NAME)" "$$(git rev-parse --abbrev-ref HEAD)"
+	@printf "%-25s  %s\n" "$(d)" "$$(git -C ../$(d) rev-parse --abbrev-ref HEAD)"
+	@printf "\n"
+
+bundle_volume: _bundle bundle_status ## Add a Docker volume for a local repository | d=<dir> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='../$(d):/$(d)'
 	@sed -i'' "s|^SAFE_DIRECTORIES = .*|& /$(d)|" Makefile
 
-bundle_add: _bundle ## Register a path repository in composer.json | d=<dir> | d=monolog-bundle
+bundle_add: _bundle bundle_status ## Register a path repository in composer.json | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(COMPOSER) config repositories.$(d) '{"type": "path", "url": "../$(d)", "options": {"symlink": true}}'
 
@@ -35,7 +42,7 @@ bundle_remove: ## Unregister a path repository from composer.json | d=<dir> | d=
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(COMPOSER) config --unset repositories.$(d)
 
-bundle_install: _bundle ## Install external dependencies used during the tests | d=<dir> | d=symfony
+bundle_install: _bundle bundle_status ## Install external dependencies used during the tests | d=<dir> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@printf "🧙 Install Composer packages in $(Y)/$(d)$(S)\n"
 	$(COMPOSER) install --working-dir=/$(d)
@@ -46,18 +53,16 @@ bundle_clean: ## Remove vendor and lock file from a local repository | d=<dir> |
 
 bundle_tests: bundle_tests_clean ## Run PHPUnit tests in a local repository | d=<dir> [a=<args>] | d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
-	@if docker compose exec php [ -f "/$(d)/phpunit" ]; then \
-		echo "$(G)🧙 Running PHPUnit via root phpunit binary$(S)"; \
-		docker compose exec -e SYMFONY_DEPRECATIONS_HELPER=weak -e COMPOSER_ALLOW_SUPERUSER=1 php /$(d)/phpunit -c /$(d)/phpunit.xml.dist --display-skipped $(a); \
-	elif docker compose exec php [ -f "/$(d)/vendor/bin/phpunit" ]; then \
-		echo "$(G)🧙 Running PHPUnit via vendor/bin/phpunit$(S)"; \
+	@if docker compose exec php [ -f "/$(d)/phpunit.xml" ]; then \
+		docker compose exec -e SYMFONY_DEPRECATIONS_HELPER=weak -e COMPOSER_ALLOW_SUPERUSER=1 php /$(d)/vendor/bin/phpunit -c /$(d)/phpunit.xml --display-skipped $(a); \
+	elif docker compose exec php [ -f "/$(d)/phpunit.xml.dist" ]; then \
 		docker compose exec -e SYMFONY_DEPRECATIONS_HELPER=weak -e COMPOSER_ALLOW_SUPERUSER=1 php /$(d)/vendor/bin/phpunit -c /$(d)/phpunit.xml.dist --display-skipped $(a); \
 	else \
-		echo "$(R)✘ PHPUnit binary not found in /$(d) inside the container$(S)"; \
+		echo "$(R)✘ PHPUnit configuration file not found in /$(d) inside the container$(S)"; \
 		exit 1; \
 	fi
 
-bundle_tests_clean: _bundle ## Clean PHPUnit cache and temporary files in a local repository | d=<dir> | d=symfony
+bundle_tests_clean: _bundle bundle_status ## Clean PHPUnit cache and temporary files in a local repository | d=<dir> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	docker compose exec -u 0 php rm -fr /tmp/* /$(d)/.phpunit.result.cache /$(d)/var/cache/*
 
