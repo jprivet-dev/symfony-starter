@@ -16,12 +16,18 @@ contrib_dockerfile: ## Inject PHP extensions required for contribution into Dock
 
 ##
 
-bundle_volume: ## Add a Docker volume for a local repository | d=<dir> | d=symfony
+_bundle_exists: # INTERNAL
+	@if [ ! -d "../$(d)" ]; then \
+		printf "$(R)✘ Directory '../$(d)' not found. Clone your fork side-by-side with the Symfony Starter first.$(S)\n"; \
+		exit 1; \
+	fi
+
+bundle_volume: _bundle_exists ## Add a Docker volume for a local repository | d=<dir> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='../$(d):/$(d)'
 	@sed -i'' "s|^SAFE_DIRECTORIES = .*|& /$(d)|" Makefile
 
-bundle_add: ## Register a path repository in composer.json | d=<dir> | d=monolog-bundle
+bundle_add: _bundle_exists ## Register a path repository in composer.json | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(COMPOSER) config repositories.$(d) '{"type": "path", "url": "../$(d)", "options": {"symlink": true}}'
 
@@ -29,7 +35,7 @@ bundle_remove: ## Unregister a path repository from composer.json | d=<dir> | d=
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(COMPOSER) config --unset repositories.$(d)
 
-bundle_install: ## Install external dependencies used during the tests | d=<dir> | d=symfony
+bundle_install: _bundle_exists ## Install external dependencies used during the tests | d=<dir> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@printf "🧙 Install Composer packages in $(Y)/$(d)$(S)\n"
 	$(COMPOSER) install --working-dir=/$(d)
@@ -51,16 +57,19 @@ bundle_tests: bundle_tests_clean ## Run PHPUnit tests in a local repository | d=
 		exit 1; \
 	fi
 
-bundle_tests_clean: ## Clean PHPUnit cache and temporary files in a local repository | d=<dir> | d=symfony
+bundle_tests_clean: _bundle_exists ## Clean PHPUnit cache and temporary files in a local repository | d=<dir> | d=symfony
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	docker compose exec -u 0 php rm -fr /tmp/* /$(d)/.phpunit.result.cache /$(d)/var/cache/*
 
 ##
 
+_monorepo_exists: # INTERNAL
+	$(MAKE) _bundle_exists d=$(SYMFONY_MONOREPO_DIR)
+
 monorepo_volume: ## Add a Docker volume for the Symfony monorepo
 	$(MAKE) bundle_volume d=$(SYMFONY_MONOREPO_DIR)
 
-monorepo_link: ## Replace vendors with symlinks to the Symfony monorepo
+monorepo_link: _monorepo_exists ## Replace vendors with symlinks to the Symfony monorepo
 	$(PHP) /$(SYMFONY_MONOREPO_DIR)/link /app
 	@printf "🔗 Local directory $(Y)/$(SYMFONY_MONOREPO_DIR)$(S) linked to the project\n"
 
