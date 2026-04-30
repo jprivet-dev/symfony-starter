@@ -126,8 +126,8 @@ make contrib@lts
 ### 3. Add the Docker volume and register the path repository
 
 ```shell
-make bundle_volume d=monolog-bundle
-make bundle_add d=monolog-bundle
+make repo_volume d=monolog-bundle
+make repo_add d=monolog-bundle
 git commit -am "Add the Docker volume and register the path repository"
 
 make build up_detached
@@ -149,20 +149,20 @@ git add . && git commit -m "Install symfony/monolog-bundle:4.x-dev"
 ### 5. Install the external dependencies used during the tests
 
 ```shell
-make bundle_install d=monolog-bundle
+make repo_install d=monolog-bundle
 ```
 
 ### 6. Run the tests for the first time to verify everything is working
 
 ```shell
-make bundle_tests d=monolog-bundle
+make repo_tests d=monolog-bundle
 ```
 
 PHPUnit cache and temporary files are automatically cleaned before each test run.
 If you need to clean them manually:
 
 ```shell
-make bundle_tests_clean d=monolog-bundle
+make repo_tests_clean d=monolog-bundle
 ```
 
 ### 7. Revert: remove the path repository and restore the published package
@@ -171,7 +171,7 @@ make bundle_tests_clean d=monolog-bundle
 > published version of the package, remove the local path repository.
 
 ```shell
-make bundle_remove d=monolog-bundle
+make repo_remove d=monolog-bundle
 make update a=symfony/monolog-bundle
 ```
 
