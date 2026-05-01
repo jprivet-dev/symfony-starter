@@ -64,7 +64,8 @@ TESTS     = tests
 
 NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
 PWD                = $(shell pwd)
-LOCAL_MK           = make/local.mk
+MAKE_LOCAL_MK      = make/local.mk
+MAKE_LOCAL_MK_DIST = $(MAKE_LOCAL_MK).dist
 BIN_CONSOLE        = bin/console
 BIN_PHPUNIT        = bin/phpunit
 COMPOSER_JSON      = composer.json
@@ -236,7 +237,7 @@ include make/requires.mk
 # --- EXTEND THE MAIN MAKEFILE ---
 
 ifneq ($(APP_ENV),prod)
--include $(sort $(wildcard make/*local.mk))
+-include $(sort $(wildcard $(MAKE_LOCAL_MK)))
 endif
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
@@ -272,7 +273,7 @@ install: up_detached ## Start the project, install dependencies and show info
 .PHONY: info
 info: ## Show project access info
 	@printf "\n$(Y)--- Info ---$(S)\n"
-	@printf " $(Y)›$(S) Copy $(Y)$(LOCAL_MK).dist$(S) to $(G)$(LOCAL_MK)$(S) to extend the Makefile with your own commands.\n"
+	@printf " $(Y)›$(S) Copy $(Y)$(MAKE_LOCAL_MK_DIST)$(S) to $(G)$(MAKE_LOCAL_MK)$(S) (ignored by Git) to extend the Makefile with your own local commands.\n"
 	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
 	@printf " $(Y)›$(S) Access to the application (accept the auto-generated TLS certificate):\n"
 	@printf "    - Homepage ....... $(G)$(LOCALHOST)/$(S)\n"
