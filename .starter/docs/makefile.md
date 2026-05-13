@@ -216,22 +216,29 @@ Usage: make <target>
 
   contrib_dockerfile                      Inject PHP extensions required for contribution into Dockerfile (xsl, etc.)
 
-  repo_status d=<dir>                     Show current branch for reproducer and a local repository
-  repo_volume d=<dir>                     Add a Docker volume for a local repository (e.g. make repo_volume d=symfony)
-  repo_add d=<dir>                        Register a path repository in composer.json (e.g. make repo_add d=monolog-bundle)
-  repo_remove d=<dir>                     Unregister a path repository from composer.json (e.g. make repo_remove d=monolog-bundle)
-  repo_install d=<dir>                    Install external dependencies used during the tests (e.g. make repo_install d=symfony)
-  repo_clean d=<dir>                      Remove vendor and lock file from a local repository (e.g. make repo_clean d=symfony)
-  repo_tests d=<dir> [a=<args>]           Run PHPUnit tests in a local repository (e.g. make repo_tests d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle)
-  repo_tests_clean d=<dir>                Clean PHPUnit cache and temporary files in a local repository (e.g. make repo_tests_clean d=symfony)
-
+▸ SYMFONY MONOREPO
   monorepo_volume                         Add a Docker volume for the Symfony monorepo
   monorepo_link                           Replace vendors with symlinks to the Symfony monorepo
-  monorepo_unlink                         Restore original vendors (rollback symlinks to the Symfony monorepo)
   monorepo_install                        Install external dependencies used during the tests in the Symfony monorepo
-  monorepo_clean                          Remove vendor and lock file from the Symfony monorepo
+
+  monorepo_status                         Show current branch for reproducer and the Symfony monorepo
   monorepo_tests [a=<args>]               Run PHPUnit tests in the Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
   monorepo_tests_clean                    Clean PHPUnit cache and temporary files in the Symfony monorepo
+
+  monorepo_clean                          Remove vendor and lock file from the Symfony monorepo
+  monorepo_unlink                         Restore original vendors (rollback symlinks to the Symfony monorepo)
+
+▸ OTHER REPO
+  repo_volume d=<dir>                     Add a Docker volume for a local repository (e.g. make repo_volume d=monolog-bundle)
+  repo_add d=<dir>                        Register a path repository in composer.json (e.g. make repo_add d=monolog-bundle)
+  repo_install d=<dir>                    Install external dependencies used during the tests (e.g. make repo_install d=monolog-bundle)
+
+  repo_status d=<dir>                     Show current branch for reproducer and a local repository (e.g. make repo_status d=monolog-bundle)
+  repo_tests d=<dir> [a=<args>]           Run PHPUnit tests in a local repository (e.g. make repo_tests d=monolog-bundle)
+  repo_tests_clean d=<dir>                Clean PHPUnit cache and temporary files in a local repository (e.g. make repo_tests_clean d=monolog-bundle)
+
+  repo_remove d=<dir>                     Unregister a path repository from composer.json (e.g. make repo_remove d=monolog-bundle)
+  repo_clean d=<dir>                      Remove vendor and lock file from a local repository (e.g. make repo_clean d=monolog-bundle)
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
