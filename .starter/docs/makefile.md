@@ -265,7 +265,7 @@ Usage: make <target>
   skeleton                                Install symfony/skeleton from the versioned dunglas/symfony-docker files at the root
   clone_symfony_demo                      Clone and extract https://github.com/symfony/demo files at the root
 
-  COMPLETE INSTALLATION
+▸ COMPLETE INSTALLATION
   require_api                             Install API Platform - https://api-platform.com/docs/symfony/
   require_easy_admin                      Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
   require_stimulus                        Install StimulusBundle - https://ux.symfony.com/
@@ -289,11 +289,11 @@ Usage: make <target>
 
   health [c=<status_code>] [t=<text>]     Check the website and database connection (via Doctrine) (e.g. make health c=404 t="Welcome to Symfony")
 
-  DATABASE
+▸ DATABASE
   switch_to_mariadb                       Switch the stack from PostgreSQL to MySQL/MariaDB
   switch_to_sqlite                        Switch the stack from PostgreSQL to SQLite
 
-  YQ
+▸ YQ
   yq [a=<argument>]                       Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor (e.g. make yq a=--help)
   yq_add f=<file> k=<key> v=<value>    ya Append a value to an array key in a YAML file (e.g. make yq_add f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway)
   yq_clear f=<file> k=<key>            yc Clear a key's value in a YAML file (sets it to empty string) (e.g. make yq_clear f=compose.yaml k=services.php.extra_hosts)

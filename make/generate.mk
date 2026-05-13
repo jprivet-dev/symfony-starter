@@ -247,7 +247,7 @@ else
 endif
 	$(M) co m="make clone_symfony_demo"
 
-##   COMPLETE INSTALLATION
+## ▸ COMPLETE INSTALLATION
 
 require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
 	$(C) require api
@@ -388,7 +388,7 @@ health_welcome_to_easy_admin: # INTERNAL
 health_welcome_to_symfony: # INTERNAL
 	$(M) health c=404 t="Welcome to Symfony"
 
-##   DATABASE
+## ▸ DATABASE
 
 switch_to_mariadb: .env Dockerfile compose.override.yaml compose.yaml ## Switch the stack from PostgreSQL to MySQL/MariaDB
 ifeq ($(IS_POSTGRESQL),)
@@ -421,7 +421,7 @@ endif
 	$(M) build_force_start
 	@printf " $(G)✔$(S) Stack updated to SQLite!\n"
 
-##   YQ
+## ▸ YQ
 
 yq: ## Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor | [a=<argument>] | a=--help
 	$(YQ) $(a)
