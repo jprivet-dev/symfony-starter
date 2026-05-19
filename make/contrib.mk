@@ -17,32 +17,33 @@ contrib_dockerfile: ## Inject PHP extensions required for contribution into Dock
 ## ▸ SYMFONY MONOREPO
 
 _monorepo: # INTERNAL
-	$(MAKE) _repo d=$(SYMFONY_MONOREPO_DIR)
+	$(M) _repo d=$(SYMFONY_MONOREPO_DIR)
 
 monorepo_volume: ## Add a Docker volume for the Symfony monorepo
-	$(MAKE) repo_volume d=$(SYMFONY_MONOREPO_DIR)
+	$(M) repo_volume d=$(SYMFONY_MONOREPO_DIR)
+	$(M) co m="Add the Docker volume for the Symfony monorepo"
 
 monorepo_link: _monorepo ## Replace vendors with symlinks to the Symfony monorepo
 	$(PHP) /$(SYMFONY_MONOREPO_DIR)/link /app
 	@printf "🔗 Local directory $(Y)/$(SYMFONY_MONOREPO_DIR)$(S) linked to the project\n"
 
 monorepo_install: ## Install external dependencies used during the tests in the Symfony monorepo
-	$(MAKE) repo_install d=$(SYMFONY_MONOREPO_DIR)
+	$(M) repo_install d=$(SYMFONY_MONOREPO_DIR)
 
 ##
 
 monorepo_status: ## Show current branch for reproducer and the Symfony monorepo
-	$(MAKE) repo_status d=$(SYMFONY_MONOREPO_DIR) a=$(a)
+	$(M) repo_status d=$(SYMFONY_MONOREPO_DIR) a=$(a)
 
 monorepo_tests: ## Run PHPUnit tests in the Symfony monorepo | [a=<args>] | a=/symfony/src/Symfony/Bundle/FrameworkBundle
-	$(MAKE) repo_tests d=$(SYMFONY_MONOREPO_DIR) a=$(a)
+	$(M) repo_tests d=$(SYMFONY_MONOREPO_DIR) a=$(a)
 
 monorepo_tests_clean: ## Clean PHPUnit cache and temporary files in the Symfony monorepo
-	$(MAKE) repo_tests_clean d=$(SYMFONY_MONOREPO_DIR)
+	$(M) repo_tests_clean d=$(SYMFONY_MONOREPO_DIR)
 ##
 
 monorepo_clean: ## Remove vendor and lock file from the Symfony monorepo
-	$(MAKE) repo_clean d=$(SYMFONY_MONOREPO_DIR)
+	$(M) repo_clean d=$(SYMFONY_MONOREPO_DIR)
 
 monorepo_unlink: ## Restore original vendors (rollback symlinks to the Symfony monorepo)
 	$(PHP) /$(SYMFONY_MONOREPO_DIR)/link /app --rollback
@@ -58,12 +59,14 @@ _repo: # INTERNAL
 
 repo_volume: _repo repo_status ## Add a Docker volume for a local repository | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
-	$(MAKE) ya f=compose.override.yaml k=services.php.volumes v='../$(d):/$(d)'
+	$(M) ya f=compose.override.yaml k=services.php.volumes v='../$(d):/$(d)'
 	@sed -i'' "s|^SAFE_DIRECTORIES = .*|& /$(d)|" Makefile
+	$(M) co m="Add the Docker volume for the $(d) repository"
 
 repo_add: _repo repo_status ## Register a path repository in composer.json | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(COMPOSER) config repositories.$(d) '{"type": "path", "url": "../$(d)", "options": {"symlink": true}}'
+	$(M) co m="Register the $(d) path repository"
 
 repo_install: _repo repo_status ## Install external dependencies used during the tests | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))

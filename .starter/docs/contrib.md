@@ -37,8 +37,6 @@ make contrib@lts
 
 ```shell
 make monorepo_volume
-git commit -am "Add the Docker volume for the Symfony monorepo"
-
 make build up_detached
 ```
 
@@ -128,8 +126,6 @@ make contrib@lts
 ```shell
 make repo_volume d=monolog-bundle
 make repo_add d=monolog-bundle
-git commit -am "Add the Docker volume and register the path repository"
-
 make build up_detached
 ```
 
