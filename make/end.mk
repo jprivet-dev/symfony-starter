@@ -39,6 +39,7 @@ hosts: ## Add the server name to /etc/hosts file
 ## — GIT 🐙 ———————————————————————————————————————————————————————————————————
 
 git_hooks_init: ## Initialize the project's hooks directory (set GIT_HOOKS var)
+	@printf "\n$(Y)--- Git hooks init (GIT_HOOKS=$(GIT_HOOKS)) ---$(S)\n"
 ifeq ($(GIT_HOOKS),on)
 	$(MAKE) git_hooks_enable
 else
@@ -55,7 +56,7 @@ git_hooks_enable: ## Enable the project's hooks directory
 	-git config core.hooksPath hooks/
 	@printf " $(G)✔$(S) Git hooks enabled.\n"
 
-git_pre_push: c1 ## Actions on Git pre-push
+git_pre_push: check_push ## Actions on Git pre-push
 
 ## — TROUBLESHOOTING 😵️ ———————————————————————————————————————————————————————
 
@@ -96,7 +97,7 @@ tree: ## Visualize your structure (requires `tree` command) | [l=<level>] | l=1
 vars: ## Show key Makefile variables
 	@printf "\n$(Y)--- Vars ---$(S)\n"
 	@$(foreach var, \
-		USER UNAME_S APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
+		USER UNAME_S GIT_HOOKS APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
 		CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE \
 		IS_MYSQL IS_POSTGRESQL IS_SQLITE, \
 		printf "%-15s : %s\n" "${var}" "${${var}}"; \

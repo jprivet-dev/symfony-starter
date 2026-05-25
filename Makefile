@@ -43,7 +43,7 @@ endif
 
 # --- GIT ---
 
-GIT_HOOKS = off
+GIT_HOOKS ?= off
 
 # --- YQ ---
 
@@ -64,7 +64,8 @@ TESTS     = tests
 
 NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
 PWD                = $(shell pwd)
-LOCAL_MK           = make/local.mk
+MAKE_LOCAL_MK      = make/local.mk
+MAKE_LOCAL_MK_DIST = $(MAKE_LOCAL_MK).dist
 BIN_CONSOLE        = bin/console
 BIN_PHPUNIT        = bin/phpunit
 COMPOSER_JSON      = composer.json
@@ -169,6 +170,7 @@ endef
 ENV_FILES += $(call add_env_file,.env.local)
 ENV_FILES += $(call add_env_file,.env.$(APP_ENV))
 ENV_FILES += $(call add_env_file,.env.$(APP_ENV).local)
+ENV_FILES := $(strip $(ENV_FILES))
 
 # .env is loaded by Docker by default, only add it explicitly if overrides are active
 ifneq ($(ENV_FILES),)
@@ -183,7 +185,7 @@ ifndef COMPOSE_V2
 $(warning [WARNING] Docker Compose CLI plugin is required but is not available on your system)
 endif
 
-COMPOSE = docker compose $(ENV_FILES)
+COMPOSE = $(strip docker compose $(ENV_FILES))
 
 # In a first step, you can test the application's production behavior in a development environment by setting APP_ENV=prod.
 # To test the full Docker production setup (e.g., optimized images, production-specific configurations), you can also add USE_COMPOSE_PROD_YAML=true.
@@ -235,7 +237,7 @@ include make/requires.mk
 # --- EXTEND THE MAIN MAKEFILE ---
 
 ifneq ($(APP_ENV),prod)
--include $(sort $(wildcard make/*local.mk))
+-include $(sort $(wildcard $(MAKE_LOCAL_MK)))
 endif
 
 ## — 🐳 🎵 THE SYMFONY STARTER MAKEFILE 🎵 🐳 —————————————————————————————————
@@ -271,7 +273,7 @@ install: up_detached ## Start the project, install dependencies and show info
 .PHONY: info
 info: ## Show project access info
 	@printf "\n$(Y)--- Info ---$(S)\n"
-	@printf " $(Y)›$(S) Copy $(Y)$(LOCAL_MK).dist$(S) to $(G)$(LOCAL_MK)$(S) to extend the Makefile with your own commands.\n"
+	@printf " $(Y)›$(S) Copy $(Y)$(MAKE_LOCAL_MK_DIST)$(S) to $(G)$(MAKE_LOCAL_MK)$(S) (ignored by Git) to extend the Makefile with your own local commands.\n"
 	@printf " $(Y)›$(S) Run $(Y). aliases$(S) or $(Y)source aliases$(S) to create bash aliases for main make commands ($(G)symfony$(S), $(G)php$(S), $(G)composer$(S), ...)\n"
 	@printf " $(Y)›$(S) Access to the application (accept the auto-generated TLS certificate):\n"
 	@printf "    - Homepage ....... $(G)$(LOCALHOST)/$(S)\n"
@@ -313,11 +315,23 @@ build_force_start: ## [Level 3] Force build & Start - Rebuilding from scratch (t
 
 ##
 
-.PHONY: c1
-check_level_1 c1: composer_validate validate lint ## Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
+check:  ## Check everything before you deliver - Composer, Doctrine validation, linters, ... (no stop on failure)
+	@printf " $(Y)›$(S) 💡 Tip: enrich $(G)check$(S) in Makefile as your project matures\n"
+	-$(MAKE) composer_validate
+	@#-$(MAKE) validate         # Doctrine mapping validation
+	@#-$(MAKE) lint             # Twig, YAML, container linters (phpcsfixer, twigcsfixer, phpstan)
+	@#-$(MAKE) phpstan_lint     # Static analysis only
 
-.PHONY: c2
-check_level_2 c2: composer_validate validate lint phpunit ## Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
+check_all: check ## Check everything before you deliver - check + tests (no stop on failure)
+	@#-$(MAKE) tests            # Full test suite (better left to CI)
+
+check_push: ## Check on git push (stop on failure)
+	@printf " $(Y)›$(S) 💡 Tip: enrich $(G)check_push$(S) in Makefile as your project matures\n"
+	$(MAKE) composer_validate
+	@#$(MAKE) validate         # Doctrine mapping validation
+	@#$(MAKE) lint             # Twig, YAML, container linters (phpcsfixer, twigcsfixer, phpstan)
+	@#$(MAKE) phpstan_lint     # Static analysis only
+	@#$(MAKE) tests            # Full test suite (better left to CI)
 
 .PHONY: tests t
 tests t: db_init@test fixtures@test phpunit ## Run all tests

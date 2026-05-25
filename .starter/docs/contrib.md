@@ -1,223 +1,233 @@
-# Contributing to Symfony: Connect your local repository
+# Contributing: Connect your local Symfony repository
 
 [⬅️ README](README.md)
 
 ---
 
-This starter provides a powerful toolkit to help you contribute to the Symfony framework or any Symfony bundle. It allows you to mount a local repository directly into your Dockerized application and test your changes immediately.
+This starter provides a powerful toolkit to help you contribute to the Symfony framework or any
+Symfony bundle. It allows you to mount a local repository directly into your Dockerized application
+and test your changes immediately.
 
-## Contribute to symfony/symfony
+## Contribute to `symfony/symfony`
 
-### Prerequisites
+### 1. Fork and clone side-by-side with the starter
 
-1. Fork [github.com/symfony/symfony](https://github.com/symfony/symfony) on GitHub.
-2. Clone your fork side-by-side with the starter:
+> See https://github.com/symfony/symfony
 
 ```shell
 git clone git@github.com:YOUR_USERNAME/symfony.git ../symfony
 ```
 
-### Setup
+```
+./
+├── symfony/           <-- Your fork
+└── symfony-starter/   <-- Your reproducer
+```
 
-Add the Docker volume and rebuild:
+### 2. Generate a minimalist Symfony application configured for contribution
+
+```shell
+# stable release
+make contrib
+# or LTS - long-term support release
+make contrib@lts
+```
+
+### 3. Add the Docker volume for the Symfony monorepo and rebuild
 
 ```shell
 make monorepo_volume
-git commit -am "Add a Docker volume for the Symfony monorepo"
-
-make build
-make up_detached
+make build up_detached
 ```
 
-Link the monorepo into your application's vendors:
+### 4. Install the component you wish to contribute
+
+e.g. [HTTP Client](https://symfony.com/doc/current/http_client.html):
+
+```shell
+# composer require symfony/http-client (via docker compose)
+make require a=symfony/http-client
+```
+
+### 5. Link the monorepo into your application's vendors
 
 ```shell
 make monorepo_link
 ```
 
-### Develop & Test
+### 6. Install the external dependencies used during the tests
 
-Modify files in `../symfony/src/` — changes are immediately reflected in the application.
-
-Before running tests, ensure all dependencies are installed within the monorepo:
-
-```bash
+```shell
 make monorepo_install
 ```
 
-Run the framework tests inside the container using absolute paths from the container's root:
+### 7. Run the tests for the first time to verify everything is working
 
-```bash
-# Run tests for a specific component
-make monorepo_tests a="/symfony/src/Symfony/Component/HttpKernel"
+e.g. [HTTP Client](https://symfony.com/doc/current/http_client.html):
+
+```shell
+make monorepo_tests a="/symfony/src/Symfony/Component/HttpClient"
 ```
 
-**Pro-tip:** When running large test suites, you can exclude specific groups that require additional infrastructure (like Redis) by appending the argument:
+> Tests are run inside the reproducer's PHP container using absolute paths from the container's
+> root (e.g. `/symfony/src/...`).
 
-```bash
+**Pro-tip:** When running large test suites, you can exclude the integration group, which requires
+additional infrastructure (e.g. Redis or RabbitMQ), by appending the `--exclude-group` argument:
+
+```shell
 make monorepo_tests a="/symfony/src/Symfony/Bundle --exclude-group=redis"
 ```
 
-Clean PHPUnit cache and temporary files if needed (recommended before running large suites):
+PHPUnit cache and temporary files are automatically cleaned before each test run.
+If you need to clean them manually:
 
-```bash
+```shell
 make monorepo_tests_clean
 ```
 
-### Personal shortcuts (local customization)
+### 8. Revert: unlink the monorepo
 
-If you are working frequently on specific components, you can create your own shortcuts. The starter includes a mechanism to load local Makefile rules that are not committed to the repository.
-
-1. Create your local Makefile:
-   ```bash
-   cp make/local.mk.dist make/local.mk
-   ```
-
-2. Add your custom commands to `make/local.mk`. These will automatically appear in `make help`. Here are some useful examples you can use:
-
-```makefile
-monorepo_tests_bridge: ## Run tests for all Bridge components
-	make monorepo_tests a="/symfony/src/Symfony/Bridge"
-
-monorepo_tests_bundle: ## Run tests for all Bundle components
-	make monorepo_tests a="/symfony/src/Symfony/Bundle"
-
-monorepo_tests_component: ## Run tests for all Components
-	make monorepo_tests a="/symfony/src/Symfony/Component"
-
-monorepo_tests_di: ## Run tests for DependencyInjection: Testing service container compilation and resolution
-	make monorepo_tests a="/symfony/src/Symfony/Component/DependencyInjection"
-
-monorepo_tests_doctrine: ## Run tests for DoctrineBridge: Verifying integration between Symfony and Doctrine
-	make monorepo_tests a="/symfony/src/Symfony/Bridge/Doctrine"
-
-monorepo_tests_eventdispatcher: ## Run tests for EventDispatcher: Testing the communication layer between components
-	make monorepo_tests a="/symfony/src/Symfony/Component/EventDispatcher"
-
-monorepo_tests_form: ## Run tests for Form: Testing complex mapping, validation, and rendering logic
-	make monorepo_tests a="/symfony/src/Symfony/Component/Form"
-
-monorepo_tests_httpfoundation: ## Run tests for HttpFoundation: Verifying HTTP request/response standards and logic
-	make monorepo_tests a="/symfony/src/Symfony/Component/HttpFoundation"
-
-monorepo_tests_httpkernel: ## Run tests for HttpKernel: The central engine managing the request lifecycle
-	make monorepo_tests a="/symfony/src/Symfony/Component/HttpKernel"
-
-monorepo_tests_routing: ## Run tests for Routing: Validating URL matching and generation
-	make monorepo_tests a="/symfony/src/Symfony/Component/Routing"
-
-monorepo_tests_security: ## Run tests for SecurityBundle: Testing authentication, firewalls, and authorization
-	make monorepo_tests a="/symfony/src/Symfony/Bundle/SecurityBundle"
-
-monorepo_tests_twig: ## Run tests for TwigBridge: Validating Twig extensions and integration with components
-	make monorepo_tests a="/symfony/src/Symfony/Bridge/Twig"
+```shell
+make monorepo_unlink
 ```
 
-> **Note:** The `make/local.mk` file is ignored by Git. This is the perfect place to experiment with new commands before potentially proposing them as a permanent addition to the project.
+## Contribute to a Symfony bundle or bridge
 
----
+This section uses the [MonologBundle](https://github.com/symfony/monolog-bundle) as an example.
+The same workflow applies to any Symfony bundle or bridge hosted in its own repository, outside
+the `symfony/symfony` monorepo.
 
-## Contribute to a Symfony bundle
+### 1. Fork and clone side-by-side with the starter
 
-This section uses [symfony/monolog-bundle](https://github.com/symfony/monolog-bundle) as an example. The same workflow applies to any Symfony bundle.
-
-### Prerequisites
-
-1. Fork [github.com/symfony/monolog-bundle](https://github.com/symfony/monolog-bundle) on GitHub.
-2. Clone your fork side-by-side with the starter:
+> See https://github.com/symfony/monolog-bundle
 
 ```shell
 git clone git@github.com:YOUR_USERNAME/monolog-bundle.git ../monolog-bundle
 ```
 
-### Setup
-
-Add the Docker volume and register the path repository:
-
-```shell
-make contrib_volume d=monolog-bundle
-make contrib_add_repo d=monolog-bundle
-git commit -am "Add a Docker volume and repo for the monolog-bundle"
-
-make build
-make up_detached
+```
+./
+├── symfony-starter/   <-- Your reproducer
+└── monolog-bundle/    <-- Your fork
 ```
 
-Link the local version:
+### 2. Generate a minimalist Symfony application configured for contribution
 
 ```shell
+# stable release
+make contrib
+# or LTS - long-term support release
+make contrib@lts
+```
+
+### 3. Add the Docker volume and register the path repository
+
+```shell
+make repo_volume d=monolog-bundle
+make repo_add d=monolog-bundle
+make build up_detached
+```
+
+### 4. Link the local version
+
+```shell
+# composer require symfony/monolog-bundle:4.x-dev --prefer-source (via docker compose)
 make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
-git add .
-git commit -m "Install symfony/monolog-bundle:4.x-dev"
+git add . && git commit -m "Install symfony/monolog-bundle:4.x-dev"
 ```
 
-> **Note:** Composer expects a version following the `[branch-name]-dev` pattern (e.g., if your local branch is `4.x`, use `4.x-dev`).
+> [!NOTE]
+>
+> Composer expects a version following the `[branch-name]-dev` pattern. If your local branch is
+> named `main`, use `main-dev`; if it's `4.x`, use `4.x-dev`.
 
-### Develop & Test
-
-Modify files in `../monolog-bundle/` — changes are immediately reflected in the application.
-
-Before running tests, ensure all dependencies are installed within the repo:
-
-```bash
-make contrib_install d=monolog-bundle
-```
-
-Run the bundle tests inside the container:
+### 5. Install the external dependencies used during the tests
 
 ```shell
-make contrib_tests d=monolog-bundle
+make repo_install d=monolog-bundle
 ```
 
-Clean PHPUnit cache if needed:
+### 6. Run the tests for the first time to verify everything is working
 
 ```shell
-make contrib_tests_clean d=monolog-bundle
+make repo_tests d=monolog-bundle
 ```
 
-### Revert
-
-Remove the local Composer repository and restore the original package:
+PHPUnit cache and temporary files are automatically cleaned before each test run.
+If you need to clean them manually:
 
 ```shell
-make contrib_remove_repo d=monolog-bundle
-make update a="symfony/monolog-bundle"
+make repo_tests_clean d=monolog-bundle
 ```
 
----
+### 7. Revert: remove the path repository and restore the published package
 
-## Submit your contribution
-
-Manage your Git branches as usual on your host machine and open a Pull Request on the official repository.
+> Once your changes are ready to submit as a pull request, or if you want to switch back to the
+> published version of the package, remove the local path repository.
 
 ```shell
-# For symfony/symfony
-cd ../symfony
-git checkout -b fix/my-issue
-# ... commit your changes ...
-git push origin fix/my-issue
+make repo_remove d=monolog-bundle
+make update a=symfony/monolog-bundle
 ```
+
+## Personal shortcuts
+
+If you are working frequently on specific components, you can create your own shortcuts. The
+starter includes a mechanism to load local Makefile rules that are not committed to the repository.
+
+### 1. Create your local Makefile
 
 ```shell
-# For symfony/monolog-bundle
-cd ../monolog-bundle
-git checkout -b fix/my-issue
-# ... commit your changes ...
-git push origin fix/my-issue
+cp make/local.mk.dist make/local.mk
 ```
 
-> See the [official contribution guide](https://symfony.com/doc/current/contributing/code/pull_requests.html) for more details.
+### 2. Add your custom commands to `make/local.mk`
 
----
+These will automatically appear in `make help`. Here are some useful examples you can use:
 
-## Cleanup
+```makefile
+monorepo_tests_bridge: ## Run tests for all Bridge components
+	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Bridge"
 
-To remove vendors and lock files from a local repository to save space:
+monorepo_tests_bundle: ## Run tests for all Bundle components
+	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Bundle"
 
-```shell
-make monorepo_clean
-make contrib_clean d=monolog-bundle
+monorepo_tests_component: ## Run tests for all Components
+	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component"
+
+monorepo_tests_di: ## Run tests for DependencyInjection
+	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component/DependencyInjection"
+
+monorepo_tests_doctrine: ## Run tests for DoctrineBridge
+	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Bridge/Doctrine"
+
+monorepo_tests_eventdispatcher: ## Run tests for EventDispatcher
+	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component/EventDispatcher"
+
+monorepo_tests_form: ## Run tests for Form
+	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component/Form"
+
+monorepo_tests_httpfoundation: ## Run tests for HttpFoundation
+	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component/HttpFoundation"
+
+monorepo_tests_httpkernel: ## Run tests for HttpKernel
+	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component/HttpKernel"
+
+monorepo_tests_routing: ## Run tests for Routing
+	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Component/Routing"
+
+monorepo_tests_security: ## Run tests for SecurityBundle
+	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Bundle/SecurityBundle"
+
+monorepo_tests_twig: ## Run tests for TwigBridge
+	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Bridge/Twig"
 ```
+
+> [!NOTE]
+>
+> The `make/local.mk` file is ignored by Git. This is the perfect place to experiment with new
+> commands before potentially proposing them as a permanent addition to the project.
 
 ---
 

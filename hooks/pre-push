@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
-# Usage
+# Git hook: pre-push
 #
-#   # Enable
-#   $ git config core.hooksPath hooks/
+# Runs make git_pre_push before every push to catch issues early.
 #
-#   # Disable
-#   $ git config --unset core.hooksPath
+# Enable:
+#   git config core.hooksPath hooks/
+#
+# Disable:
+#   git config --unset core.hooksPath
 
 # (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET
 G="\033[32m"
@@ -17,9 +19,7 @@ S="\033[0m"
 TITLE="GIT HOOK PRE-PUSH"
 printf "${Y}>\n> ${TITLE}\n>\n${S}"
 
-FORCE_NO_TTY=true make git_pre_push
-
-if [ $? -eq 0 ]; then
+if FORCE_NO_TTY=true make git_pre_push; then
   printf "${G}>\n> ${TITLE}: Everything is OK\n>\n${S}"
   exit 0
 fi

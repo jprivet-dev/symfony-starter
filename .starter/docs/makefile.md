@@ -25,8 +25,9 @@ Usage: make <target>
   build_start                             [Level 2] Build & Start - Updating image with cache (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
   build_force_start                       [Level 3] Force build & Start - Rebuilding from scratch (triggers: Dockerfile, system packages, cache issues)
 
-  check_level_1                        c1 Check everything before you deliver - Composer, Doctrine validation, linters (stop on failure)
-  check_level_2                        c2 Check everything before you deliver - Composer, Doctrine validation, linters, PHPUnit (stop on failure)
+  check                                   Check everything before you deliver - Composer, Doctrine validation, linters, ... (no stop on failure)
+  check_all                               Check everything before you deliver - check + tests (no stop on failure)
+  check_push                              Check on git push (stop on failure)
   tests                                t  Run all tests
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
@@ -213,23 +214,31 @@ Usage: make <target>
 
   (to delete this section, delete make/contrib.mk)
 
-  contrib_dockerfile                      Inject PHP extensions for contribution into Dockerfile
+  contrib_dockerfile                      Inject PHP extensions required for contribution into Dockerfile (xsl, etc.)
 
-  contrib_volume d=<dir>                  Add a Docker volume for a directory (e.g. make contrib_volume d=symfony)
-  contrib_add_repo d=<dir>                Add a path repository to composer.json (e.g. make contrib_add_repo d=monolog-bundle)
-  contrib_remove_repo d=<dir>             Remove a path repository to composer.json (e.g. make contrib_remove_repo d=monolog-bundle)
-  contrib_install d=<dir>                 Install Composer packages in a directory (e.g. make contrib_install d=symfony)
-  contrib_clean d=<dir>                   Remove vendor and lock file from a directory (e.g. make contrib_clean d=symfony)
-  contrib_tests d=<dir> [a=<args>]        Run PHPUnit tests in a directory (e.g. make contrib_tests d=symfony a=/symfony/src/Symfony/Bundle/FrameworkBundle)
-  contrib_tests_clean d=<dir>             Clean PHPUnit cache and temporary files in a directory (e.g. make contrib_tests_clean d=symfony)
-
+▸ SYMFONY MONOREPO
   monorepo_volume                         Add a Docker volume for the Symfony monorepo
-  monorepo_link                           Link the Symfony monorepo to the project (replace vendors with symlinks)
-  monorepo_unlink                         Restore original vendors (rollback links from the Symfony monorepo)
-  monorepo_install                        Install Composer packages in the Symfony monorepo
-  monorepo_clean                          Remove vendor and lock file from the Symfony monorepo
+  monorepo_link                           Replace vendors with symlinks to the Symfony monorepo
+  monorepo_install                        Install external dependencies used during the tests in the Symfony monorepo
+
+  monorepo_status                         Show current branch for reproducer and the Symfony monorepo
   monorepo_tests [a=<args>]               Run PHPUnit tests in the Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
-  monorepo_tests_clean                    Clean PHPUnit cache and temporary files the Symfony monorepo
+  monorepo_tests_clean                    Clean PHPUnit cache and temporary files in the Symfony monorepo
+
+  monorepo_clean                          Remove vendor and lock file from the Symfony monorepo
+  monorepo_unlink                         Restore original vendors (rollback symlinks to the Symfony monorepo)
+
+▸ OTHER REPO
+  repo_volume d=<dir>                     Add a Docker volume for a local repository (e.g. make repo_volume d=monolog-bundle)
+  repo_add d=<dir>                        Register a path repository in composer.json (e.g. make repo_add d=monolog-bundle)
+  repo_install d=<dir>                    Install external dependencies used during the tests (e.g. make repo_install d=monolog-bundle)
+
+  repo_status d=<dir>                     Show current branch for reproducer and a local repository (e.g. make repo_status d=monolog-bundle)
+  repo_tests d=<dir> [a=<args>]           Run PHPUnit tests in a local repository (e.g. make repo_tests d=monolog-bundle)
+  repo_tests_clean d=<dir>                Clean PHPUnit cache and temporary files in a local repository (e.g. make repo_tests_clean d=monolog-bundle)
+
+  repo_remove d=<dir>                     Unregister a path repository from composer.json (e.g. make repo_remove d=monolog-bundle)
+  repo_clean d=<dir>                      Remove vendor and lock file from a local repository (e.g. make repo_clean d=monolog-bundle)
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
@@ -256,7 +265,7 @@ Usage: make <target>
   skeleton                                Install symfony/skeleton from the versioned dunglas/symfony-docker files at the root
   clone_symfony_demo                      Clone and extract https://github.com/symfony/demo files at the root
 
-  COMPLETE INSTALLATION
+▸ COMPLETE INSTALLATION
   require_api                             Install API Platform - https://api-platform.com/docs/symfony/
   require_easy_admin                      Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
   require_stimulus                        Install StimulusBundle - https://ux.symfony.com/
@@ -280,11 +289,11 @@ Usage: make <target>
 
   health [c=<status_code>] [t=<text>]     Check the website and database connection (via Doctrine) (e.g. make health c=404 t="Welcome to Symfony")
 
-  DATABASE
+▸ DATABASE
   switch_to_mariadb                       Switch the stack from PostgreSQL to MySQL/MariaDB
   switch_to_sqlite                        Switch the stack from PostgreSQL to SQLite
 
-  YQ
+▸ YQ
   yq [a=<argument>]                       Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor (e.g. make yq a=--help)
   yq_add f=<file> k=<key> v=<value>    ya Append a value to an array key in a YAML file (e.g. make yq_add f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway)
   yq_clear f=<file> k=<key>            yc Clear a key's value in a YAML file (sets it to empty string) (e.g. make yq_clear f=compose.yaml k=services.php.extra_hosts)
