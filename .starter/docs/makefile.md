@@ -165,7 +165,7 @@ Usage: make <target>
   twigcsfixer_lint                        Check Twig style
 
 — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
-  assets                                  Generate all assets
+  assets                               a  Generate all assets
 
   asset_map_clear                         Clear all assets in the public output directory
   asset_map_compile                       Compile all mapped assets and write them to the final public output directory
