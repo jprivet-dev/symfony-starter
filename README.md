@@ -38,7 +38,7 @@ cd symfony-starter
 
 > [!NOTE]
 >
-> ⏱️ Each generation takes approximately 3 - 4 minutes depending on your machine and network speed.
+> Each generation takes approximately ⏱️ 3-4 minutes depending on your machine and network speed.
 
 ### Contribute to Symfony
 
