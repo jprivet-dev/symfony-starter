@@ -141,7 +141,10 @@ the `symfony/symfony` monorepo.
 > See https://github.com/symfony/monolog-bundle
 
 ```shell
+# in ./
 git clone git@github.com:YOUR_USERNAME/monolog-bundle.git ../monolog-bundle
+cd ../monolog-bundle
+git remote add upstream https://github.com/symfony/monolog-bundle.git
 ```
 
 ```
@@ -150,7 +153,22 @@ git clone git@github.com:YOUR_USERNAME/monolog-bundle.git ../monolog-bundle
 └── monolog-bundle/    <-- Your fork
 ```
 
-### 2. Add the Docker volume, register the path repository and link the local version
+### 2. Create your topic branch
+
+```shell
+# IN /monolog-bundle - NOT IN /symfony-starter
+
+# Update an existing branch
+git switch 4.x
+git pull --rebase upstream 4.x
+git switch -c MY_TOPIC_BRANCH 4.x
+
+# Or track a new remote branch
+git switch 3.x
+git switch -c MY_TOPIC_BRANCH 3.x
+```
+
+### 3. Add the Docker volume, register the path repository and link the local version
 
 ```shell
 # in /symfony-starter
@@ -164,14 +182,14 @@ make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
 > Composer expects a version following the `[branch-name]-dev` pattern. If your local branch is
 > named `main`, use `main-dev`; if it's `4.x`, use `4.x-dev`.
 
-### 3. Install the external dependencies used during the tests
+### 4. Install the external dependencies used during the tests
 
 ```shell
 # in /symfony-starter
 make repo_install d=monolog-bundle
 ```
 
-### 4. Run the tests for the first time to verify everything is working
+### 5. Run the tests for the first time to verify everything is working
 
 ```shell
 # in /symfony-starter
@@ -186,7 +204,7 @@ If you need to clean them manually:
 make repo_tests_clean d=monolog-bundle
 ```
 
-### 5. Revert: remove the path repository and restore the published package
+### 6. Revert: remove the path repository and restore the published package
 
 > Once your changes are ready to submit as a pull request, or if you want to switch back to the
 > published version of the package, remove the local path repository.
@@ -201,49 +219,35 @@ make update a=symfony/monolog-bundle
 
 ```mermaid
 flowchart TD
-    START([Start]) --> REPRODUCER
-
-    REPRODUCER["GENERATE YOUR REPRODUCER\n─────────────────────\nmake contrib\nmake contrib@lts\nmake contrib@6x\n\nin /symfony-starter"]
-
-    REPRODUCER --> CHOICE{What do you\nwant to contribute to?}
-
-    CHOICE -->|symfony/symfony| M1
-    CHOICE -->|Bundle or Bridge| B1
-
-    %% ── MONOREPO WORKFLOW ──────────────────────────────────────
-
-    M1["1. FORK & CLONE\n─────────────────────\ngit clone YOUR_USERNAME/symfony.git\ngit remote add upstream\n\nin ./"]
-    M1 --> M2
-
-    M2["2. CREATE TOPIC BRANCH\n─────────────────────\ngit switch 8.x\ngit pull --rebase upstream 8.x\ngit switch -c MY_TOPIC_BRANCH 8.x\n\nin /symfony"]
-    M2 --> M3
-
-    M3["3. ADD DOCKER VOLUME\n─────────────────────\nmake monorepo_volume\n\nin /symfony-starter"]
-    M3 --> M4
-
-    M4["4. INSTALL COMPONENT, LINK & DEPENDENCIES\n─────────────────────\nmake require a=symfony/http-client\nmake monorepo_link\nmake monorepo_install\n\nin /symfony-starter"]
-    M4 --> M5
-
-    M5["5. RUN TESTS\n─────────────────────\nmake monorepo_tests a=...\n\nin /symfony-starter"]
-    M5 --> M6
-
-    M6(["6. REVERT\nmake monorepo_unlink"])
-
-    %% ── BUNDLE WORKFLOW ────────────────────────────────────────
-
-    B1["1. FORK & CLONE\n─────────────────────\ngit clone YOUR_USERNAME/monolog-bundle.git\n\nin ./"]
-    B1 --> B2
-
-    B2["2. ADD VOLUME, REGISTER REPO & LINK\n─────────────────────\nmake repo_volume d=monolog-bundle\nmake repo_add d=monolog-bundle\nmake require a=monolog-bundle:4.x-dev\n\nin /symfony-starter"]
-    B2 --> B3
-
-    B3["3. INSTALL DEPENDENCIES\n─────────────────────\nmake repo_install d=monolog-bundle\n\nin /symfony-starter"]
-    B3 --> B4
-
-    B4["4. RUN TESTS\n─────────────────────\nmake repo_tests d=monolog-bundle\n\nin /symfony-starter"]
-    B4 --> B5
-
-    B5(["5. REVERT\nmake repo_remove d=monolog-bundle\nmake update a=symfony/monolog-bundle"])
+  START([Start]) --> REPRODUCER
+  REPRODUCER["GENERATE YOUR REPRODUCER\n─────────────────────\nmake contrib\nmake contrib@lts\nmake contrib@6x\n\nin /symfony-starter"]
+  REPRODUCER --> CHOICE{What do you\nwant to contribute to?}
+  CHOICE -->|symfony/symfony| M1
+  CHOICE -->|Bundle or Bridge| B1
+%% ── MONOREPO WORKFLOW ──────────────────────────────────────
+  M1["1. FORK & CLONE\n─────────────────────\ngit clone YOUR_USERNAME/symfony.git\ngit remote add upstream\n\nin ./"]
+  M1 --> M2
+  M2["2. CREATE TOPIC BRANCH\n─────────────────────\ngit switch 8.x\ngit pull --rebase upstream 8.x\ngit switch -c MY_TOPIC_BRANCH 8.x\n\nin /symfony"]
+  M2 --> M3
+  M3["3. ADD DOCKER VOLUME\n─────────────────────\nmake monorepo_volume\n\nin /symfony-starter"]
+  M3 --> M4
+  M4["4. INSTALL COMPONENT, LINK & DEPENDENCIES\n─────────────────────\nmake require a=symfony/http-client\nmake monorepo_link\nmake monorepo_install\n\nin /symfony-starter"]
+  M4 --> M5
+  M5["5. RUN TESTS\n─────────────────────\nmake monorepo_tests a=...\n\nin /symfony-starter"]
+  M5 --> M6
+  M6(["6. REVERT\nmake monorepo_unlink"])
+%% ── BUNDLE WORKFLOW ────────────────────────────────────────
+  B1["1. FORK & CLONE\n─────────────────────\ngit clone YOUR_USERNAME/monolog-bundle.git\ngit remote add upstream\n\nin ./"]
+  B1 --> B2
+  B2["2. CREATE TOPIC BRANCH\n─────────────────────\ngit switch 4.x\ngit pull --rebase upstream 4.x\ngit switch -c MY_TOPIC_BRANCH 4.x\n\nin /monolog-bundle"]
+  B2 --> B3
+  B3["3. ADD DOCKER VOLUME, REGISTER REPO & LINK\n─────────────────────\nmake repo_volume d=monolog-bundle\nmake repo_add d=monolog-bundle\nmake require a=monolog-bundle:4.x-dev\n\nin /symfony-starter"]
+  B3 --> B4
+  B4["4. INSTALL DEPENDENCIES\n─────────────────────\nmake repo_install d=monolog-bundle\n\nin /symfony-starter"]
+  B4 --> B5
+  B5["5. RUN TESTS\n─────────────────────\nmake repo_tests d=monolog-bundle\n\nin /symfony-starter"]
+  B5 --> B6
+  B6(["6. REVERT\nmake repo_remove d=monolog-bundle\nmake update a=symfony/monolog-bundle"])
 ```
 
 ## Personal shortcuts
