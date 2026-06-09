@@ -8,6 +8,26 @@ This starter provides a powerful toolkit to help you contribute to the Symfony f
 Symfony bundle. It allows you to mount a local repository directly into your Dockerized application
 and test your changes immediately.
 
+## Before you start: generate your reproducer
+
+Before contributing to `symfony/symfony` or any Symfony bundle, generate a minimalist Symfony
+application configured for contribution:
+
+```shell
+# stable release
+make contrib
+# or LTS - long-term support release
+make contrib@lts
+# or Symfony 6.x
+make contrib@6x
+```
+
+> | Command | Symfony version |
+> |---|---|
+> | `make contrib` | Latest stable release (currently 8.x) |
+> | `make contrib@lts` | Long-term support release (currently 7.x) |
+> | `make contrib@6x` | Symfony 6.x (for legacy contribution) |
+
 ## Contribute to `symfony/symfony`
 
 ### 1. Fork and clone side-by-side with the starter
@@ -24,23 +44,16 @@ git clone git@github.com:YOUR_USERNAME/symfony.git ../symfony
 └── symfony-starter/   <-- Your reproducer
 ```
 
-### 2. Generate a minimalist Symfony application configured for contribution
+### 2. Add the Docker volume for the Symfony monorepo
 
-```shell
-# stable release
-make contrib
-# or LTS - long-term support release
-make contrib@lts
-```
-
-### 3. Add the Docker volume for the Symfony monorepo and rebuild
+This mounts your local `../symfony` fork into the container, allowing you to use the
+reproducer's PHP container as the PHP interpreter for the Symfony monorepo.
 
 ```shell
 make monorepo_volume
-make build up_detached
 ```
 
-### 4. Install the component you wish to contribute
+### 3. Install the component you wish to contribute
 
 e.g. [HTTP Client](https://symfony.com/doc/current/http_client.html):
 
@@ -49,19 +62,19 @@ e.g. [HTTP Client](https://symfony.com/doc/current/http_client.html):
 make require a=symfony/http-client
 ```
 
-### 5. Link the monorepo into your application's vendors
+### 4. Link the monorepo into your application's vendors
 
 ```shell
 make monorepo_link
 ```
 
-### 6. Install the external dependencies used during the tests
+### 5. Install the external dependencies used during the tests
 
 ```shell
 make monorepo_install
 ```
 
-### 7. Run the tests for the first time to verify everything is working
+### 6. Run the tests for the first time to verify everything is working
 
 e.g. [HTTP Client](https://symfony.com/doc/current/http_client.html):
 
@@ -86,7 +99,7 @@ If you need to clean them manually:
 make monorepo_tests_clean
 ```
 
-### 8. Revert: unlink the monorepo
+### 7. Revert: unlink the monorepo
 
 ```shell
 make monorepo_unlink
@@ -112,29 +125,12 @@ git clone git@github.com:YOUR_USERNAME/monolog-bundle.git ../monolog-bundle
 └── monolog-bundle/    <-- Your fork
 ```
 
-### 2. Generate a minimalist Symfony application configured for contribution
-
-```shell
-# stable release
-make contrib
-# or LTS - long-term support release
-make contrib@lts
-```
-
-### 3. Add the Docker volume and register the path repository
+### 2. Add the Docker volume, register the path repository and link the local version
 
 ```shell
 make repo_volume d=monolog-bundle
 make repo_add d=monolog-bundle
-make build up_detached
-```
-
-### 4. Link the local version
-
-```shell
-# composer require symfony/monolog-bundle:4.x-dev --prefer-source (via docker compose)
 make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
-git add . && git commit -m "Install symfony/monolog-bundle:4.x-dev"
 ```
 
 > [!NOTE]
@@ -142,13 +138,13 @@ git add . && git commit -m "Install symfony/monolog-bundle:4.x-dev"
 > Composer expects a version following the `[branch-name]-dev` pattern. If your local branch is
 > named `main`, use `main-dev`; if it's `4.x`, use `4.x-dev`.
 
-### 5. Install the external dependencies used during the tests
+### 3. Install the external dependencies used during the tests
 
 ```shell
 make repo_install d=monolog-bundle
 ```
 
-### 6. Run the tests for the first time to verify everything is working
+### 4. Run the tests for the first time to verify everything is working
 
 ```shell
 make repo_tests d=monolog-bundle
@@ -161,7 +157,7 @@ If you need to clean them manually:
 make repo_tests_clean d=monolog-bundle
 ```
 
-### 7. Revert: remove the path repository and restore the published package
+### 5. Revert: remove the path repository and restore the published package
 
 > Once your changes are ready to submit as a pull request, or if you want to switch back to the
 > published version of the package, remove the local path repository.

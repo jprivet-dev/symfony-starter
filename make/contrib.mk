@@ -22,6 +22,7 @@ _monorepo: # INTERNAL
 monorepo_volume: ## Add a Docker volume for the Symfony monorepo
 	$(M) repo_volume d=$(SYMFONY_MONOREPO_DIR)
 	$(M) co m="Add the Docker volume for the Symfony monorepo"
+	$(M) restart
 
 monorepo_link: _monorepo ## Replace vendors with symlinks to the Symfony monorepo
 	$(PHP) /$(SYMFONY_MONOREPO_DIR)/link /app
@@ -62,6 +63,7 @@ repo_volume: _repo repo_status ## Add a Docker volume for a local repository | d
 	$(M) ya f=compose.override.yaml k=services.php.volumes v='../$(d):/$(d)'
 	@sed -i'' "s|^SAFE_DIRECTORIES = .*|& /$(d)|" Makefile
 	$(M) co m="Add the Docker volume for the $(d) repository"
+	$(M) restart
 
 repo_add: _repo repo_status ## Register a path repository in composer.json | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))

@@ -10,8 +10,8 @@ From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform]
 
 Built on top of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) and driven by a powerful Makefile, it covers everything from project initialization to daily development.
 
-|                                                                                                                         |                                                                                                    |
-|:------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------|
+|                                                                                                                                  |                                                                                                             |
+|:---------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------|
 | <strong>[Symfony](https://symfony.com/)</strong><br>![minimalist.png](.starter/docs/img/minimalist.png)                          | <strong>[API Platform](https://api-platform.com/)</strong><br>![api.png](.starter/docs/img/api.png)         |
 | <strong>[EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle)</strong><br>![easy-admin.png](.starter/docs/img/easy-admin.png) | <strong>[Symfony Demo](https://github.com/symfony/demo)</strong><br>![demo.png](.starter/docs/img/demo.png) |
 
@@ -35,6 +35,20 @@ cd symfony-starter
 | 🔌 API Platform | `make api`        | `make api@lts`        | 🐘 PostgreSQL |
 | ⚡ EasyAdmin     | `make easy_admin` | `make easy_admin@lts` | 🐘 PostgreSQL |
 | 🎓 Demo         | `make demo`       | —                     | 🪶 SQLite     |
+
+### Contribute to Symfony
+
+Use the starter as a reproducer to contribute to the Symfony framework, any Symfony bundle or
+bridge. It lets you mount a local fork directly into the Docker environment and run the test suite
+using the reproducer's PHP container (no local PHP installation required).
+
+| Command            | Symfony version                           |
+|--------------------|-------------------------------------------|
+| `make contrib`     | Latest stable release (currently 8.x)     |
+| `make contrib@lts` | Long-term support release (currently 7.x) |
+| `make contrib@6x`  | Symfony 6.x (for legacy contribution)     |
+
+📖 [Read the full contributing guide](.starter/docs/contrib.md)
 
 ## Switch to another DB
 
