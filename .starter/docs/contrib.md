@@ -223,7 +223,7 @@ make repo_remove d=monolog-bundle
 make update a=symfony/monolog-bundle
 ```
 
-## Workflow overview.
+## Workflow overview
 
 ```mermaid
 flowchart TD
@@ -311,7 +311,7 @@ monorepo_tests_twig: ## Run tests for TwigBridge
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Bridge/Twig"
 ```
 
-> [!NOTE]
+> [!TIP]
 >
 > The `make/local.mk` file is ignored by Git. This is the perfect place to experiment with new
 > commands before potentially proposing them as a permanent addition to the project.
