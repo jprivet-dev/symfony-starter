@@ -183,7 +183,7 @@ make repo_add d=monolog-bundle
 make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
 ```
 
-> [!NOTE]
+> [!TIP]
 >
 > Composer expects a version following the `[branch-name]-dev` pattern. If your local branch is
 > named `main`, use `main-dev`; if it's `4.x`, use `4.x-dev`.
