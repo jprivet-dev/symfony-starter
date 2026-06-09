@@ -52,7 +52,7 @@ using the reproducer's PHP container (no local PHP installation required).
 | `make contrib@lts` | Long-term support release (currently 7.x) |
 | `make contrib@6x`  | Symfony 6.x (for legacy contribution)     |
 
-📖 Read [Contributing - Connect your local Symfony repository](.starter/docs/contrib.md) documentation.
+📖 [Contributing guide: connect your local Symfony repository](.starter/docs/contrib.md)
 
 ## Switch to another DB
 
