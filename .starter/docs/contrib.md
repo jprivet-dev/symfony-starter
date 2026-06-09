@@ -14,6 +14,8 @@ Before contributing to `symfony/symfony` or any Symfony bundle, generate a minim
 application configured for contribution:
 
 ```shell
+# in /symfony-starter
+
 # stable release
 make contrib
 # or LTS - long-term support release
@@ -22,63 +24,83 @@ make contrib@lts
 make contrib@6x
 ```
 
-> | Command | Symfony version |
-> |---|---|
-> | `make contrib` | Latest stable release (currently 8.x) |
-> | `make contrib@lts` | Long-term support release (currently 7.x) |
-> | `make contrib@6x` | Symfony 6.x (for legacy contribution) |
+| Command            | Symfony version                       |
+|--------------------|---------------------------------------|
+| `make contrib`     | Latest stable release                 |
+| `make contrib@lts` | Long-term support release             |
+| `make contrib@6x`  | Symfony 6.x (for legacy contribution) |
 
 ## Contribute to `symfony/symfony`
 
 ### 1. Fork and clone side-by-side with the starter
 
-> See https://github.com/symfony/symfony
+> See https://symfony.com/doc/current/contributing/code/pull_requests.html
+
+Fork the [symfony/symfony](https://github.com/symfony/symfony) repository on GitHub. Uncheck
+"Copy the `X.Y` branch only", then clone your fork side-by-side with the starter:
 
 ```shell
-git clone git@github.com:YOUR_USERNAME/symfony.git ../symfony
+# in ./
+git clone git@github.com:YOUR_USERNAME/symfony.git
+cd symfony
+git remote add upstream https://github.com/symfony/symfony.git
 ```
 
 ```
-./
+./                     <-- run git clone from here
 ├── symfony/           <-- Your fork
 └── symfony-starter/   <-- Your reproducer
 ```
 
-### 2. Add the Docker volume for the Symfony monorepo
+### 2. Create your topic branch
+
+```shell
+# IN /symfony - NOT IN /symfony-starter
+
+# Update an existing branch
+git switch 8.x
+git pull --rebase upstream 8.x
+git switch -c MY_TOPIC_BRANCH 8.x
+
+# Or track a new remote branch
+git switch 6.x
+git switch -c MY_TOPIC_BRANCH 6.x
+```
+
+### 3. Add the Docker volume for the Symfony monorepo
 
 This mounts your local `../symfony` fork into the container, allowing you to use the
 reproducer's PHP container as the PHP interpreter for the Symfony monorepo.
 
 ```shell
+# in /symfony-starter
 make monorepo_volume
 ```
 
-### 3. Install the component you wish to contribute
+### 4. Install the component, link the monorepo and install its dependencies
 
 e.g. [HTTP Client](https://symfony.com/doc/current/http_client.html):
 
 ```shell
-# composer require symfony/http-client (via docker compose)
+# in /symfony-starter
+
+# 1. install the component you wish to contribute
+# e.g. composer require symfony/http-client (via docker compose)
 make require a=symfony/http-client
-```
 
-### 4. Link the monorepo into your application's vendors
-
-```shell
+# 2. link the monorepo into your application's vendors
 make monorepo_link
-```
 
-### 5. Install the external dependencies used during the tests
-
-```shell
+# 3. install the external dependencies used during the tests
 make monorepo_install
 ```
 
-### 6. Run the tests for the first time to verify everything is working
+### 5. Run the tests for the first time to verify everything is working
 
 e.g. [HTTP Client](https://symfony.com/doc/current/http_client.html):
 
 ```shell
+# in /symfony-starter
 make monorepo_tests a="/symfony/src/Symfony/Component/HttpClient"
 ```
 
@@ -89,6 +111,7 @@ make monorepo_tests a="/symfony/src/Symfony/Component/HttpClient"
 additional infrastructure (e.g. Redis or RabbitMQ), by appending the `--exclude-group` argument:
 
 ```shell
+# in /symfony-starter
 make monorepo_tests a="/symfony/src/Symfony/Bundle --exclude-group=redis"
 ```
 
@@ -96,12 +119,14 @@ PHPUnit cache and temporary files are automatically cleaned before each test run
 If you need to clean them manually:
 
 ```shell
+# in /symfony-starter
 make monorepo_tests_clean
 ```
 
-### 7. Revert: unlink the monorepo
+### 6. Revert: unlink the monorepo
 
 ```shell
+# in /symfony-starter
 make monorepo_unlink
 ```
 
@@ -128,6 +153,7 @@ git clone git@github.com:YOUR_USERNAME/monolog-bundle.git ../monolog-bundle
 ### 2. Add the Docker volume, register the path repository and link the local version
 
 ```shell
+# in /symfony-starter
 make repo_volume d=monolog-bundle
 make repo_add d=monolog-bundle
 make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
@@ -141,12 +167,14 @@ make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
 ### 3. Install the external dependencies used during the tests
 
 ```shell
+# in /symfony-starter
 make repo_install d=monolog-bundle
 ```
 
 ### 4. Run the tests for the first time to verify everything is working
 
 ```shell
+# in /symfony-starter
 make repo_tests d=monolog-bundle
 ```
 
@@ -154,6 +182,7 @@ PHPUnit cache and temporary files are automatically cleaned before each test run
 If you need to clean them manually:
 
 ```shell
+# in /symfony-starter
 make repo_tests_clean d=monolog-bundle
 ```
 
@@ -163,8 +192,58 @@ make repo_tests_clean d=monolog-bundle
 > published version of the package, remove the local path repository.
 
 ```shell
+# in /symfony-starter
 make repo_remove d=monolog-bundle
 make update a=symfony/monolog-bundle
+```
+
+## Workflow overview.
+
+```mermaid
+flowchart TD
+    START([Start]) --> REPRODUCER
+
+    REPRODUCER["🔨 Generate your reproducer\n─────────────────────\nmake contrib\nmake contrib@lts\nmake contrib@6x\n\nin /symfony-starter"]
+
+    REPRODUCER --> CHOICE{What do you\nwant to contribute to?}
+
+    CHOICE -->|symfony/symfony| M1
+    CHOICE -->|Bundle or Bridge| B1
+
+    %% ── MONOREPO WORKFLOW ──────────────────────────────────────
+
+    M1["1. Fork & clone\n─────────────────────\ngit clone YOUR_USERNAME/symfony.git\ngit remote add upstream\n\nin ./"]
+    M1 --> M2
+
+    M2["2. Create topic branch\n─────────────────────\ngit switch 8.x\ngit pull --rebase upstream 8.x\ngit switch -c MY_TOPIC_BRANCH 8.x\n\nin /symfony"]
+    M2 --> M3
+
+    M3["3. Add Docker volume\n─────────────────────\nmake monorepo_volume\n\nin /symfony-starter"]
+    M3 --> M4
+
+    M4["4. Install component, link & dependencies\n─────────────────────\nmake require a=symfony/http-client\nmake monorepo_link\nmake monorepo_install\n\nin /symfony-starter"]
+    M4 --> M5
+
+    M5["5. Run tests ✅\n─────────────────────\nmake monorepo_tests a=...\n\nin /symfony-starter"]
+    M5 --> M6
+
+    M6(["6. Revert\nmake monorepo_unlink"])
+
+    %% ── BUNDLE WORKFLOW ────────────────────────────────────────
+
+    B1["1. Fork & clone\n─────────────────────\ngit clone YOUR_USERNAME/monolog-bundle.git\n\nin ./"]
+    B1 --> B2
+
+    B2["2. Add volume, register repo & link\n─────────────────────\nmake repo_volume d=monolog-bundle\nmake repo_add d=monolog-bundle\nmake require a=monolog-bundle:4.x-dev\n\nin /symfony-starter"]
+    B2 --> B3
+
+    B3["3. Install dependencies\n─────────────────────\nmake repo_install d=monolog-bundle\n\nin /symfony-starter"]
+    B3 --> B4
+
+    B4["4. Run tests ✅\n─────────────────────\nmake repo_tests d=monolog-bundle\n\nin /symfony-starter"]
+    B4 --> B5
+
+    B5(["5. Revert\nmake repo_remove d=monolog-bundle\nmake update a=symfony/monolog-bundle"])
 ```
 
 ## Personal shortcuts
