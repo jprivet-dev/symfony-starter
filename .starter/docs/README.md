@@ -51,7 +51,7 @@
 
 ## Contributing
 
-* [Contributing to Symfony: Connect your local Symfony repository](contrib.md)
+* [Contributing - Connect your local Symfony repository](contrib.md)
 
 ---
 
