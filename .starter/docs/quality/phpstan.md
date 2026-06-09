@@ -29,19 +29,21 @@ composer require --dev phpstan/phpstan-phpunit
 ```yaml
 # phpstan.dist.neon
 includes:
-    - vendor/phpstan/phpstan-symfony/extension.neon
-    - vendor/phpstan/phpstan-doctrine/extension.neon
-    - vendor/phpstan/phpstan-phpunit/extension.neon
+  - vendor/phpstan/phpstan-symfony/extension.neon
+  - vendor/phpstan/phpstan-doctrine/extension.neon
+  - vendor/phpstan/phpstan-phpunit/extension.neon
 
 parameters:
-    level: 6
-    paths:
-        - src/
-        - tests/
+  level: 6
+  paths:
+    - src/
+    - tests/
 ```
 
 ## Configure PhpStorm
 
+> [!IMPORTANT]
+>
 > Prerequisite : [Configure a remote PHP interpreter (Docker)](../remote-php-interpreter.md)
 
 * Go on **Settings (Ctrl+Alt+S) > PHP > Quality Tools**.

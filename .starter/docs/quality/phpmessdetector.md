@@ -56,10 +56,14 @@ Solution - Exclude the `MissingImport` rule in `phpmd.xml`:
     </rule>
 ```
 
+> [!NOTE]
+>
 > See https://phpmd.org/rules/cleancode.html#missingimport
 
 ## Configure PhpStorm
 
+> [!IMPORTANT]
+>
 > Prerequisite : [Configure a remote PHP interpreter (Docker)](../remote-php-interpreter.md)
 
 * Go on **Settings (Ctrl+Alt+S) > PHP > Test Framework**.

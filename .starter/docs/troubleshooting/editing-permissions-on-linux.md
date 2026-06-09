@@ -18,6 +18,8 @@ make permissions
 
 This command will change the ownership of the project files to your current host user, allowing you to edit them freely.
 
+> [!NOTE]
+>
 > See https://github.com/dunglas/symfony-docker/blob/docs/troubleshooting.md for more details on `dunglas/symfony-docker` troubleshooting.
 
 ## Alternative solution (when containers are stopped)

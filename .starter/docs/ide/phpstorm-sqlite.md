@@ -30,7 +30,7 @@ make phpstorm_config
 1. Open the **Database** tool window (`View > Tool Windows > Database`).
 2. Click the `+` icon in the toolbar, navigate to **Data Source**, and select **SQLite**.
 3. In the right pane, use the following settings under the **General** tab:
-   * **File**: path to your SQLite database file (see `make phpstorm_config` output)
+  * **File**: path to your SQLite database file (see `make phpstorm_config` output)
 4. Click **Test Connection** to confirm the setup. You should see a **Succeeded** message.
 5. Click `OK` or `Apply` to validate the connection.
 

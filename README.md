@@ -52,6 +52,8 @@ using the reproducer's PHP container (no local PHP installation required).
 
 ## Switch to another DB
 
+> [!NOTE]
+>
 > By default, **🐘 PostgreSQL** is used. Run one of the following commands after generation to switch to another database.
 
 | Application     | 🐬 MariaDB                                     | 🪶 SQLite                                     |

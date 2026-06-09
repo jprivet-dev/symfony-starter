@@ -13,6 +13,7 @@ You can use the same variables from https://github.com/dunglas/symfony-docker/bl
 ## Symfony 6 compatibility patch
 
 > [!WARNING]
+>
 > A regression introduced in [`dunglas/symfony-docker@1ad09f7`](https://github.com/dunglas/symfony-docker/commit/1ad09f7e19fecdf4d888699bef568480bda31888) breaks Symfony 6 project generation with FrankenPHP worker mode. Until an official fix is released, you need to apply the following patch before generating a Symfony 6 project.
 
 Apply the patch:

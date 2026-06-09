@@ -49,6 +49,8 @@ The underscore (`_`) is not treated as a word separator by default in Linux term
 
 ## Decision outcome
 
+> [!NOTE]
+>
 > **Option 2 is chosen:** Adopt `snake_case` (`my_target_a`) for all Makefile targets.
 
 The increased efficiency and seamless copy/paste experience enabled by double-clicking on a `snake_case` target outweigh the preference for `kebab-case` commonly seen elsewhere. This decision directly supports the goal of improving developer workflow and reducing friction when executing commands.

@@ -34,6 +34,8 @@ make contrib@6x
 
 ### 1. Fork and clone side-by-side with the starter
 
+> [!NOTE]
+>
 > See https://symfony.com/doc/current/contributing/code/pull_requests.html
 
 Fork the [symfony/symfony](https://github.com/symfony/symfony) repository on GitHub. Uncheck
@@ -104,6 +106,8 @@ e.g. [HTTP Client](https://symfony.com/doc/current/http_client.html):
 make monorepo_tests a="/symfony/src/Symfony/Component/HttpClient"
 ```
 
+> [!NOTE]
+>
 > Tests are run inside the reproducer's PHP container using absolute paths from the container's
 > root (e.g. `/symfony/src/...`).
 
@@ -138,6 +142,8 @@ the `symfony/symfony` monorepo.
 
 ### 1. Fork and clone side-by-side with the starter
 
+> [!NOTE]
+>
 > See https://github.com/symfony/monolog-bundle
 
 ```shell
@@ -206,6 +212,8 @@ make repo_tests_clean d=monolog-bundle
 
 ### 6. Revert: remove the path repository and restore the published package
 
+> [!TIP]
+>
 > Once your changes are ready to submit as a pull request, or if you want to switch back to the
 > published version of the package, remove the local path repository.
 
