@@ -203,7 +203,7 @@ make update a=symfony/monolog-bundle
 flowchart TD
     START([Start]) --> REPRODUCER
 
-    REPRODUCER["🔨 Generate your reproducer\n─────────────────────\nmake contrib\nmake contrib@lts\nmake contrib@6x\n\nin /symfony-starter"]
+    REPRODUCER["GENERATE YOUR REPRODUCER\n─────────────────────\nmake contrib\nmake contrib@lts\nmake contrib@6x\n\nin /symfony-starter"]
 
     REPRODUCER --> CHOICE{What do you\nwant to contribute to?}
 
@@ -212,38 +212,38 @@ flowchart TD
 
     %% ── MONOREPO WORKFLOW ──────────────────────────────────────
 
-    M1["1. Fork & clone\n─────────────────────\ngit clone YOUR_USERNAME/symfony.git\ngit remote add upstream\n\nin ./"]
+    M1["1. FORK & CLONE\n─────────────────────\ngit clone YOUR_USERNAME/symfony.git\ngit remote add upstream\n\nin ./"]
     M1 --> M2
 
-    M2["2. Create topic branch\n─────────────────────\ngit switch 8.x\ngit pull --rebase upstream 8.x\ngit switch -c MY_TOPIC_BRANCH 8.x\n\nin /symfony"]
+    M2["2. CREATE TOPIC BRANCH\n─────────────────────\ngit switch 8.x\ngit pull --rebase upstream 8.x\ngit switch -c MY_TOPIC_BRANCH 8.x\n\nin /symfony"]
     M2 --> M3
 
-    M3["3. Add Docker volume\n─────────────────────\nmake monorepo_volume\n\nin /symfony-starter"]
+    M3["3. ADD DOCKER VOLUME\n─────────────────────\nmake monorepo_volume\n\nin /symfony-starter"]
     M3 --> M4
 
-    M4["4. Install component, link & dependencies\n─────────────────────\nmake require a=symfony/http-client\nmake monorepo_link\nmake monorepo_install\n\nin /symfony-starter"]
+    M4["4. INSTALL COMPONENT, LINK & DEPENDENCIES\n─────────────────────\nmake require a=symfony/http-client\nmake monorepo_link\nmake monorepo_install\n\nin /symfony-starter"]
     M4 --> M5
 
-    M5["5. Run tests ✅\n─────────────────────\nmake monorepo_tests a=...\n\nin /symfony-starter"]
+    M5["5. RUN TESTS\n─────────────────────\nmake monorepo_tests a=...\n\nin /symfony-starter"]
     M5 --> M6
 
-    M6(["6. Revert\nmake monorepo_unlink"])
+    M6(["6. REVERT\nmake monorepo_unlink"])
 
     %% ── BUNDLE WORKFLOW ────────────────────────────────────────
 
-    B1["1. Fork & clone\n─────────────────────\ngit clone YOUR_USERNAME/monolog-bundle.git\n\nin ./"]
+    B1["1. FORK & CLONE\n─────────────────────\ngit clone YOUR_USERNAME/monolog-bundle.git\n\nin ./"]
     B1 --> B2
 
-    B2["2. Add volume, register repo & link\n─────────────────────\nmake repo_volume d=monolog-bundle\nmake repo_add d=monolog-bundle\nmake require a=monolog-bundle:4.x-dev\n\nin /symfony-starter"]
+    B2["2. ADD VOLUME, REGISTER REPO & LINK\n─────────────────────\nmake repo_volume d=monolog-bundle\nmake repo_add d=monolog-bundle\nmake require a=monolog-bundle:4.x-dev\n\nin /symfony-starter"]
     B2 --> B3
 
-    B3["3. Install dependencies\n─────────────────────\nmake repo_install d=monolog-bundle\n\nin /symfony-starter"]
+    B3["3. INSTALL DEPENDENCIES\n─────────────────────\nmake repo_install d=monolog-bundle\n\nin /symfony-starter"]
     B3 --> B4
 
-    B4["4. Run tests ✅\n─────────────────────\nmake repo_tests d=monolog-bundle\n\nin /symfony-starter"]
+    B4["4. RUN TESTS\n─────────────────────\nmake repo_tests d=monolog-bundle\n\nin /symfony-starter"]
     B4 --> B5
 
-    B5(["5. Revert\nmake repo_remove d=monolog-bundle\nmake update a=symfony/monolog-bundle"])
+    B5(["5. REVERT\nmake repo_remove d=monolog-bundle\nmake update a=symfony/monolog-bundle"])
 ```
 
 ## Personal shortcuts
