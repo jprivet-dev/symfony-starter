@@ -36,6 +36,10 @@ cd symfony-starter
 | ⚡ EasyAdmin     | `make easy_admin` | `make easy_admin@lts` | 🐘 PostgreSQL |
 | 🎓 Demo         | `make demo`       | —                     | 🪶 SQLite     |
 
+> [!NOTE]
+>
+> ⏱️ Each generation takes approximately 3 - 4 minutes depending on your machine and network speed.
+
 ### Contribute to Symfony
 
 Use the starter as a reproducer to contribute to the Symfony framework, any Symfony bundle or
