@@ -155,7 +155,8 @@ generate_flavor() {
         return
     fi
 
-    if ${FUNC} >"${LOG_FILE}" 2>&1; then
+    ${FUNC} 2>&1 | sed 's/\x1b\[[0-9;]*m//g' >"${LOG_FILE}"
+    if [ "${PIPESTATUS[0]}" -eq 0 ]; then
         RESULTS["${BRANCH}"]="ok"
         printf "\n ${G}✔${S} ${BRANCH} generated successfully — see ${Y}${LOG_FILE}${S}\n"
     else
