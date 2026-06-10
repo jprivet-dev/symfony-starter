@@ -21,8 +21,6 @@ _monorepo: # INTERNAL
 
 monorepo_volume: ## Add a Docker volume for the Symfony monorepo
 	$(M) repo_volume d=$(SYMFONY_MONOREPO_DIR)
-	$(M) co m="Add the Docker volume for the Symfony monorepo"
-	$(M) restart
 
 monorepo_link: _monorepo ## Replace vendors with symlinks to the Symfony monorepo
 	$(PHP) /$(SYMFONY_MONOREPO_DIR)/link /app
