@@ -30,6 +30,12 @@ make contrib@6x
 | `make contrib@lts` | Long-term support release             |
 | `make contrib@6x`  | Symfony 6.x (for legacy contribution) |
 
+> [!TIP]
+>
+> If you are contributing to `symfony/symfony`, `make contrib` will ask you whether to add the
+> Docker volume for the Symfony monorepo automatically. You can also run `make monorepo_volume`
+> manually at any time.
+
 ## Contribute to `symfony/symfony`
 
 ### 1. Fork and clone side-by-side with the starter
@@ -73,6 +79,10 @@ git switch -c MY_TOPIC_BRANCH 6.x
 
 This mounts your local `../symfony` fork into the container, allowing you to use the
 reproducer's PHP container as the PHP interpreter for the Symfony monorepo.
+
+> [!NOTE]
+>
+> If you answered `Y` during `make contrib`, this step has already been done. Skip to step 4.
 
 ```shell
 # in /symfony-starter
