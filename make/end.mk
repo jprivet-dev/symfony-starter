@@ -108,7 +108,7 @@ vars: ## Show key Makefile variables
 PHONY: confirm
 confirm: # INTERNAL - Display a confirmation before continuing [y/N]
 	@if [ "$${NO_INTERACTION}" = "true" ]; then exit 0; fi; \
-	printf "$(G)Do you want to continue?$(S) [$(Y)y/N$(S)]: " && read answer && [ $${answer:-N} = y ]
+	printf "$(G)Do you want to continue?$(S) [$(Y)y/N$(S)]: " && read ANSWER && [ $${ANSWER:-N} = y ]
 
 PHONY: runtime
 runtime: # INTERNAL - Check if vendor/autoload_runtime.php is ready yet
