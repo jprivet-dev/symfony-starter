@@ -201,9 +201,8 @@ endif
 	$(M) skeleton
 	$(M) contrib_dockerfile
 	@if [ "$${NO_INTERACTION}" != "true" ]; then \
-		printf "\n $(Y)›$(S) Are you contributing to $(G)symfony/symfony$(S) monorepo? Add the Docker volume now? [$(G)Y$(S)/n]: "; \
-		read ANSWER; \
-		if [ "$$ANSWER" != "n" ] && [ "$$ANSWER" != "N" ]; then \
+		printf "\n $(G)Are you contributing to symfony/symfony monorepo (add the Docker volume now)?$(S) [$(Y)y/N$(S)]: " && read ANSWER; \
+		if [ "$$ANSWER" = "y" ] && [ "$$ANSWER" != "Y" ]; then \
 			$(M) monorepo_volume; \
 		else \
 			printf " $(Y)›$(S) Skipped. Run $(G)make monorepo_volume$(S) manually when needed.\n"; \
