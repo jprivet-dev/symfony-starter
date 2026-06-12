@@ -7,7 +7,7 @@ A small description of my project.
 > This `README` is a starting point **for your new Symfony project**. Replace in that file:
 > * **My Generated Symfony Project** title.
 > * **A small description of my project**.
-> * **YOUR_USERNAME** and **my-project**.
+> * **MY_USERNAME** and **my-project**.
 >
 > 🚀 [How to generate a project with Symfony Starter?](.starter/docs/STARTER.md)
 >
@@ -30,7 +30,7 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
 ### 1. Clone the project
 
 ```shell
-git clone git@github.com:YOUR_USERNAME/my-project.git
+git clone git@github.com:MY_USERNAME/my-project.git
 cd my-project
 ```
 
@@ -51,8 +51,8 @@ make stop   # Stop the project
 
 ## Comments, suggestions?
 
-Feel free to make comments/suggestions in the [Git issues section](https://github.com/YOUR_USERNAME/my-project/issues).
+Feel free to make comments/suggestions in the [Git issues section](https://github.com/MY_USERNAME/my-project/issues).
 
 ## License
 
-This project is released under the [**MIT License**](https://github.com/YOUR_USERNAME/my-project/blob/main/LICENSE).
+This project is released under the [**MIT License**](https://github.com/MY_USERNAME/my-project/blob/main/LICENSE).

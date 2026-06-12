@@ -49,7 +49,7 @@ Fork the [symfony/symfony](https://github.com/symfony/symfony) repository on Git
 
 ```shell
 # in ./
-git clone git@github.com:YOUR_USERNAME/symfony.git
+git clone git@github.com:MY_USERNAME/symfony.git
 cd symfony
 git remote add upstream https://github.com/symfony/symfony.git
 ```
@@ -158,7 +158,7 @@ the `symfony/symfony` monorepo.
 
 ```shell
 # in ./
-git clone git@github.com:YOUR_USERNAME/monolog-bundle.git ../monolog-bundle
+git clone git@github.com:MY_USERNAME/monolog-bundle.git ../monolog-bundle
 cd ../monolog-bundle
 git remote add upstream https://github.com/symfony/monolog-bundle.git
 ```
@@ -243,7 +243,7 @@ flowchart TD
   CHOICE -->|symfony/symfony| M1
   CHOICE -->|Bundle or Bridge| B1
 %% ── MONOREPO WORKFLOW ──────────────────────────────────────
-  M1["1. FORK & CLONE\n─────────────────────\n$ git clone YOUR_USERNAME/symfony.git\n$ git remote add upstream\n\nin ./"]
+  M1["1. FORK & CLONE\n─────────────────────\n$ git clone MY_USERNAME/symfony.git\n$ git remote add upstream\n\nin ./"]
   M1 --> M2
   M2["2. CREATE TOPIC BRANCH\n─────────────────────\n$ git switch 8.x\n$ git pull --rebase upstream 8.x\n$ git switch -c MY_TOPIC_BRANCH 8.x\n\nin /symfony"]
   M2 --> M3
@@ -255,7 +255,7 @@ flowchart TD
   M5 --> M6
   M6(["6. REVERT\n$ make monorepo_unlink"])
 %% ── BUNDLE WORKFLOW ────────────────────────────────────────
-  B1["1. FORK & CLONE\n─────────────────────\n$ git clone YOUR_USERNAME/monolog-bundle.git\n$ git remote add upstream\n\nin ./"]
+  B1["1. FORK & CLONE\n─────────────────────\n$ git clone MY_USERNAME/monolog-bundle.git\n$ git remote add upstream\n\nin ./"]
   B1 --> B2
   B2["2. CREATE TOPIC BRANCH\n─────────────────────\n$ git switch 4.x\n$ git pull --rebase upstream 4.x\n$ git switch -c MY_TOPIC_BRANCH 4.x\n\nin /monolog-bundle"]
   B2 --> B3
