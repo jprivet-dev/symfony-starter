@@ -2,7 +2,7 @@
 
 A small description of my project. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu mauris at mauris imperdiet rhoncus. Nam porta mollis tincidunt. Duis ut orci pharetra, dignissim dolor euismod, luctus purus. Proin eu facilisis libero, ac accumsan velit. Aliquam velit eros, sodales eu libero vel, vulputate placerat est. Nam laoreet ac mi nec bibendum.
 
-> [!NOTE]
+> [!TIP]
 >
 > This `README` is a starting point **for your new Symfony project**. Replace the title, description and project-specific placeholders (`YOUR_USERNAME`, `my-project`) with your own content.
 > Once your project is ready, remove the flavors table above.
