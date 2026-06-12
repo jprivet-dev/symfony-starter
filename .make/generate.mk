@@ -265,10 +265,6 @@ require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/Ea
 	$(C) require easycorp/easyadmin-bundle
 	$(M) co m="composer require easycorp/easyadmin-bundle"
 
-require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
-	$(C) require symfony/asset-mapper symfony/stimulus-bundle
-	$(M) co m="composer require symfony/asset-mapper symfony/stimulus-bundle"
-
 require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
 	# FIX: Ban version 6 for the moment to prevent Symfony PropertyInfo crash
 	# symfony/property-info v6 does not support phpdocumentor/reflection-docblock
@@ -303,6 +299,10 @@ require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
 	$(C) require --dev symfony/profiler-pack
 	$(M) co m="Install Profiler"
+
+require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
+	$(C) require symfony/asset-mapper symfony/stimulus-bundle
+	$(M) co m="Install StimulusBundle"
 
 require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
 	$(C) require --dev symfony/test-pack
