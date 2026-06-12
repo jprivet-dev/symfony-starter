@@ -64,7 +64,7 @@ TESTS     = tests
 
 NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
 PWD                = $(shell pwd)
-MAKE_LOCAL_MK      = make/local.mk
+MAKE_LOCAL_MK      = .make/local.mk
 MAKE_LOCAL_MK_DIST = $(MAKE_LOCAL_MK).dist
 BIN_CONSOLE        = bin/console
 BIN_PHPUNIT        = bin/phpunit
@@ -232,7 +232,7 @@ PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
 
 # --- REQUIRES ---
 
-include make/requires.mk
+include .make/requires.mk
 
 # --- EXTEND THE MAIN MAKEFILE ---
 
@@ -501,31 +501,31 @@ else
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),)
-include make/doctrine.mk
+include .make/doctrine.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_MONOLOG))),)
-include make/monolog.mk
+include .make/monolog.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(BIN_PHPUNIT))),)
-include make/phpunit.mk
+include .make/phpunit.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)), $(wildcard $(VENDOR_PHPMETRICS)), $(wildcard $(VENDOR_PHPSTAN)), $(wildcard $(VENDOR_TWIGCSFIXER))),)
-include make/quality.mk
+include .make/quality.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_ASSETS))),)
-include make/assets.mk
+include .make/assets.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_TRANSLATION))),)
-include make/translation.mk
+include .make/translation.mk
 endif
 
-include make/end.mk
+include .make/end.mk
 
--include make/contrib.mk
+-include .make/contrib.mk
 
--include make/generate.mk
+-include .make/generate.mk

@@ -276,10 +276,10 @@ starter includes a mechanism to load local Makefile rules that are not committed
 ### 1. Create your local Makefile
 
 ```shell
-cp make/local.mk.dist make/local.mk
+cp .make/local.mk.dist .make/local.mk
 ```
 
-### 2. Add your custom commands to `make/local.mk`
+### 2. Add your custom commands to `.make/local.mk`
 
 These will automatically appear in `make help`. Here are some useful examples you can use:
 
@@ -323,7 +323,7 @@ monorepo_tests_twig: ## Run tests for TwigBridge
 
 > [!TIP]
 >
-> The `make/local.mk` file is ignored by Git. This is the perfect place to experiment with new
+> The `.make/local.mk` file is ignored by Git. This is the perfect place to experiment with new
 > commands before potentially proposing them as a permanent addition to the project.
 
 ---

@@ -1,6 +1,6 @@
 ## — SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
 
-##   (to delete this section, delete make/contrib.mk)
+##   (to delete this section, delete .make/contrib.mk)
 ##
 
 # Clone by default your Symfony monorepo side-by-side with the Symfony Starter

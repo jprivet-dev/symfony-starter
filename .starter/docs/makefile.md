@@ -212,7 +212,7 @@ Usage: make <target>
 
 — SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
 
-  (to delete this section, delete make/contrib.mk)
+  (to delete this section, delete .make/contrib.mk)
 
   contrib_dockerfile                      Inject PHP extensions required for contribution into Dockerfile (xsl, etc.)
 
@@ -242,7 +242,7 @@ Usage: make <target>
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
-  (to delete this section, delete make/generate.mk)
+  (to delete this section, delete .make/generate.mk)
 
   clean_app                               Remove all fresh Symfony application files (var/, vendor/, ...)
 

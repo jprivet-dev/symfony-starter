@@ -1,6 +1,6 @@
 ## — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
-##   (to delete this section, delete make/generate.mk)
+##   (to delete this section, delete .make/generate.mk)
 ##
 
 # This GENERATE block, with these following targets and variables,
