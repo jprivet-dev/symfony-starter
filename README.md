@@ -1,6 +1,6 @@
 # My Generated Symfony Project
 
-A small description of my project. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu mauris at mauris imperdiet rhoncus. Nam porta mollis tincidunt. Duis ut orci pharetra, dignissim dolor euismod, luctus purus. Proin eu facilisis libero, ac accumsan velit. Aliquam velit eros, sodales eu libero vel, vulputate placerat est. Nam laoreet ac mi nec bibendum.
+A small description of my project.
 
 > [!TIP]
 >
