@@ -6,18 +6,18 @@ A small description of my project. Lorem ipsum dolor sit amet, consectetur adipi
 >
 > This `README` is a starting point **for your new Symfony project**. Replace the title, description and project-specific placeholders (`YOUR_USERNAME`, `my-project`) with your own content.
 > Once your project is ready, remove the flavors table above.
-
-[How to generate a project with Symfony Starter?](.starter/docs/STARTER.md)
-
-|                                                                                   |                                                                          |
-|:----------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
-| <strong>Symfony</strong><br>![minimalist.png](.starter/docs/img/minimalist.png)   | <strong>API Platform</strong><br>![api.png](.starter/docs/img/api.png)   |
-| <strong>EasyAdmin</strong><br>![easy-admin.png](.starter/docs/img/easy-admin.png) | <strong>Symfony Demo</strong><br>![demo.png](.starter/docs/img/demo.png) |
+>
+> 🚀 [How to generate a project with Symfony Starter?](.starter/docs/STARTER.md)
+>
+> |                                                                                   |                                                                          |
+> |:----------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
+> | <strong>Symfony</strong><br>![minimalist.png](.starter/docs/img/minimalist.png)   | <strong>API Platform</strong><br>![api.png](.starter/docs/img/api.png)   |
+> | <strong>EasyAdmin</strong><br>![easy-admin.png](.starter/docs/img/easy-admin.png) | <strong>Symfony Demo</strong><br>![demo.png](.starter/docs/img/demo.png) |
 
 ## Symfony Starter Documentation
 
-* Generated with [Symfony Starter](https://github.com/jprivet-dev/symfony-starter)
-* [Browse the full Symfony Starter documentation](.starter/docs/STARTER.md)
+* 🚀 Generated with [Symfony Starter](https://github.com/jprivet-dev/symfony-starter)
+* 📖 Browse the [full documentation](.starter/docs/STARTER.md)
 
 ## Prerequisites
 
