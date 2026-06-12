@@ -53,7 +53,7 @@ git_hooks_disable: ## Disable the project's hooks directory
 	@printf " $(R)⨯$(S) Git hooks disabled.\n"
 
 git_hooks_enable: ## Enable the project's hooks directory
-	-git config core.hooksPath hooks/
+	-git config core.hooksPath .hooks/
 	@printf " $(G)✔$(S) Git hooks enabled.\n"
 
 git_pre_push: check_push ## Actions on Git pre-push

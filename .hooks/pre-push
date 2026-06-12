@@ -5,7 +5,7 @@
 # Runs make git_pre_push before every push to catch issues early.
 #
 # Enable:
-#   git config core.hooksPath hooks/
+#   git config core.hooksPath .hooks/
 #
 # Disable:
 #   git config --unset core.hooksPath
