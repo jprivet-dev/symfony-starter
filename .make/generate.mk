@@ -300,10 +300,6 @@ require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler
 	$(C) require --dev symfony/profiler-pack
 	$(M) co m="Install Profiler"
 
-require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
-	$(C) require symfony/asset-mapper symfony/stimulus-bundle
-	$(M) co m="Install StimulusBundle"
-
 require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
 	$(C) require --dev symfony/test-pack
 	$(M) co m="Install PHPUnit"
@@ -311,6 +307,18 @@ require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.
 require_translation: ## Install Translation - https://symfony.com/doc/current/translation.html
 	$(C) require symfony/translation
 	$(M) co m="Install Translation"
+
+require_ux_live_component: ## Install Live Component - https://ux.symfony.com/
+	$(C) symfony/ux-live-component
+	$(M) co m="Install Live Component"
+
+require_ux_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
+	$(C) require symfony/asset-mapper symfony/stimulus-bundle
+	$(M) co m="Install StimulusBundle"
+
+require_ux_twig_component: ## Install Twig Component - https://ux.symfony.com/
+	$(C) symfony/ux-twig-component
+	$(M) co m="Install Twig Component"
 
 ##
 

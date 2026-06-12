@@ -268,7 +268,6 @@ Usage: make <target>
 ▸ COMPLETE INSTALLATION
   require_api                             Install API Platform - https://api-platform.com/docs/symfony/
   require_easy_admin                      Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
-  require_stimulus                        Install StimulusBundle - https://ux.symfony.com/
   require_webapp                          Install a web application - https://symfony.com/doc/current/setup.html
 
   require_asset_mapper                    Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
@@ -277,6 +276,9 @@ Usage: make <target>
   require_profiler                        Install Profiler - https://symfony.com/doc/current/profiler.html
   require_test_pack                       Install PHPUnit - https://symfony.com/doc/current/testing.html
   require_translation                     Install Translation - https://symfony.com/doc/current/translation.html
+  require_ux_live_component               Install Live Component - https://ux.symfony.com/
+  require_ux_stimulus                     Install StimulusBundle - https://ux.symfony.com/
+  require_ux_twig_component               Install Twig Component - https://ux.symfony.com/
 
   require_phpcsfixer                      Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
   require_phpmd                           Install PHP Mess Detector - https://phpmd.org/
