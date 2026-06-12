@@ -4,8 +4,10 @@ A small description of my project.
 
 > [!TIP]
 >
-> This `README` is a starting point **for your new Symfony project**. Replace the title, description and project-specific placeholders (`YOUR_USERNAME`, `my-project`) with your own content.
-> Once your project is ready, remove the flavors table above.
+> This `README` is a starting point **for your new Symfony project**. Replace in that file:
+> * **My Generated Symfony Project** title.
+> * **A small description of my project**.
+> * **YOUR_USERNAME** and **my-project**.
 >
 > 🚀 [How to generate a project with Symfony Starter?](.starter/docs/STARTER.md)
 >
