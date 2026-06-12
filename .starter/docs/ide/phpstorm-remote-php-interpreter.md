@@ -1,6 +1,6 @@
 # PhpStorm - Configure a remote PHP interpreter (Docker)
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -58,4 +58,4 @@ You can access a PHP interpreter installed in a Docker container. This is the ma
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

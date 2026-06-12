@@ -1,6 +1,6 @@
 # Linux - Editing permissions
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -34,4 +34,4 @@ This command recursively changes the ownership of all files and directories in y
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

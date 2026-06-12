@@ -1,6 +1,6 @@
 # PHP CS Fixer
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -36,4 +36,4 @@ composer require --dev friendsofphp/php-cs-fixer
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

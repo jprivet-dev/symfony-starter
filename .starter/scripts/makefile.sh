@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script updates the Makefile commands in the README.md file.
+# This script updates the Makefile commands in the makefile.md file.
 # We use a `while` loop to process the file line by line, which is a more robust approach than `sed`.
 # `sed` can cause issues with special characters and line endings,
 # making this method more reliable and portable across different systems.

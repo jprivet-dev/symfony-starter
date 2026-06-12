@@ -1,6 +1,6 @@
 # PHP_CodeSniffer
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -21,4 +21,4 @@ PHP_CodeSniffer is a set of two PHP scripts:
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

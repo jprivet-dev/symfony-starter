@@ -1,6 +1,6 @@
 # Database: port mapping strategy
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -60,4 +60,4 @@ The `.starter/block/` directory contains one folder per database engine (`postgr
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

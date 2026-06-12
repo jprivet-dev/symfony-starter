@@ -1,6 +1,6 @@
 # Makefile - Discover all commands
 
-[⬅️ README](README.md)
+[⬅️ STARTER](STARTER.md)
 
 ---
 
@@ -308,5 +308,5 @@ Usage: make <target>
 
 ---
 
-[⬅️ README](README.md)
+[⬅️ STARTER](STARTER.md)
 

@@ -1,120 +1,56 @@
-# Symfony Starter
+# My Generated Symfony Project
 
-![PHP](https://img.shields.io/badge/PHP-8.5-777BB4?logo=php)
-![Symfony](https://img.shields.io/badge/Symfony-8%20%7C%207%20LTS-000000?logo=symfony)
-![dunglas/symfony-docker](https://img.shields.io/badge/dunglas%2Fsymfony--docker-3c0d1772-2088FF?logo=docker)
-
-**Generate a fully Dockerized Symfony application with a single command.**
-
-From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform](https://api-platform.com/) or [EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle) stack, [Symfony Starter](https://github.com/jprivet-dev/symfony-starter) handles the entire setup — Docker, database, dependencies — so you can focus on your code from the first minute. You can also use the official [Symfony Demo](https://github.com/symfony/demo) as a reference for best practices, or [contribute to Symfony Core](.starter/docs/contrib.md) in a real Docker environment.
-
-Built on top of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) and driven by a powerful Makefile, it covers everything from project initialization to daily development.
-
-|                                                                                                                                  |                                                                                                             |
-|:---------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------|
-| <strong>[Symfony](https://symfony.com/)</strong><br>![minimalist.png](.starter/docs/img/minimalist.png)                          | <strong>[API Platform](https://api-platform.com/)</strong><br>![api.png](.starter/docs/img/api.png)         |
-| <strong>[EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle)</strong><br>![easy-admin.png](.starter/docs/img/easy-admin.png) | <strong>[Symfony Demo](https://github.com/symfony/demo)</strong><br>![demo.png](.starter/docs/img/demo.png) |
-
-## Quick start
-
-1. Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
-
-2. Clone the project:
-
-```shell
-git clone git@github.com:jprivet-dev/symfony-starter.git
-cd symfony-starter
-```
-
-3. And generate...
-
-| Application     | Stable            | LTS                   | Database      |
-|-----------------|-------------------|-----------------------|---------------|
-| 🌱 Minimalist   | `make minimalist` | `make minimalist@lts` | 🚫 No DB      |
-| 🌍 Webapp       | `make webapp`     | `make webapp@lts`     | 🐘 PostgreSQL |
-| 🔌 API Platform | `make api`        | `make api@lts`        | 🐘 PostgreSQL |
-| ⚡ EasyAdmin     | `make easy_admin` | `make easy_admin@lts` | 🐘 PostgreSQL |
-| 🎓 Demo         | `make demo`       | —                     | 🪶 SQLite     |
+A small description of my project. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu mauris at mauris imperdiet rhoncus. Nam porta mollis tincidunt. Duis ut orci pharetra, dignissim dolor euismod, luctus purus. Proin eu facilisis libero, ac accumsan velit. Aliquam velit eros, sodales eu libero vel, vulputate placerat est. Nam laoreet ac mi nec bibendum.
 
 > [!NOTE]
 >
-> Each generation takes approximately ⏱️ 3-4 minutes depending on your machine and network speed.
+> This `README` is a starting point **for your new Symfony project**. Replace the title, description and project-specific placeholders (`YOUR_USERNAME`, `my-project`) with your own content.
+> Once your project is ready, remove the flavors table above.
 
-### Contribute to Symfony
+[How to generate a project with Symfony Starter?](.starter/docs/STARTER.md)
 
-Use the starter as a reproducer to contribute to the Symfony framework, any Symfony bundle or
-bridge. It lets you mount a local fork directly into the Docker environment and run the test suite
-using the reproducer's PHP container (no local PHP installation required).
+|                                                                                   |                                                                          |
+|:----------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
+| <strong>Symfony</strong><br>![minimalist.png](.starter/docs/img/minimalist.png)   | <strong>API Platform</strong><br>![api.png](.starter/docs/img/api.png)   |
+| <strong>EasyAdmin</strong><br>![easy-admin.png](.starter/docs/img/easy-admin.png) | <strong>Symfony Demo</strong><br>![demo.png](.starter/docs/img/demo.png) |
 
-| Command            | Symfony version                           |
-|--------------------|-------------------------------------------|
-| `make contrib`     | Latest stable release (currently 8.x)     |
-| `make contrib@lts` | Long-term support release (currently 7.x) |
-| `make contrib@6x`  | Symfony 6.x (for legacy contribution)     |
+## Symfony Starter Documentation
 
-📖 [Contributing guide: connect your local Symfony repository](.starter/docs/contrib.md)
+* Generated with [Symfony Starter](https://github.com/jprivet-dev/symfony-starter)
+* [Browse the full Symfony Starter documentation](.starter/docs/STARTER.md)
 
-## Switch to another DB
+## Prerequisites
 
-> [!NOTE]
->
-> By default, **🐘 PostgreSQL** is used. Run one of the following commands after generation to switch to another database.
+Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
 
-| Application     | 🐬 MariaDB                                     | 🪶 SQLite                                     |
-|-----------------|------------------------------------------------|-----------------------------------------------|
-| 🌱 Minimalist   | `make require_orm`<br>`make switch_to_mariadb` | `make require_orm`<br>`make switch_to_sqlite` |
-| 🌍 Webapp       | `make switch_to_mariadb`                       | `make switch_to_sqlite`                       |
-| 🔌 API Platform | `make switch_to_mariadb`                       | `make switch_to_sqlite`                       |
-| ⚡ EasyAdmin     | `make switch_to_mariadb`                       | `make switch_to_sqlite`                       |
-| 🎓 Demo         | —                                              | —                                             |
+## Installation
 
-## Generate from scratch
-
-You can switch between flavors or restart from scratch. This will **delete** the current Symfony application and Docker configuration.
+### 1. Clone the project
 
 ```shell
-make clean_app  # 1. Nuke the current setup
-make easy_admin # 2. Generate a different flavor
+git clone git@github.com:YOUR_USERNAME/my-project.git
+cd my-project
 ```
 
-## Use a source branch directly
-
-If you just want to try a specific configuration without generating it, checkout a source branch directly and start it immediately.
+### 2. Start and install
 
 ```shell
-git fetch origin    # 1. Fetch all branches
-git checkout webapp # 2. Switch to the desired branch
-make clean_app      # 3. Nuke (only if necessary) the current setup
-make install        # 4. Install and start
+make install
 ```
 
-**Available branches:**
+### Then with Makefile...
 
-| Application     | Stable                                                                               | LTS                                                                                          | Database      |
-|-----------------|--------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|---------------|
-| 🌱 Minimalist   | [minimalist](https://github.com/jprivet-dev/symfony-starter/tree/minimalist)         | [minimalist@lts](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts)         | 🚫 No DB      |
-| 🌍 Webapp       | [webapp](https://github.com/jprivet-dev/symfony-starter/tree/webapp)                 | [webapp@lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts)                 | 🐘 PostgreSQL |
-|                 | [webapp@mariadb](https://github.com/jprivet-dev/symfony-starter/tree/webapp@mariadb) | [webapp@lts_mariadb](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts_mariadb) | 🐬 MariaDB    |
-|                 | [webapp@sqlite](https://github.com/jprivet-dev/symfony-starter/tree/webapp@sqlite)   | [webapp@lts_sqlite](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts_sqlite)   | 🪶 SQLite     |
-| 🔌 API Platform | [api](https://github.com/jprivet-dev/symfony-starter/tree/api)                       | [api@lts](https://github.com/jprivet-dev/symfony-starter/tree/api@lts)                       | 🐘 PostgreSQL |
-| ⚡ EasyAdmin     | [easy_admin](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin)         | [easy_admin@lts](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts)         | 🐘 PostgreSQL |
-| 🎓 Demo         | [demo](https://github.com/jprivet-dev/symfony-starter/tree/demo)                     | —                                                                                            | 🪶 SQLite     |
+```shell
+make start  # Start the project and show info
+make stop   # Stop the project
+```
 
-## Documentation
-
-📖 [Browse the full documentation](.starter/docs/README.md)
-
-## Main links
-
-* https://symfony.com/doc/current/setup/docker.html
-* https://github.com/dunglas/symfony-docker
-* https://github.com/jprivet-dev/symfony-docker
+> Run `make help` to see all available commands.
 
 ## Comments, suggestions?
 
-Feel free to make comments/suggestions to me in the [Git issues section](https://github.com/jprivet-dev/symfony-starter/issues).
+Feel free to make comments/suggestions in the [Git issues section](https://github.com/YOUR_USERNAME/my-project/issues).
 
-## Credits & License
+## License
 
-* Based on [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker).
-* This project is released under the [**MIT License**](https://github.com/jprivet-dev/symfony-starter/blob/main/LICENSE).
+This project is released under the [**MIT License**](https://github.com/YOUR_USERNAME/my-project/blob/main/LICENSE).

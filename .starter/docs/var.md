@@ -1,6 +1,6 @@
 # Compose - Accessing the `var/` directory
 
-[⬅️ README](README.md)
+[⬅️ STARTER](STARTER.md)
 
 ---
 
@@ -37,4 +37,4 @@ services:
 
 ---
 
-[⬅️ README](README.md)
+[⬅️ STARTER](STARTER.md)

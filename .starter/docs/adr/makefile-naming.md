@@ -1,6 +1,6 @@
 # Makefile: target naming convention
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -58,4 +58,4 @@ The increased efficiency and seamless copy/paste experience enabled by double-cl
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

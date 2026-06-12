@@ -1,6 +1,6 @@
 # PhpStorm - Connect it to the running MariaDB container
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -49,4 +49,4 @@ make phpstorm_config
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

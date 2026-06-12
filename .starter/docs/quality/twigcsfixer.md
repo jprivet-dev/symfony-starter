@@ -1,6 +1,6 @@
 # Twig CS Fixer
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -24,4 +24,4 @@ TODO
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

@@ -1,6 +1,6 @@
 # PHPStan
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -82,5 +82,5 @@ Looking for a solution...
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 

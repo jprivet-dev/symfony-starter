@@ -1,6 +1,6 @@
 # Contributing - Connect your local Symfony repository
 
-[⬅️ README](README.md)
+[⬅️ STARTER](STARTER.md)
 
 ---
 
@@ -328,4 +328,4 @@ monorepo_tests_twig: ## Run tests for TwigBridge
 
 ---
 
-[⬅️ README](README.md)
+[⬅️ STARTER](STARTER.md)
