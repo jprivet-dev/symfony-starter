@@ -84,14 +84,20 @@ repo_status: _repo ## Show current branch for reproducer and a local repository 
 
 repo_tests: repo_tests_clean ## Run PHPUnit tests in a local repository | d=<dir> [a=<args>] | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
-	@if $(CONTAINER_PHP) test -f "/$(d)/phpunit.xml"; then \
-		$(CONTAINER_PHP) /$(d)/vendor/bin/phpunit -c /$(d)/phpunit.xml --colors=always --display-skipped $(a); \
+	@if $(CONTAINER_PHP) test -f "/$(d)/phpunit"; then \
+		PHPUNIT="/$(d)/phpunit"; \
+	else \
+		PHPUNIT="/$(d)/vendor/bin/phpunit"; \
+	fi; \
+	if $(CONTAINER_PHP) test -f "/$(d)/phpunit.xml"; then \
+		CONFIG="/$(d)/phpunit.xml"; \
 	elif $(CONTAINER_PHP) test -f "/$(d)/phpunit.xml.dist"; then \
-		$(CONTAINER_PHP) /$(d)/vendor/bin/phpunit -c /$(d)/phpunit.xml.dist --colors=always --display-skipped $(a); \
+		CONFIG="/$(d)/phpunit.xml.dist"; \
 	else \
 		echo "$(R)✘ PHPUnit configuration file not found in /$(d) inside the container$(S)"; \
 		exit 1; \
-	fi
+	fi; \
+	$(CONTAINER_PHP) $$PHPUNIT -c $$CONFIG --display-skipped $(a)
 
 repo_tests_clean: _repo repo_status ## Clean PHPUnit cache and temporary files in a local repository | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
