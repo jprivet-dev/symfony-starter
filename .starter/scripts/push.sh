@@ -21,16 +21,7 @@ BRANCHES=(
     "minimalist"
     "minimalist@lts"
     "webapp"
-    "webapp@mariadb"
-    "webapp@sqlite"
     "webapp@lts"
-    "webapp@lts_mariadb"
-    "webapp@lts_sqlite"
-    "api"
-    "api@lts"
-    "easy_admin"
-    "easy_admin@lts"
-    "demo"
 )
 
 printf "\n${Y}--- Symfony Starter - Push All ---${S}\n\n"
