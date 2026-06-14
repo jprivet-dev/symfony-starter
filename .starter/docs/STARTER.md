@@ -83,26 +83,23 @@ make easy_admin # 2. Generate a different flavor
 
 ## Use a source branch directly
 
-If you just want to try a specific configuration without generating it, checkout a source branch directly and start it immediately.
-
-```shell
-git fetch origin    # 1. Fetch all branches
-git checkout webapp # 2. Switch to the desired branch
-make clean_app      # 3. Nuke (only if necessary) the current setup
-make install        # 4. Install and start
-```
-
-**Available branches:**
+If you just want to try the starter without generating it, use one of the pre-built branches:
 
 | Application     | Stable                                                                               | LTS                                                                                          | Database      |
 |-----------------|--------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|---------------|
 | 🌱 Minimalist   | [minimalist](https://github.com/jprivet-dev/symfony-starter/tree/minimalist)         | [minimalist@lts](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts)         | 🚫 No DB      |
 | 🌍 Webapp       | [webapp](https://github.com/jprivet-dev/symfony-starter/tree/webapp)                 | [webapp@lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts)                 | 🐘 PostgreSQL |
-|                 | [webapp@mariadb](https://github.com/jprivet-dev/symfony-starter/tree/webapp@mariadb) | [webapp@lts_mariadb](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts_mariadb) | 🐬 MariaDB    |
-|                 | [webapp@sqlite](https://github.com/jprivet-dev/symfony-starter/tree/webapp@sqlite)   | [webapp@lts_sqlite](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts_sqlite)   | 🪶 SQLite     |
-| 🔌 API Platform | [api](https://github.com/jprivet-dev/symfony-starter/tree/api)                       | [api@lts](https://github.com/jprivet-dev/symfony-starter/tree/api@lts)                       | 🐘 PostgreSQL |
-| ⚡ EasyAdmin     | [easy_admin](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin)         | [easy_admin@lts](https://github.com/jprivet-dev/symfony-starter/tree/easy_admin@lts)         | 🐘 PostgreSQL |
-| 🎓 Demo         | [demo](https://github.com/jprivet-dev/symfony-starter/tree/demo)                     | —                                                                                            | 🪶 SQLite     |
+
+```shell
+git fetch origin            # 1. Fetch all branches
+git checkout minimalist     # 2. Switch to the desired branch (e.g. minimalist, webapp, webapp@lts)
+make clean_app              # 3. Nuke (only if necessary) the current setup
+make install                # 4. Install and start
+```
+
+> [!TIP]
+>
+> From there, use `make require_orm`, `make require_api`, `make switch_to_mariadb`, etc. to add more features.
 
 ## Documentation
 
