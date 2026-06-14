@@ -214,7 +214,7 @@ Usage: make <target>
 
   (to delete this section, delete .make/contrib.mk)
 
-  contrib_dockerfile                      Inject PHP extensions required for contribution into Dockerfile (xsl, etc.)
+  reproducer_dockerfile                   Add the necessary PHP extensions for the reproducer in the Dockerfile (xsl, etc.)
 
 ▸ SYMFONY MONOREPO
   monorepo_volume                         Add a Docker volume for the Symfony monorepo
@@ -257,9 +257,9 @@ Usage: make <target>
   easy_admin                              Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
   easy_admin@lts                          Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 
-  contrib                                 Generate a minimalist Symfony application with Docker configuration for contribution (stable release)
-  contrib@lts                             Generate a minimalist Symfony application with Docker configuration for contribution (LTS - long-term support release)
-  contrib@6x                              Generate a minimalist Symfony 6.x application with Docker configuration for contribution
+  reproducer                              Generate a minimalist Symfony application with Docker configuration as a reproducer (stable release)
+  reproducer@lts                          Generate a minimalist Symfony application with Docker configuration as a reproducer (LTS - long-term support release)
+  reproducer@6x                           Generate a minimalist Symfony 6.x application with Docker configuration as a reproducer
 
   update_symfony_docker                   Update the vendored dunglas/symfony-docker snapshot at the root
   skeleton                                Install symfony/skeleton from the versioned dunglas/symfony-docker files at the root

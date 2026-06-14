@@ -6,13 +6,13 @@
 # Clone by default your Symfony monorepo side-by-side with the Symfony Starter
 SYMFONY_MONOREPO_DIR=symfony
 
-contrib_dockerfile: ## Inject PHP extensions required for contribution into Dockerfile (xsl, etc.)
+reproducer_dockerfile: ## Add the necessary PHP extensions for the reproducer in the Dockerfile (xsl, etc.)
 	$(M) permissions
 	$(M) rb m=recipes t=Dockerfile s=.starter/block/contrib/Dockerfile
-	$(M) co m="Enable contribution PHP extensions (xsl, etc.)"
+	$(M) co m="Enable reproducer PHP extensions (xsl, etc.)"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
-	@printf " $(G)✔$(S) Enable contribution PHP extensions (xsl, etc.)\n"
+	@printf " $(G)✔$(S) Necessary PHP extensions added for the reproducer in the Dockerfile (xsl, etc.)\n"
 
 ## ▸ SYMFONY MONOREPO
 

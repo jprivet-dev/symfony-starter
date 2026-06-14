@@ -11,28 +11,28 @@ and test your changes immediately.
 ## Before you start: generate your reproducer
 
 Before contributing to `symfony/symfony` or any Symfony bundle, generate a minimalist Symfony
-application configured for contribution:
+application configured as a reproducer:
 
 ```shell
 # in /symfony-starter
 
 # stable release
-make contrib
+make reproducer
 # or LTS - long-term support release
-make contrib@lts
+make reproducer@lts
 # or Symfony 6.x
-make contrib@6x
+make reproducer@6x
 ```
 
 | Command            | Symfony version                       |
 |--------------------|---------------------------------------|
-| `make contrib`     | Latest stable release                 |
-| `make contrib@lts` | Long-term support release             |
-| `make contrib@6x`  | Symfony 6.x (for legacy contribution) |
+| `make reproducer`     | Latest stable release                 |
+| `make reproducer@lts` | Long-term support release             |
+| `make reproducer@6x`  | Symfony 6.x (for legacy reproducer) |
 
 > [!TIP]
 >
-> If you are contributing to `symfony/symfony`, `make contrib` will ask you whether to add the
+> If you are contributing to `symfony/symfony`, `make reproducer` will ask you whether to add the
 > Docker volume for the Symfony monorepo automatically. You can also run `make monorepo_volume`
 > manually at any time.
 
@@ -82,7 +82,7 @@ reproducer's PHP container as the PHP interpreter for the Symfony monorepo.
 
 > [!NOTE]
 >
-> If you answered `Y` during `make contrib`, this step has already been done. Skip to step 4.
+> If you answered `Y` during `make reproducer`, this step has already been done. Skip to step 4.
 
 ```shell
 # in /symfony-starter
@@ -238,7 +238,7 @@ make update a=symfony/monolog-bundle
 ```mermaid
 flowchart TD
   START([Start]) --> REPRODUCER
-  REPRODUCER["GENERATE YOUR REPRODUCER\n─────────────────────\n$ make contrib\n$ make contrib@lts\n$ make contrib@6x\n\nin /symfony-starter"]
+  REPRODUCER["GENERATE YOUR REPRODUCER\n─────────────────────\n$ make reproducer\n$ make reproducer@lts\n$ make reproducer@6x\n\nin /symfony-starter"]
   REPRODUCER --> CHOICE{What do you\nwant to contribute to?}
   CHOICE -->|symfony/symfony| M1
   CHOICE -->|Bundle or Bridge| B1

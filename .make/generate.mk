@@ -191,18 +191,18 @@ easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Dock
 
 ##
 
-.PHONY: contrib
-contrib: ## Generate a minimalist Symfony application with Docker configuration for contribution (stable release)
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),contrib)
+.PHONY: reproducer
+reproducer: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (stable release)
+	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),reproducer)
 ifneq ($(filter 6.%,$(SYMFONY_VERSION)),)
 	git apply .starter/patch/symfony6-frankenphp.patch
 	git commit -am "🤖 [starter] fix: restore Symfony 6 compatibility with FrankenPHP worker mode"
 endif
 	$(M) skeleton
-	$(M) contrib_dockerfile
+	$(M) reproducer_dockerfile
 	@if [ "$${NO_INTERACTION}" != "true" ]; then \
 		printf "\n $(G)Are you contributing to symfony/symfony monorepo (add the Docker volume now)?$(S) [$(Y)y/N$(S)]: " && read ANSWER; \
-		if [ "$$ANSWER" = "y" ] && [ "$$ANSWER" != "Y" ]; then \
+		if [ "$$ANSWER" = "y" ] || [ "$$ANSWER" = "Y" ]; then \
 			$(M) monorepo_volume; \
 		else \
 			printf " $(Y)›$(S) Skipped. Run $(G)make monorepo_volume$(S) manually when needed.\n"; \
@@ -211,13 +211,13 @@ endif
 	$(M) permissions images info
 	$(M) health_welcome_to_symfony
 	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application (for contribution) generated!\n\n"
+	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application (as a reproducer) generated!\n\n"
 
-contrib@lts: ## Generate a minimalist Symfony application with Docker configuration for contribution (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) contrib BRANCH=$(or $(BRANCH),contrib@lts)
+reproducer@lts: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) reproducer BRANCH=$(or $(BRANCH),reproducer@lts)
 
-contrib@6x: ## Generate a minimalist Symfony 6.x application with Docker configuration for contribution
-	SYMFONY_VERSION=6.* $(M) contrib BRANCH=$(or $(BRANCH),contrib@6x)
+reproducer@6x: ## Generate a minimalist Symfony 6.x application with Docker configuration as a reproducer
+	SYMFONY_VERSION=6.* $(M) reproducer BRANCH=$(or $(BRANCH),reproducer@6x)
 
 ##
 

@@ -35,7 +35,7 @@ BRANCHES=(
     "easy_admin"
     "easy_admin@lts"
     "demo"
-    "contrib@6x"
+    "reproducer@6x"
 )
 
 # ------------------------------------------------------------------
@@ -128,10 +128,10 @@ generate_flavor_demo() {
     NO_INTERACTION=true make demo
 }
 
-generate_flavor_contrib_6x() {
+generate_flavor_reproducer_6x() {
     git switch "${WORK_BRANCH}"
     NO_INTERACTION=true make clean_app
-    NO_INTERACTION=true make contrib@6x
+    NO_INTERACTION=true make reproducer@6x
 }
 
 # ------------------------------------------------------------------

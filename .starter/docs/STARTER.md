@@ -14,8 +14,8 @@ From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform]
 
 Built on top of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) and driven by a powerful Makefile, it covers everything from project initialization to daily development.
 
-|                                                                                   |                                                                          |
-|:----------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
+|                                                                     |                                                            |
+|:--------------------------------------------------------------------|:-----------------------------------------------------------|
 | <strong>Symfony</strong><br>![minimalist.png](img/minimalist.png)   | <strong>API Platform</strong><br>![api.png](img/api.png)   |
 | <strong>EasyAdmin</strong><br>![easy-admin.png](img/easy-admin.png) | <strong>Symfony Demo</strong><br>![demo.png](img/demo.png) |
 
@@ -50,11 +50,11 @@ Use the starter as a reproducer to contribute to the Symfony framework, any Symf
 bridge. It lets you mount a local fork directly into the Docker environment and run the test suite
 using the reproducer's PHP container (no local PHP installation required).
 
-| Command            | Symfony version                           |
-|--------------------|-------------------------------------------|
-| `make contrib`     | Latest stable release (currently 8.x)     |
-| `make contrib@lts` | Long-term support release (currently 7.x) |
-| `make contrib@6x`  | Symfony 6.x (for legacy contribution)     |
+| Command               | Symfony version                     |
+|-----------------------|-------------------------------------|
+| `make reproducer`     | Latest stable release               |
+| `make reproducer@lts` | Long-term support release           |
+| `make reproducer@6x`  | Symfony 6.x (for legacy reproducer) |
 
 📖 [Contributing guide: connect your local Symfony repository](contrib.md)
 
