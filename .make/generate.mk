@@ -200,14 +200,6 @@ ifneq ($(filter 6.%,$(SYMFONY_VERSION)),)
 endif
 	$(M) skeleton
 	$(M) reproducer_dockerfile
-	@if [ "$${NO_INTERACTION}" != "true" ]; then \
-		printf "\n $(G)Are you contributing to symfony/symfony monorepo (add the Docker volume now)?$(S) [$(Y)y/N$(S)]: " && read ANSWER; \
-		if [ "$$ANSWER" = "y" ] || [ "$$ANSWER" = "Y" ]; then \
-			$(M) monorepo_volume; \
-		else \
-			printf " $(Y)›$(S) Skipped. Run $(G)make monorepo_volume$(S) manually when needed.\n"; \
-		fi; \
-	fi
 	$(M) permissions images info
 	$(M) health_welcome_to_symfony
 	$(PRINT_EXECUTION_TIME)
