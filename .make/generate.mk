@@ -84,22 +84,19 @@ compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make bui
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(M) co m="use DATABASE_URL var in compose.yaml"
 
-suggest_orphan_branch: # INTERNAL - Suggest creating a new orphan branch before generation | FLAVOR=<flavor>
+orphan_branch: # INTERNAL - Create a new orphan branch before generation | FLAVOR=<flavor>
 	@printf "\n$(Y)--- Branch ---$(S)\n"
 	@printf " $(Y)›$(S) Current branch: $(G)$$(git rev-parse --abbrev-ref HEAD)$(S)\n"
-	@printf " $(Y)›$(S) New orphan branch name [$(G)$(FLAVOR)$(S)] — starts with a single \"First commit\" ($(Y)Enter$(S) to accept, $(Y)n$(S) to skip): "; \
+	@BRANCH_NAME=$(FLAVOR); \
 	if [ "$${NO_INTERACTION}" != "true" ]; then \
-		read BRANCH_NAME; \
+		printf " $(Y)›$(S) New orphan branch name [$(G)$(FLAVOR)$(S)]: "; \
+		read INPUT; \
+		BRANCH_NAME=$${INPUT:-$(FLAVOR)}; \
 	fi; \
-	if [ "$$BRANCH_NAME" = "n" ] || [ "$$BRANCH_NAME" = "N" ]; then \
-		printf " $(Y)›$(S) Skipped. Staying on current branch.\n"; \
-	else \
-		BRANCH_NAME=$${BRANCH_NAME:-$(FLAVOR)}; \
-		git branch -D "$$BRANCH_NAME" 2>/dev/null || true; \
-		git checkout --orphan "$$BRANCH_NAME"; \
-		$(M) co m="Initial commit"; \
-		printf " $(G)✔$(S) Orphan branch $(G)$$BRANCH_NAME$(S) created with a fresh history\n"; \
-	fi
+	git branch -D "$$BRANCH_NAME" 2>/dev/null || true; \
+	git checkout --orphan "$$BRANCH_NAME"; \
+	$(M) co m="Initial commit"; \
+	printf " $(G)✔$(S) Orphan branch $(G)$$BRANCH_NAME$(S) created with a fresh history\n"
 
 #
 
@@ -114,7 +111,7 @@ clean_app: confirm ## Remove all fresh Symfony application files (var/, vendor/,
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),minimalist)
+	$(M) orphan_branch FLAVOR=$(or $(BRANCH),minimalist)
 	$(M) skeleton
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application generated!\n\n"
@@ -124,7 +121,7 @@ minimalist@lts: ## Generate a minimalist Symfony application with Docker configu
 
 .PHONY: webapp
 webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (stable release)
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),webapp)
+	$(M) orphan_branch FLAVOR=$(or $(BRANCH),webapp)
 	$(M) skeleton
 	$(M) require_webapp
 	$(M) permissions images info
@@ -139,7 +136,7 @@ webapp@lts: ## Generate a webapp Symfony application (with PostgreSQL) with Dock
 
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),api)
+	$(M) orphan_branch FLAVOR=$(or $(BRANCH),api)
 	$(M) skeleton
 	$(M) require_orm
 	$(M) require_api
@@ -153,7 +150,7 @@ api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker co
 
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),demo)
+	$(M) orphan_branch FLAVOR=$(or $(BRANCH),demo)
 	$(M) clone_symfony_demo
 	$(M) build_force_start
 	git restore .env.local.demo
@@ -171,7 +168,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),easy_admin)
+	$(M) orphan_branch FLAVOR=$(or $(BRANCH),easy_admin)
 	$(M) skeleton
 	$(M) require_orm
 	$(M) require_easy_admin
@@ -193,7 +190,7 @@ easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Dock
 
 .PHONY: reproducer
 reproducer: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (stable release)
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),reproducer)
+	$(M) orphan_branch FLAVOR=$(or $(BRANCH),reproducer)
 ifneq ($(filter 6.%,$(SYMFONY_VERSION)),)
 	git apply .starter/patch/symfony6-frankenphp.patch
 	git commit -am "🤖 [starter] fix: restore Symfony 6 compatibility with FrankenPHP worker mode"
