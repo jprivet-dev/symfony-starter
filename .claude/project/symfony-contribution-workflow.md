@@ -104,11 +104,18 @@ Suggest the user rename the current conversation to the reproducer branch name t
 
 ### 3. Select the right reproducer command
 
-| Symfony version | Command                                    |
-|-----------------|--------------------------------------------|
-| 8.x (stable)    | `make reproducer BRANCH={branch-name}`     |
-| 7.x (LTS)       | `make reproducer@lts BRANCH={branch-name}` |
-| 6.x (legacy)    | `make reproducer@6x BRANCH={branch-name}`  |
+| Symfony version | Command                                                    |
+|-----------------|------------------------------------------------------------|
+| 8.2 (dev)       | `SYMFONY_VERSION=8.2 make reproducer BRANCH={branch-name}` |
+| 8.1 (stable)    | `make reproducer BRANCH={branch-name}`                     |
+| 7.4 (LTS)       | `make reproducer@lts BRANCH={branch-name}`                 |
+| 6.4 (legacy)    | `make reproducer@6x BRANCH={branch-name}`                  |
+
+> [!NOTE]
+>
+> Use `SYMFONY_VERSION=X.Y` to target a specific Git branch of the monorepo that is not yet covered by a named target (e.g. `SYMFONY_VERSION=8.2 make reproducer BRANCH={branch-name}`).
+>
+> You can check https://symfony.com/releases to confirm.
 
 ### 4. Present the global approach
 
