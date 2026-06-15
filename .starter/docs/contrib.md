@@ -24,11 +24,11 @@ make reproducer@lts
 make reproducer@6x
 ```
 
-| Command               | Symfony version                       |
-|-----------------------|---------------------------------------|
-| `make reproducer`     | Latest stable release                 |
-| `make reproducer@lts` | Long-term support release             |
-| `make reproducer@6x`  | Symfony 6.x (for legacy reproducer)  |
+| Command               | Symfony version                     |
+|-----------------------|-------------------------------------|
+| `make reproducer`     | Latest stable release               |
+| `make reproducer@lts` | Long-term support release           |
+| `make reproducer@6x`  | Symfony 6.x (for legacy reproducer) |
 
 ## Contribute to `symfony/symfony`
 
@@ -126,7 +126,7 @@ make monorepo_tests a="/symfony/src/Symfony/Component/HttpClient"
 > [!TIP]
 >
 > When running large test suites, you can exclude the integration group, which requires
-additional infrastructure (e.g. Redis or RabbitMQ), by appending the `--exclude-group` argument:
+> additional infrastructure (e.g. Redis or RabbitMQ), by appending the `--exclude-group` argument:
 
 ```shell
 # in /symfony-starter
@@ -263,7 +263,6 @@ flowchart TD
   REPRODUCER --> CHOICE{What do you\nwant to contribute to?}
   CHOICE -->|symfony/symfony| MP1
   CHOICE -->|Bundle or Bridge| BP1
-
 %% ── MONOREPO WORKFLOW ──────────────────────────────────────
   MP1["PHASE 1 — REPRODUCE\n─────────────────────\n$ make require a=symfony/http-client\n\nin /symfony-starter"]
   MP1 --> MP2["PHASE 2 — CONTRIBUTE\n1. FORK & CLONE\n─────────────────────\n$ git clone MY_USERNAME/symfony.git\n$ git remote add upstream\n\nin ./"]
@@ -272,7 +271,6 @@ flowchart TD
   M3 --> M4["4. INSTALL & LINK\n─────────────────────\n$ make monorepo_install\n$ make monorepo_link\n\nin /symfony-starter"]
   M4 --> M5["5. RUN TESTS\n─────────────────────\n$ make monorepo_tests a=...\n\nin /symfony-starter"]
   M5 --> M6(["6. REVERT\n$ make monorepo_unlink"])
-
 %% ── BUNDLE WORKFLOW ────────────────────────────────────────
   BP1["PHASE 1 — REPRODUCE\n─────────────────────\n$ make require a=symfony/monolog-bundle\n\nin /symfony-starter"]
   BP1 --> BP2["PHASE 2 — CONTRIBUTE\n1. FORK & CLONE\n─────────────────────\n$ git clone MY_USERNAME/monolog-bundle.git\n$ git remote add upstream\n\nin ./"]
@@ -340,6 +338,16 @@ monorepo_tests_twig: ## Run tests for TwigBridge
 >
 > The `.make/local.mk` file is ignored by Git. This is the perfect place to experiment with new
 > commands before potentially proposing them as a permanent addition to the project.
+
+## AI-assisted issue workflow with Claude.ai
+
+If you use [Claude.ai](https://claude.ai), you can set up a [Claude Project](https://claude.ai/projects) that
+automatically generates the complete contribution procedure from a Symfony issue
+— no Claude Code required.
+
+> [!TIP]
+>
+> See `.claude/project-issue-workflow.md` for the setup instructions.
 
 ---
 
