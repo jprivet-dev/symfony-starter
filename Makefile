@@ -62,28 +62,28 @@ SRC       = src
 TEMPLATES = templates
 TESTS     = tests
 
-NOW               := $(shell date +%Y%m%d-%H%M%S-%3N)
-PWD                = $(shell pwd)
-MAKE_LOCAL_MK      = .make/local.mk
-MAKE_LOCAL_MK_DIST = $(MAKE_LOCAL_MK).dist
-BIN_CONSOLE        = bin/console
-BIN_PHPUNIT        = bin/phpunit
-COMPOSER_JSON      = composer.json
-DOCKERFILE         = Dockerfile
-VENDOR_API         = vendor/api-platform
-VENDOR_ASSETS      = vendor/symfony/asset-mapper
-VENDOR_DOCTRINE    = vendor/doctrine
-VENDOR_EASYADMIN   = vendor/easycorp/easyadmin-bundle
-VENDOR_MAILER      = vendor/symfony/mailer
-VENDOR_MONOLOG     = vendor/symfony/monolog-bundle
-VENDOR_PHPCSFIXER  = vendor/bin/php-cs-fixer
-VENDOR_PHPMD       = vendor/bin/phpmd
-VENDOR_PHPMETRICS  = vendor/bin/phpmetrics
-VENDOR_PHPSTAN     = vendor/bin/phpstan
-VENDOR_PROFILER    = vendor/symfony/web-profiler-bundle
-VENDOR_TAILWIND    = vendor/symfonycasts/tailwind-bundle
-VENDOR_TRANSLATION = vendor/symfony/translation
-VENDOR_TWIGCSFIXER = vendor/bin/twig-cs-fixer
+NOW                := $(shell date +%Y%m%d-%H%M%S-%3N)
+PWD                 = $(shell pwd)
+MAKE_LOCAL_MK       = .make/local.mk
+MAKE_LOCAL_MK_DIST  = $(MAKE_LOCAL_MK).dist
+BIN_CONSOLE         = bin/console
+BIN_PHPUNIT         = bin/phpunit
+COMPOSER_JSON       = composer.json
+DOCKERFILE          = Dockerfile
+VENDOR_API          = vendor/api-platform
+VENDOR_ASSETS       = vendor/symfony/asset-mapper
+VENDOR_DOCTRINE_ORM = vendor/doctrine/orm
+VENDOR_EASYADMIN    = vendor/easycorp/easyadmin-bundle
+VENDOR_MAILER       = vendor/symfony/mailer
+VENDOR_MONOLOG      = vendor/symfony/monolog-bundle
+VENDOR_PHPCSFIXER   = vendor/bin/php-cs-fixer
+VENDOR_PHPMD        = vendor/bin/phpmd
+VENDOR_PHPMETRICS   = vendor/bin/phpmetrics
+VENDOR_PHPSTAN      = vendor/bin/phpstan
+VENDOR_PROFILER     = vendor/symfony/web-profiler-bundle
+VENDOR_TAILWIND     = vendor/symfonycasts/tailwind-bundle
+VENDOR_TRANSLATION  = vendor/symfony/translation
+VENDOR_TWIGCSFIXER  = vendor/bin/twig-cs-fixer
 
 # --- COMPONENTS CONFIG ---
 
@@ -500,7 +500,7 @@ else
 	$(COMPOSER) update $(a)
 endif
 
-ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE))),)
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE_ORM))),)
 include .make/doctrine.mk
 endif
 

@@ -373,7 +373,7 @@ health: ## Check the website and database connection (via Doctrine) | [c=<status
 			EXIT_CODE=1; \
 		fi; \
 	fi; \
-	if [ ! -e "$(VENDOR_DOCTRINE)" ]; then \
+	if [ ! -e "$(VENDOR_DOCTRINE_ORM)" ]; then \
 		printf " $(Y)› Database connection skipped (Doctrine not installed)$(S)\n"; \
 	else \
 		if $(CONSOLE) dbal:run-sql "SELECT 1" > /dev/null 2>&1; then \
