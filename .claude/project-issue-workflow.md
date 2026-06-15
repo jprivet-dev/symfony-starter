@@ -37,7 +37,7 @@ Always specify the working directory context (in /symfony-starter or in /symfony
 ### 4. Start a new conversation
 
 For each issue, **open a new conversation** in this project and name it after the branch:
-e.g. `64610-csrf-token-invalid`
+e.g. `symfony/64610-csrf-token-invalid-sf7.4`
 
 This keeps one conversation per issue, making it easy to resume work later.
 
@@ -65,8 +65,34 @@ Extract:
 
 ### 2. Propose a branch name and conversation title
 
-Use the format: `{issue_id}-{short-kebab-case-description}`
-e.g. `64610-csrf-token-invalid`
+Use the format: `symfony/{issue_id}-{short-kebab-case-description}-sf{version}`
+e.g. `symfony/64610-csrf-token-invalid-sf7.4`
+
+The `symfony/` prefix helps distinguish branches across different repositories
+(e.g. `monolog/64610-...` for a MonologBundle issue).
+
+The `-sf{version}` suffix makes it easy to work on the same issue across multiple Symfony
+versions simultaneously, e.g.:
+
+- `symfony/64610-csrf-token-invalid-sf7.4`
+- `symfony/64610-csrf-token-invalid-sf8.1`
+
+This is a suggestion — the user is free to choose a different name. The only constraint
+is that **the branch name must be identical** in the reproducer and in the Symfony fork
+to avoid confusion. This can be verified at any time with:
+
+```shell
+# in /symfony-starter
+make monorepo_status
+```
+
+Which outputs something like:
+
+```
+REPOSITORY                 BRANCH
+symfony-starter            symfony/64610-csrf-token-invalid-sf7.4
+symfony                    symfony/64610-csrf-token-invalid-sf7.4
+```
 
 Suggest the user rename the current conversation to this branch name to keep things organized.
 
@@ -86,6 +112,7 @@ understands the path ahead:
 - **Phase 1 — Setup**: generate the reproducer and install the required dependencies
 - **Phase 2 — Reproduce**: write the minimal code to trigger the bug and confirm it exists
 - **Phase 3 — Fix**: link the local Symfony fork, investigate the component, and submit a fix
+- **Phase 4 — Cleanup**: unlink the monorepo and clean up the reproducer
 
 Then generate only Phase 1. Wait for the user's confirmation before moving to the next phase.
 
@@ -156,3 +183,17 @@ Steps to generate:
 End Phase 3 with this reminder:
 > ✅ Phase 3 ready. Run the tests after each change, then open a Pull Request on
 > `symfony/symfony` targeting the `{branch}` branch.
+> Once your PR is submitted, ask me for **Phase 4** to clean up the environment.
+
+### 8. Generate Phase 4 — Cleanup (on request only)
+
+Only generate this phase when the user explicitly asks for it.
+
+```shell
+# in /symfony-starter
+make monorepo_unlink
+make clean_app
+```
+
+End Phase 4 with this reminder:
+> ✅ Phase 4 complete. The environment is clean and ready for the next issue.
