@@ -71,7 +71,18 @@ Use the format `{repo}/{issue_id}-{short-kebab-case-description}-sf{version}` **
 | `gotenberg/12345-the-issue-sf7.4` | `12345-the-issue-sf7.4` |
 
 - The `{repo}/` prefix is **only used in the reproducer** — it helps distinguish branches when working on multiple repositories simultaneously
-- The `-sf{version}` suffix makes it easy to work on the same issue across multiple Symfony versions simultaneously
+- The `-sf{version}` suffix uses the exact major.minor version (e.g. `sf8.1`, `sf7.4`) — never `sf8.x` or any wildcard form.
+
+If the target Symfony version **cannot be clearly deduced** from the issue (no explicit version tag, no affected version mentioned, no code reference pointing to a specific branch), **ask the user before going any further**:
+
+> Which Symfony version should this branch target? (e.g. `8.1`, `7.4`)
+
+Do **not** ask this question if the version is already apparent from:
+
+- an explicit version label or milestone on the issue
+- a code reference to a specific branch (e.g. `8.2` in a GitHub URL)
+- the user's own message
+
 - In the fork, the branch name is simply `{issue_id}-{short-kebab-case-description}-sf{version}` — no prefix needed
 
 This is a suggestion — the user is free to choose a different name. The only constraint is that the **fork branch name must match the suffix** of the reproducer branch name to avoid confusion. This can be verified at any time with:
