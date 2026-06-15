@@ -200,6 +200,7 @@ ifneq ($(filter 6.%,$(SYMFONY_VERSION)),)
 	git commit -am "🤖 [starter] fix: restore Symfony 6 compatibility with FrankenPHP worker mode"
 endif
 	$(M) skeleton
+	$(M) require_maker_bundle
 	$(M) reproducer_dockerfile
 	$(M) permissions images info
 	$(M) health_welcome_to_symfony
