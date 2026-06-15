@@ -41,6 +41,7 @@ make reproducer@6x
 
 # e.g. composer require symfony/http-client (via docker compose)
 make require a=symfony/http-client
+g add . && g commit -m "require symfony/http-client"
 ```
 
 #### 2. Reproduce the bug
@@ -160,6 +161,7 @@ the `symfony/symfony` monorepo.
 ```shell
 # in /symfony-starter
 make require a="symfony/monolog-bundle"
+g add . && g commit -m "require symfony/monolog-bundle"
 ```
 
 #### 2. Reproduce the bug
@@ -209,6 +211,7 @@ git switch -c MY_TOPIC_BRANCH 3.x
 make repo_volume d=monolog-bundle
 make repo_add d=monolog-bundle
 make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
+git add . && git commit -m "require symfony/monolog-bundle:4.x-dev"
 ```
 
 > [!TIP]
