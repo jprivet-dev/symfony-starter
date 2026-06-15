@@ -87,11 +87,15 @@ compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make bui
 orphan_branch: # INTERNAL - Create a new orphan branch before generation | FLAVOR=<flavor>
 	@printf "\n$(Y)--- Branch ---$(S)\n"
 	@printf " $(Y)›$(S) Current branch: $(G)$$(git rev-parse --abbrev-ref HEAD)$(S)\n"
-	@BRANCH_NAME=$(FLAVOR); \
-	if [ "$${NO_INTERACTION}" != "true" ]; then \
+	@if [ -n "$(BRANCH)" ]; then \
+		BRANCH_NAME="$(BRANCH)"; \
+		printf " $(Y)›$(S) Using specified orphan branch name: $(G)$$BRANCH_NAME$(S)\n"; \
+	elif [ "$${NO_INTERACTION}" != "true" ]; then \
 		printf " $(Y)›$(S) New orphan branch name [$(G)$(FLAVOR)$(S)]: "; \
 		read INPUT; \
 		BRANCH_NAME=$${INPUT:-$(FLAVOR)}; \
+	else \
+		BRANCH_NAME="$(FLAVOR)"; \
 	fi; \
 	git branch -D "$$BRANCH_NAME" 2>/dev/null || true; \
 	git checkout --orphan "$$BRANCH_NAME"; \
@@ -111,17 +115,17 @@ clean_app: confirm ## Remove all fresh Symfony application files (var/, vendor/,
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
-	$(M) orphan_branch FLAVOR=$(or $(BRANCH),minimalist)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),minimalist) BRANCH=$(BRANCH)
 	$(M) skeleton
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application generated!\n\n"
 
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist BRANCH=minimalist@lts
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist FLAVOR=minimalist@lts BRANCH=$(BRANCH)
 
 .PHONY: webapp
 webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (stable release)
-	$(M) orphan_branch FLAVOR=$(or $(BRANCH),webapp)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),webapp) BRANCH=$(BRANCH)
 	$(M) skeleton
 	$(M) require_webapp
 	$(M) permissions images info
@@ -130,13 +134,13 @@ webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker c
 	@printf " $(G)🎉 Success!$(S) Webapp Symfony application generated!\n\n"
 
 webapp@lts: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) webapp BRANCH=$(or $(BRANCH),webapp@lts)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) webapp FLAVOR=webapp@lts BRANCH=$(BRANCH)
 
 ##
 
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
-	$(M) orphan_branch FLAVOR=$(or $(BRANCH),api)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),api) BRANCH=$(BRANCH)
 	$(M) skeleton
 	$(M) require_orm
 	$(M) require_api
@@ -146,11 +150,11 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	@printf " $(G)🎉 Success!$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
 api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api BRANCH=api@lts
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api FLAVOR=api@lts BRANCH=$(BRANCH)
 
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
-	$(M) orphan_branch FLAVOR=$(or $(BRANCH),demo)
+	$(M) orphan_branch FLAVOR=demo BRANCH=$(BRANCH)
 	$(M) clone_symfony_demo
 	$(M) build_force_start
 	git restore .env.local.demo
@@ -168,7 +172,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
-	$(M) orphan_branch FLAVOR=$(or $(BRANCH),easy_admin)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),easy_admin) BRANCH=$(BRANCH)
 	$(M) skeleton
 	$(M) require_orm
 	$(M) require_easy_admin
@@ -184,13 +188,13 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	@printf " $(G)🎉 Success!$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
 easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) easy_admin BRANCH=easy_admin@lts
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) easy_admin FLAVOR=easy_admin@lts BRANCH=$(BRANCH)
 
 ##
 
 .PHONY: reproducer
 reproducer: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (stable release)
-	$(M) orphan_branch FLAVOR=$(or $(BRANCH),reproducer)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),reproducer) BRANCH=$(BRANCH)
 ifneq ($(filter 6.%,$(SYMFONY_VERSION)),)
 	git apply .starter/patch/symfony6-frankenphp.patch
 	git commit -am "🤖 [starter] fix: restore Symfony 6 compatibility with FrankenPHP worker mode"
@@ -203,10 +207,10 @@ endif
 	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application (as a reproducer) generated!\n\n"
 
 reproducer@lts: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) reproducer BRANCH=$(or $(BRANCH),reproducer@lts)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) reproducer FLAVOR=reproducer@lts BRANCH=$(BRANCH)
 
 reproducer@6x: ## Generate a minimalist Symfony 6.x application with Docker configuration as a reproducer
-	SYMFONY_VERSION=6.* $(M) reproducer BRANCH=$(or $(BRANCH),reproducer@6x)
+	SYMFONY_VERSION=6.* $(M) reproducer FLAVOR=reproducer@6x BRANCH=$(BRANCH)
 
 ##
 
