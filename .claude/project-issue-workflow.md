@@ -2,26 +2,44 @@
 
 ## Project setup
 
-Create a Claude Project at https://claude.ai with the following configuration:
+### 1. Create the Claude Project
 
-### Files to load
+Go to https://claude.ai/projects and click **Create project**.
 
-- `.starter/docs/STARTER.md`
-- `.starter/docs/contrib.md`
-- `.make/contrib.mk`
-- `.make/generate.mk`
-- `.claude/project-contrib-issue.md` (this file)
+- **Name**: `Symfony Contribution Workflow`
+- **Description** *(optional)*: `Step-by-step workflow to reproduce and fix Symfony issues using the Symfony Starter toolkit.`
 
-### Project instructions
+### 2. Load the project files
+
+In the project settings, upload the following files from your local `symfony-starter` repository:
+
+| File                                | Purpose                                                 |
+|-------------------------------------|---------------------------------------------------------|
+| `.starter/docs/STARTER.md`          | Starter toolkit overview and available `make` commands  |
+| `.starter/docs/contrib.md`          | Full contribution guide (monorepo and bundle workflows) |
+| `.make/contrib.mk`                  | Makefile targets for contribution commands              |
+| `.make/generate.mk`                 | Makefile targets for project generation                 |
+| `.claude/project-issue-workflow.md` | This file — defines the issue workflow                  |
+
+### 3. Set the project instructions
+
+In the project settings, paste the following as **Project instructions**:
 
 ```
 You are assisting a Symfony developer using the Symfony Starter toolkit.
 When the user mentions a Symfony issue, follow the workflow defined in
-project-contrib-issue.md, using .starter/docs/contrib.md as the reference
+project-issue-workflow.md, using .starter/docs/contrib.md as the reference
 for all commands and procedures.
 Always generate complete, ready-to-run commands with no placeholders left unfilled.
 Always specify the working directory context (in /symfony-starter or in /symfony).
 ```
+
+### 4. Start a new conversation
+
+For each issue, **open a new conversation** in this project and name it after the branch:
+e.g. `64610-csrf-token-invalid`
+
+This keeps one conversation per issue, making it easy to resume work later.
 
 ---
 
@@ -35,20 +53,22 @@ Extract:
 
 - **Symfony version** affected → target branch (e.g. `7.4`, `8.1`)
 - **Component** affected → Composer package and monorepo path:
-  - Form → `symfony/form` → `/symfony/src/Symfony/Component/Form`
-  - Security CSRF → `symfony/security-csrf` → `/symfony/src/Symfony/Component/Security/Csrf`
-  - HttpKernel → `symfony/http-kernel` → `/symfony/src/Symfony/Component/HttpKernel`
-  - HttpClient → `symfony/http-client` → `/symfony/src/Symfony/Component/HttpClient`
-  - Routing → `symfony/routing` → `/symfony/src/Symfony/Component/Routing`
-  - EventDispatcher → `symfony/event-dispatcher` → `/symfony/src/Symfony/Component/EventDispatcher`
-  - Console → `symfony/console` → `/symfony/src/Symfony/Component/Console`
-  - *(adapt for any other component)*
+    - Form → `symfony/form` → `/symfony/src/Symfony/Component/Form`
+    - Security CSRF → `symfony/security-csrf` → `/symfony/src/Symfony/Component/Security/Csrf`
+    - HttpKernel → `symfony/http-kernel` → `/symfony/src/Symfony/Component/HttpKernel`
+    - HttpClient → `symfony/http-client` → `/symfony/src/Symfony/Component/HttpClient`
+    - Routing → `symfony/routing` → `/symfony/src/Symfony/Component/Routing`
+    - EventDispatcher → `symfony/event-dispatcher` → `/symfony/src/Symfony/Component/EventDispatcher`
+    - Console → `symfony/console` → `/symfony/src/Symfony/Component/Console`
+    - *(adapt for any other component)*
 - **Type** : bug, feature, deprecation, RFC
 
-### 2. Propose a branch name
+### 2. Propose a branch name and conversation title
 
 Use the format: `{issue_id}-{short-kebab-case-description}`
 e.g. `64610-csrf-token-invalid`
+
+Suggest the user rename the current conversation to this branch name to keep things organized.
 
 ### 3. Select the right reproducer command
 
@@ -58,15 +78,81 @@ e.g. `64610-csrf-token-invalid`
 | 7.x (LTS)       | `make reproducer@lts BRANCH={branch-name}` |
 | 6.x (legacy)    | `make reproducer@6x BRANCH={branch-name}`  |
 
-### 4. Generate the complete two-phase workflow
+### 4. Present the global approach
 
-Follow `.starter/docs/contrib.md` and fill in all values from the issue analysis.
+Before generating any commands, briefly present the three-phase approach so the user
+understands the path ahead:
+
+- **Phase 1 — Setup**: generate the reproducer and install the required dependencies
+- **Phase 2 — Reproduce**: write the minimal code to trigger the bug and confirm it exists
+- **Phase 3 — Fix**: link the local Symfony fork, investigate the component, and submit a fix
+
+Then generate only Phase 1. Wait for the user's confirmation before moving to the next phase.
+
+### 5. Generate Phase 1 — Setup
+
+Generate the reproducer and install only the Composer dependencies needed to reproduce the issue.
+Do not write any application code at this stage.
+
+Fill in all values from the issue analysis.
 Never leave placeholders like `MY_TOPIC_BRANCH`, `MY_USERNAME`, or `{branch-name}` unfilled.
 Always specify the working directory context for each command block.
+
+```shell
+# in /symfony-starter
+make reproducer@lts BRANCH={branch-name}
+```
+
+Then add each required Composer dependency:
+
+```shell
+# in /symfony-starter
+make require a={package}
+git add . && git commit -m "require {package}"
+```
+
+End Phase 1 with this reminder:
+> ✅ Phase 1 complete. Once the environment is ready, ask me for **Phase 2** to write the
+> minimal reproduction code.
+
+### 6. Generate Phase 2 — Reproduce (on request only)
+
+Only generate this phase when the user explicitly asks for it.
+
+Provide the minimal application code needed to trigger the bug:
+
+- Controller, form type, template, entity, fixture — only what is strictly necessary
+- Target the exact scenario described in the issue
+- Include the expected result and the actual result to observe
+
+End Phase 2 with this reminder:
+> ✅ Phase 2 complete. If the bug is confirmed, ask me for **Phase 3** to link your local
+> Symfony fork and start investigating the fix.
+
+### 7. Generate Phase 3 — Fix (on request only)
+
+Only generate this phase when the user explicitly asks for it, and only if the bug has been
+confirmed in Phase 2.
+
+Follow `.starter/docs/contrib.md` for all commands and procedures.
 
 #### Rules
 
 - `make monorepo_install` must always be run **before** `make monorepo_link`
-- The branch name must be **identical** in the reproducer and in the symfony fork
+- The branch name must be **identical** in the reproducer and in the Symfony fork
 - If the fork already exists locally, include the update steps (`git switch`, `git pull --rebase upstream`)
 - If the issue targets a bundle or bridge outside the monorepo, follow the bundle workflow from `contrib.md`
+
+Steps to generate:
+
+1. Fork and clone `symfony/symfony` side-by-side with the starter (if not already done)
+2. Create the topic branch in the fork
+3. Add the Docker volume: `make monorepo_volume`
+4. Install and link: `make monorepo_install` then `make monorepo_link`
+5. Run the component tests to verify the setup
+6. Provide the monorepo path to investigate
+7. Remind how to revert: `make monorepo_unlink`
+
+End Phase 3 with this reminder:
+> ✅ Phase 3 ready. Run the tests after each change, then open a Pull Request on
+> `symfony/symfony` targeting the `{branch}` branch.
