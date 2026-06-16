@@ -64,14 +64,15 @@ Extract:
 
 Use the format `{repo}/{issue_id}-{short-kebab-case-description}-sf{version}` **in the reproducer** to distinguish branches across different repositories and Symfony versions:
 
-| Reproducer branch name            | Fork branch name        |
-|-----------------------------------|-------------------------|
-| `symfony/12345-the-issue-sf7.4`   | `12345-the-issue-sf7.4` |
-| `monolog/12345-the-issue-sf7.4`   | `12345-the-issue-sf7.4` |
-| `gotenberg/12345-the-issue-sf7.4` | `12345-the-issue-sf7.4` |
+| Reproducer branch name              | Fork branch name            |
+|-------------------------------------|-----------------------------|
+| `symfony/12345-the-issue-sf7.4`     | `12345-the-issue-sf7.4`     |
+| `symfony/12345-the-issue-sf8.2-dev` | `12345-the-issue-sf8.2-dev` |
+| `monolog/12345-the-issue-sf7.4`     | `12345-the-issue-sf7.4`     |
+| `gotenberg/12345-the-issue-sf7.4`   | `12345-the-issue-sf7.4`     |
 
 - The `{repo}/` prefix is **only used in the reproducer** — it helps distinguish branches when working on multiple repositories simultaneously
-- The `-sf{version}` suffix uses the exact major.minor version (e.g. `sf8.1`, `sf7.4`) — never `sf8.x` or any wildcard form.
+- The `-sf{version}` suffix uses the exact major.minor version (e.g. `sf8.1`, `sf7.4`) — never `sf8.x` or any wildcard form. For dev branches, append `-dev` (e.g. `sf8.2-dev`).
 
 If the target Symfony version **cannot be clearly deduced** from the issue (no explicit version tag, no affected version mentioned, no code reference pointing to a specific branch), **ask the user before going any further**:
 
@@ -104,12 +105,12 @@ Suggest the user rename the current conversation to the reproducer branch name t
 
 ### 3. Select the right reproducer command
 
-| Symfony version | Command                                                    |
-|-----------------|------------------------------------------------------------|
-| 8.2 (dev)       | `SYMFONY_VERSION=8.2 make reproducer BRANCH={branch-name}` |
-| 8.1 (stable)    | `make reproducer BRANCH={branch-name}`                     |
-| 7.4 (LTS)       | `make reproducer@lts BRANCH={branch-name}`                 |
-| 6.4 (legacy)    | `make reproducer@6x BRANCH={branch-name}`                  |
+| Symfony version | Command                                    |
+|-----------------|--------------------------------------------|
+| 8.2 (dev)       | `make reproducer@dev BRANCH={branch-name}` |
+| 8.1 (stable)    | `make reproducer BRANCH={branch-name}`     |
+| 7.4 (LTS)       | `make reproducer@lts BRANCH={branch-name}` |
+| 6.4 (legacy)    | `make reproducer@6x BRANCH={branch-name}`  |
 
 > [!NOTE]
 >
