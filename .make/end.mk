@@ -105,16 +105,23 @@ vars: ## Show key Makefile variables
 
 # —— INTERNAL (HIDDEN) 🚧‍️ ——————————————————————————————————————————————————————————————
 
-PHONY: confirm
+.PHONY: confirm
 confirm: # INTERNAL - Display a confirmation before continuing [y/N]
 	@if [ "$${NO_INTERACTION}" = "true" ]; then exit 0; fi; \
 	printf "$(G)Do you want to continue?$(S) [$(Y)y/N$(S)]: " && read ANSWER && [ $${ANSWER:-N} = y ]
 
-PHONY: runtime
+.PHONY: runtime
 runtime: # INTERNAL - Check if vendor/autoload_runtime.php is ready yet
 	@printf "\nWaiting for Symfony Runtime...\n"
-	@until $(CONTAINER_PHP) ls vendor/autoload_runtime.php >/dev/null 2>&1; do \
-		printf " $(R)⨯$(S) The vendor file is not ready yet. Pause 3 seconds...\n"; \
+	@MAX=10; \
+	ATTEMPTS=0; \
+	until $(CONTAINER_PHP) ls vendor/autoload_runtime.php >/dev/null 2>&1; do \
+		ATTEMPTS=$$((ATTEMPTS + 1)); \
+		printf " $(R)⨯$(S) The vendor file is not ready yet (attempt $$ATTEMPTS/$$MAX). Pause 3 seconds... $(Y)$$($(CONTAINER_PHP) ls vendor/autoload_runtime.php 2>&1)$(S)\n"; \
+		if [ $$ATTEMPTS -ge $$MAX ]; then \
+			printf " $(R)⨯ Symfony Runtime is not ready after $$MAX attempts. Aborting.$(S)\n"; \
+			exit 1; \
+		fi; \
 		sleep 3; \
 	done
 	@printf " $(G)✔$(S) Symfony Runtime is ready!\n"
