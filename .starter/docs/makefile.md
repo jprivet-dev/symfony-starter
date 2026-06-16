@@ -220,6 +220,7 @@ Usage: make <target>
   monorepo_volume                         Add a Docker volume for the Symfony monorepo
   monorepo_link                           Replace vendors with symlinks to the Symfony monorepo
   monorepo_install                        Install external dependencies used during the tests in the Symfony monorepo
+  monorepo_update                         Update Composer dependencies in the Symfony monorepo
 
   monorepo_status                         Show current branch for reproducer and the Symfony monorepo
   monorepo_tests [a=<args>]               Run PHPUnit tests in the Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
@@ -232,6 +233,7 @@ Usage: make <target>
   repo_volume d=<dir>                     Add a Docker volume for a local repository (e.g. make repo_volume d=monolog-bundle)
   repo_add d=<dir>                        Register a path repository in composer.json (e.g. make repo_add d=monolog-bundle)
   repo_install d=<dir>                    Install external dependencies used during the tests (e.g. make repo_install d=monolog-bundle)
+  repo_update d=<dir>                     Update Composer dependencies in a local repository (e.g. make repo_update d=monolog-bundle)
 
   repo_status d=<dir>                     Show current branch for reproducer and a local repository (e.g. make repo_status d=monolog-bundle)
   repo_tests d=<dir> [a=<args>]           Run PHPUnit tests in a local repository (e.g. make repo_tests d=monolog-bundle)
