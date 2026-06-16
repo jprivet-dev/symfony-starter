@@ -86,20 +86,22 @@ Do **not** ask this question if the version is already apparent from:
 
 - In the fork, the branch name is simply `{issue_id}-{short-kebab-case-description}-sf{version}` — no prefix needed
 
-This is a suggestion — the user is free to choose a different name. The only constraint is that the **fork branch name must match the suffix** of the reproducer branch name to avoid confusion. This can be verified at any time with:
-
-```shell
-# in /symfony-starter
-make monorepo_status
-```
-
-Which outputs something like:
-
-```
-REPOSITORY                 BRANCH
-symfony-starter            symfony/12345-the-issue-sf7.4
-symfony                    12345-the-issue-sf7.4
-```
+> [!TIP]
+>
+> This is a suggestion — the user is free to choose a different name. The only constraint is that the **fork branch name must match the suffix** of the reproducer branch name to avoid confusion. This can be verified at any time with:
+>
+> ```shell
+> # in /symfony-starter
+> make monorepo_status
+> ```
+>
+> Which outputs something like:
+>
+> ```
+> REPOSITORY                 BRANCH
+> symfony-starter            symfony/12345-the-issue-sf7.4
+> symfony                    12345-the-issue-sf7.4
+> ```
 
 Suggest the user rename the current conversation to the reproducer branch name to keep things organized.
 
@@ -129,6 +131,10 @@ Before generating any commands, briefly present the four-phase approach so the u
 | 3     | Fix       | link the local Symfony fork, investigate the component, and submit a fix |
 | 4     | Cleanup   | unlink the monorepo and optionally clean up the reproducer               |
 
+> [!NOTE]
+>
+> For a **dev branch** (e.g. `8.2-dev`), Phase 1 also includes connecting the monorepo, since the reproducer runs on an unreleased version that is not yet available on Packagist.
+
 Then generate only Phase 1. Wait for the user's confirmation before moving to the next phase.
 
 ### 5. Generate Phase 1 — Setup
@@ -137,8 +143,12 @@ Generate the reproducer and install only the Composer dependencies needed to rep
 
 Fill in all values from the issue analysis. Never leave placeholders like `MY_TOPIC_BRANCH`, `MY_USERNAME`, or `{branch-name}` unfilled. Always specify the working directory context for each command block.
 
+#### Phase 1 — stable or LTS branch
+
 ```shell
 # in /symfony-starter
+make reproducer BRANCH={branch-name}
+# or for LTS:
 make reproducer@lts BRANCH={branch-name}
 ```
 
@@ -148,6 +158,35 @@ Then add each required Composer dependency:
 # in /symfony-starter
 make require a={package}
 git add . && git commit -m "require {package}"
+```
+
+End Phase 1 with this reminder:
+> ✅ Phase 1 complete. Once the environment is ready, ask me for **Phase 2** to write the minimal reproduction code.
+
+#### Phase 1 — dev branch
+
+For a dev branch, the monorepo must be connected immediately — the reproducer depends on unreleased code that is not available on Packagist.
+
+```shell
+# in /symfony-starter
+make reproducer@dev BRANCH={branch-name}
+```
+
+Then add each required Composer dependency:
+
+```shell
+# in /symfony-starter
+make require a={package}
+git add . && git commit -m "require {package}"
+```
+
+Then fork and clone `symfony/symfony` side-by-side with the starter (if not already done), create the topic branch in the fork, then connect the monorepo:
+
+```shell
+# in /symfony-starter
+make monorepo_volume
+make monorepo_install
+make monorepo_link
 ```
 
 Then verify that both branches are aligned:
@@ -176,6 +215,10 @@ End Phase 2 with this reminder:
 ### 7. Generate Phase 3 — Fix (on request only)
 
 Only generate this phase when the user explicitly asks for it, and only if the bug has been confirmed in Phase 2.
+
+> [!NOTE]
+>
+> For a **dev branch**, the monorepo is already connected since Phase 1. Skip steps 3 and 4 below and go directly to running the tests.
 
 Follow `.starter/docs/contrib.md` for all commands and procedures.
 
