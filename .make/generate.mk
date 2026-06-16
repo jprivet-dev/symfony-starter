@@ -120,6 +120,9 @@ minimalist: ## Generate a minimalist Symfony application with Docker configurati
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application generated!\n\n"
 
+minimalist@dev: ## Generate a minimalist Symfony application with Docker configuration (next dev release)
+	STABILITY=dev $(M) minimalist FLAVOR=minimalist@dev BRANCH=$(BRANCH)
+
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist FLAVOR=minimalist@lts BRANCH=$(BRANCH)
 
@@ -132,6 +135,9 @@ webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker c
 	$(M) health_welcome_to_symfony
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Webapp Symfony application generated!\n\n"
+
+webapp@dev: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (next dev release)
+	STABILITY=dev $(M) webapp FLAVOR=webapp@dev BRANCH=$(BRANCH)
 
 webapp@lts: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) webapp FLAVOR=webapp@lts BRANCH=$(BRANCH)
@@ -209,6 +215,9 @@ endif
 
 reproducer@lts: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (LTS - long-term support release)
 	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) reproducer FLAVOR=reproducer@lts BRANCH=$(BRANCH)
+
+reproducer@dev: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (next dev release)
+	STABILITY=dev $(M) reproducer FLAVOR=reproducer@dev BRANCH=$(BRANCH)
 
 reproducer@6x: ## Generate a minimalist Symfony 6.x application with Docker configuration as a reproducer
 	SYMFONY_VERSION=6.* $(M) reproducer FLAVOR=reproducer@6x BRANCH=$(BRANCH)

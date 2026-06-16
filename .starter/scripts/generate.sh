@@ -30,6 +30,7 @@ LOGS_DIR=".starter/scripts/logs"
 BRANCHES_MINIMALIST=(
     "minimalist"
     "minimalist@lts"
+    "minimalist@dev"
 )
 
 BRANCHES_WEBAPP=(
@@ -39,6 +40,7 @@ BRANCHES_WEBAPP=(
     "webapp@lts"
     "webapp@lts_mariadb"
     "webapp@lts_sqlite"
+    "webapp@dev"
 )
 
 BRANCHES_API=(
@@ -72,6 +74,7 @@ BRANCHES_DEFAULT=(
     "${BRANCHES_MINIMALIST[@]}"
     "webapp"
     "webapp@lts"
+    "webapp@dev"
 )
 
 # --- Select branch list ---

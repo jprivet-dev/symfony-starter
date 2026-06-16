@@ -247,8 +247,10 @@ Usage: make <target>
   clean_app                               Remove all fresh Symfony application files (var/, vendor/, ...)
 
   minimalist                              Generate a minimalist Symfony application with Docker configuration (stable release)
+  minimalist@dev                          Generate a minimalist Symfony application with Docker configuration (next dev release)
   minimalist@lts                          Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
   webapp                                  Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (stable release)
+  webapp@dev                              Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (next dev release)
   webapp@lts                              Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 
   api                                     Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
@@ -259,6 +261,7 @@ Usage: make <target>
 
   reproducer                              Generate a minimalist Symfony application with Docker configuration as a reproducer (stable release)
   reproducer@lts                          Generate a minimalist Symfony application with Docker configuration as a reproducer (LTS - long-term support release)
+  reproducer@dev                          Generate a minimalist Symfony application with Docker configuration as a reproducer (next dev release)
   reproducer@6x                           Generate a minimalist Symfony 6.x application with Docker configuration as a reproducer
 
   update_symfony_docker                   Update the vendored dunglas/symfony-docker snapshot at the root
