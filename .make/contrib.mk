@@ -29,6 +29,9 @@ monorepo_link: _monorepo ## Replace vendors with symlinks to the Symfony monorep
 monorepo_install: ## Install external dependencies used during the tests in the Symfony monorepo
 	$(M) repo_install d=$(SYMFONY_MONOREPO_DIR)
 
+monorepo_update: ## Update Composer dependencies in the Symfony monorepo
+	$(M) repo_update d=$(SYMFONY_MONOREPO_DIR)
+
 ##
 
 monorepo_status: ## Show current branch for reproducer and the Symfony monorepo
@@ -72,6 +75,11 @@ repo_install: _repo repo_status ## Install external dependencies used during the
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@printf "🧙 Install Composer packages in $(Y)/$(d)$(S)\n"
 	$(COMPOSER) install --working-dir=/$(d)
+
+repo_update: _repo repo_status ## Update Composer dependencies in a local repository | d=<dir> | d=monolog-bundle
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	@printf "🧙 Update Composer packages in $(Y)/$(d)$(S)\n"
+	$(COMPOSER) update --working-dir=/$(d)
 
 ##
 
