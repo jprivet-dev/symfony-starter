@@ -143,6 +143,10 @@ Generate the reproducer and install only the Composer dependencies needed to rep
 
 Fill in all values from the issue analysis. Never leave placeholders like `MY_TOPIC_BRANCH`, `MY_USERNAME`, or `{branch-name}` unfilled. Always specify the working directory context for each command block.
 
+> [!TIP]
+>
+> The reproducer comes with [MakerBundle](https://symfony.com/bundles/SymfonyMakerBundle/current/index.html) pre-installed. You can use `make console c=make:controller`, `make console c=make:form`, `make console c=make:entity`, etc. to scaffold code quickly during Phase 2.
+
 #### Phase 1 — stable or LTS branch
 
 ```shell
@@ -161,6 +165,7 @@ git add . && git commit -m "require {package}"
 ```
 
 End Phase 1 with this reminder:
+
 > ✅ Phase 1 complete. Once the environment is ready, ask me for **Phase 2** to write the minimal reproduction code.
 
 #### Phase 1 — dev branch
@@ -208,8 +213,10 @@ Provide the minimal application code needed to trigger the bug:
 - Controller, form type, template, entity, fixture — only what is strictly necessary
 - Target the exact scenario described in the issue
 - Include the expected result and the actual result to observe
+- Use MakerBundle commands (`make console c=make:controller`, `make console c=make:form`, etc.) when possible to speed up scaffolding
 
 End Phase 2 with this reminder:
+
 > ✅ Phase 2 complete. If the bug is confirmed, ask me for **Phase 3** to link your local Symfony fork and start investigating the fix.
 
 ### 7. Generate Phase 3 — Fix (on request only)
@@ -240,6 +247,7 @@ Steps to generate:
 7. Remind how to revert: `make monorepo_unlink`
 
 End Phase 3 with this reminder:
+
 > ✅ Phase 3 ready. Run the tests after each change, then open a Pull Request on `symfony/symfony` targeting the `{branch}` branch. Once your PR is submitted, ask me for **Phase 4** to clean up the environment.
 
 ### 8. Generate Phase 4 — Cleanup (on request only)
@@ -257,4 +265,5 @@ make clean_app
 ```
 
 End Phase 4 with this reminder:
+
 > ✅ Phase 4 complete. The environment is clean and ready for the next issue.
