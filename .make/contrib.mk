@@ -38,7 +38,7 @@ monorepo_status: ## Show current branch for reproducer and the Symfony monorepo
 	$(M) repo_status d=$(SYMFONY_MONOREPO_DIR) a=$(a)
 
 monorepo_tests: ## Run PHPUnit tests in the Symfony monorepo | [a=<args>] | a=/symfony/src/Symfony/Bundle/FrameworkBundle
-	$(M) repo_tests d=$(SYMFONY_MONOREPO_DIR) a=$(a)
+	$(M) repo_tests d=$(SYMFONY_MONOREPO_DIR) a="$(a)"
 
 monorepo_tests_clean: ## Clean PHPUnit cache and temporary files in the Symfony monorepo
 	$(M) repo_tests_clean d=$(SYMFONY_MONOREPO_DIR)
