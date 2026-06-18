@@ -112,7 +112,7 @@ repo_tests rt: repo_tests_clean ## Run PHPUnit tests in a local repository | d=<
 		echo "$(R)✘ PHPUnit configuration file not found in /$(d) inside the container$(S)"; \
 		exit 1; \
 	fi; \
-	$(CONTAINER_PHP) $$PHPUNIT -c $$CONFIG --display-skipped $(a)
+	$(CONTAINER_PHP) $$PHPUNIT -c $$CONFIG $(a)
 
 repo_tests_clean: _repo repo_status ## Clean PHPUnit cache and temporary files in a local repository | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
