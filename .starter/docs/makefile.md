@@ -271,6 +271,8 @@ Usage: make <target>
   clone_symfony_demo                      Clone and extract https://github.com/symfony/demo files at the root
 
 ▸ COMPLETE INSTALLATION
+  require_co [a=<args>]                   Add required packages, then commit (e.g. make require_co a="symfony/http-client")
+
   require_api                             Install API Platform - https://api-platform.com/docs/symfony/
   require_easy_admin                      Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
   require_webapp                          Install a web application - https://symfony.com/doc/current/setup.html

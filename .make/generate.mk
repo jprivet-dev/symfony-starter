@@ -260,6 +260,12 @@ endif
 
 ## ▸ COMPLETE INSTALLATION
 
+require_co: ## Add required packages, then commit | [a=<args>] | a="symfony/http-client"
+	$(M) require a="$(a)"
+	$(M) co m="composer require $(a)"
+
+##
+
 require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
 	$(C) require api
 	$(M) co m="composer require api"

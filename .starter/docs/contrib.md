@@ -40,8 +40,7 @@ make reproducer@6x
 # in /symfony-starter
 
 # e.g. composer require symfony/http-client (via docker compose)
-make require a=symfony/http-client
-g add . && g commit -m "require symfony/http-client"
+make require_co a=symfony/http-client
 ```
 
 #### 2. Reproduce the bug
@@ -160,8 +159,7 @@ the `symfony/symfony` monorepo.
 
 ```shell
 # in /symfony-starter
-make require a="symfony/monolog-bundle"
-g add . && g commit -m "require symfony/monolog-bundle"
+make require_co a="symfony/monolog-bundle"
 ```
 
 #### 2. Reproduce the bug
@@ -210,8 +208,7 @@ git switch -c MY_TOPIC_BRANCH 3.x
 # in /symfony-starter
 make repo_volume d=monolog-bundle
 make repo_add d=monolog-bundle
-make require a="symfony/monolog-bundle:4.x-dev --prefer-source"
-git add . && git commit -m "require symfony/monolog-bundle:4.x-dev"
+make require_co a="symfony/monolog-bundle:4.x-dev --prefer-source"
 ```
 
 > [!TIP]
@@ -264,7 +261,7 @@ flowchart TD
   CHOICE -->|symfony/symfony| MP1
   CHOICE -->|Bundle or Bridge| BP1
 %% ── MONOREPO WORKFLOW ──────────────────────────────────────
-  MP1["PHASE 1 — REPRODUCE\n─────────────────────\n$ make require a=symfony/http-client\n\nin /symfony-starter"]
+  MP1["PHASE 1 — REPRODUCE\n─────────────────────\n$ make require_co a=symfony/http-client\n\nin /symfony-starter"]
   MP1 --> MP2["PHASE 2 — CONTRIBUTE\n1. FORK & CLONE\n─────────────────────\n$ git clone MY_USERNAME/symfony.git\n$ git remote add upstream\n\nin ./"]
   MP2 --> M2["2. CREATE TOPIC BRANCH\n─────────────────────\n$ git switch 8.x\n$ git pull --rebase upstream 8.x\n$ git switch -c MY_TOPIC_BRANCH 8.x\n\nin /symfony"]
   M2 --> M3["3. ADD DOCKER VOLUME\n─────────────────────\n$ make monorepo_volume\n\nin /symfony-starter"]
@@ -272,10 +269,10 @@ flowchart TD
   M4 --> M5["5. RUN TESTS\n─────────────────────\n$ make monorepo_tests a=...\n\nin /symfony-starter"]
   M5 --> M6(["6. REVERT\n$ make monorepo_unlink"])
 %% ── BUNDLE WORKFLOW ────────────────────────────────────────
-  BP1["PHASE 1 — REPRODUCE\n─────────────────────\n$ make require a=symfony/monolog-bundle\n\nin /symfony-starter"]
+  BP1["PHASE 1 — REPRODUCE\n─────────────────────\n$ make require_co a=symfony/monolog-bundle\n\nin /symfony-starter"]
   BP1 --> BP2["PHASE 2 — CONTRIBUTE\n1. FORK & CLONE\n─────────────────────\n$ git clone MY_USERNAME/monolog-bundle.git\n$ git remote add upstream\n\nin ./"]
   BP2 --> B2["2. CREATE TOPIC BRANCH\n─────────────────────\n$ git switch 4.x\n$ git pull --rebase upstream 4.x\n$ git switch -c MY_TOPIC_BRANCH 4.x\n\nin /monolog-bundle"]
-  B2 --> B3["3. ADD DOCKER VOLUME, REGISTER REPO & LINK\n─────────────────────\n$ make repo_volume d=monolog-bundle\n$ make repo_add d=monolog-bundle\n$ make require a=monolog-bundle:4.x-dev\n\nin /symfony-starter"]
+  B2 --> B3["3. ADD DOCKER VOLUME, REGISTER REPO & LINK\n─────────────────────\n$ make repo_volume d=monolog-bundle\n$ make repo_add d=monolog-bundle\n$ make require_co a=monolog-bundle:4.x-dev\n\nin /symfony-starter"]
   B3 --> B4["4. INSTALL DEPENDENCIES\n─────────────────────\n$ make repo_install d=monolog-bundle\n\nin /symfony-starter"]
   B4 --> B5["5. RUN TESTS\n─────────────────────\n$ make repo_tests d=monolog-bundle\n\nin /symfony-starter"]
   B5 --> B6(["6. REVERT\n$ make repo_remove d=monolog-bundle\n$ make update a=symfony/monolog-bundle"])
