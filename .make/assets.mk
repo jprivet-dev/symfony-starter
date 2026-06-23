@@ -1,7 +1,7 @@
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 
-.PHONY: assets
-assets: _assets ## Generate all assets
+.PHONY: assets a
+assets a: _assets ## Generate all assets
 	@printf "\n$(Y)--- Assets (env: $(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
 	$(MAKE) importmap_install
@@ -13,6 +13,7 @@ ifneq ($(wildcard $(VENDOR_TAILWIND)),)
 	$(MAKE) tailwind_build
 endif
 endif
+	$(MAKE) cache_clear
 
 ##
 
@@ -46,5 +47,5 @@ importmap_update: _assets ## Update JavaScript packages to their latest versions
 	$(CONSOLE) importmap:update
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_TAILWIND))),)
-include make/assets_tailwind.mk
+include .make/assets_tailwind.mk
 endif

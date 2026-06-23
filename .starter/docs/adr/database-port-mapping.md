@@ -1,6 +1,6 @@
 # Database: port mapping strategy
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -46,6 +46,8 @@ Provide a dedicated block file for each database engine that includes the correc
 
 ## Decision outcome
 
+> [!NOTE]
+>
 > **Option 3 is chosen:** Use `.starter/block/<db>/` files to manage port mapping per database engine.
 
 This approach ensures that:
@@ -58,4 +60,4 @@ The `.starter/block/` directory contains one folder per database engine (`postgr
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

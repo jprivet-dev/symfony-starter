@@ -1,6 +1,6 @@
 # Testing overview
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -86,4 +86,4 @@ class SmokeTest extends WebTestCase
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

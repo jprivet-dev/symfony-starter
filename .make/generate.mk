@@ -1,6 +1,6 @@
 ## — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
-##   (to delete this section, delete make/generate.mk)
+##   (to delete this section, delete .make/generate.mk)
 ##
 
 # This GENERATE block, with these following targets and variables,
@@ -84,22 +84,23 @@ compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make bui
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(M) co m="use DATABASE_URL var in compose.yaml"
 
-suggest_orphan_branch: # INTERNAL - Suggest creating a new orphan branch before generation | FLAVOR=<flavor>
+orphan_branch: # INTERNAL - Create a new orphan branch before generation | FLAVOR=<flavor>
 	@printf "\n$(Y)--- Branch ---$(S)\n"
 	@printf " $(Y)›$(S) Current branch: $(G)$$(git rev-parse --abbrev-ref HEAD)$(S)\n"
-	@printf " $(Y)›$(S) New orphan branch name [$(G)$(FLAVOR)$(S)] — starts with a single \"First commit\" ($(Y)Enter$(S) to accept, $(Y)n$(S) to skip): "; \
-	if [ "$${NO_INTERACTION}" != "true" ]; then \
-		read BRANCH_NAME; \
-	fi; \
-	if [ "$$BRANCH_NAME" = "n" ] || [ "$$BRANCH_NAME" = "N" ]; then \
-		printf " $(Y)›$(S) Skipped. Staying on current branch.\n"; \
+	@if [ -n "$(BRANCH)" ]; then \
+		BRANCH_NAME="$(BRANCH)"; \
+		printf " $(Y)›$(S) Using specified orphan branch name: $(G)$$BRANCH_NAME$(S)\n"; \
+	elif [ "$${NO_INTERACTION}" != "true" ]; then \
+		printf " $(Y)›$(S) New orphan branch name [$(G)$(FLAVOR)$(S)]: "; \
+		read INPUT; \
+		BRANCH_NAME=$${INPUT:-$(FLAVOR)}; \
 	else \
-		BRANCH_NAME=$${BRANCH_NAME:-$(FLAVOR)}; \
-		git branch -D "$$BRANCH_NAME" 2>/dev/null || true; \
-		git checkout --orphan "$$BRANCH_NAME"; \
-		$(M) co m="Initial commit"; \
-		printf " $(G)✔$(S) Orphan branch $(G)$$BRANCH_NAME$(S) created with a fresh history\n"; \
-	fi
+		BRANCH_NAME="$(FLAVOR)"; \
+	fi; \
+	git branch -D "$$BRANCH_NAME" 2>/dev/null || true; \
+	git checkout --orphan "$$BRANCH_NAME"; \
+	$(M) co m="Initial commit"; \
+	printf " $(G)✔$(S) Orphan branch $(G)$$BRANCH_NAME$(S) created with a fresh history\n"
 
 #
 
@@ -114,17 +115,20 @@ clean_app: confirm ## Remove all fresh Symfony application files (var/, vendor/,
 
 .PHONY: minimalist
 minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),minimalist)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),minimalist) BRANCH=$(BRANCH)
 	$(M) skeleton
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application generated!\n\n"
 
+minimalist@dev: ## Generate a minimalist Symfony application with Docker configuration (next dev release)
+	STABILITY=dev $(M) minimalist FLAVOR=minimalist@dev BRANCH=$(BRANCH)
+
 minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist BRANCH=minimalist@lts
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist FLAVOR=minimalist@lts BRANCH=$(BRANCH)
 
 .PHONY: webapp
 webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (stable release)
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),webapp)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),webapp) BRANCH=$(BRANCH)
 	$(M) skeleton
 	$(M) require_webapp
 	$(M) permissions images info
@@ -132,14 +136,17 @@ webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker c
 	$(PRINT_EXECUTION_TIME)
 	@printf " $(G)🎉 Success!$(S) Webapp Symfony application generated!\n\n"
 
+webapp@dev: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (next dev release)
+	STABILITY=dev $(M) webapp FLAVOR=webapp@dev BRANCH=$(BRANCH)
+
 webapp@lts: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) webapp BRANCH=$(or $(BRANCH),webapp@lts)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) webapp FLAVOR=webapp@lts BRANCH=$(BRANCH)
 
 ##
 
 .PHONY: api
 api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),api)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),api) BRANCH=$(BRANCH)
 	$(M) skeleton
 	$(M) require_orm
 	$(M) require_api
@@ -149,11 +156,11 @@ api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker config
 	@printf " $(G)🎉 Success!$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
 
 api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api BRANCH=api@lts
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api FLAVOR=api@lts BRANCH=$(BRANCH)
 
 .PHONY: demo
 demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),demo)
+	$(M) orphan_branch FLAVOR=demo BRANCH=$(BRANCH)
 	$(M) clone_symfony_demo
 	$(M) build_force_start
 	git restore .env.local.demo
@@ -171,7 +178,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
 
 easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),easy_admin)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),easy_admin) BRANCH=$(BRANCH)
 	$(M) skeleton
 	$(M) require_orm
 	$(M) require_easy_admin
@@ -187,29 +194,33 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	@printf " $(G)🎉 Success!$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
 
 easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) easy_admin BRANCH=easy_admin@lts
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) easy_admin FLAVOR=easy_admin@lts BRANCH=$(BRANCH)
 
 ##
 
-.PHONY: contrib
-contrib: ## Generate a minimalist Symfony application with Docker configuration for contribution (stable release)
-	$(M) suggest_orphan_branch FLAVOR=$(or $(BRANCH),contrib)
+.PHONY: reproducer
+reproducer: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (stable release)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),reproducer) BRANCH=$(BRANCH)
 ifneq ($(filter 6.%,$(SYMFONY_VERSION)),)
 	git apply .starter/patch/symfony6-frankenphp.patch
 	git commit -am "🤖 [starter] fix: restore Symfony 6 compatibility with FrankenPHP worker mode"
 endif
 	$(M) skeleton
-	$(M) contrib_dockerfile
+	$(M) require_maker_bundle
+	$(M) reproducer_dockerfile
 	$(M) permissions images info
 	$(M) health_welcome_to_symfony
 	$(PRINT_EXECUTION_TIME)
-	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application (for contribution) generated!\n\n"
+	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application (as a reproducer) generated!\n\n"
 
-contrib@lts: ## Generate a minimalist Symfony application with Docker configuration for contribution (LTS - long-term support release)
-	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) contrib BRANCH=$(or $(BRANCH),contrib@lts)
+reproducer@lts: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) reproducer FLAVOR=reproducer@lts BRANCH=$(BRANCH)
 
-contrib@6x: ## Generate a minimalist Symfony 6.x application with Docker configuration for contribution
-	SYMFONY_VERSION=6.* $(M) contrib BRANCH=$(or $(BRANCH),contrib@6x)
+reproducer@dev: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (next dev release)
+	STABILITY=dev $(M) reproducer FLAVOR=reproducer@dev BRANCH=$(BRANCH)
+
+reproducer@6x: ## Generate a minimalist Symfony 6.x application with Docker configuration as a reproducer
+	SYMFONY_VERSION=6.* $(M) reproducer FLAVOR=reproducer@6x BRANCH=$(BRANCH)
 
 ##
 
@@ -249,6 +260,12 @@ endif
 
 ## ▸ COMPLETE INSTALLATION
 
+require_co: ## Add required packages, then commit | [a=<args>] | a="symfony/http-client"
+	$(M) require a="$(a)"
+	$(M) co m="composer require $(a)"
+
+##
+
 require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
 	$(C) require api
 	$(M) co m="composer require api"
@@ -256,10 +273,6 @@ require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
 require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
 	$(C) require easycorp/easyadmin-bundle
 	$(M) co m="composer require easycorp/easyadmin-bundle"
-
-require_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
-	$(C) require symfony/asset-mapper symfony/stimulus-bundle
-	$(M) co m="composer require symfony/asset-mapper symfony/stimulus-bundle"
 
 require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
 	# FIX: Ban version 6 for the moment to prevent Symfony PropertyInfo crash
@@ -303,6 +316,18 @@ require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.
 require_translation: ## Install Translation - https://symfony.com/doc/current/translation.html
 	$(C) require symfony/translation
 	$(M) co m="Install Translation"
+
+require_ux_live_component: ## Install Live Component - https://ux.symfony.com/
+	$(C) symfony/ux-live-component
+	$(M) co m="Install Live Component"
+
+require_ux_stimulus: ## Install StimulusBundle - https://ux.symfony.com/
+	$(C) require symfony/asset-mapper symfony/stimulus-bundle
+	$(M) co m="Install StimulusBundle"
+
+require_ux_twig_component: ## Install Twig Component - https://ux.symfony.com/
+	$(C) symfony/ux-twig-component
+	$(M) co m="Install Twig Component"
 
 ##
 
@@ -363,7 +388,7 @@ health: ## Check the website and database connection (via Doctrine) | [c=<status
 			EXIT_CODE=1; \
 		fi; \
 	fi; \
-	if [ ! -e "$(VENDOR_DOCTRINE)" ]; then \
+	if [ ! -e "$(VENDOR_DOCTRINE_ORM)" ]; then \
 		printf " $(Y)› Database connection skipped (Doctrine not installed)$(S)\n"; \
 	else \
 		if $(CONSOLE) dbal:run-sql "SELECT 1" > /dev/null 2>&1; then \

@@ -1,6 +1,6 @@
 # Makefile - Discover all commands
 
-[⬅️ README](README.md)
+[⬅️ STARTER](STARTER.md)
 
 ---
 
@@ -165,7 +165,7 @@ Usage: make <target>
   twigcsfixer_lint                        Check Twig style
 
 — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
-  assets                                  Generate all assets
+  assets                               a  Generate all assets
 
   asset_map_clear                         Clear all assets in the public output directory
   asset_map_compile                       Compile all mapped assets and write them to the final public output directory
@@ -212,29 +212,31 @@ Usage: make <target>
 
 — SYMFONY CONTRIBUTION 🔗 ——————————————————————————————————————————————————
 
-  (to delete this section, delete make/contrib.mk)
+  (to delete this section, delete .make/contrib.mk)
 
-  contrib_dockerfile                      Inject PHP extensions required for contribution into Dockerfile (xsl, etc.)
+  reproducer_dockerfile                   Add the necessary PHP extensions for the reproducer in the Dockerfile (xsl, etc.)
 
 ▸ SYMFONY MONOREPO
   monorepo_volume                         Add a Docker volume for the Symfony monorepo
-  monorepo_link                           Replace vendors with symlinks to the Symfony monorepo
+  monorepo_link                        ml Replace vendors with symlinks to the Symfony monorepo
   monorepo_install                        Install external dependencies used during the tests in the Symfony monorepo
+  monorepo_update                         Update Composer dependencies in the Symfony monorepo
 
-  monorepo_status                         Show current branch for reproducer and the Symfony monorepo
-  monorepo_tests [a=<args>]               Run PHPUnit tests in the Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
+  monorepo_status                      ms Show current branch for reproducer and the Symfony monorepo
+  monorepo_tests [a=<args>]            mt Run PHPUnit tests in the Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
   monorepo_tests_clean                    Clean PHPUnit cache and temporary files in the Symfony monorepo
 
   monorepo_clean                          Remove vendor and lock file from the Symfony monorepo
-  monorepo_unlink                         Restore original vendors (rollback symlinks to the Symfony monorepo)
+  monorepo_unlink                      mu Restore original vendors (rollback symlinks to the Symfony monorepo)
 
 ▸ OTHER REPO
   repo_volume d=<dir>                     Add a Docker volume for a local repository (e.g. make repo_volume d=monolog-bundle)
   repo_add d=<dir>                        Register a path repository in composer.json (e.g. make repo_add d=monolog-bundle)
   repo_install d=<dir>                    Install external dependencies used during the tests (e.g. make repo_install d=monolog-bundle)
+  repo_update d=<dir>                     Update Composer dependencies in a local repository (e.g. make repo_update d=monolog-bundle)
 
-  repo_status d=<dir>                     Show current branch for reproducer and a local repository (e.g. make repo_status d=monolog-bundle)
-  repo_tests d=<dir> [a=<args>]           Run PHPUnit tests in a local repository (e.g. make repo_tests d=monolog-bundle)
+  repo_status d=<dir>                  rs Show current branch for reproducer and a local repository (e.g. make repo_status d=monolog-bundle)
+  repo_tests d=<dir> [a=<args>]        rt Run PHPUnit tests in a local repository (e.g. make repo_tests d=monolog-bundle)
   repo_tests_clean d=<dir>                Clean PHPUnit cache and temporary files in a local repository (e.g. make repo_tests_clean d=monolog-bundle)
 
   repo_remove d=<dir>                     Unregister a path repository from composer.json (e.g. make repo_remove d=monolog-bundle)
@@ -242,13 +244,15 @@ Usage: make <target>
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
-  (to delete this section, delete make/generate.mk)
+  (to delete this section, delete .make/generate.mk)
 
   clean_app                               Remove all fresh Symfony application files (var/, vendor/, ...)
 
   minimalist                              Generate a minimalist Symfony application with Docker configuration (stable release)
+  minimalist@dev                          Generate a minimalist Symfony application with Docker configuration (next dev release)
   minimalist@lts                          Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
   webapp                                  Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (stable release)
+  webapp@dev                              Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (next dev release)
   webapp@lts                              Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 
   api                                     Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
@@ -257,18 +261,20 @@ Usage: make <target>
   easy_admin                              Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
   easy_admin@lts                          Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
 
-  contrib                                 Generate a minimalist Symfony application with Docker configuration for contribution (stable release)
-  contrib@lts                             Generate a minimalist Symfony application with Docker configuration for contribution (LTS - long-term support release)
-  contrib@6x                              Generate a minimalist Symfony 6.x application with Docker configuration for contribution
+  reproducer                              Generate a minimalist Symfony application with Docker configuration as a reproducer (stable release)
+  reproducer@lts                          Generate a minimalist Symfony application with Docker configuration as a reproducer (LTS - long-term support release)
+  reproducer@dev                          Generate a minimalist Symfony application with Docker configuration as a reproducer (next dev release)
+  reproducer@6x                           Generate a minimalist Symfony 6.x application with Docker configuration as a reproducer
 
   update_symfony_docker                   Update the vendored dunglas/symfony-docker snapshot at the root
   skeleton                                Install symfony/skeleton from the versioned dunglas/symfony-docker files at the root
   clone_symfony_demo                      Clone and extract https://github.com/symfony/demo files at the root
 
 ▸ COMPLETE INSTALLATION
+  require_co [a=<args>]                   Add required packages, then commit (e.g. make require_co a="symfony/http-client")
+
   require_api                             Install API Platform - https://api-platform.com/docs/symfony/
   require_easy_admin                      Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
-  require_stimulus                        Install StimulusBundle - https://ux.symfony.com/
   require_webapp                          Install a web application - https://symfony.com/doc/current/setup.html
 
   require_asset_mapper                    Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
@@ -277,6 +283,9 @@ Usage: make <target>
   require_profiler                        Install Profiler - https://symfony.com/doc/current/profiler.html
   require_test_pack                       Install PHPUnit - https://symfony.com/doc/current/testing.html
   require_translation                     Install Translation - https://symfony.com/doc/current/translation.html
+  require_ux_live_component               Install Live Component - https://ux.symfony.com/
+  require_ux_stimulus                     Install StimulusBundle - https://ux.symfony.com/
+  require_ux_twig_component               Install Twig Component - https://ux.symfony.com/
 
   require_phpcsfixer                      Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
   require_phpmd                           Install PHP Mess Detector - https://phpmd.org/
@@ -306,5 +315,5 @@ Usage: make <target>
 
 ---
 
-[⬅️ README](README.md)
+[⬅️ STARTER](STARTER.md)
 

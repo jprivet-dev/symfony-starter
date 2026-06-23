@@ -1,6 +1,6 @@
 # PhpStorm - Connect it to the running PostgreSQL container
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -16,6 +16,8 @@ Run the following command to display the connection details for your IDE:
 make phpstorm_config
 ```
 
+> [!NOTE]
+>
 > See [Database: port mapping strategy](adr/database-port-mapping.md) to understand why the port mapping is configured the way it is.
 
 ## Connect PhpStorm
@@ -23,11 +25,11 @@ make phpstorm_config
 1. Open the **Database** tool window (`View > Tool Windows > Database`).
 2. Click the `+` icon in the toolbar, navigate to **Data Source**, and select **PostgreSQL**.
 3. In the right pane, use the following settings under the **General** tab:
-   * **Host**: `127.0.0.1`
-   * **Port**: `5432`
-   * **User**: `app`
-   * **Password**: `!ChangeMe!`
-   * **Database**: `app`
+  * **Host**: `127.0.0.1`
+  * **Port**: `5432`
+  * **User**: `app`
+  * **Password**: `!ChangeMe!`
+  * **Database**: `app`
 4. Click **Test Connection** to confirm the setup. You should see a **Succeeded** message.
 5. Click `OK` or `Apply` to validate the connection.
 
@@ -38,4 +40,4 @@ make phpstorm_config
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

@@ -1,6 +1,6 @@
 # PHP CS Fixer
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -16,6 +16,8 @@ composer require --dev friendsofphp/php-cs-fixer
 
 ## Configure PhpStorm
 
+> [!IMPORTANT]
+>
 > Prerequisite : [Configure a remote PHP interpreter (Docker)](../remote-php-interpreter.md)
 
 * Go on **Settings (Ctrl+Alt+S) > PHP > Quality Tools**.
@@ -34,4 +36,4 @@ composer require --dev friendsofphp/php-cs-fixer
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

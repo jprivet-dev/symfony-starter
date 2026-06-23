@@ -1,6 +1,6 @@
 # PhpStorm - Configure inspections
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)
 
 ---
 
@@ -52,4 +52,4 @@ private function readCsv(string $filePath): iterable
 
 ---
 
-[⬅️ README](../README.md)
+[⬅️ STARTER](../STARTER.md)

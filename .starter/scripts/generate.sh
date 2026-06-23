@@ -1,11 +1,17 @@
 #!/bin/bash
 # ------------------------------------------------------------------
 # Script: generate.sh
-# Description: Generate all Symfony Starter flavors into their
+# Description: Generate Symfony Starter flavors into their
 #              respective branches.
 #
 # Usage:
-#   bash .starter/scripts/generate.sh
+#   bash .starter/scripts/generate.sh                # default: minimalist + webapp
+#   bash .starter/scripts/generate.sh --all          # all branches
+#   bash .starter/scripts/generate.sh --minimalist   # minimalist branches only
+#   bash .starter/scripts/generate.sh --webapp       # webapp branches only
+#   bash .starter/scripts/generate.sh --api          # api branches only
+#   bash .starter/scripts/generate.sh --easy-admin   # easy_admin branches only
+#   bash .starter/scripts/generate.sh --demo         # demo branch only
 #
 # The script starts from the current branch (your work branch).
 # Make sure you are on the right branch before running this script.
@@ -21,22 +27,88 @@ WORK_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 START_TOTAL=$(date +%s)
 LOGS_DIR=".starter/scripts/logs"
 
-BRANCHES=(
+BRANCHES_MINIMALIST=(
     "minimalist"
     "minimalist@lts"
+    "minimalist@dev"
+)
+
+BRANCHES_WEBAPP=(
     "webapp"
     "webapp@mariadb"
     "webapp@sqlite"
     "webapp@lts"
     "webapp@lts_mariadb"
     "webapp@lts_sqlite"
+    "webapp@dev"
+)
+
+BRANCHES_API=(
     "api"
     "api@lts"
+)
+
+BRANCHES_EASY_ADMIN=(
     "easy_admin"
     "easy_admin@lts"
-    "demo"
-    "contrib@6x"
 )
+
+BRANCHES_DEMO=(
+    "demo"
+)
+
+BRANCHES_REPRODUCER=(
+    "reproducer@6x"
+)
+
+BRANCHES_ALL=(
+    "${BRANCHES_MINIMALIST[@]}"
+    "${BRANCHES_WEBAPP[@]}"
+    "${BRANCHES_API[@]}"
+    "${BRANCHES_EASY_ADMIN[@]}"
+    "${BRANCHES_DEMO[@]}"
+    "${BRANCHES_REPRODUCER[@]}"
+)
+
+BRANCHES_DEFAULT=(
+    "${BRANCHES_MINIMALIST[@]}"
+    "webapp"
+    "webapp@lts"
+    "webapp@dev"
+)
+
+# --- Select branch list ---
+
+case "$1" in
+--all)
+    BRANCHES=("${BRANCHES_ALL[@]}")
+    MODE="all"
+    ;;
+--minimalist)
+    BRANCHES=("${BRANCHES_MINIMALIST[@]}")
+    MODE="minimalist"
+    ;;
+--webapp)
+    BRANCHES=("${BRANCHES_WEBAPP[@]}")
+    MODE="webapp"
+    ;;
+--api)
+    BRANCHES=("${BRANCHES_API[@]}")
+    MODE="api"
+    ;;
+--easy-admin)
+    BRANCHES=("${BRANCHES_EASY_ADMIN[@]}")
+    MODE="easy-admin"
+    ;;
+--demo)
+    BRANCHES=("${BRANCHES_DEMO[@]}")
+    MODE="demo"
+    ;;
+*)
+    BRANCHES=("${BRANCHES_DEFAULT[@]}")
+    MODE="default"
+    ;;
+esac
 
 # ------------------------------------------------------------------
 # Flavor functions — one per branch
@@ -128,10 +200,10 @@ generate_flavor_demo() {
     NO_INTERACTION=true make demo
 }
 
-generate_flavor_contrib_6x() {
+generate_flavor_reproducer_6x() {
     git switch "${WORK_BRANCH}"
     NO_INTERACTION=true make clean_app
-    NO_INTERACTION=true make contrib@6x
+    NO_INTERACTION=true make reproducer@6x
 }
 
 # ------------------------------------------------------------------
@@ -155,7 +227,8 @@ generate_flavor() {
         return
     fi
 
-    if ${FUNC} >"${LOG_FILE}" 2>&1; then
+    ${FUNC} 2>&1 | sed 's/\x1b\[[0-9;]*m//g' >"${LOG_FILE}"
+    if [ "${PIPESTATUS[0]}" -eq 0 ]; then
         RESULTS["${BRANCH}"]="ok"
         printf "\n ${G}✔${S} ${BRANCH} generated successfully — see ${Y}${LOG_FILE}${S}\n"
     else
@@ -172,8 +245,9 @@ HAS_ERROR=0
 
 mkdir -p "${LOGS_DIR}"
 
-printf "\n${Y}--- Symfony Starter - Generate All ---${S}\n"
-printf " ${Y}›${S} Work branch: ${G}${WORK_BRANCH}${S}\n\n"
+printf "\n${Y}--- Symfony Starter - Generate ---${S}\n"
+printf " ${Y}›${S} Work branch: ${G}${WORK_BRANCH}${S}\n"
+printf " ${Y}›${S} Mode: ${G}${MODE}${S}\n\n"
 
 # --- Delete all target branches ---
 
@@ -203,7 +277,7 @@ MINUTES_TOTAL=$((DURATION_TOTAL / 60))
 SECONDS_TOTAL=$((DURATION_TOTAL % 60))
 
 printf "\n${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n"
-printf " ${Y}Report${S}\n"
+printf " ${Y}Report${S} — mode: ${G}${MODE}${S}\n"
 printf "${Y}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${S}\n\n"
 
 for BRANCH in "${BRANCHES[@]}"; do

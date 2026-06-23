@@ -5,7 +5,7 @@ ifeq ($(wildcard $(VENDOR_ASSETS)),)
 endif
 
 _doctrine: # INTERNAL
-ifeq ($(wildcard $(VENDOR_DOCTRINE)),)
+ifeq ($(wildcard $(VENDOR_DOCTRINE_ORM)),)
 	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine$(S) with $(G)make require_orm$(S)\n"
 	@exit 1
 endif
