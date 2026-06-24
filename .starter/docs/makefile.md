@@ -218,16 +218,18 @@ Usage: make <target>
 
 ▸ SYMFONY MONOREPO
   monorepo_volume                         Add a Docker volume for the Symfony monorepo
-  monorepo_link                        ml Replace vendors with symlinks to the Symfony monorepo
   monorepo_install                        Install external dependencies used during the tests in the Symfony monorepo
   monorepo_update                         Update Composer dependencies in the Symfony monorepo
+
+  monorepo_link                           Replace vendors with symlinks to the Symfony monorepo
+  monorepo_unlink                         Restore original vendors (rollback symlinks to the Symfony monorepo)
+  link                                    monorepo_link alias
+  unlink                                  monorepo_unlink alias
 
   monorepo_status                      ms Show current branch for reproducer and the Symfony monorepo
   monorepo_tests [a=<args>]            mt Run PHPUnit tests in the Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
   monorepo_tests_clean                    Clean PHPUnit cache and temporary files in the Symfony monorepo
-
   monorepo_clean                          Remove vendor and lock file from the Symfony monorepo
-  monorepo_unlink                      mu Restore original vendors (rollback symlinks to the Symfony monorepo)
 
 ▸ OTHER REPO
   repo_volume d=<dir>                     Add a Docker volume for a local repository (e.g. make repo_volume d=monolog-bundle)

@@ -19,42 +19,44 @@ reproducer_dockerfile: ## Add the necessary PHP extensions for the reproducer in
 _monorepo: # INTERNAL
 	$(M) _repo d=$(SYMFONY_MONOREPO_DIR)
 
-monorepo_volume: ## Add a Docker volume for the Symfony monorepo
+monorepo_volume: monorepo_status ## Add a Docker volume for the Symfony monorepo
 	$(M) repo_volume d=$(SYMFONY_MONOREPO_DIR)
 
-.PHONY: monorepo_link ml
-monorepo_link ml: _monorepo ## Replace vendors with symlinks to the Symfony monorepo
-	$(PHP) /$(SYMFONY_MONOREPO_DIR)/link /app
-	@printf "🔗 Local directory $(Y)/$(SYMFONY_MONOREPO_DIR)$(S) linked to the project\n"
-
-monorepo_install: ## Install external dependencies used during the tests in the Symfony monorepo
+monorepo_install: monorepo_status ## Install external dependencies used during the tests in the Symfony monorepo
 	$(M) repo_install d=$(SYMFONY_MONOREPO_DIR)
 
-monorepo_update: ## Update Composer dependencies in the Symfony monorepo
+monorepo_update: monorepo_status ## Update Composer dependencies in the Symfony monorepo
 	$(M) repo_update d=$(SYMFONY_MONOREPO_DIR)
 
 ##
 
-.PHONY: monorepo_status ms
-monorepo_status ms: ## Show current branch for reproducer and the Symfony monorepo
-	$(M) repo_status d=$(SYMFONY_MONOREPO_DIR) a=$(a)
+monorepo_link: monorepo_status ## Replace vendors with symlinks to the Symfony monorepo
+	$(PHP) /$(SYMFONY_MONOREPO_DIR)/link /app
+	@printf "🔗 Local directory $(Y)/$(SYMFONY_MONOREPO_DIR)$(S) linked to the project\n"
 
-.PHONY: monorepo_tests mt
-monorepo_tests mt: ## Run PHPUnit tests in the Symfony monorepo | [a=<args>] | a=/symfony/src/Symfony/Bundle/FrameworkBundle
-	$(M) repo_tests d=$(SYMFONY_MONOREPO_DIR) a="$(a)"
+monorepo_unlink: monorepo_status ## Restore original vendors (rollback symlinks to the Symfony monorepo)
+	$(PHP) /$(SYMFONY_MONOREPO_DIR)/link /app --rollback
+	@printf "🔙 Original vendors restored (detached from $(Y)/$(SYMFONY_MONOREPO_DIR)$(S))\n"
 
-monorepo_tests_clean: ## Clean PHPUnit cache and temporary files in the Symfony monorepo
-	$(M) repo_tests_clean d=$(SYMFONY_MONOREPO_DIR)
+link: monorepo_link ## monorepo_link alias
+
+unlink: monorepo_unlink ## monorepo_unlink alias
 
 ##
 
-monorepo_clean: ## Remove vendor and lock file from the Symfony monorepo
-	$(M) repo_clean d=$(SYMFONY_MONOREPO_DIR)
+.PHONY: monorepo_status ms
+monorepo_status ms: _monorepo ## Show current branch for reproducer and the Symfony monorepo
+	$(M) repo_status d=$(SYMFONY_MONOREPO_DIR) a=$(a)
 
-.PHONY: monorepo_unlink mu
-monorepo_unlink mu: ## Restore original vendors (rollback symlinks to the Symfony monorepo)
-	$(PHP) /$(SYMFONY_MONOREPO_DIR)/link /app --rollback
-	@printf "🔙 Original vendors restored (detached from $(Y)/$(SYMFONY_MONOREPO_DIR)$(S))\n"
+.PHONY: monorepo_tests mt
+monorepo_tests mt: monorepo_status ## Run PHPUnit tests in the Symfony monorepo | [a=<args>] | a=/symfony/src/Symfony/Bundle/FrameworkBundle
+	$(M) repo_tests d=$(SYMFONY_MONOREPO_DIR) a="$(a)"
+
+monorepo_tests_clean: monorepo_status ## Clean PHPUnit cache and temporary files in the Symfony monorepo
+	$(M) repo_tests_clean d=$(SYMFONY_MONOREPO_DIR)
+
+monorepo_clean: monorepo_status ## Remove vendor and lock file from the Symfony monorepo
+	$(M) repo_clean d=$(SYMFONY_MONOREPO_DIR)
 
 ## ▸ OTHER REPO
 
@@ -64,24 +66,24 @@ _repo: # INTERNAL
 		exit 1; \
 	fi
 
-repo_volume: _repo repo_status ## Add a Docker volume for a local repository | d=<dir> | d=monolog-bundle
+repo_volume: repo_status ## Add a Docker volume for a local repository | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(M) ya f=compose.override.yaml k=services.php.volumes v='../$(d):/$(d)'
 	@sed -i'' "s|^SAFE_DIRECTORIES = .*|& /$(d)|" Makefile
 	$(M) co m="Add the Docker volume for the $(d) repository"
 	$(M) restart
 
-repo_add: _repo repo_status ## Register a path repository in composer.json | d=<dir> | d=monolog-bundle
+repo_add: repo_status ## Register a path repository in composer.json | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(COMPOSER) config repositories.$(d) '{"type": "path", "url": "../$(d)", "options": {"symlink": true}}'
 	$(M) co m="Register the $(d) path repository"
 
-repo_install: _repo repo_status ## Install external dependencies used during the tests | d=<dir> | d=monolog-bundle
+repo_install: repo_status ## Install external dependencies used during the tests | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@printf "🧙 Install Composer packages in $(Y)/$(d)$(S)\n"
 	$(COMPOSER) install --working-dir=/$(d)
 
-repo_update: _repo repo_status ## Update Composer dependencies in a local repository | d=<dir> | d=monolog-bundle
+repo_update: repo_status ## Update Composer dependencies in a local repository | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@printf "🧙 Update Composer packages in $(Y)/$(d)$(S)\n"
 	$(COMPOSER) update --working-dir=/$(d)
@@ -97,7 +99,7 @@ repo_status rs: _repo ## Show current branch for reproducer and a local reposito
 	@printf "\n"
 
 .PHONY: repo_tests rt
-repo_tests rt: repo_tests_clean ## Run PHPUnit tests in a local repository | d=<dir> [a=<args>] | d=monolog-bundle
+repo_tests rt: repo_tests_clean repo_status ## Run PHPUnit tests in a local repository | d=<dir> [a=<args>] | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@if $(CONTAINER_PHP) test -f "/$(d)/phpunit"; then \
 		PHPUNIT="/$(d)/phpunit"; \
@@ -114,17 +116,17 @@ repo_tests rt: repo_tests_clean ## Run PHPUnit tests in a local repository | d=<
 	fi; \
 	$(CONTAINER_PHP) $$PHPUNIT -c $$CONFIG $(a)
 
-repo_tests_clean: _repo repo_status ## Clean PHPUnit cache and temporary files in a local repository | d=<dir> | d=monolog-bundle
+repo_tests_clean: repo_status ## Clean PHPUnit cache and temporary files in a local repository | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(CONTAINER_PHP) rm -fr /tmp/* /$(d)/.phpunit.result.cache /$(d)/var/cache/*
 
 ##
 
-repo_remove: ## Unregister a path repository from composer.json | d=<dir> | d=monolog-bundle
+repo_remove: repo_status ## Unregister a path repository from composer.json | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(COMPOSER) config --unset repositories.$(d)
 
 
-repo_clean: ## Remove vendor and lock file from a local repository | d=<dir> | d=monolog-bundle
+repo_clean: repo_status ## Remove vendor and lock file from a local repository | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(CONTAINER_PHP) rm -fr /$(d)/vendor /$(d)/composer.lock
