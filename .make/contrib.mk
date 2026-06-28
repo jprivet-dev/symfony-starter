@@ -6,6 +6,22 @@
 # Clone by default your Symfony monorepo side-by-side with the Symfony Starter
 SYMFONY_MONOREPO_DIR=symfony
 
+PHPUNIT_EXE =
+ifneq ($(wildcard ../$(d)/phpunit),)
+PHPUNIT_EXE = /$(d)/phpunit
+endif
+ifneq ($(wildcard ../$(d)/vendor/bin/phpunit),)
+PHPUNIT_EXE = /$(d)/vendor/bin/phpunit
+endif
+
+PHPUNIT_CONFIG =
+ifneq ($(wildcard ../$(d)/phpunit.xml),)
+PHPUNIT_CONFIG = /$(d)/phpunit.xml
+endif
+ifneq ($(wildcard ../$(d)/phpunit.xml.dist),)
+PHPUNIT_CONFIG = /$(d)/phpunit.xml.dist
+endif
+
 reproducer_dockerfile: ## Add the necessary PHP extensions for the reproducer in the Dockerfile (xsl, etc.)
 	$(M) permissions
 	$(M) rb m=recipes t=Dockerfile s=.starter/block/contrib/Dockerfile
@@ -51,6 +67,9 @@ monorepo_status ms: _monorepo ## Show current branch for reproducer and the Symf
 .PHONY: monorepo_tests mt
 monorepo_tests mt: monorepo_status ## Run PHPUnit tests in the Symfony monorepo | [a=<args>] | a=/symfony/src/Symfony/Bundle/FrameworkBundle
 	$(M) repo_tests d=$(SYMFONY_MONOREPO_DIR) a="$(a)"
+
+monorepo_coverage mc: ## Generate HTML coverage report | [a=<args>] | a="/symfony/src/Symfony/Component/Console"
+	$(M) repo_coverage d=$(SYMFONY_MONOREPO_DIR) a="$(a)"
 
 monorepo_tests_clean: monorepo_status ## Clean PHPUnit cache and temporary files in the Symfony monorepo
 	$(M) repo_tests_clean d=$(SYMFONY_MONOREPO_DIR)
@@ -101,20 +120,17 @@ repo_status rs: _repo ## Show current branch for reproducer and a local reposito
 .PHONY: repo_tests rt
 repo_tests rt: repo_tests_clean repo_status ## Run PHPUnit tests in a local repository | d=<dir> [a=<args>] | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
-	@if $(CONTAINER_PHP) test -f "/$(d)/phpunit"; then \
-		PHPUNIT="/$(d)/phpunit"; \
-	else \
-		PHPUNIT="/$(d)/vendor/bin/phpunit"; \
-	fi; \
-	if $(CONTAINER_PHP) test -f "/$(d)/phpunit.xml"; then \
-		CONFIG="/$(d)/phpunit.xml"; \
-	elif $(CONTAINER_PHP) test -f "/$(d)/phpunit.xml.dist"; then \
-		CONFIG="/$(d)/phpunit.xml.dist"; \
-	else \
-		echo "$(R)✘ PHPUnit configuration file not found in /$(d) inside the container$(S)"; \
-		exit 1; \
-	fi; \
-	$(CONTAINER_PHP) $$PHPUNIT -c $$CONFIG $(a)
+	$(if $(PHPUNIT_EXE),, $(error PHPUnit executable not found in /$(d)))
+	$(if $(PHPUNIT_CONFIG),, $(error PHPUnit configuration file not found in /$(d)))
+	$(CONTAINER_PHP) $(PHPUNIT_EXE) -c $(PHPUNIT_CONFIG) $(a)
+
+.PHONY: repo_coverage rc
+repo_coverage rc: repo_tests_clean repo_status ## Generate HTML coverage report for a local repository | d=<dir> [a=<args>] | d=monolog-bundle
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	$(if $(PHPUNIT_EXE),, $(error PHPUnit executable not found in /$(d)))
+	$(if $(PHPUNIT_CONFIG),, $(error PHPUnit configuration file not found in /$(d)))
+	-$(CONTAINER_PHP_COVERAGE) $(PHPUNIT_EXE) -c $(PHPUNIT_CONFIG) $(a) --coverage-html $(COVERAGE_DIR)
+	@printf " $(G)✔$(S) Coverage report: $(Y)$(COVERAGE_INDEX)$(S)\n"
 
 repo_tests_clean: repo_status ## Clean PHPUnit cache and temporary files in a local repository | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))

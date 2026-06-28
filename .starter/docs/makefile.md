@@ -228,6 +228,7 @@ Usage: make <target>
 
   monorepo_status                      ms Show current branch for reproducer and the Symfony monorepo
   monorepo_tests [a=<args>]            mt Run PHPUnit tests in the Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
+  monorepo_coverage [a=<args>]         mc Generate HTML coverage report (e.g. make monorepo_coverage a="/symfony/src/Symfony/Component/Console")
   monorepo_tests_clean                    Clean PHPUnit cache and temporary files in the Symfony monorepo
   monorepo_clean                          Remove vendor and lock file from the Symfony monorepo
 
@@ -239,6 +240,7 @@ Usage: make <target>
 
   repo_status d=<dir>                  rs Show current branch for reproducer and a local repository (e.g. make repo_status d=monolog-bundle)
   repo_tests d=<dir> [a=<args>]        rt Run PHPUnit tests in a local repository (e.g. make repo_tests d=monolog-bundle)
+  repo_coverage d=<dir> [a=<args>]     rc Generate HTML coverage report for a local repository (e.g. make repo_coverage d=monolog-bundle)
   repo_tests_clean d=<dir>                Clean PHPUnit cache and temporary files in a local repository (e.g. make repo_tests_clean d=monolog-bundle)
 
   repo_remove d=<dir>                     Unregister a path repository from composer.json (e.g. make repo_remove d=monolog-bundle)

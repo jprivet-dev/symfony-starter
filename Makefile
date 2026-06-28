@@ -92,6 +92,11 @@ PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
 PHPSTAN_BASELINE  = phpstan-baseline.php
 PHPSTAN_CONFIG    = phpstan.dist.neon
 
+# --- TESTS CONFIG ---
+
+COVERAGE_DIR   = $(BUILD)/coverage-$(NOW)
+COVERAGE_INDEX = $(PWD)/$(COVERAGE_DIR)/index.html
+
 # --- DATABASE ---
 
 DB_URL_CLEAN   = $(shell echo '$(DATABASE_URL)' | tr -d '"')
