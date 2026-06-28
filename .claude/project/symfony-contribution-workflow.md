@@ -160,8 +160,8 @@ Then add each required Composer dependency:
 
 ```shell
 # in /symfony-starter
-make require a={package}
-git add . && git commit -m "require {package}"
+# install the dependency and commit in one step
+make require_co a={package}
 ```
 
 End Phase 1 with this reminder:
@@ -181,8 +181,8 @@ Then add each required Composer dependency:
 
 ```shell
 # in /symfony-starter
-make require a={package}
-git add . && git commit -m "require {package}"
+# install the dependency and commit in one step
+make require_co a={package}
 ```
 
 Then fork and clone `symfony/symfony` side-by-side with the starter (if not already done), create the topic branch in the fork, then connect the monorepo:
