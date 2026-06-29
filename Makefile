@@ -114,11 +114,17 @@ PROJECT_NAME ?= $(shell basename $(CURDIR) | tr '[:upper:]' '[:lower:]')
 SERVER_NAME   = $(PROJECT_NAME).localhost
 IMAGES_PREFIX = $(PROJECT_NAME)-
 
-# Port is derived from the project name to avoid conflicts when running multiple instances.
-# Can be overridden in .env.local (e.g. HTTP_PORT=8080)
+# Default ports for local development. Override in .env.local (e.g. HTTP_PORT=9090).
+# Set HTTP_PORTS_AUTO=true in .env.local to derive ports from the project name (avoids conflicts between projects).
 # See services.php.ports in compose.yaml
-HTTP_PORT  ?= $(shell echo $(PROJECT_NAME) | cksum | awk '{print 8000 + $$1 % 900}')
-HTTPS_PORT ?= $(shell echo $(PROJECT_NAME) | cksum | awk '{print 8400 + $$1 % 99}')
+HTTP_PORT  ?= 8042
+HTTPS_PORT ?= 8442
+
+ifeq ($(HTTP_PORTS_AUTO),true)
+HTTP_PORT  := $(shell echo $(PROJECT_NAME) | cksum | awk '{print 8000 + $$1 % 900}')
+HTTPS_PORT := $(shell echo $(PROJECT_NAME) | cksum | awk '{print 8400 + $$1 % 99}')
+endif
+
 HTTP3_PORT ?= $(HTTPS_PORT)
 
 # Will be ":PORT" if HTTP_PORT is defined, otherwise empty.
