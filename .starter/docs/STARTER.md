@@ -1,4 +1,4 @@
-# Symfony Starter — Documentation
+# Symfony Starter - Generate your project
 
 [⬅️ README](../../README.md)
 
@@ -56,7 +56,7 @@ using the reproducer's PHP container (no local PHP installation required).
 | `make reproducer@lts` | Long-term support release           |
 | `make reproducer@6x`  | Symfony 6.x (for legacy reproducer) |
 
-📖 [Contributing guide: connect your local Symfony repository](contrib.md)
+📖 [Contributing - Create your reproducer](contrib.md)
 
 ## Switch to another DB
 
@@ -150,7 +150,7 @@ make install                # 4. Install and start
 
 ## Contributing
 
-* [Contributing - Connect your local Symfony repository](contrib.md)
+* [Contributing - Create your reproducer](contrib.md)
 
 ---
 

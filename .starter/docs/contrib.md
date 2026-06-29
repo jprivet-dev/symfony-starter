@@ -1,4 +1,4 @@
-# Contributing - Connect your local Symfony repository
+# Contributing - Create your reproducer
 
 [⬅️ STARTER](STARTER.md)
 
