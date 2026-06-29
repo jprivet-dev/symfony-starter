@@ -535,6 +535,8 @@ ifneq ($(or $(ALL), $(wildcard $(VENDOR_TRANSLATION))),)
 include .make/translation.mk
 endif
 
+-include $(sort $(wildcard .make/_*.mk))
+
 include .make/end.mk
 
 -include .make/contrib.mk
