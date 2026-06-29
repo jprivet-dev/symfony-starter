@@ -62,7 +62,7 @@ make info   # Show project access info (URLs, ports)
 
 ## Documentation
 
-Browse the full [Symfony Starter documentation](.starter/docs/STARTER.md).
+Browse the [full Symfony Starter documentation](.starter/docs/STARTER.md).
 
 ## References
 
