@@ -31,3 +31,9 @@ services:
     tty: true
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
+
+###> sensiolabs/gotenberg-bundle ###
+  gotenberg:
+    ports:
+      - "3000"
+###< sensiolabs/gotenberg-bundle ###
