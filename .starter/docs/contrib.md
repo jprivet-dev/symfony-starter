@@ -1,4 +1,4 @@
-# Generate your reproducer
+# Generate your reproducer and contribute to Symfony
 
 [⬅️ Symfony Starter documentation](README.md)
 
@@ -13,24 +13,13 @@ and test your changes immediately.
 Before contributing to `symfony/symfony` or any Symfony bundle, generate a minimalist Symfony
 application configured as a reproducer:
 
-```shell
-# in /symfony-starter
-
-# stable release
-make reproducer
-
-# or LTS - long-term support release
-make reproducer@lts
-
-# or Symfony 6.x
-make reproducer@6x
-```
-
 | Command               | Symfony version                     |
 |-----------------------|-------------------------------------|
 | `make reproducer`     | Latest stable release               |
 | `make reproducer@lts` | Long-term support release           |
 | `make reproducer@6x`  | Symfony 6.x (for legacy reproducer) |
+
+All commands run in `/symfony-starter`.
 
 > [!TIP]
 >

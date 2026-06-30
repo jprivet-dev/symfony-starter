@@ -13,8 +13,8 @@ cd symfony-starter
 
 ### 2. Generate your app
 
-* [Your project](.starter/docs/README.md).
-* [Your reproducer](.starter/docs/contrib.md).
+* [Generate your Symfony project](.starter/docs/README.md).
+* [Generate your reproducer and contribute to Symfony](.starter/docs/contrib.md).
 
 > [!NOTE]
 >

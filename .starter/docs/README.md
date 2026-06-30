@@ -8,7 +8,7 @@
 ![Symfony](https://img.shields.io/badge/Symfony-8%20%7C%207%20LTS-000000?logo=symfony)
 ![dunglas/symfony-docker](https://img.shields.io/badge/dunglas%2Fsymfony--docker-3c0d1772-2088FF?logo=docker)
 
-## Generate your project
+## Generate your Symfony project
 
 Generate a fully Dockerized Symfony application with a single command 🥳
 
@@ -58,7 +58,9 @@ using the reproducer's PHP container (no local PHP installation required).
 | `make reproducer@lts` | Long-term support release           |
 | `make reproducer@6x`  | Symfony 6.x (for legacy reproducer) |
 
-* See [Generate your reproducer](contrib.md)
+All commands run in `/symfony-starter`.
+
+ See full [Generate your reproducer and contribute to Symfony](contrib.md) documentation.
 
 ## Switch to another DB
 
@@ -87,10 +89,10 @@ make easy_admin # 2. Generate a different flavor
 
 If you just want to try the starter without generating it, use one of the pre-built branches:
 
-| Application     | Stable                                                                               | LTS                                                                                          | Database      |
-|-----------------|--------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|---------------|
-| 🌱 Minimalist   | [minimalist](https://github.com/jprivet-dev/symfony-starter/tree/minimalist)         | [minimalist@lts](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts)         | 🚫 No DB      |
-| 🌍 Webapp       | [webapp](https://github.com/jprivet-dev/symfony-starter/tree/webapp)                 | [webapp@lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts)                 | 🐘 PostgreSQL |
+| Application   | Stable                                                                       | LTS                                                                                  | Database      |
+|---------------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|---------------|
+| 🌱 Minimalist | [minimalist](https://github.com/jprivet-dev/symfony-starter/tree/minimalist) | [minimalist@lts](https://github.com/jprivet-dev/symfony-starter/tree/minimalist@lts) | 🚫 No DB      |
+| 🌍 Webapp     | [webapp](https://github.com/jprivet-dev/symfony-starter/tree/webapp)         | [webapp@lts](https://github.com/jprivet-dev/symfony-starter/tree/webapp@lts)         | 🐘 PostgreSQL |
 
 ```shell
 git fetch origin            # 1. Fetch all branches
