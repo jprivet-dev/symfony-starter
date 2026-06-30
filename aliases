@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# Usage:
+#   . aliases
+# or
+#   source aliases
+
+# (G)REEN, (R)ED, (Y)ELLOW & RE(S)ET
+G='\033[32m'
+R='\033[31m'
+Y='\033[33m'
+S='\033[0m'
+
+function makefile_create() {
+    local alias_name="${1}"
+    local path="${2}"
+    local argument_name="${3}"
+    local overwritten=""
+
+    if [ ! -f "${path}" ] && [ ! -d "${path}" ]; then
+        printf " ${R}⨯${S} Skipping ${Y}${alias_name}${S} alias for ${Y}make ${alias_name}${S} (file or directory ${Y}${path}${S} not found)\n"
+        return 1
+    fi
+
+    if alias "${alias_name}" &>/dev/null; then
+        overwritten=" (alias already exists and overwritten)"
+    fi
+
+    alias "${alias_name}"="makefile_execute ${alias_name} ${argument_name}" &&
+        printf " ${G}✔${S} Create ${G}${alias_name}${S} alias for ${G}make ${alias_name}${S}${overwritten}\n"
+}
+
+function makefile_execute() {
+    local alias_name="${1}"
+    shift
+    local argument_name="${1}"
+    shift
+    make "${alias_name}" "${argument_name}"="${*}"
+}
+
+function makefile_aliases() {
+    printf "\n${Y}Aliases${S}"
+    printf "\n${Y}-------${S}\n\n"
+
+    local aliases_list=""
+
+    for entry in "${@}"; do
+        IFS=':' read -r alias_name path argument_name <<<"${entry}"
+        if [ -z "${path}" ]; then
+            path="."
+        fi
+
+        makefile_create "${alias_name}" "${path}" "${argument_name}"
+        aliases_list="${aliases_list} ${alias_name}"
+    done
+
+    printf "\nThis aliases are temporary for your current shell session. To remove them ${G}close your terminal tab/window (Easiest)${S}, or run:\n"
+    printf "${Y}$ unalias${aliases_list}${S}\n"
+}
+
+# Add alias with its file/directory to check
+makefile_aliases \
+    symfony:bin/console:c \
+    console:bin/console:c \
+    sf:bin/console:c \
+    php:compose.yaml:a \
+    composer:composer.json:a \
+    phpunit:bin/phpunit:a

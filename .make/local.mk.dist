@@ -1,0 +1,23 @@
+#
+# EXTENDS THE MAIN MAKEFILE WITH YOUR OWN LOCAL MAKEFILE
+#
+# - To activate it, copy ".make/local.mk.dist" to ".make/local.mk".
+# - All ".make/*local.mk" files EXTEND the main Makefile and are IGNORED by Git.
+# - Use here only commands specific to your local setup.
+# - DO NOT use your local commands in the main Makefile: your commands are ONLY available when APP_ENV=dev.
+# - You can use here all commands and variables from the main Makefile.
+# - With "## Description of my_command" => Your commands are VISIBLE when running "make help".
+# - With  "# Description of my_command" => Your commands are NOT VISIBLE when running "make help".
+# - With no description                 => Your commands are NOT VISIBLE when running "make help".
+# - If a command is very useful, suggest it and integrate it into the main Makefile.
+#
+
+my_command: # Description of my_command (NOT VISIBLE when running "make help")
+	@printf " $(G)✔$(S) My own command $(G)my_command$(S) is available and use the main Makefile variables - $(Y)[APP_ENV=$(APP_ENV)]$(S)\n"
+
+docker_stop_all: confirm # Stops all running containers (NOT VISIBLE when running "make help")
+	docker stop $$(docker ps -a -q)
+
+.PHONY: volumes
+volumes: confirm # Stops and removes all containers and any unnamed volumes (NOT VISIBLE when running "make help")
+	docker compose down --volumes --rmi all
