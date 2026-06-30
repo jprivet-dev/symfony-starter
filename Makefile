@@ -54,7 +54,7 @@ YQ = docker run --rm --user "$(USER)" -v "$(PWD)":/workdir -w /workdir mikefarah
 
 # Directories to trust in Git within the PHP container.
 # Add your local contribution volumes here (e.g., /symfony, /monolog-bundle).
-SAFE_DIRECTORIES = /app
+SAFE_DIRECTORIES = /app /GotenbergBundle
 
 # --- FILES & DIRECTORIES ---
 

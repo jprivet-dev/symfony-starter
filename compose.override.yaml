@@ -18,6 +18,7 @@ services:
 
       - ./var:/app/var
       - ./var/log:/app/var/log
+      - ../GotenbergBundle:/GotenbergBundle
     environment:
       FRANKENPHP_WORKER_CONFIG: watch
       FRANKENPHP_SITE_CONFIG: hot_reload
@@ -29,10 +30,10 @@ services:
       # Ensure that host.docker.internal is correctly defined on Linux
       - host.docker.internal:host-gateway
     tty: true
-###> symfony/mercure-bundle ###
-###< symfony/mercure-bundle ###
+  ###> symfony/mercure-bundle ###
+  ###< symfony/mercure-bundle ###
+  ###> sensiolabs/gotenberg-bundle ###
 
-###> sensiolabs/gotenberg-bundle ###
   gotenberg:
     ports:
       - "3000"
