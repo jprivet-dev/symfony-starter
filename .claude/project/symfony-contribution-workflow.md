@@ -15,8 +15,9 @@ In the project settings, upload the following files from your local `symfony-sta
 
 | File                                               | Purpose                                                 |
 |----------------------------------------------------|---------------------------------------------------------|
-| `.starter/docs/STARTER.md`                         | Starter toolkit overview and available `make` commands  |
 | `.starter/docs/contrib.md`                         | Full contribution guide (monorepo and bundle workflows) |
+| `.starter/docs/README.md`                          | Starter toolkit overview                                |
+| `.starter/docs/makefile.md`                        | Available `make` commands                               |
 | `.make/contrib.mk`                                 | Makefile targets for contribution commands              |
 | `.make/generate.mk`                                | Makefile targets for project generation                 |
 | `.claude/project/symfony-contribution-workflow.md` | This file — defines the issue workflow                  |
@@ -151,9 +152,15 @@ Fill in all values from the issue analysis. Never leave placeholders like `MY_TO
 
 ```shell
 # in /symfony-starter
+
+# stable release
 make reproducer BRANCH={branch-name}
-# or for LTS:
+
+# or LTS - long-term support release
 make reproducer@lts BRANCH={branch-name}
+
+# or Symfony 6.x
+make reproducer@6x BRANCH={branch-name}
 ```
 
 Then add each required Composer dependency:
@@ -163,6 +170,17 @@ Then add each required Composer dependency:
 # install the dependency and commit in one step
 make require_co a={package}
 ```
+
+Go to https://symfony-starter.localhost:8442/ and accept the auto-generated TLS certificate on first visit.
+
+> [!TIP]
+>
+> By default, the app runs on port `8442`. Two ways to change it:
+>
+> * **Fixed ports:** set `HTTP_PORT` and `HTTPS_PORT` in `.env.local` (e.g. `HTTPS_PORT=9443`).
+> * **Auto ports:** set `HTTP_PORTS_AUTO=true` in `.env.local` to derive ports from the project name (avoids conflicts between projects).
+>
+> Run `make restart` to apply, then `make info` to see the current URLs.
 
 End Phase 1 with this reminder:
 
@@ -200,6 +218,17 @@ Then verify that both branches are aligned:
 # in /symfony-starter
 make monorepo_status
 ```
+
+Go to https://symfony-starter.localhost:8442/ and accept the auto-generated TLS certificate on first visit.
+
+> [!TIP]
+>
+> By default, the app runs on port `8442`. Two ways to change it:
+>
+> * **Fixed ports:** set `HTTP_PORT` and `HTTPS_PORT` in `.env.local` (e.g. `HTTPS_PORT=9443`).
+> * **Auto ports:** set `HTTP_PORTS_AUTO=true` in `.env.local` to derive ports from the project name (avoids conflicts between projects).
+>
+> Run `make restart` to apply, then `make info` to see the current URLs.
 
 End Phase 1 with this reminder:
 > ✅ Phase 1 complete. Once the environment is ready, ask me for **Phase 2** to write the minimal reproduction code.
