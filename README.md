@@ -39,6 +39,10 @@ make gotenberg_install
 
 Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334) on first visit.
 
+|                                                              |                                                                   |
+|:-------------------------------------------------------------|:------------------------------------------------------------------|
+| ![gotenberg-homepage.jpeg](docs/img/gotenberg-homepage.jpeg) | ![gotenberg-pdf.jpeg](docs/img/gotenberg-pdf.jpeg)               |
+
 > [!TIP]
 >
 > By default, the app runs on port `8442`. Two ways to change it:
