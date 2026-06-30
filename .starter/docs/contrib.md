@@ -34,8 +34,7 @@ make reproducer@6x
 
 > [!TIP]
 >
-> See the [GotenbergBundle reproducer](https://github.com/jprivet-dev/symfony-reproducer/tree/gotenberg-bundle/reproducer-sf6.4),
-> hosted on a dedicated branch of [jprivet-dev/symfony-reproducer](https://github.com/jprivet-dev/symfony-reproducer).
+> See the [GotenbergBundle reproducer example](https://github.com/jprivet-dev/symfony-starter/tree/reproducer/gotenberg-bundle/sf6.4).
 
 ## Contribute to `symfony/symfony`
 
