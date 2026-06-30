@@ -14,7 +14,7 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		cd -
 		rm -Rf tmp/
 
-		composer require "php:>=$PHP_VERSION"
+		composer require "php:>=$PHP_VERSION" runtime/frankenphp-symfony
 		composer config --json extra.symfony.docker 'true'
 
 		# Remove the project install block from this script and the compose.yaml
