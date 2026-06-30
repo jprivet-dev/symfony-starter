@@ -31,8 +31,8 @@ Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS
 >
 > * **Fixed ports:** set `HTTP_PORT` and `HTTPS_PORT` in `.env.local` (e.g. `HTTPS_PORT=9443`).
 > * **Auto ports:** set `HTTP_PORTS_AUTO=true` in `.env.local` to derive ports from the project name (avoids conflicts between projects).
->
-> Run `make info` to see the current URLs.
+> 
+> Run `make restart` to apply, then `make info` to see the current URLs.
 
 ### 4. Update your README
 
