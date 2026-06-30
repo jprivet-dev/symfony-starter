@@ -1,0 +1,38 @@
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;">
+
+    <!-- Grid lines -->
+    <line x1="60" y1="20" x2="60" y2="240" stroke="#dee2e6" stroke-width="1"/>
+    <line x1="60" y1="240" x2="580" y2="240" stroke="#dee2e6" stroke-width="1"/>
+    <line x1="60" y1="180" x2="580" y2="180" stroke="#dee2e6" stroke-width="1" stroke-dasharray="4"/>
+    <line x1="60" y1="120" x2="580" y2="120" stroke="#dee2e6" stroke-width="1" stroke-dasharray="4"/>
+    <line x1="60" y1="60" x2="580" y2="60" stroke="#dee2e6" stroke-width="1" stroke-dasharray="4"/>
+
+    <!-- Y axis labels -->
+    <text x="50" y="244" text-anchor="end" font-size="11" fill="#6c757d">$0</text>
+    <text x="50" y="184" text-anchor="end" font-size="11" fill="#6c757d">$5M</text>
+    <text x="50" y="124" text-anchor="end" font-size="11" fill="#6c757d">$10M</text>
+    <text x="50" y="64" text-anchor="end" font-size="11" fill="#6c757d">$15M</text>
+
+    <!-- Bars -->
+    <!-- Q1: $9.8M → height = 9.8/15 * 180 = 117.6 -->
+    <rect x="100" y="122" width="80" height="118" fill="#0d6efd" rx="3"/>
+    <!-- Q2: $11.2M → height = 134.4 -->
+    <rect x="220" y="106" width="80" height="134" fill="#0d6efd" rx="3"/>
+    <!-- Q3: $12.7M → height = 152.4 -->
+    <rect x="340" y="88" width="80" height="152" fill="#0d6efd" rx="3"/>
+    <!-- Q4: $14.5M → height = 174 -->
+    <rect x="460" y="66" width="80" height="174" fill="#0d6efd" rx="3"/>
+
+    <!-- Value labels on bars -->
+    <text x="140" y="114" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">$9.8M</text>
+    <text x="260" y="98" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">$11.2M</text>
+    <text x="380" y="80" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">$12.7M</text>
+    <text x="500" y="58" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">$14.5M</text>
+
+    <!-- X axis labels -->
+    <text x="140" y="258" text-anchor="middle" font-size="12" fill="#6c757d">Q1</text>
+    <text x="260" y="258" text-anchor="middle" font-size="12" fill="#6c757d">Q2</text>
+    <text x="380" y="258" text-anchor="middle" font-size="12" fill="#6c757d">Q3</text>
+    <text x="500" y="258" text-anchor="middle" font-size="12" fill="#6c757d">Q4</text>
+
+</svg>

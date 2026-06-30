@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report>
+  <title>Acme Corporation Annual Report 2024</title>
+  <generated>2024-12-31</generated>
+  <data>
+    <revenue currency="USD">48200000</revenue>
+    <profit currency="USD">9100000</profit>
+    <customers>1240</customers>
+  </data>
+</report>

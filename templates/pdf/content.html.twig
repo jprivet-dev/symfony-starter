@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Annual Report 2024</title>
+    <link href="{{ gotenberg_asset('vendor/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet"/>
+    <style>
+        body {
+            font-size: 14px;
+        }
+
+        .header {
+            background-color: #0d6efd;
+            color: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            border-left: 4px solid #0d6efd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1 class="mb-1">Acme Corporation</h1>
+    <p class="mb-0 opacity-75">Annual Performance Report — Fiscal Year 2024</p>
+</div>
+
+<div class="container-fluid px-4">
+
+    <div class="row mb-4" style="break-inside: avoid;">
+        <div class="col-12">
+            <h2 class="h4 mb-3">Executive Summary</h2>
+            <p>
+                Fiscal year 2024 marked a period of strong growth and strategic transformation for Acme Corporation.
+                Despite a challenging macroeconomic environment, the company achieved record revenue, expanded into
+                three new markets, and significantly improved its operational efficiency through technology investment.
+            </p>
+            <p>
+                This report provides a comprehensive overview of our financial performance, key initiatives,
+                and outlook for the year ahead.
+            </p>
+        </div>
+    </div>
+
+    <div class="row mb-4" style="break-inside: avoid;">
+        <div class="col-12">
+            <h2 class="h4 mb-3">Key Metrics</h2>
+        </div>
+        <div class="col-4 mb-3">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1" style="font-size: 12px;">TOTAL REVENUE</p>
+                    <h3 class="mb-0">$48.2M</h3>
+                    <small class="text-success">▲ 23% vs 2023</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 mb-3">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1" style="font-size: 12px;">NET PROFIT</p>
+                    <h3 class="mb-0">$9.1M</h3>
+                    <small class="text-success">▲ 18% vs 2023</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 mb-3">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-1" style="font-size: 12px;">NEW CUSTOMERS</p>
+                    <h3 class="mb-0">1,240</h3>
+                    <small class="text-success">▲ 31% vs 2023</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4" style="break-inside: avoid;">
+        <div class="col-6">
+            <h2 class="h4 mb-3">Strategic Initiatives</h2>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Cloud Infrastructure Migration
+                    <span class="badge bg-success">Completed</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    APAC Market Expansion
+                    <span class="badge bg-success">Completed</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Product Line Refresh
+                    <span class="badge bg-primary">In Progress</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Partner Ecosystem Program
+                    <span class="badge bg-primary">In Progress</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    AI-Powered Analytics Platform
+                    <span class="badge bg-secondary">Planned</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-6">
+            <h2 class="h4 mb-3">Revenue by Segment</h2>
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                <tr>
+                    <th>Segment</th>
+                    <th>Revenue</th>
+                    <th>Share</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Enterprise</td>
+                    <td>$24.1M</td>
+                    <td>50%</td>
+                </tr>
+                <tr>
+                    <td>SMB</td>
+                    <td>$14.5M</td>
+                    <td>30%</td>
+                </tr>
+                <tr>
+                    <td>Consumer</td>
+                    <td>$9.6M</td>
+                    <td>20%</td>
+                </tr>
+                </tbody>
+                <tfoot class="table-light">
+                <tr>
+                    <th>Total</th>
+                    <th>$48.2M</th>
+                    <th>100%</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mb-4" style="break-inside: avoid;">
+        <div class="col-12">
+            <h2 class="h4 mb-3">Quarterly Revenue 2024</h2>
+            {{ include('pdf/svg.html.twig') }}
+        </div>
+    </div>
+
+    <div class="row mb-4" style="break-inside: avoid;">
+        <div class="col-12">
+            <h2 class="h4 mb-3">Outlook 2025</h2>
+            <p>
+                Looking ahead, Acme Corporation is well-positioned to sustain its growth trajectory. The company
+                will focus on deepening customer relationships, accelerating product innovation, and capturing
+                emerging opportunities in artificial intelligence and automation.
+            </p>
+            <p>
+                We project revenue growth of 18–22% for fiscal year 2025, driven by the full-year contribution
+                of our APAC operations and the launch of our next-generation analytics platform in Q2.
+            </p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
