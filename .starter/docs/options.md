@@ -1,6 +1,6 @@
 # Symfony and Docker - Use build options
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)
 
 ---
 
@@ -84,4 +84,4 @@ make start
 
 ---
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)

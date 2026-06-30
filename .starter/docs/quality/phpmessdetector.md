@@ -1,6 +1,6 @@
 # PHP Mess Detector
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -89,4 +89,4 @@ Solution - Exclude the `MissingImport` rule in `phpmd.xml`:
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)

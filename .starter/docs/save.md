@@ -1,6 +1,6 @@
 # Symfony - Save your generated application
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)
 
 ---
 
@@ -45,4 +45,4 @@ make restart
 
 ---
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)

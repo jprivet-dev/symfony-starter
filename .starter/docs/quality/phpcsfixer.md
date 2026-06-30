@@ -1,6 +1,6 @@
 # PHP CS Fixer
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -36,4 +36,4 @@ composer require --dev friendsofphp/php-cs-fixer
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)

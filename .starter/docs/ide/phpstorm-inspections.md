@@ -1,6 +1,6 @@
 # PhpStorm - Configure inspections
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -52,4 +52,4 @@ private function readCsv(string $filePath): iterable
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)

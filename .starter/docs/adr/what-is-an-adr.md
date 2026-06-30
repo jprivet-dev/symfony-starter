@@ -1,6 +1,6 @@
 # What is an ADR (Architecture Decision Records)?
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -14,4 +14,4 @@ Its main purpose is to:
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)

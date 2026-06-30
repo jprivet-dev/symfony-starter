@@ -1,4 +1,4 @@
-# Symfony Starter - Generate your project
+# 🚀 Symfony Starter documentation
 
 [⬅️ README](../../README.md)
 
@@ -8,7 +8,9 @@
 ![Symfony](https://img.shields.io/badge/Symfony-8%20%7C%207%20LTS-000000?logo=symfony)
 ![dunglas/symfony-docker](https://img.shields.io/badge/dunglas%2Fsymfony--docker-3c0d1772-2088FF?logo=docker)
 
-**Generate a fully Dockerized Symfony application with a single command.**
+## Generate your project
+
+Generate a fully Dockerized Symfony application with a single command 🥳
 
 From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform](https://api-platform.com/) or [EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle) stack, [Symfony Starter](https://github.com/jprivet-dev/symfony-starter) handles the entire setup — Docker, database, dependencies — so you can focus on your code from the first minute. You can also use the official [Symfony Demo](https://github.com/symfony/demo) as a reference for best practices, or [contribute to Symfony Core](contrib.md) in a real Docker environment.
 
@@ -44,7 +46,7 @@ cd symfony-starter
 >
 > Each generation takes approximately ⏱️ 3-4 minutes depending on your machine and network speed.
 
-### Contribute to Symfony
+## Create your reproducer and contribute to Symfony
 
 Use the starter as a reproducer to contribute to the Symfony framework, any Symfony bundle or
 bridge. It lets you mount a local fork directly into the Docker environment and run the test suite
@@ -56,7 +58,7 @@ using the reproducer's PHP container (no local PHP installation required).
 | `make reproducer@lts` | Long-term support release           |
 | `make reproducer@6x`  | Symfony 6.x (for legacy reproducer) |
 
-📖 [Contributing - Create your reproducer](contrib.md)
+* See [Create your reproducer](contrib.md)
 
 ## Switch to another DB
 
@@ -148,9 +150,9 @@ make install                # 4. Install and start
 * [Docker - "container is unhealthy" after `docker compose up`](troubleshooting/unhealthy.md)
 * [Docker and Git - "detected dubious ownership in repository"](troubleshooting/dubious-ownership.md)
 
-## Contributing
+### Contributing
 
-* [Contributing - Create your reproducer](contrib.md)
+* [Create your reproducer](contrib.md)
 
 ---
 

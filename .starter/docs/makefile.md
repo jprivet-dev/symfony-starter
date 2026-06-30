@@ -1,6 +1,6 @@
 # Makefile - Discover all commands
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)
 
 ---
 
@@ -319,5 +319,5 @@ Usage: make <target>
 
 ---
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)
 

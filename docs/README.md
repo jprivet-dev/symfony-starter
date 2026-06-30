@@ -1,10 +1,12 @@
-# Project documentation
+# 📖 Project documentation
 
 [⬅️ README](../README.md)
 
 ---
 
 Project documentation entry point.
+
+## Documentation
 
 ### Main
 

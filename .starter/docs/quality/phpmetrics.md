@@ -1,6 +1,6 @@
 # PhpMetrics
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -28,6 +28,6 @@ composer require --dev phpmetrics/phpmetrics:2.8.1 --with-all-dependencies
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 

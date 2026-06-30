@@ -1,6 +1,6 @@
 # PhpStorm - Connect it to the running PostgreSQL container
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -16,9 +16,7 @@ Run the following command to display the connection details for your IDE:
 make phpstorm_config
 ```
 
-> [!NOTE]
->
-> See [Database: port mapping strategy](adr/database-port-mapping.md) to understand why the port mapping is configured the way it is.
+* See [Database: port mapping strategy](adr/database-port-mapping.md) to understand why the port mapping is configured the way it is.
 
 ## Connect PhpStorm
 
@@ -40,4 +38,4 @@ make phpstorm_config
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)

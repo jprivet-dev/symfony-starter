@@ -1,6 +1,6 @@
-# Contributing - Create your reproducer
+# Create your reproducer
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)
 
 ---
 
@@ -18,8 +18,10 @@ application configured as a reproducer:
 
 # stable release
 make reproducer
+
 # or LTS - long-term support release
 make reproducer@lts
+
 # or Symfony 6.x
 make reproducer@6x
 ```
@@ -29,6 +31,11 @@ make reproducer@6x
 | `make reproducer`     | Latest stable release               |
 | `make reproducer@lts` | Long-term support release           |
 | `make reproducer@6x`  | Symfony 6.x (for legacy reproducer) |
+
+> [!TIP]
+>
+> See the [GotenbergBundle reproducer](https://github.com/jprivet-dev/symfony-reproducer/tree/gotenberg-bundle/reproducer-sf6.4),
+> hosted on a dedicated branch of [jprivet-dev/symfony-reproducer](https://github.com/jprivet-dev/symfony-reproducer).
 
 ## Contribute to `symfony/symfony`
 
@@ -289,11 +296,14 @@ starter includes a mechanism to load local Makefile rules that are not committed
 cp .make/local.mk.dist .make/local.mk
 ```
 
-### 2. Add your custom commands to `.make/local.mk`
+### 2. Add your custom commands
 
-These will automatically appear in `make help`. Here are some useful examples you can use:
+Create `.make/_monorepo.mk` to add shortcuts for the components you work on frequently.
+These files are automatically loaded and will appear in `make help`.
 
 ```makefile
+## — MONOREPO CONTRIBUTION 🔗 —————————————————————————————————————————————————
+
 monorepo_tests_bridge: ## Run tests for all Bridge components
 	$(MAKE) monorepo_tests a="/symfony/src/Symfony/Bridge"
 
@@ -333,8 +343,9 @@ monorepo_tests_twig: ## Run tests for TwigBridge
 
 > [!TIP]
 >
-> The `.make/local.mk` file is ignored by Git. This is the perfect place to experiment with new
-> commands before potentially proposing them as a permanent addition to the project.
+> * Files matching `.make/_*.mk` are auto-loaded and can be committed to the repository — ideal
+> for project-specific commands.
+> * Use `.make/local.mk` (gitignored) for personal shortcuts you don't want to share.
 
 ## AI-assisted issue workflow with Claude.ai
 
@@ -348,4 +359,4 @@ automatically generates the complete contribution procedure from a Symfony issue
 
 ---
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)

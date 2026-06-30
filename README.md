@@ -10,10 +10,10 @@ A small description of my new Symfony project.
 > * `MY_USERNAME`.
 > * `my-project`.
 >
-> Quick start:
+> 🚀 Quick start:
 >
-> * [Symfony Starter - Generate your project](.starter/docs/STARTER.md).
-> * [Contributing - Create your reproducer](.starter/docs/contrib.md).
+> * [Generate your project](.starter/docs/README.md).
+> * [Create your reproducer](.starter/docs/contrib.md).
 >
 > |                                                                                   |                                                                          |
 > |:----------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
@@ -62,8 +62,8 @@ make info   # Show project access info (URLs, ports)
 
 ## Documentation
 
-* [The Project documentation](doc/README.md).
-* [The Symfony Starter documentation](.starter/docs/STARTER.md).
+* 📖 [The Project documentation](docs/README.md).
+* 🚀 [The Symfony Starter documentation](.starter/docs/README.md).
 
 ## References
 

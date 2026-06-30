@@ -1,6 +1,6 @@
 # Linux - Editing permissions
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -34,4 +34,4 @@ This command recursively changes the ownership of all files and directories in y
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
