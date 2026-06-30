@@ -192,6 +192,21 @@ Usage: make <target>
 — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
   extract                                 Extract translation strings from templates
 
+— GOTENBERGBUNDLE CONTRIBUTION 🔗 ——————————————————————————————————————————
+  gotenberg_status                        Show current branch for reproducer and GotenbergBundle repository
+  gotenberg_install                       Install external dependencies used during the tests and initialize Dagger
+  gotenberg_tests                         Run PHPUnit tests
+  gotenberg_coverage                      Generate HTML coverage report
+
+  dagger_develop                          Initialize Dagger module in GotenbergBundle
+  dagger_all                              Run all Dagger checks (stop on failure) [GotenbergBundle]
+
+  dagger_cs_fixer                         Fix code style via Dagger [GotenbergBundle]
+  dagger_phpstan                          Run PHPStan static analysis via Dagger [GotenbergBundle]
+  dagger_deps                             Validate Composer dependencies via Dagger [GotenbergBundle]
+  dagger_docs                             Generate documentation via Dagger [GotenbergBundle]
+  dagger_phpunit                          Run PHPUnit tests via Dagger for all Symfony/PHP version combinations [GotenbergBundle]
+
 — CERTIFICATES 🔐‍️ ——————————————————————————————————————————————————————————
   certificates                            Install the Caddy TLS certificate to the trust store
   certificates_export                     Export the Caddy root certificate from the container to the host
