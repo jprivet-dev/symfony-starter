@@ -11,7 +11,7 @@ git clone git@github.com:jprivet-dev/symfony-starter.git
 cd symfony-starter
 ```
 
-### 2. Generate
+### 2. Generate your app
 
 * [Your project](.starter/docs/README.md).
 * [Your reproducer](.starter/docs/contrib.md).
@@ -21,9 +21,18 @@ cd symfony-starter
 | <strong>Symfony</strong><br>![minimalist.png](.starter/docs/img/minimalist.png)   | <strong>API Platform</strong><br>![api.png](.starter/docs/img/api.png)   |
 | <strong>EasyAdmin</strong><br>![easy-admin.png](.starter/docs/img/easy-admin.png) | <strong>Symfony Demo</strong><br>![demo.png](.starter/docs/img/demo.png) |
 
-### 3. Update your README
+### 3. Go on the app
 
-Replace your `README.md` with [README.template.md](README.template.md) and fill in your project details.
+Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334) on first visit.
+
+> [!TIP]
+>
+> * Override default ports in `.env.local` (e.g. `HTTP_PORT=9090 HTTPS_PORT=9443`), or set `HTTP_PORTS_AUTO=true` to derive ports from the project name (avoids conflicts between projects).
+> * Run `make info` to see the current URLs.
+
+### 4. Update your README
+
+Replace this `README.md` with [README.template.md](README.template.md) and fill in your project details.
 
 ## Documentation
 
