@@ -29,7 +29,7 @@ In the project settings, paste the following as **Project instructions**:
 
 ### 4. Start a new conversation
 
-For each issue, **open a new conversation** in this project and name it after the branch: e.g. `symfony/12345-the-issue-sf7.4`
+For each issue, **open a new conversation** in this project and name it after the branch: e.g. `Symfony #12345: the issue title`, `Monolog #12345: the issue title`
 
 This keeps one conversation per issue, making it easy to resume work later.
 
@@ -62,16 +62,16 @@ Extract:
 
 ### 2. Propose a branch name and conversation title
 
-Use the format `{repo}/{issue_id}-{short-kebab-case-description}-sf{version}` **in the reproducer** to distinguish branches across different repositories and Symfony versions:
+Use the format `reproducer/{repo}/{issue_id}-{short-kebab-case-description}-sf{version}` **in the reproducer** to distinguish branches across different repositories and Symfony versions:
 
-| Reproducer branch name              | Fork branch name            |
-|-------------------------------------|-----------------------------|
-| `symfony/12345-the-issue-sf7.4`     | `12345-the-issue-sf7.4`     |
-| `symfony/12345-the-issue-sf8.2-dev` | `12345-the-issue-sf8.2-dev` |
-| `monolog/12345-the-issue-sf7.4`     | `12345-the-issue-sf7.4`     |
-| `gotenberg/12345-the-issue-sf7.4`   | `12345-the-issue-sf7.4`     |
+| Reproducer branch name                         | Fork branch name            |
+|------------------------------------------------|-----------------------------|
+| `reproducer/symfony/12345-the-issue-sf7.4`     | `12345-the-issue-sf7.4`     |
+| `reproducer/symfony/12345-the-issue-sf8.2-dev` | `12345-the-issue-sf8.2-dev` |
+| `reproducer/monolog/12345-the-issue-sf7.4`     | `12345-the-issue-sf7.4`     |
+| `reproducer/gotenberg/12345-the-issue-sf7.4`   | `12345-the-issue-sf7.4`     |
 
-- The `{repo}/` prefix is **only used in the reproducer** — it helps distinguish branches when working on multiple repositories simultaneously
+- The `reproducer/{repo}/` prefix is **only used in the reproducer** — it helps distinguish branches when working on multiple repositories simultaneously
 - The `-sf{version}` suffix uses the exact major.minor version (e.g. `sf8.1`, `sf7.4`) — never `sf8.x` or any wildcard form. For dev branches, append `-dev` (e.g. `sf8.2-dev`).
 
 If the target Symfony version **cannot be clearly deduced** from the issue (no explicit version tag, no affected version mentioned, no code reference pointing to a specific branch), **ask the user before going any further**:
@@ -88,7 +88,7 @@ Do **not** ask this question if the version is already apparent from:
 
 > [!TIP]
 >
-> This is a suggestion — the user is free to choose a different name. The only constraint is that the **fork branch name must match the suffix** of the reproducer branch name to avoid confusion. This can be verified at any time with:
+> This is a suggestion — the user is free to choose a different name. The only constraint is that the **fork branch name should match the suffix** of the reproducer branch name to avoid confusion. This can be verified at any time with:
 >
 > ```shell
 > # in /symfony-starter
@@ -99,7 +99,7 @@ Do **not** ask this question if the version is already apparent from:
 >
 > ```
 > REPOSITORY                 BRANCH
-> symfony-starter            symfony/12345-the-issue-sf7.4
+> symfony-starter            reproducer/symfony/12345-the-issue-sf7.4
 > symfony                    12345-the-issue-sf7.4
 > ```
 
