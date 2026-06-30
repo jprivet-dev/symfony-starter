@@ -22,6 +22,11 @@ ifneq ($(wildcard ../$(d)/phpunit.xml.dist),)
 PHPUNIT_CONFIG = /$(d)/phpunit.xml.dist
 endif
 
+SYMFONY_MINOR           = $(shell $(CONSOLE) --version | grep -oP '\d+\.\d+')
+REPO_PHPCSFIXER_CONFIG  = /$(d)/.php-cs-fixer.dist.php
+REPO_TWIGCSFIXER_CONFIG = /$(d)/.twig-cs-fixer.dist.php
+REPO_PHPSTAN_CONFIG     = $(shell test -f "../$(d)/phpstan-$(SYMFONY_MINOR).dist.neon" && echo "/$(d)/phpstan-$(SYMFONY_MINOR).dist.neon" || echo "/$(d)/phpstan.dist.neon")
+
 reproducer_dockerfile: ## Add the necessary PHP extensions for the reproducer in the Dockerfile (xsl, etc.)
 	$(M) permissions
 	$(M) rb m=recipes t=Dockerfile s=.starter/block/contrib/Dockerfile
@@ -76,6 +81,27 @@ monorepo_tests_clean: monorepo_status ## Clean PHPUnit cache and temporary files
 
 monorepo_clean: monorepo_status ## Remove vendor and lock file from the Symfony monorepo
 	$(M) repo_clean d=$(SYMFONY_MONOREPO_DIR)
+
+##
+
+monorepo_phpcsfixer_check: monorepo_status ## Check code style in the Symfony monorepo
+	$(M) repo_phpcsfixer_check d=$(SYMFONY_MONOREPO_DIR)
+
+monorepo_phpcsfixer_fix: monorepo_status ## Fix code style in the Symfony monorepo
+	$(M) repo_phpcsfixer_fix d=$(SYMFONY_MONOREPO_DIR)
+
+##
+
+monorepo_twigcsfixer_fix: monorepo_status ## Fix Twig code style in the Symfony monorepo
+	$(M) repo_twigcsfixer_fix d=$(SYMFONY_MONOREPO_DIR)
+
+monorepo_twigcsfixer_lint: monorepo_status ## Check Twig code style in the Symfony monorepo
+	$(M) repo_twigcsfixer_lint d=$(SYMFONY_MONOREPO_DIR)
+
+##
+
+monorepo_phpstan_analyse: monorepo_status ## Run PHPStan analyse on the Symfony monorepo
+	$(M) repo_phpstan_analyse d=$(SYMFONY_MONOREPO_DIR)
 
 ## ▸ OTHER REPO
 
@@ -142,7 +168,30 @@ repo_remove: repo_status ## Unregister a path repository from composer.json | d=
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(COMPOSER) config --unset repositories.$(d)
 
-
 repo_clean: repo_status ## Remove vendor and lock file from a local repository | d=<dir> | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(CONTAINER_PHP) rm -fr /$(d)/vendor /$(d)/composer.lock
+
+##
+
+repo_phpcsfixer_check: _phpcsfixer repo_status ## Check code style in a local repository | d=<dir> | d=monolog-bundle
+	@printf "\n$(Y)--- PHP CS Fixer [CHECK] ---$(S)\n"
+	$(PHPCSFIXER) --config=$(REPO_PHPCSFIXER_CONFIG) check --diff
+
+repo_phpcsfixer_fix: _phpcsfixer repo_status ## Fix code style in a local repository | d=<dir> | d=monolog-bundle
+	$(PHPCSFIXER) --config=$(REPO_PHPCSFIXER_CONFIG) fix
+
+##
+
+repo_twigcsfixer_fix: _twigcsfixer repo_status ## Fix Twig code style in a local repository | d=<dir> | d=monolog-bundle
+	$(TWIGCSFIXER) fix -c $(REPO_TWIGCSFIXER_CONFIG)
+
+repo_twigcsfixer_lint: _twigcsfixer repo_status ## Check Twig code style in a local repository | d=<dir> | d=monolog-bundle
+	@printf "\n$(Y)--- Twig CS Fixer [LINT] ---$(S)\n"
+	$(TWIGCSFIXER) lint -c $(REPO_TWIGCSFIXER_CONFIG)
+
+##
+
+repo_phpstan_analyse: _phpstan repo_status ## Run PHPStan analyse on a local repository | d=<dir> | d=monolog-bundle
+	@printf "\n$(Y)--- PHPStan [ANALYSE] ---$(S)\n"
+	$(PHPSTAN) analyse -c $(REPO_PHPSTAN_CONFIG) --memory-limit=-1

@@ -152,8 +152,8 @@ Usage: make <target>
   lint                                    Run all linters (stop on failure)
 
   phpcsfixer [a=<args>]                   Run PHP CS Fixer (e.g. make phpcsfixer a=list)
+  phpcsfixer_check                        Check code style
   phpcsfixer_fix                          Fix code style
-  phpcsfixer_lint                         Check code style
 
   phpmd [a=<args>]                        Run PHP Mess Detector (e.g. make phpmd a="src ansi cleancode")
   phpmd_lint                              Run PHP Mess Detector with all rules
@@ -162,7 +162,7 @@ Usage: make <target>
 
   phpstan [a=<args>]                      Run PHPStan (e.g. make phpstan a="src tests")
   phpstan_baseline [a=<args>]             Generate PHPStan baseline (e.g. make phpstan_baseline a="src tests")
-  phpstan_lint [a=<args>]                 Run PHPStan analyse (e.g. make phpstan_lint a="src tests")
+  phpstan_analyse [a=<args>]              Run PHPStan analyse (e.g. make phpstan_analyse a="src tests")
 
   twigcsfixer [a=<args>]                  Run Twig CS Fixer (e.g. make twigcsfixer a="lint /path/to/code")
   twigcsfixer_fix                         Fix Twig style
@@ -236,6 +236,14 @@ Usage: make <target>
   monorepo_tests_clean                    Clean PHPUnit cache and temporary files in the Symfony monorepo
   monorepo_clean                          Remove vendor and lock file from the Symfony monorepo
 
+  monorepo_phpcsfixer_check               Check code style in the Symfony monorepo
+  monorepo_phpcsfixer_fix                 Fix code style in the Symfony monorepo
+
+  monorepo_twigcsfixer_fix                Fix Twig code style in the Symfony monorepo
+  monorepo_twigcsfixer_lint               Check Twig code style in the Symfony monorepo
+
+  monorepo_phpstan_analyse                Run PHPStan analyse on the Symfony monorepo
+
 ▸ OTHER REPO
   repo_volume d=<dir>                     Add a Docker volume for a local repository (e.g. make repo_volume d=monolog-bundle)
   repo_add d=<dir>                        Register a path repository in composer.json (e.g. make repo_add d=monolog-bundle)
@@ -249,6 +257,14 @@ Usage: make <target>
 
   repo_remove d=<dir>                     Unregister a path repository from composer.json (e.g. make repo_remove d=monolog-bundle)
   repo_clean d=<dir>                      Remove vendor and lock file from a local repository (e.g. make repo_clean d=monolog-bundle)
+
+  repo_phpcsfixer_check d=<dir>           Check code style in a local repository (e.g. make repo_phpcsfixer_check d=monolog-bundle)
+  repo_phpcsfixer_fix d=<dir>             Fix code style in a local repository (e.g. make repo_phpcsfixer_fix d=monolog-bundle)
+
+  repo_twigcsfixer_fix d=<dir>            Fix Twig code style in a local repository (e.g. make repo_twigcsfixer_fix d=monolog-bundle)
+  repo_twigcsfixer_lint d=<dir>           Check Twig code style in a local repository (e.g. make repo_twigcsfixer_lint d=monolog-bundle)
+
+  repo_phpstan_analyse d=<dir>            Run PHPStan analyse on a local repository (e.g. make repo_phpstan_analyse d=monolog-bundle)
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 

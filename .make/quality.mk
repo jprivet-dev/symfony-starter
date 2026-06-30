@@ -6,7 +6,7 @@ fix: ## Fix with all linters
 	-$(MAKE) twigcsfixer_fix
 
 .PHONY: lint
-lint: phpcsfixer_lint phpstan_lint phpmd_lint twigcsfixer_lint ## Run all linters (stop on failure)
+lint: phpcsfixer_check phpstan_analyse phpmd_lint twigcsfixer_lint ## Run all linters (stop on failure)
 
 ##
 
@@ -14,12 +14,12 @@ lint: phpcsfixer_lint phpstan_lint phpmd_lint twigcsfixer_lint ## Run all linter
 phpcsfixer: _phpcsfixer ## Run PHP CS Fixer | [a=<args>] | a=list
 	$(PHPCSFIXER) $(a)
 
+phpcsfixer_check: _phpcsfixer ## Check code style
+	@printf "\n$(Y)--- PHP CS Fixer [CHECK] ---$(S)\n"
+	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) check --diff
+
 phpcsfixer_fix: _phpcsfixer ## Fix code style
 	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) fix
-
-phpcsfixer_lint: _phpcsfixer ## Check code style
-	@printf "\n$(Y)--- PHP CS Fixer [LINT] ---$(S)\n"
-	$(PHPCSFIXER) --config=$(PHPCSFIXER_CONFIG) check
 
 ##
 
@@ -49,9 +49,9 @@ phpstan: _phpstan ## Run PHPStan | [a=<args>] | a="src tests"
 phpstan_baseline: _phpstan ## Generate PHPStan baseline | [a=<args>] | a="src tests"
 	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a) --generate-baseline $(PHPSTAN_BASELINE)
 
-phpstan_lint: _phpstan ## Run PHPStan analyse | [a=<args>] | a="src tests"
-	@printf "\n$(Y)--- PHPStan [LINT] ---$(S)\n"
-	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a)
+phpstan_analyse: _phpstan ## Run PHPStan analyse | [a=<args>] | a="src tests"
+	@printf "\n$(Y)--- PHPStan [ANALYSE] ---$(S)\n"
+	$(PHPSTAN) analyse -c $(PHPSTAN_CONFIG) $(a) --memory-limit=-1
 
 ##
 
