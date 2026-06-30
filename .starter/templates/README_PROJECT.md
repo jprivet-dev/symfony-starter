@@ -48,7 +48,7 @@ make stop     # Stop the project (down)
 make info     # Show project access info (URLs, ports)
 ```
 
-> [!TIP]
+> [!NOTE]
 >
 > Run `make` to see all available commands ([makefile.md](.starter/docs/makefile.md)).
 
