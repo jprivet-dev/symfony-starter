@@ -27,12 +27,26 @@ Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS
 
 > [!TIP]
 >
-> * Override default ports in `.env.local` (e.g. `HTTP_PORT=9090 HTTPS_PORT=9443`), or set `HTTP_PORTS_AUTO=true` to derive ports from the project name (avoids conflicts between projects).
+> * Override default ports in `.env.local`:
+>   * e.g. `HTTP_PORT=9090 HTTPS_PORT=9443`.
+>   * or set `HTTP_PORTS_AUTO=true` to derive ports from the project name (avoids conflicts between projects).
 > * Run `make info` to see the current URLs.
 
 ### 4. Update your README
 
 Replace this `README.md` with [README.template.md](README.template.md) and fill in your project details.
+
+## Makefile daily usage
+
+```shell
+make start  # Start the project and show info (detached mode)
+make stop   # Stop the project (down)
+make info   # Show project access info (URLs, ports)
+```
+
+> [!TIP]
+>
+> Run `make` to see all available commands ([makefile.md](.starter/docs/makefile.md)).
 
 ## Documentation
 
