@@ -1,14 +1,11 @@
-# My Generated Symfony Project
+# <README_TITLE>
 
-A small description of my new Symfony project.
+<README_DESCRIPTION>.
 
 > [!TIP]
 >
-> This `README` is a starting point **for your new Symfony project**. Replace in that file:
-> * `My Generated Symfony Project` title.
-> * `A small description of my new Symfony project`.
-> * `MY_USERNAME`.
-> * `my-project`.
+> * This `README` is a starting point **for your new Symfony project**. 
+> * Replace in that file: `<README_TITLE>`, `<README_DESCRIPTION>`, `<USERNAME>` and `<PROJECT_NAME>`.
 >
 > 🚀 Quick start:
 >
@@ -29,8 +26,8 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
 ### 1. Clone the project
 
 ```shell
-git clone git@github.com:MY_USERNAME/my-project.git
-cd my-project
+git clone git@github.com:<USERNAME>/<PROJECT_NAME>.git
+cd <PROJECT_NAME>
 ```
 
 ### 2. Install the app
@@ -41,7 +38,7 @@ make install
 
 ### 3. Go on the app
 
-Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334) on first visit.
+Go to https://<PROJECT_NAME>.localhost:8442/ and accept [the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334) on first visit.
 
 > [!TIP]
 >
@@ -72,8 +69,8 @@ make info   # Show project access info (URLs, ports)
 
 ## Comments, suggestions?
 
-Feel free to make comments/suggestions in the [Git issues section](https://github.com/MY_USERNAME/my-project/issues).
+Feel free to make comments/suggestions in the [Git issues section](https://github.com/<USERNAME>/<PROJECT_NAME>/issues).
 
 ## License
 
-This project is released under the [**MIT License**](https://github.com/MY_USERNAME/my-project/blob/main/LICENSE).
+This project is released under the [**MIT License**](https://github.com/<USERNAME>/<PROJECT_NAME>/blob/main/LICENSE).
