@@ -1,4 +1,4 @@
-# Create your reproducer
+# Generate your reproducer
 
 [⬅️ Symfony Starter documentation](README.md)
 

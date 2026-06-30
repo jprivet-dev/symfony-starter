@@ -46,7 +46,7 @@ cd symfony-starter
 >
 > Each generation takes approximately ⏱️ 3-4 minutes depending on your machine and network speed.
 
-## Create your reproducer and contribute to Symfony
+## Generate your reproducer and contribute to Symfony
 
 Use the starter as a reproducer to contribute to the Symfony framework, any Symfony bundle or
 bridge. It lets you mount a local fork directly into the Docker environment and run the test suite
@@ -58,7 +58,7 @@ using the reproducer's PHP container (no local PHP installation required).
 | `make reproducer@lts` | Long-term support release           |
 | `make reproducer@6x`  | Symfony 6.x (for legacy reproducer) |
 
-* See [Create your reproducer](contrib.md)
+* See [Generate your reproducer](contrib.md)
 
 ## Switch to another DB
 
@@ -152,7 +152,7 @@ make install                # 4. Install and start
 
 ### Contributing
 
-* [Create your reproducer](contrib.md)
+* [Generate your reproducer](contrib.md)
 
 ---
 
