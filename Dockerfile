@@ -37,6 +37,19 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PHP_INI_SCAN_DIR=":$PHP_INI_DIR/app.conf.d"
 
 ###> recipes ###
+# Contrib PHP extensions
+RUN apt-get update && apt-get install -y \
+    libxslt1-dev \
+    libgd-dev \
+    libzip-dev \
+    libicu-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install native extensions with explicit clean to avoid 'modules/*' error
+RUN docker-php-ext-configure xsl && docker-php-ext-install xsl
+RUN docker-php-ext-configure gd && docker-php-ext-install gd
+RUN docker-php-ext-configure zip && docker-php-ext-install zip
+RUN docker-php-ext-configure intl && docker-php-ext-install intl
 ###< recipes ###
 
 COPY --link frankenphp/conf.d/10-app.ini $PHP_INI_DIR/app.conf.d/
