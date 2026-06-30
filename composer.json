@@ -10,7 +10,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "runtime/frankenphp-symfony": "^1.0",
-        "sensiolabs/gotenberg-bundle": "^1.3",
+        "sensiolabs/gotenberg-bundle": "1.x-dev",
         "symfony/asset": "6.4.*",
         "symfony/asset-mapper": "6.4.*",
         "symfony/console": "6.4.*",
