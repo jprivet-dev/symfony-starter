@@ -27,10 +27,12 @@ Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS
 
 > [!TIP]
 >
-> * Override default ports in `.env.local`:
->   * e.g. `HTTP_PORT=9090 HTTPS_PORT=9443`.
->   * or set `HTTP_PORTS_AUTO=true` to derive ports from the project name (avoids conflicts between projects).
-> * Run `make info` to see the current URLs.
+> By default, the app runs on port `8442`. Two ways to change it:
+>
+> * **Fixed ports:** set `HTTP_PORT` and `HTTPS_PORT` in `.env.local` (e.g. `HTTPS_PORT=9443`).
+> * **Auto ports:** set `HTTP_PORTS_AUTO=true` in `.env.local` to derive ports from the project name (avoids conflicts between projects).
+>
+> Run `make info` to see the current URLs.
 
 ### 4. Update your README
 
