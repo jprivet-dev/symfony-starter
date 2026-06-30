@@ -1,11 +1,13 @@
-# <MY_TITLE>
-
-<MY_DESCRIPTION>
+# Contribution reproducer
 
 > [!TIP]
 >
-> * This `README` is a starting point **for your new Symfony project**. 
-> * Replace in that file: `<MY_TITLE>`, `<MY_DESCRIPTION>`, `<MY_USERNAME>` and `<MY_PROJECT_NAME>`.
+> * This `README_REPRODUCER` is a starting point **for your reproducer**.
+> * Replace in that file: `<MY_ISSUE_URL>`, `<MY_ISSUE_TITLE>`, `<MY_ISSUE_ID>`, `<MY_USERNAME>`, `<MY_PROJECT_NAME>`, `<MY_BRANCH_NAME>`, `<MY_REPO_NAME>`, `<MY_UPSTREAM_REPO>`, `<MY_UPSTREAM_URL>` and `<MY_BUNDLE_INSTALL_STEPS>`.
+
+## Issue
+
+[<MY_ISSUE_TITLE> <MY_ISSUE_ID>](<MY_ISSUE_URL>)
 
 ## Prerequisites
 
@@ -15,18 +17,29 @@ Be sure to install the latest version of [Docker Engine](https://docs.docker.com
 
 ### 1. Clone the project
 
+Clone this repository and your fork side-by-side:
+
 ```shell
-git clone git@github.com:<MY_USERNAME>/<MY_PROJECT_NAME>.git
-cd <MY_PROJECT_NAME>
+git clone git@github.com:<MY_USERNAME>/<MY_PROJECT_NAME>.git --branch <MY_BRANCH_NAME>
+git clone git@github.com:<MY_USERNAME>/<MY_REPO_NAME>.git
 ```
+
+> [!NOTE]
+>
+> Fork [<MY_UPSTREAM_REPO>](<MY_UPSTREAM_URL>) first, then clone your own fork.
 
 ### 2. Install the app
 
 ```shell
+cd <MY_PROJECT_NAME>
 make install
 ```
 
-### 3. Go on the app
+### 3. Install bundle dependencies
+
+<MY_BUNDLE_INSTALL_STEPS>
+
+### 4. Go on the app
 
 Go to https://<MY_PROJECT_NAME>.localhost:8442/ and accept [the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334) on first visit.
 

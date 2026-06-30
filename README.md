@@ -34,9 +34,12 @@ Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS
 > 
 > Run `make restart` to apply, then `make info` to see the current URLs.
 
-### 4. Update your README
+### 3. Update your README
 
-Replace this `README.md` with [README.template.md](README.template.md) and fill in your project details.
+Replace your `README.md` with one of these templates and fill in your details:
+
+* [README_PROJECT.md](.starter/templates/README_PROJECT.md) — for a new Symfony project.
+* [README_REPRODUCER.md](.starter/templates/README_REPRODUCER.md) — for a contribution reproducer.
 
 ## Makefile daily usage
 
