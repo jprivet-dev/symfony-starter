@@ -4,7 +4,11 @@
 
 ---
 
-This project uses a modular Makefile system. Commands are **loaded dynamically based on the components currently installed** in your project.
+> [!IMPORTANT]
+>
+> This page lists every command across the entire project. Commands are **loaded dynamically based on the components currently installed**, so only a subset will be available in your environment.
+>
+> Run `make` to see which ones apply to your current setup.
 
 <!-- MAKEFILE_COMMANDS_START -->
 
