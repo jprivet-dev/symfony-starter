@@ -42,9 +42,10 @@ Go to https://<MY_PROJECT_NAME>.localhost:8442/ and accept [the auto-generated T
 ## Makefile daily usage
 
 ```shell
-make start  # Start the project and show info (detached mode)
-make stop   # Stop the project (down)
-make info   # Show project access info (URLs, ports)
+make install  # Start the project, install dependencies and show info
+make start    # Start the project and show info (detached mode)
+make stop     # Stop the project (down)
+make info     # Show project access info (URLs, ports)
 ```
 
 > [!TIP]

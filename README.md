@@ -16,6 +16,11 @@ cd symfony-starter
 * [Your project](.starter/docs/README.md).
 * [Your reproducer](.starter/docs/contrib.md).
 
+> [!NOTE]
+>
+> Already generated? Just run `make install`.
+
+
 |                                                                                   |                                                                          |
  |:----------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
 | <strong>Symfony</strong><br>![minimalist.png](.starter/docs/img/minimalist.png)   | <strong>API Platform</strong><br>![api.png](.starter/docs/img/api.png)   |
@@ -34,7 +39,7 @@ Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS
 > 
 > Run `make restart` to apply, then `make info` to see the current URLs.
 
-### 3. Update your README
+### 4. Update your README
 
 Replace your `README.md` with one of these templates and fill in your details:
 
@@ -44,9 +49,10 @@ Replace your `README.md` with one of these templates and fill in your details:
 ## Makefile daily usage
 
 ```shell
-make start  # Start the project and show info (detached mode)
-make stop   # Stop the project (down)
-make info   # Show project access info (URLs, ports)
+make install  # Start the project, install dependencies and show info
+make start    # Start the project and show info (detached mode)
+make stop     # Stop the project (down)
+make info     # Show project access info (URLs, ports)
 ```
 
 > [!TIP]
