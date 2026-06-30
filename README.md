@@ -1,32 +1,41 @@
-# Symfony Starter
+# Contribution reproducer
 
-Generate a fully Dockerized Symfony application with a single command 🥳
+## Prerequisites
+
+Be sure to install the latest version of:
+
+* [Docker Engine](https://docs.docker.com/engine/install/).
+* [Dagger](https://docs.dagger.io/install) (on the host machine, for full CI checks).
 
 ## Installation
 
 ### 1. Clone the project
 
+Clone this repository and your fork side-by-side:
+
 ```shell
-git clone git@github.com:jprivet-dev/symfony-starter.git
-cd symfony-starter
+git clone git@github.com:jprivet-dev/symfony-starter.git --branch reproducer/gotenberg-bundle/sf6.4
+git clone git@github.com:jprivet-dev/GotenbergBundle.git
 ```
-
-### 2. Generate your app
-
-* [Generate your Symfony project](.starter/docs/README.md).
-* [Generate your reproducer and contribute to Symfony](.starter/docs/contrib.md).
 
 > [!NOTE]
 >
-> Already generated? Just run `make install`.
+> Fork [sensiolabs/GotenbergBundle](https://github.com/sensiolabs/GotenbergBundle) first, then clone your own fork.
 
+### 2. Install the app
 
-|                                                                                   |                                                                          |
- |:----------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
-| <strong>Symfony</strong><br>![minimalist.png](.starter/docs/img/minimalist.png)   | <strong>API Platform</strong><br>![api.png](.starter/docs/img/api.png)   |
-| <strong>EasyAdmin</strong><br>![easy-admin.png](.starter/docs/img/easy-admin.png) | <strong>Symfony Demo</strong><br>![demo.png](.starter/docs/img/demo.png) |
+```shell
+cd symfony-starter
+make install
+```
 
-### 3. Go on the app
+### 3. Install bundle dependencies
+
+```shell
+make gotenberg_install
+```
+
+### 4. Go on the app
 
 Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334) on first visit.
 
@@ -36,23 +45,20 @@ Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS
 >
 > * **Fixed ports:** set `HTTP_PORT` and `HTTPS_PORT` in `.env.local` (e.g. `HTTPS_PORT=9443`).
 > * **Auto ports:** set `HTTP_PORTS_AUTO=true` in `.env.local` to derive ports from the project name (avoids conflicts between projects).
-> 
+>
 > Run `make restart` to apply, then `make info` to see the current URLs.
-
-### 4. Update your README
-
-Replace your `README.md` with one of these templates and fill in your details:
-
-* [README_PROJECT.md](.starter/templates/README_PROJECT.md) — for a new Symfony project.
-* [README_REPRODUCER.md](.starter/templates/README_REPRODUCER.md) — for a contribution reproducer.
 
 ## Makefile daily usage
 
 ```shell
-make install  # Start the project, install dependencies and show info
-make start    # Start the project and show info (detached mode)
-make stop     # Stop the project (down)
-make info     # Show project access info (URLs, ports)
+make install              # Start the project, install dependencies and show info
+make start                # Start the project and show info (detached mode)
+make stop                 # Stop the project (down)
+make info                 # Show project access info (URLs, ports)
+make gotenberg_install    # Install bundle dependencies and initialize Dagger
+make gotenberg_tests      # Run PHPUnit tests
+make gotenberg_coverage   # Generate HTML coverage report
+make dagger_all           # Run all Dagger checks (cs-fixer, phpstan, deps, docs, phpunit)
 ```
 
 > [!NOTE]
@@ -61,7 +67,13 @@ make info     # Show project access info (URLs, ports)
 
 ## Documentation
 
-🚀 [The Symfony Starter documentation](.starter/docs/README.md).
+* 📖 [The Project documentation](docs/README.md).
+* 🚀 [The Symfony Starter documentation](.starter/docs/README.md).
+
+## References
+
+* Generated with [jprivet-dev/symfony-starter](https://github.com/jprivet-dev/symfony-starter).
+* Built on top of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker).
 
 ## Comments, suggestions?
 
