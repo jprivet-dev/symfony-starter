@@ -61,6 +61,10 @@ Extract:
 
 - **Type**: bug, feature, deprecation, RFC
 
+> [!IMPORTANT]
+>
+> If the issue is a **feature** (or RFC), it must target the **next development branch**. New features are never accepted in stable or LTS branches — only bug fixes and security patches are. In this case, do **not** ask the user for a version: use the dev branch directly.
+
 ### 2. Propose a branch name and conversation title
 
 Use the format `reproducer/{repo}/{issue_id}-{short-kebab-case-description}-sf{version}` **in the reproducer** to distinguish branches across different repositories and Symfony versions:
@@ -75,7 +79,7 @@ Use the format `reproducer/{repo}/{issue_id}-{short-kebab-case-description}-sf{v
 - The `reproducer/{repo}/` prefix is **only used in the reproducer** — it helps distinguish branches when working on multiple repositories simultaneously
 - The `-sf{version}` suffix uses the exact major.minor version (e.g. `sf8.1`, `sf7.4`) — never `sf8.x` or any wildcard form. For dev branches, append `-dev` (e.g. `sf8.2-dev`).
 
-If the target Symfony version **cannot be clearly deduced** from the issue (no explicit version tag, no affected version mentioned, no code reference pointing to a specific branch), **ask the user before going any further**:
+If the issue is a **bug fix** and the target Symfony version **cannot be clearly deduced** from the issue (no explicit version tag, no affected version mentioned, no code reference pointing to a specific branch), **ask the user before going any further**:
 
 > Which Symfony version should this branch target? (e.g. `8.1`, `7.4`)
 
