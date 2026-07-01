@@ -208,6 +208,10 @@ endif
 	$(M) skeleton
 	$(M) require_maker_bundle
 	$(M) require_test_pack
+ifeq ($(STABILITY),dev)
+	$(C) update
+	$(M) co m="composer update (align lock with dev dependencies)"
+endif
 	$(M) require_phpcsfixer
 	$(M) require_phpmd
 	$(M) require_phpstan
