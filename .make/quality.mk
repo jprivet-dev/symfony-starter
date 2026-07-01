@@ -1,12 +1,19 @@
 ## — QUALITY ✅ ———————————————————————————————————————————————————————————————
 
-.PHONY: fix
-fix: ## Fix with all linters
-	-$(MAKE) phpcsfixer_fix
-	-$(MAKE) twigcsfixer_fix
-
 .PHONY: lint
-lint: phpcsfixer_check phpstan_analyse phpmd_lint twigcsfixer_lint ## Run all linters (stop on failure)
+lint: ## Run all linters (stop on failure)
+ifeq ($(wildcard $(VENDOR_PHPCSFIXER)),)
+	$(MAKE) phpcsfixer_check
+endif
+ifeq ($(wildcard $(VENDOR_PHPMD)),)
+	$(MAKE) phpmd_lint
+endif
+ifeq ($(wildcard $(VENDOR_PHPSTAN)),)
+	$(MAKE) phpstan_analyse
+endif
+ifeq ($(wildcard $(VENDOR_TWIGCSFIXER)),)
+	$(MAKE) twigcsfixer_lint
+endif
 
 ##
 
