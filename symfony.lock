@@ -95,5 +95,14 @@
             "config/packages/routing.yaml",
             "config/routes.yaml"
         ]
+    },
+    "vincentlanglet/twig-cs-fixer": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "d42582ae1bce86fd43491d6264c738b0867f8ffe"
+        }
     }
 }

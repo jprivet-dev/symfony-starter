@@ -79,6 +79,7 @@
         "phpunit/phpunit": "^13.2",
         "symfony/browser-kit": "8.2.*",
         "symfony/css-selector": "8.2.*",
-        "symfony/maker-bundle": "^1.67"
+        "symfony/maker-bundle": "^1.67",
+        "vincentlanglet/twig-cs-fixer": "^4.0"
     }
 }
