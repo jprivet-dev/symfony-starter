@@ -146,6 +146,8 @@ Then generate only Phase 1. Wait for the user's confirmation before moving to th
 
 Generate the reproducer and install only the Composer dependencies needed to reproduce the issue. Do not write any application code at this stage.
 
+List **all** dependencies upfront — Composer packages, PHP extensions (`ext-*`), and framework bundles (e.g. `symfony/twig-bundle` for rendering, `symfony/validator` for constraints). Do not defer any dependency to Phase 2; the reproducer must be fully functional before writing application code.
+
 Fill in all values from the issue analysis. Never leave placeholders like `MY_TOPIC_BRANCH`, `MY_USERNAME`, or `{branch-name}` unfilled. Always specify the working directory context for each command block.
 
 > [!TIP]
