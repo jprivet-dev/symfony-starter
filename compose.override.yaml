@@ -18,6 +18,7 @@ services:
 
       - ./var:/app/var
       - ./var/log:/app/var/log
+      - ../symfony:/symfony
     environment:
       FRANKENPHP_WORKER_CONFIG: watch
       FRANKENPHP_SITE_CONFIG: hot_reload
