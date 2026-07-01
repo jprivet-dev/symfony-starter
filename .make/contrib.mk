@@ -4,28 +4,7 @@
 ##
 
 # Clone by default your Symfony monorepo side-by-side with the Symfony Starter
-SYMFONY_MONOREPO_DIR=symfony
-
-PHPUNIT_EXE =
-ifneq ($(wildcard ../$(d)/phpunit),)
-PHPUNIT_EXE = /$(d)/phpunit
-endif
-ifneq ($(wildcard ../$(d)/vendor/bin/phpunit),)
-PHPUNIT_EXE = /$(d)/vendor/bin/phpunit
-endif
-
-PHPUNIT_CONFIG =
-ifneq ($(wildcard ../$(d)/phpunit.xml),)
-PHPUNIT_CONFIG = /$(d)/phpunit.xml
-endif
-ifneq ($(wildcard ../$(d)/phpunit.xml.dist),)
-PHPUNIT_CONFIG = /$(d)/phpunit.xml.dist
-endif
-
-SYMFONY_MINOR           = $(shell $(CONSOLE) --version | grep -oP '\d+\.\d+')
-REPO_PHPCSFIXER_CONFIG  = /$(d)/.php-cs-fixer.dist.php
-REPO_TWIGCSFIXER_CONFIG = /$(d)/.twig-cs-fixer.dist.php
-REPO_PHPSTAN_CONFIG     = $(shell test -f "../$(d)/phpstan-$(SYMFONY_MINOR).dist.neon" && echo "/$(d)/phpstan-$(SYMFONY_MINOR).dist.neon" || echo "/$(d)/phpstan.dist.neon")
+SYMFONY_MONOREPO_DIR = symfony
 
 reproducer_dockerfile: ## Add the necessary PHP extensions for the reproducer in the Dockerfile (xsl, etc.)
 	$(M) permissions
@@ -144,6 +123,8 @@ repo_status rs: _repo ## Show current branch for reproducer and a local reposito
 	@printf "\n"
 
 .PHONY: repo_tests rt
+repo_tests rt: PHPUNIT_EXE = $(shell test -f "../$(d)/vendor/bin/phpunit" && echo "/$(d)/vendor/bin/phpunit" || (test -f "../$(d)/phpunit" && echo "/$(d)/phpunit"))
+repo_tests rt: PHPUNIT_CONFIG = $(shell test -f "../$(d)/phpunit.xml.dist" && echo "/$(d)/phpunit.xml.dist" || (test -f "../$(d)/phpunit.xml" && echo "/$(d)/phpunit.xml"))
 repo_tests rt: repo_tests_clean repo_status ## Run PHPUnit tests in a local repository | d=<dir> [a=<args>] | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(if $(PHPUNIT_EXE),, $(error PHPUnit executable not found in /$(d)))
@@ -151,6 +132,8 @@ repo_tests rt: repo_tests_clean repo_status ## Run PHPUnit tests in a local repo
 	$(CONTAINER_PHP) $(PHPUNIT_EXE) -c $(PHPUNIT_CONFIG) $(a)
 
 .PHONY: repo_coverage rc
+repo_coverage rc: PHPUNIT_EXE = $(shell test -f "../$(d)/vendor/bin/phpunit" && echo "/$(d)/vendor/bin/phpunit" || (test -f "../$(d)/phpunit" && echo "/$(d)/phpunit"))
+repo_coverage rc: PHPUNIT_CONFIG = $(shell test -f "../$(d)/phpunit.xml.dist" && echo "/$(d)/phpunit.xml.dist" || (test -f "../$(d)/phpunit.xml" && echo "/$(d)/phpunit.xml"))
 repo_coverage rc: repo_tests_clean repo_status ## Generate HTML coverage report for a local repository | d=<dir> [a=<args>] | d=monolog-bundle
 	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	$(if $(PHPUNIT_EXE),, $(error PHPUnit executable not found in /$(d)))
@@ -174,24 +157,46 @@ repo_clean: repo_status ## Remove vendor and lock file from a local repository |
 
 ##
 
+repo_lint: ## Run all linters in a local repository (no stop on failure) | d=<dir> | d=monolog-bundle
+ifeq ($(wildcard $(VENDOR_PHPCSFIXER)),)
+	-$(MAKE) repo_phpcsfixer_check
+endif
+ifeq ($(wildcard $(VENDOR_TWIGCSFIXER)),)
+	-$(MAKE) repo_twigcsfixer_lint
+endif
+ifeq ($(wildcard $(VENDOR_PHPSTAN)),)
+	-$(MAKE) repo_phpstan_analyse
+endif
+ifeq ($(wildcard $(VENDOR_PHPMD)),)
+	-$(MAKE) repo_phpmd_lint
+endif
+
+##
+
 repo_phpcsfixer_check: _phpcsfixer repo_status ## Check code style in a local repository | d=<dir> | d=monolog-bundle
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@printf "\n$(Y)--- PHP CS Fixer [CHECK] ---$(S)\n"
-	$(PHPCSFIXER) --config=$(REPO_PHPCSFIXER_CONFIG) check --diff
+	$(PHPCSFIXER) --config=/$(d)/.php-cs-fixer.dist.php check --diff
 
 repo_phpcsfixer_fix: _phpcsfixer repo_status ## Fix code style in a local repository | d=<dir> | d=monolog-bundle
-	$(PHPCSFIXER) --config=$(REPO_PHPCSFIXER_CONFIG) fix
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	$(PHPCSFIXER) --config=/$(d)/.php-cs-fixer.dist.php fix
 
 ##
 
 repo_twigcsfixer_fix: _twigcsfixer repo_status ## Fix Twig code style in a local repository | d=<dir> | d=monolog-bundle
-	$(TWIGCSFIXER) fix -c $(REPO_TWIGCSFIXER_CONFIG)
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
+	$(TWIGCSFIXER) fix -c /$(d)/.twig-cs-fixer.dist.php
 
 repo_twigcsfixer_lint: _twigcsfixer repo_status ## Check Twig code style in a local repository | d=<dir> | d=monolog-bundle
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@printf "\n$(Y)--- Twig CS Fixer [LINT] ---$(S)\n"
-	$(TWIGCSFIXER) lint -c $(REPO_TWIGCSFIXER_CONFIG)
+	$(TWIGCSFIXER) lint -c /$(d)/.twig-cs-fixer.dist.php
 
 ##
 
+repo_phpstan_analyse: SYMFONY_MINOR = $(shell $(CONSOLE) --version | grep -oP '\d+\.\d+')
 repo_phpstan_analyse: _phpstan repo_status ## Run PHPStan analyse on a local repository | d=<dir> | d=monolog-bundle
+	$(if $(d),, $(error "Please specify a directory name with 'd=...'"))
 	@printf "\n$(Y)--- PHPStan [ANALYSE] ---$(S)\n"
-	$(PHPSTAN) analyse -c $(REPO_PHPSTAN_CONFIG) --memory-limit=-1
+	$(PHPSTAN) analyse -c $(shell test -f "../$(d)/phpstan-$(SYMFONY_MINOR).dist.neon" && echo "/$(d)/phpstan-$(SYMFONY_MINOR).dist.neon" || echo "/$(d)/phpstan.dist.neon") --memory-limit=-1
