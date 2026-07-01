@@ -11,6 +11,9 @@
             ".php-cs-fixer.dist.php"
         ]
     },
+    "phpstan/phpstan": {
+        "version": "2.2.3"
+    },
     "phpunit/phpunit": {
         "version": "13.2",
         "recipe": {
