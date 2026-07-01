@@ -50,6 +50,7 @@ RUN docker-php-ext-configure xsl && docker-php-ext-install xsl
 RUN docker-php-ext-configure gd && docker-php-ext-install gd
 RUN docker-php-ext-configure zip && docker-php-ext-install zip
 RUN docker-php-ext-configure intl && docker-php-ext-install intl
+RUN docker-php-ext-install bcmath
 ###< recipes ###
 
 COPY --link frankenphp/conf.d/10-app.ini $PHP_INI_DIR/app.conf.d/
