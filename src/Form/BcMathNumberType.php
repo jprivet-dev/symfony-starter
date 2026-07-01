@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Form\Type;
+namespace App\Form;
 
+use BcMath\Number;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,8 +14,8 @@ class BcMathNumberType extends AbstractType
     {
         $builder->addModelTransformer(
             new CallbackTransformer(
-                fn(?\BcMath\Number $value): ?string => null !== $value ? (string)$value : null,
-                fn(?string $value): ?\BcMath\Number => null !== $value && '' !== $value ? new \BcMath\Number($value) : null,
+                fn (?Number $value): ?string => null !== $value ? (string) $value : null,
+                fn (?string $value): ?Number => null !== $value && '' !== $value ? new Number($value) : null,
             )
         );
     }

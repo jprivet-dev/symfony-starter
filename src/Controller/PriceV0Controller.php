@@ -2,23 +2,23 @@
 
 namespace App\Controller;
 
-use App\Dto\PriceDto;
-use App\Form\PriceType;
+use App\Dto\PriceV0Dto;
+use App\Form\PriceV0Type;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class PriceController extends AbstractController
+class PriceV0Controller extends AbstractController
 {
-    #[Route('/price', name: 'app_price')]
+    #[Route('/price/v0', name: 'app_price_v0')]
     public function index(Request $request): Response
     {
-        $dto = new PriceDto();
-        $form = $this->createForm(PriceType::class, $dto);
+        $dto = new PriceV0Dto();
+        $form = $this->createForm(PriceV0Type::class, $dto);
         $form->handleRequest($request);
 
-        return $this->render('price/index.html.twig', [
+        return $this->render('price_v0/index.html.twig', [
             'form' => $form,
             'submitted' => $form->isSubmitted(),
             'valid' => $form->isSubmitted() && $form->isValid(),

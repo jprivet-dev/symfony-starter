@@ -2,13 +2,13 @@
 
 namespace App\Form;
 
-use App\Dto\PriceFormDto;
+use App\Dto\PriceV1Dto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PriceWorkaroundType extends AbstractType
+class PriceV1Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -33,6 +33,6 @@ class PriceWorkaroundType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => PriceFormDto::class]);
+        $resolver->setDefaults(['data_class' => PriceV1Dto::class]);
     }
 }

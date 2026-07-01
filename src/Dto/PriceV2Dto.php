@@ -2,26 +2,27 @@
 
 namespace App\Dto;
 
+use BcMath\Number;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class PriceV2Dto
 {
     public function __construct(
         #[Assert\NotNull]
-        #[Assert\GreaterThanOrEqual(new \BcMath\Number('0.01'))]
-        public ?\BcMath\Number $priceA = null,
+        #[Assert\GreaterThanOrEqual(new Number('0.01'))]
+        public ?Number $priceA = null,
 
         #[Assert\NotNull]
-        #[Assert\GreaterThanOrEqual(new \BcMath\Number('0.01'))]
-        public ?\BcMath\Number $priceB = null,
+        #[Assert\GreaterThanOrEqual(new Number('0.01'))]
+        public ?Number $priceB = null,
 
         #[Assert\NotNull]
-        #[Assert\GreaterThanOrEqual(new \BcMath\Number('0.01'))]
-        public ?\BcMath\Number $priceC = null,
+        #[Assert\GreaterThanOrEqual(new Number('0.01'))]
+        public ?Number $priceC = null,
 
         #[Assert\NotNull]
         #[Assert\Range(min: 0, max: 1000)]
-        public ?\BcMath\Number $priceD = null,
+        public ?Number $priceD = null,
     ) {
     }
 }

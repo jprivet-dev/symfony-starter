@@ -2,17 +2,18 @@
 
 namespace App\Dto;
 
+use BcMath\Number;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PriceFormDto
+class PriceV1Dto
 {
     public function __construct(
         #[Assert\NotBlank]
-        #[Assert\GreaterThanOrEqual(new \BcMath\Number('0.01'))]
+        #[Assert\GreaterThanOrEqual(new Number('0.01'))]
         public ?string $priceA = null,
 
         #[Assert\NotBlank]
-        #[Assert\GreaterThanOrEqual(new \BcMath\Number('0.01'))]
+        #[Assert\GreaterThanOrEqual(new Number('0.01'))]
         public ?string $priceB = null,
 
         #[Assert\NotBlank]
