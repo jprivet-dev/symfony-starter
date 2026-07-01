@@ -12,6 +12,7 @@
         "symfony/console": "8.2.*",
         "symfony/dotenv": "8.2.*",
         "symfony/flex": "^2",
+        "symfony/form": "8.2.*",
         "symfony/framework-bundle": "8.2.*",
         "symfony/runtime": "8.2.*",
         "symfony/yaml": "8.2.*"
