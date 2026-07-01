@@ -15,6 +15,7 @@
         "symfony/form": "8.2.*",
         "symfony/framework-bundle": "8.2.*",
         "symfony/runtime": "8.2.*",
+        "symfony/validator": "8.2.*",
         "symfony/yaml": "8.2.*"
     },
     "config": {
