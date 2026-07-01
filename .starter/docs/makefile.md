@@ -29,10 +29,9 @@ Usage: make <target>
   build_start                             [Level 2] Build & Start - Updating image with cache (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
   build_force_start                       [Level 3] Force build & Start - Rebuilding from scratch (triggers: Dockerfile, system packages, cache issues)
 
-  check                                   Check everything before you deliver - Composer, Doctrine validation, linters, ... (no stop on failure)
-  check_all                               Check everything before you deliver - check + tests (no stop on failure)
-  check_push                              Check on git push (stop on failure)
-  tests                                t  Run all tests
+  check                                   Check everything before you deliver - Composer, Doctrine validation, linters, ... (NO STOP on failure)
+  check_stop                              Check on git push (STOP on failure)
+  tests                                t  Run all tests (STOP on failure)
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
   build [a=<args>]                        Build or rebuild Docker services using cache (e.g. make build a=--no-cache)
@@ -148,8 +147,7 @@ Usage: make <target>
   xdebug_version                          Xdebug version number
 
 — QUALITY ✅ ———————————————————————————————————————————————————————————————
-  fix                                     Fix with all linters
-  lint                                    Run all linters (stop on failure)
+  lint                                    Run all linters (NO STOP on failure)
 
   phpcsfixer [a=<args>]                   Run PHP CS Fixer (e.g. make phpcsfixer a=list)
   phpcsfixer_check                        Check code style
@@ -222,8 +220,8 @@ Usage: make <target>
 
 ▸ SYMFONY MONOREPO
   monorepo_volume                         Add a Docker volume for the Symfony monorepo
-  monorepo_install                        Install external dependencies used during the tests in the Symfony monorepo
-  monorepo_update                         Update Composer dependencies in the Symfony monorepo
+  monorepo_install                        Install external dependencies used during the tests - Symfony monorepo
+  monorepo_update                         Update Composer dependencies - Symfony monorepo
 
   monorepo_link                           Replace vendors with symlinks to the Symfony monorepo
   monorepo_unlink                         Restore original vendors (rollback symlinks to the Symfony monorepo)
@@ -231,40 +229,40 @@ Usage: make <target>
   unlink                                  monorepo_unlink alias
 
   monorepo_status                      ms Show current branch for reproducer and the Symfony monorepo
-  monorepo_tests [a=<args>]            mt Run PHPUnit tests in the Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
-  monorepo_coverage [a=<args>]         mc Generate HTML coverage report (e.g. make monorepo_coverage a="/symfony/src/Symfony/Component/Console")
-  monorepo_tests_clean                    Clean PHPUnit cache and temporary files in the Symfony monorepo
-  monorepo_clean                          Remove vendor and lock file from the Symfony monorepo
+  monorepo_tests [a=<args>]            mt Run PHPUnit tests - Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
+  monorepo_coverage [a=<args>]         mc Generate HTML coverage report - Symfony monorepo (e.g. make monorepo_coverage a="/symfony/src/Symfony/Component/Console")
+  monorepo_tests_clean                    Clean PHPUnit cache and temporary files - Symfony monorepo
+  monorepo_clean                          Remove vendor and lock file - Symfony monorepo
 
-  monorepo_phpcsfixer_check               Check code style in the Symfony monorepo
-  monorepo_phpcsfixer_fix                 Fix code style in the Symfony monorepo
-
-  monorepo_twigcsfixer_fix                Fix Twig code style in the Symfony monorepo
-  monorepo_twigcsfixer_lint               Check Twig code style in the Symfony monorepo
-
-  monorepo_phpstan_analyse                Run PHPStan analyse on the Symfony monorepo
+  monorepo_lint                           Run all linters - Symfony monorepo (NO STOP on failure)
+  monorepo_phpcsfixer_check               Check code style - Symfony monorepo
+  monorepo_phpcsfixer_fix                 Fix code style - Symfony monorepo
+  monorepo_phpmd_lint                     Run PHP Mess Detector with all rules - Symfony monorepo
+  monorepo_phpstan_analyse                Run PHPStan analyse - Symfony monorepo
+  monorepo_twigcsfixer_fix                Fix Twig code style - Symfony monorepo
+  monorepo_twigcsfixer_lint               Check Twig code style - Symfony monorepo
 
 ▸ OTHER REPO
   repo_volume d=<dir>                     Add a Docker volume for a local repository (e.g. make repo_volume d=monolog-bundle)
-  repo_add d=<dir>                        Register a path repository in composer.json (e.g. make repo_add d=monolog-bundle)
-  repo_install d=<dir>                    Install external dependencies used during the tests (e.g. make repo_install d=monolog-bundle)
-  repo_update d=<dir>                     Update Composer dependencies in a local repository (e.g. make repo_update d=monolog-bundle)
+  repo_add d=<dir>                        Register a path repository in composer.json - local repository (e.g. make repo_add d=monolog-bundle)
+  repo_install d=<dir>                    Install external dependencies used during the tests - local repository (e.g. make repo_install d=monolog-bundle)
+  repo_update d=<dir>                     Update Composer dependencies - local repository (e.g. make repo_update d=monolog-bundle)
 
   repo_status d=<dir>                  rs Show current branch for reproducer and a local repository (e.g. make repo_status d=monolog-bundle)
-  repo_tests d=<dir> [a=<args>]        rt Run PHPUnit tests in a local repository (e.g. make repo_tests d=monolog-bundle)
-  repo_coverage d=<dir> [a=<args>]     rc Generate HTML coverage report for a local repository (e.g. make repo_coverage d=monolog-bundle)
-  repo_tests_clean d=<dir>                Clean PHPUnit cache and temporary files in a local repository (e.g. make repo_tests_clean d=monolog-bundle)
+  repo_tests d=<dir> [a=<args>]        rt Run PHPUnit tests - local repository (e.g. make repo_tests d=monolog-bundle)
+  repo_coverage d=<dir> [a=<args>]     rc Generate HTML coverage report - local repository (e.g. make repo_coverage d=monolog-bundle)
+  repo_tests_clean d=<dir>                Clean PHPUnit cache and temporary files - local repository (e.g. make repo_tests_clean d=monolog-bundle)
 
-  repo_remove d=<dir>                     Unregister a path repository from composer.json (e.g. make repo_remove d=monolog-bundle)
-  repo_clean d=<dir>                      Remove vendor and lock file from a local repository (e.g. make repo_clean d=monolog-bundle)
+  repo_remove d=<dir>                     Unregister a path repository from composer.json - local repository (e.g. make repo_remove d=monolog-bundle)
+  repo_clean d=<dir>                      Remove vendor and lock file - local repository (e.g. make repo_clean d=monolog-bundle)
 
-  repo_phpcsfixer_check d=<dir>           Check code style in a local repository (e.g. make repo_phpcsfixer_check d=monolog-bundle)
-  repo_phpcsfixer_fix d=<dir>             Fix code style in a local repository (e.g. make repo_phpcsfixer_fix d=monolog-bundle)
-
-  repo_twigcsfixer_fix d=<dir>            Fix Twig code style in a local repository (e.g. make repo_twigcsfixer_fix d=monolog-bundle)
-  repo_twigcsfixer_lint d=<dir>           Check Twig code style in a local repository (e.g. make repo_twigcsfixer_lint d=monolog-bundle)
-
-  repo_phpstan_analyse d=<dir>            Run PHPStan analyse on a local repository (e.g. make repo_phpstan_analyse d=monolog-bundle)
+  repo_lint d=<dir>                       Run all linters - local repository (NO STOP on failure) (e.g. make repo_lint d=monolog-bundle)
+  repo_phpcsfixer_check d=<dir>           Check code style - local repository (e.g. make repo_phpcsfixer_check d=monolog-bundle)
+  repo_phpcsfixer_fix d=<dir>             Fix code style - local repository (e.g. make repo_phpcsfixer_fix d=monolog-bundle)
+  repo_phpmd_lint d=<dir>                 Run PHP Mess Detector with all rules - local repository (e.g. make repo_phpmd_lint d=monolog-bundle)
+  repo_phpstan_analyse d=<dir>            Run PHPStan analyse - local repository (e.g. make repo_phpstan_analyse d=monolog-bundle)
+  repo_twigcsfixer_fix d=<dir>            Fix Twig code style - local repository (e.g. make repo_twigcsfixer_fix d=monolog-bundle)
+  repo_twigcsfixer_lint d=<dir>           Check Twig code style - local repository (e.g. make repo_twigcsfixer_lint d=monolog-bundle)
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 

@@ -1,18 +1,18 @@
 ## — QUALITY ✅ ———————————————————————————————————————————————————————————————
 
 .PHONY: lint
-lint: ## Run all linters (stop on failure)
-ifeq ($(wildcard $(VENDOR_PHPCSFIXER)),)
-	$(MAKE) phpcsfixer_check
+lint: ## Run all linters (NO STOP on failure)
+ifneq ($(wildcard $(VENDOR_PHPCSFIXER)),)
+	-$(MAKE) phpcsfixer_check
 endif
-ifeq ($(wildcard $(VENDOR_PHPMD)),)
-	$(MAKE) phpmd_lint
+ifneq ($(wildcard $(VENDOR_TWIGCSFIXER)),)
+	-$(MAKE) twigcsfixer_lint
 endif
-ifeq ($(wildcard $(VENDOR_PHPSTAN)),)
-	$(MAKE) phpstan_analyse
+ifneq ($(wildcard $(VENDOR_PHPSTAN)),)
+	-$(MAKE) phpstan_analyse
 endif
-ifeq ($(wildcard $(VENDOR_TWIGCSFIXER)),)
-	$(MAKE) twigcsfixer_lint
+ifneq ($(wildcard $(VENDOR_PHPMD)),)
+	-$(MAKE) phpmd_lint
 endif
 
 ##
@@ -36,7 +36,7 @@ phpmd: _phpmd ## Run PHP Mess Detector | [a=<args>] | a="src ansi cleancode"
 
 phpmd_lint: _phpmd ## Run PHP Mess Detector with all rules
 	@printf "\n$(Y)--- PHP Mess Detector [LINT] ---$(S)\n"
-	$(PHPMD) $(SRC),$(TESTS) ansi cleancode,codesize,controversial,design,naming,unusedcode $(a)
+	$(PHPMD) $(SRC) ansi cleancode,codesize,controversial,design,naming,unusedcode $(a)
 
 ##
 

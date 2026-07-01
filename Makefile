@@ -327,33 +327,33 @@ build_force_start: ## [Level 3] Force build & Start - Rebuilding from scratch (t
 
 ##
 
-check:  ## Check everything before you deliver - Composer, Doctrine validation, linters, ... (no stop on failure)
+check:  ## Check everything before you deliver - Composer, Doctrine validation, linters, ... (NO STOP on failure)
 	-$(MAKE) composer_validate
-ifeq ($(wildcard $(VENDOR_DOCTRINE_ORM)),)
+ifneq ($(wildcard $(VENDOR_DOCTRINE_ORM)),)
 	-$(MAKE) validate
 endif
-ifneq ($(or $(ALL), $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)), $(wildcard $(VENDOR_PHPMETRICS)), $(wildcard $(VENDOR_PHPSTAN)), $(wildcard $(VENDOR_TWIGCSFIXER))),)
+ifneq ($(or $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)), $(wildcard $(VENDOR_PHPMETRICS)), $(wildcard $(VENDOR_PHPSTAN)), $(wildcard $(VENDOR_TWIGCSFIXER))),)
 	-$(MAKE) lint
 endif
-ifeq ($(wildcard $(BIN_PHPUNIT)),)
+ifneq ($(wildcard $(BIN_PHPUNIT)),)
 	-$(MAKE) phpunit
 endif
 
-check_push: ## Check on git push (stop on failure)
+check_stop: ## Check on git push (STOP on failure)
 	$(MAKE) composer_validate
-ifeq ($(wildcard $(VENDOR_DOCTRINE_ORM)),)
+ifneq ($(wildcard $(VENDOR_DOCTRINE_ORM)),)
 	$(MAKE) validate
 endif
-ifneq ($(or $(ALL), $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)), $(wildcard $(VENDOR_PHPMETRICS)), $(wildcard $(VENDOR_PHPSTAN)), $(wildcard $(VENDOR_TWIGCSFIXER))),)
+ifneq ($(or $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)), $(wildcard $(VENDOR_PHPMETRICS)), $(wildcard $(VENDOR_PHPSTAN)), $(wildcard $(VENDOR_TWIGCSFIXER))),)
 	$(MAKE) lint
 endif
-ifeq ($(wildcard $(BIN_PHPUNIT)),)
+ifneq ($(wildcard $(BIN_PHPUNIT)),)
 	$(MAKE) phpunit
 endif
 
 .PHONY: tests t
-tests t: ## Run all tests (stop on failure)
-ifeq ($(wildcard $(BIN_PHPUNIT)),)
+tests t: ## Run all tests (STOP on failure)
+ifneq ($(wildcard $(BIN_PHPUNIT)),)
 	$(MAKE) phpunit
 endif
 
