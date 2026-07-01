@@ -15,6 +15,7 @@
         "symfony/flex": "^2",
         "symfony/form": "8.2.*",
         "symfony/framework-bundle": "8.2.*",
+        "symfony/object-mapper": "8.2.*",
         "symfony/runtime": "8.2.*",
         "symfony/twig-bundle": "8.2.*",
         "symfony/validator": "8.2.*",
