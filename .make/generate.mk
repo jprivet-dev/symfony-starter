@@ -349,7 +349,7 @@ require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website
 	$(M) co m="composer require --dev phpmetrics/phpmetrics"
 
 require_phpstan: ## Install PHPStan - https://phpstan.org/
-	$(C) require --dev \
+	SYMFONY_ALLOW_CONTRIB=1 $(C) require --no-interaction --dev \
 		phpstan/phpstan \
 		phpstan/phpstan-symfony \
 		phpstan/phpstan-doctrine \
