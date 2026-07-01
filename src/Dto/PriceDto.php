@@ -22,5 +22,6 @@ class PriceDto
         #[Assert\NotNull]
         #[Assert\Range(min: 0, max: 1000)]
         public ?\BcMath\Number $priceD = null,
-    ) {}
+    ) {
+    }
 }
