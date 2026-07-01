@@ -361,7 +361,7 @@ require_phpstan: ## Install PHPStan - https://phpstan.org/
 	$(M) co m="Install PHPStan (+ symfony, doctrine & phpunit)"
 
 require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
-	$(C) require --dev vincentlanglet/twig-cs-fixer
+	SYMFONY_ALLOW_CONTRIB=1 $(C) require --no-interaction --dev vincentlanglet/twig-cs-fixer
 	$(M) co m="Install Twig CS Fixer"
 
 ##
