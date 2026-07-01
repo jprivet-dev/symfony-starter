@@ -207,6 +207,11 @@ ifneq ($(filter 6.%,$(SYMFONY_VERSION)),)
 endif
 	$(M) skeleton
 	$(M) require_maker_bundle
+	$(M) require_test_pack
+	$(M) require_phpcsfixer
+	$(M) require_phpmd
+	$(M) require_phpstan
+	$(M) require_twigcsfixer
 	$(M) reproducer_dockerfile
 	$(M) permissions images info
 	$(M) health_welcome_to_symfony
