@@ -154,7 +154,7 @@ make install                # 4. Install and start
 
 ### Contributing
 
-* [Generate your reproducer](contrib.md)
+* [Generate your reproducer and contribute to Symfony](contrib.md)
 
 ---
 
