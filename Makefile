@@ -328,25 +328,34 @@ build_force_start: ## [Level 3] Force build & Start - Rebuilding from scratch (t
 ##
 
 check:  ## Check everything before you deliver - Composer, Doctrine validation, linters, ... (no stop on failure)
-	@printf " $(Y)›$(S) 💡 Tip: enrich $(G)check$(S) in Makefile as your project matures\n"
 	-$(MAKE) composer_validate
-	@#-$(MAKE) validate         # Doctrine mapping validation
-	@#-$(MAKE) lint             # Twig, YAML, container linters (phpcsfixer, twigcsfixer, phpstan)
-	@#-$(MAKE) phpstan_lint     # Static analysis only
-
-check_all: check ## Check everything before you deliver - check + tests (no stop on failure)
-	@#-$(MAKE) tests            # Full test suite (better left to CI)
+ifeq ($(wildcard $(VENDOR_DOCTRINE_ORM)),)
+	-$(MAKE) validate
+endif
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)), $(wildcard $(VENDOR_PHPMETRICS)), $(wildcard $(VENDOR_PHPSTAN)), $(wildcard $(VENDOR_TWIGCSFIXER))),)
+	-$(MAKE) lint
+endif
+ifeq ($(wildcard $(BIN_PHPUNIT)),)
+	-$(MAKE) phpunit
+endif
 
 check_push: ## Check on git push (stop on failure)
-	@printf " $(Y)›$(S) 💡 Tip: enrich $(G)check_push$(S) in Makefile as your project matures\n"
 	$(MAKE) composer_validate
-	@#$(MAKE) validate         # Doctrine mapping validation
-	@#$(MAKE) lint             # Twig, YAML, container linters (phpcsfixer, twigcsfixer, phpstan)
-	@#$(MAKE) phpstan_lint     # Static analysis only
-	@#$(MAKE) tests            # Full test suite (better left to CI)
+ifeq ($(wildcard $(VENDOR_DOCTRINE_ORM)),)
+	$(MAKE) validate
+endif
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)), $(wildcard $(VENDOR_PHPMETRICS)), $(wildcard $(VENDOR_PHPSTAN)), $(wildcard $(VENDOR_TWIGCSFIXER))),)
+	$(MAKE) lint
+endif
+ifeq ($(wildcard $(BIN_PHPUNIT)),)
+	$(MAKE) phpunit
+endif
 
 .PHONY: tests t
-tests t: db_init@test fixtures@test phpunit ## Run all tests
+tests t: ## Run all tests (stop on failure)
+ifeq ($(wildcard $(BIN_PHPUNIT)),)
+	$(MAKE) phpunit
+endif
 
 ## — DOCKER 🐳 ————————————————————————————————————————————————————————————————
 
