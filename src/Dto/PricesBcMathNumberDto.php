@@ -5,7 +5,7 @@ namespace App\Dto;
 use BcMath\Number;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PriceBcMathNumberDto
+class PricesBcMathNumberDto
 {
     public function __construct(
         #[Assert\NotBlank]

@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Dto\PriceBcMathNumberDto;
+use App\Dto\PricesBcMathNumberDto;
 use BcMath\Number;
 use BcMathNumberType;
 use Symfony\Component\Form\AbstractType;
@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PriceBcMathNumberType extends AbstractType
+class PricesBcMathNumberType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -24,6 +24,6 @@ class PriceBcMathNumberType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => PriceBcMathNumberDto::class]);
+        $resolver->setDefaults(['data_class' => PricesBcMathNumberDto::class]);
     }
 }

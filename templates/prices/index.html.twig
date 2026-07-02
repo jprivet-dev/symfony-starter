@@ -1,33 +1,40 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ title }}{% endblock %}
+
 {% block body %}
-    <h1>Simple price</h1>
+    <h1>{{ title }}</h1>
 
     <h2>Test with</h2>
 
     <table>
         <tr>
             <th>Case</th>
+            <th>For</th>
             <th>Value</th>
             <th>Expected violation</th>
         </tr>
         <tr>
             <td>Valid 1</td>
+            <td>Price A</td>
             <td>0.015</td>
             <td></td>
         </tr>
         <tr>
             <td>Valid 2</td>
+            <td>Price B</td>
             <td>0.01</td>
             <td></td>
         </tr>
         <tr>
             <td>Invalid 1</td>
+            <td>Price C</td>
             <td>0.005</td>
             <td>This value should be greater than or equal to 0.01.</td>
         </tr>
         <tr>
             <td>Invalid 2</td>
+            <td>Price D</td>
             <td>0.00999999999999999999</td>
             <td>This value should be greater than or equal to 0.01.</td>
         </tr>
@@ -36,7 +43,10 @@
     <h2>Form</h2>
 
     {{ form_start(form) }}
-    {{ form_row(form.value) }}
+    {{ form_row(form.priceA) }}
+    {{ form_row(form.priceB) }}
+    {{ form_row(form.priceC) }}
+    {{ form_row(form.priceD) }}
     <button type="submit">Submit</button>
     {{ form_end(form) }}
 {% endblock %}

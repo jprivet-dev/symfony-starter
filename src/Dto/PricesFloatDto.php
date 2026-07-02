@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PriceFloatDto
+class PricesFloatDto
 {
     public function __construct(
         #[Assert\NotBlank]

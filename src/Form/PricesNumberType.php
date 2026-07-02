@@ -2,13 +2,13 @@
 
 namespace App\Form;
 
-use App\Dto\PriceFloatDto;
+use App\Dto\PricesFloatDto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PriceNumberType extends AbstractType
+class PricesNumberType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -21,6 +21,6 @@ class PriceNumberType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => PriceFloatDto::class]);
+        $resolver->setDefaults(['data_class' => PricesFloatDto::class]);
     }
 }
