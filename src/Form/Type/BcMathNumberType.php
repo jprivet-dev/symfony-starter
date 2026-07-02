@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Form\Type;
+
 use App\Form\DataTransformer\BcMathNumberToStringTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
