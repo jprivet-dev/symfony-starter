@@ -7,25 +7,31 @@
 
     <table border="1">
         <tr>
-            <th>Case</th>
+            <th>Property</th>
             <th>Initial value</th>
             <th>Final value</th>
-            <th>Violations (count)</th>
-            <th>Violations (messages)</th>
+            <th>Violations</th>
             <th>Status</th>
         </tr>
-        {% for case in cases %}
+        {% for property, case in cases %}
+            {% set hasViolation = false %}
+            {% for violation in violations %}
+                {% if violation.propertyPath == property %}
+                    {% set hasViolation = true %}
+                {% endif %}
+            {% endfor %}
             <tr>
-                <td>{{ case.label }}</td>
-                <td>{{ case.initial_value }}</td>
-                <td>{{ case.dto.price }}</td>
-                <td>{{ case.violations|length }}</td>
+                <td>{{ property }}</td>
+                <td>{{ case.initial }}</td>
+                <td>{{ attribute(dto, property) }}</td>
                 <td>
-                    {% for violation in case.violations %}
-                        {{ violation.message }}
+                    {% for violation in violations %}
+                        {% if violation.propertyPath == property %}
+                            {{ violation.message }}
+                        {% endif %}
                     {% endfor %}
                 </td>
-                <td>{{ case.status === 'ok' ? '✅' : '❌' }}</td>
+                <td>{{ (hasViolation != case.shouldBeValid) ? '✅' : '❌' }}</td>
             </tr>
         {% endfor %}
     </table>

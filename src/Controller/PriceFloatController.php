@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Dto\PriceBcMathNumberDto;
 use App\Dto\PriceFloatDto;
 use App\Form\PriceFloatType;
+use BcMath\Number;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +22,7 @@ class PriceFloatController extends AbstractController
         $form->handleRequest($request);
 
         return $this->render('price/index.html.twig', [
-            'title' => 'Float',
+            'title' => 'Float — Form',
             'form' => $form,
             'submitted' => $form->isSubmitted(),
             'valid' => $form->isSubmitted() && $form->isValid(),
@@ -31,32 +33,25 @@ class PriceFloatController extends AbstractController
     public function violations(ValidatorInterface $validator): Response
     {
         $cases = [
-            [
-                'label' => 'Valid',
-                'initial_value' => '0.015',
-                'dto' => new PriceFloatDto(0.015),
-                'status' => 'ok',
-            ],
-            [
-                'label' => 'Invalid 1',
-                'initial_value' => '0.005',
-                'dto' => new PriceFloatDto(0.005),
-                'status' => 'ok',
-            ],
-            [
-                'label' => 'Invalid 2',
-                'initial_value' => '0.00999999999999999999',
-                'dto' => new PriceFloatDto(0.00999999999999999999),
-                'status' => 'ko',
-            ],
+            'priceA' => ['initial' => '0.015', 'shouldBeValid' => true],
+            'priceB' => ['initial' => '0.01', 'shouldBeValid' => true],
+            'priceC' => ['initial' => '0.005', 'shouldBeValid' => false],
+            'priceD' => ['initial' => '0.00999999999999999999', 'shouldBeValid' => false],
         ];
 
-        foreach ($cases as &$case) {
-            $case['violations'] = $validator->validate($case['dto']);
-        }
+        $dto = new PriceFloatDto(
+            priceA: 0.015,
+            priceB: 0.01,
+            priceC: 0.005,
+            priceD: 0.00999999999999999999,
+        );
+
+        $violations = $validator->validate($dto);
 
         return $this->render('price/violations.html.twig', [
             'title' => 'Float — Direct Validation',
+            'dto' => $dto,
+            'violations' => $violations,
             'cases' => $cases,
         ]);
     }

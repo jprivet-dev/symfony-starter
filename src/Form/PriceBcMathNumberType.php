@@ -14,10 +14,17 @@ class PriceBcMathNumberType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('price', NumberType::class, ['label' => 'Price — GreaterThanOrEqual(new BcMath\\Number("0.01"))']);
+        $builder
+            ->add('priceA', NumberType::class)
+            ->add('priceB', NumberType::class)
+            ->add('priceC', NumberType::class)
+            ->add('priceD', NumberType::class);
 
-        // Avoid error: Unable to transform value for property path "price": Expected a numeric.
-        $builder->get('price')->addModelTransformer(static::getCallbackTransformer());
+        // Avoid error: Unable to transform value for property path "priceX": Expected a numeric.
+        $builder->get('priceA')->addModelTransformer(static::getCallbackTransformer());
+        $builder->get('priceB')->addModelTransformer(static::getCallbackTransformer());
+        $builder->get('priceC')->addModelTransformer(static::getCallbackTransformer());
+        $builder->get('priceD')->addModelTransformer(static::getCallbackTransformer());
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -32,8 +39,8 @@ class PriceBcMathNumberType extends AbstractType
     static private function getCallbackTransformer(): CallbackTransformer
     {
         return new CallbackTransformer(
-            fn (?Number $value): ?float => null === $value ? null : (float) (string) $value,
-            fn (int|float|null $value): ?Number => null === $value ? null : new Number((string) $value),
+            fn(?Number $value): ?float => null === $value ? null : (float)(string)$value,
+            fn(int|float|null $value): ?Number => null === $value ? null : new Number((string)$value),
         );
     }
 }

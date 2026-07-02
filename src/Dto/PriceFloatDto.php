@@ -2,7 +2,6 @@
 
 namespace App\Dto;
 
-use BcMath\Number;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class PriceFloatDto
@@ -10,7 +9,19 @@ class PriceFloatDto
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\GreaterThanOrEqual(0.01)]
-        public ?float $price = null,
+        public ?float $priceA = null,
+
+        #[Assert\NotBlank]
+        #[Assert\GreaterThanOrEqual(0.01)]
+        public ?float $priceB = null,
+
+        #[Assert\NotBlank]
+        #[Assert\GreaterThanOrEqual(0.01)]
+        public ?float $priceC = null,
+
+        #[Assert\NotBlank]
+        #[Assert\GreaterThanOrEqual(0.01)]
+        public ?float $priceD = null,
     ) {
     }
 }

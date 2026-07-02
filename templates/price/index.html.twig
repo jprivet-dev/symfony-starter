@@ -43,7 +43,10 @@
     <h2>Form</h2>
 
     {{ form_start(form) }}
-    {{ form_row(form.price) }}
+    {{ form_row(form.priceA) }}
+    {{ form_row(form.priceB) }}
+    {{ form_row(form.priceC) }}
+    {{ form_row(form.priceD) }}
     <button type="submit">Submit</button>
     {{ form_end(form) }}
 {% endblock %}
