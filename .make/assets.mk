@@ -34,17 +34,19 @@ importmap_audit: _assets ## Check for security vulnerability advisories for depe
 importmap_install: _assets ## Download all assets that should be downloaded
 	$(CONSOLE) importmap:install
 
-importmap_outdated: _assets ## List outdated JavaScript packages and their latest versions
-	$(CONSOLE) importmap:outdated
+importmap_outdated: _assets ## List outdated JavaScript packages and their latest versions | [p=<packages>] | p="lodash"
+	$(CONSOLE) importmap:outdated $(p)
 
-importmap_remove: _assets ## Remove JavaScript packages
-	$(CONSOLE) importmap:remove
+importmap_remove: _assets ## Remove JavaScript packages | p=<packages> | p="lodash"
+	$(if $(p),, $(error "Please specify the packages with 'p=...'"))
+	$(CONSOLE) importmap:remove $(p)
 
-importmap_require: _assets ## Require JavaScript packages
-	$(CONSOLE) importmap:require $(a)
+importmap_require: _assets ## Require JavaScript packages | p=<packages> | p="lodash@^4.15"
+	$(if $(p),, $(error "Please specify the packages with 'p=...'"))
+	$(CONSOLE) importmap:require $(p)
 
-importmap_update: _assets ## Update JavaScript packages to their latest versions
-	$(CONSOLE) importmap:update
+importmap_update: _assets ## Update JavaScript packages to their latest versions | [p=<packages>] | p="lodash"
+	$(CONSOLE) importmap:update $(p)
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_TAILWIND))),)
 include .make/assets_tailwind.mk

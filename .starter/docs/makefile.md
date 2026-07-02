@@ -175,10 +175,10 @@ Usage: make <target>
 
   importmap_audit                         Check for security vulnerability advisories for dependencies
   importmap_install                       Download all assets that should be downloaded
-  importmap_outdated                      List outdated JavaScript packages and their latest versions
-  importmap_remove                        Remove JavaScript packages
-  importmap_require                       Require JavaScript packages
-  importmap_update                        Update JavaScript packages to their latest versions
+  importmap_outdated [p=<packages>]       List outdated JavaScript packages and their latest versions (e.g. make importmap_outdated p="lodash")
+  importmap_remove p=<packages>           Remove JavaScript packages (e.g. make importmap_remove p="lodash")
+  importmap_require p=<packages>          Require JavaScript packages (e.g. make importmap_require p="lodash@^4.15")
+  importmap_update [p=<packages>]         Update JavaScript packages to their latest versions (e.g. make importmap_update p="lodash")
 
   tailwind_init                           Initializes Tailwind CSS for your project
   tailwind_clear                          Clear var/tailwind directory
