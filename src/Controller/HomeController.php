@@ -14,7 +14,7 @@ class HomeController extends AbstractController
     {
         $routes = array_filter(
             array_keys($router->getRouteCollection()->all()),
-            fn(string $name) => str_starts_with($name, 'app_'),
+            fn (string $name) => str_starts_with($name, 'app_'),
         );
 
         return $this->render('home/index.html.twig', ['routes' => $routes]);

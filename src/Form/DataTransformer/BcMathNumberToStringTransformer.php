@@ -23,7 +23,7 @@ class BcMathNumberToStringTransformer implements DataTransformerInterface
             throw new TransformationFailedException('Expected a BcMath\Number.');
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 
     public function reverseTransform(mixed $value): ?Number

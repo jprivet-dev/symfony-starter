@@ -34,13 +34,13 @@ class PricesNumberCallbackTransformerType extends AbstractType
 
     /**
      * DTO → Form: BcMath\Number → (transform) → float → (NumberType) → show string
-     * Form → DTO: entered string → (NumberType) → float → (reverseTransform) → BcMath\Number
+     * Form → DTO: entered string → (NumberType) → float → (reverseTransform) → BcMath\Number.
      */
-    static private function getCallbackTransformer(): CallbackTransformer
+    private static function getCallbackTransformer(): CallbackTransformer
     {
         return new CallbackTransformer(
-            fn(?Number $value): ?float => null === $value ? null : (float)(string)$value,
-            fn(int|float|null $value): ?Number => null === $value ? null : new Number((string)$value),
+            fn (?Number $value): ?float => null === $value ? null : (float) (string) $value,
+            fn (int|float|null $value): ?Number => null === $value ? null : new Number((string) $value),
         );
     }
 }

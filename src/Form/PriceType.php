@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Dto\PriceDto;
-use BcMathNumberType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -12,7 +11,7 @@ class PriceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('value', BcMathNumberType::class);
+        $builder->add('value', \BcMathNumberType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
