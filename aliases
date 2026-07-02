@@ -64,4 +64,4 @@ makefile_aliases \
     sf:bin/console:c \
     php:compose.yaml:a \
     composer:composer.json:a \
-    phpunit:bin/phpunit:a
+    phpunit:bin/phpunit:a \
