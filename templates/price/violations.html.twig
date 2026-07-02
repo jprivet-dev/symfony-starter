@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <h1>{{ title }}</h1>
+
+    <table border="1">
+        <tr>
+            <th>Case</th>
+            <th>Initial value</th>
+            <th>Final value</th>
+            <th>Violations (count)</th>
+            <th>Violations (messages)</th>
+            <th>Status</th>
+        </tr>
+        {% for case in cases %}
+            <tr>
+                <td>{{ case.label }}</td>
+                <td>{{ case.initial_value }}</td>
+                <td>{{ case.dto.price }}</td>
+                <td>{{ case.violations|length }}</td>
+                <td>
+                    {% for violation in case.violations %}
+                        {{ violation.message }}
+                    {% endfor %}
+                </td>
+                <td>{{ case.status === 'ok' ? '✅' : '❌' }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

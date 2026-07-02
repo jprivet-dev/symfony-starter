@@ -5,12 +5,45 @@
 {% block body %}
     <h1>{{ title }}</h1>
 
+    <h2>Test with</h2>
+
+    <table border="1">
+        <tr>
+            <th>Case</th>
+            <th>Value</th>
+            <th>Expected violations</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>Valid 1</td>
+            <td>0.015</td>
+            <td></td>
+            <td>✅</td>
+        </tr>
+        <tr>
+            <td>Valid 2</td>
+            <td>0.01</td>
+            <td></td>
+            <td>✅</td>
+        </tr>
+        <tr>
+            <td>Invalid 1</td>
+            <td>0.005</td>
+            <td>This value should be greater than or equal to 0.01.</td>
+            <td>✅</td>
+        </tr>
+        <tr>
+            <td>Invalid 2</td>
+            <td>0.00999999999999999999</td>
+            <td>This value should be greater than or equal to 0.01.</td>
+            <td>❌</td>
+        </tr>
+    </table>
+
+    <h2>Form</h2>
+
     {{ form_start(form) }}
-    {{ form_row(form.priceA) }}
+    {{ form_row(form.price) }}
     <button type="submit">Submit</button>
     {{ form_end(form) }}
-
-    {% if submitted %}
-        <h2>Result: {{ valid ? '✅ Valid' : '❌ Invalid' }}</h2>
-    {% endif %}
 {% endblock %}

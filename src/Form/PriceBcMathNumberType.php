@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Dto\PriceV0Dto;
+use App\Dto\PriceBcMathNumberDto;
 use BcMath\Number;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
@@ -10,19 +10,19 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PriceV0Type extends AbstractType
+class PriceBcMathNumberType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('priceA', NumberType::class, ['label' => 'Price A — GreaterThanOrEqual(new BcMath\\Number("0.01"))']);
+        $builder->add('price', NumberType::class, ['label' => 'Price — GreaterThanOrEqual(new BcMath\\Number("0.01"))']);
 
-        $builder->get('priceA')->addModelTransformer(static::getCallbackTransformer());
+        // Avoid error: Unable to transform value for property path "price": Expected a numeric.
+        $builder->get('price')->addModelTransformer(static::getCallbackTransformer());
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => PriceV0Dto::class]);
+        $resolver->setDefaults(['data_class' => PriceBcMathNumberDto::class]);
     }
 
     /**
