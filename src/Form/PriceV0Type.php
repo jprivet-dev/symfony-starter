@@ -14,17 +14,26 @@ class PriceV0Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        foreach (['priceA', 'priceB', 'priceC', 'priceD'] as $field) {
-            $builder->add($field, NumberType::class);
-            $builder->get($field)->addModelTransformer(new CallbackTransformer(
-                fn (?Number $value): string => (string) ($value ?? ''),
-                fn (?string $value): ?Number => null !== $value && '' !== $value ? new Number($value) : null,
-            ));
-        }
+        $builder
+            ->add('priceA', NumberType::class, ['label' => 'Price A — GreaterThanOrEqual(new BcMath\\Number("0.01"))']);
+
+        $builder->get('priceA')->addModelTransformer(static::getCallbackTransformer());
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => PriceV0Dto::class]);
+    }
+
+    /**
+     * DTO → Form: BcMath\Number → (transform) → float → (NumberType) → show string
+     * Form → DTO: entered string → (NumberType) → float → (reverseTransform) → BcMath\Number
+     */
+    static private function getCallbackTransformer(): CallbackTransformer
+    {
+        return new CallbackTransformer(
+            fn (?Number $value): ?float => null === $value ? null : (float) (string) $value,
+            fn (int|float|null $value): ?Number => null === $value ? null : new Number((string) $value),
+        );
     }
 }

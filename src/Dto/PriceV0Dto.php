@@ -8,21 +8,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class PriceV0Dto
 {
     public function __construct(
-        #[Assert\NotNull]
+        #[Assert\NotBlank]
         #[Assert\GreaterThanOrEqual(new Number('0.01'))]
         public ?Number $priceA = null,
-
-        #[Assert\NotNull]
-        #[Assert\GreaterThanOrEqual('0.01')]
-        public ?Number $priceB = null,
-
-        #[Assert\NotNull]
-        #[Assert\GreaterThanOrEqual(0.01)]
-        public ?Number $priceC = null,
-
-        #[Assert\NotNull]
-        #[Assert\Range(min: 0, max: 1000)]
-        public ?Number $priceD = null,
     ) {
     }
 }

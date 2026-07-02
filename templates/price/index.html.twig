@@ -1,15 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}BcMath\Number V2 (custom BcMathNumberType){% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-    <h1>BcMath\Number V2 (custom BcMathNumberType)</h1>
+    <h1>{{ title }}</h1>
 
     {{ form_start(form) }}
     {{ form_row(form.priceA) }}
-    {{ form_row(form.priceB) }}
-    {{ form_row(form.priceC) }}
-    {{ form_row(form.priceD) }}
     <button type="submit">Submit</button>
     {{ form_end(form) }}
 
