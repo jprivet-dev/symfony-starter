@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Reproducer</h1>
+    {% for route in routes %}
+        <p><a href="{{ path(route) }}" target="_blank">{{ route }}</a></p>
+    {% endfor %}
+{% endblock %}

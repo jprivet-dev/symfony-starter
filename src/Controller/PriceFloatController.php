@@ -2,10 +2,8 @@
 
 namespace App\Controller;
 
-use App\Dto\PriceBcMathNumberDto;
 use App\Dto\PriceFloatDto;
-use App\Form\PriceFloatType;
-use BcMath\Number;
+use App\Form\PriceNumberType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,15 +12,15 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PriceFloatController extends AbstractController
 {
-    #[Route('/price/float', name: 'app_float')]
+    #[Route('/price/float_form', name: 'app_float_form')]
     public function index(Request $request): Response
     {
         $dto = new PriceFloatDto();
-        $form = $this->createForm(PriceFloatType::class, $dto);
+        $form = $this->createForm(PriceNumberType::class, $dto);
         $form->handleRequest($request);
 
         return $this->render('price/index.html.twig', [
-            'title' => 'Float — Form',
+            'title' => 'Prices with float type with NumberType',
             'form' => $form,
             'submitted' => $form->isSubmitted(),
             'valid' => $form->isSubmitted() && $form->isValid(),
@@ -49,7 +47,7 @@ class PriceFloatController extends AbstractController
         $violations = $validator->validate($dto);
 
         return $this->render('price/violations.html.twig', [
-            'title' => 'Float — Direct Validation',
+            'title' => 'Prices with float type — Direct Validation',
             'dto' => $dto,
             'violations' => $violations,
             'cases' => $cases,

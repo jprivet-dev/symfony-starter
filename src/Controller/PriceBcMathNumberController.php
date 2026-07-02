@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Dto\PriceBcMathNumberDto;
 use App\Form\PriceBcMathNumberType;
+use App\Form\PriceNumberCallbackTransformerType;
 use BcMath\Number;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,15 +14,30 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PriceBcMathNumberController extends AbstractController
 {
-    #[Route('/price/bcmath', name: 'app_bcmath')]
+    #[Route('/price/bcmath/form/number_callback_type', name: 'app_bcmath_form_number_callback_type')]
     public function index(Request $request): Response
+    {
+        $dto = new PriceBcMathNumberDto();
+        $form = $this->createForm(PriceNumberCallbackTransformerType::class, $dto);
+        $form->handleRequest($request);
+
+        return $this->render('price/index.html.twig', [
+            'title' => 'Prices with BcMath\Number type with NumberType',
+            'form' => $form,
+            'submitted' => $form->isSubmitted(),
+            'valid' => $form->isSubmitted() && $form->isValid(),
+        ]);
+    }
+
+    #[Route('/price/bcmath/form/bcmath_number_type', name: 'app_bcmath_form_bcmath_number_type')]
+    public function customType(Request $request): Response
     {
         $dto = new PriceBcMathNumberDto();
         $form = $this->createForm(PriceBcMathNumberType::class, $dto);
         $form->handleRequest($request);
 
         return $this->render('price/index.html.twig', [
-            'title' => 'BcMath\Number — Form',
+            'title' => 'Prices with BcMath\Number type with BcMathNumberType',
             'form' => $form,
             'submitted' => $form->isSubmitted(),
             'valid' => $form->isSubmitted() && $form->isValid(),
@@ -48,7 +64,7 @@ class PriceBcMathNumberController extends AbstractController
         $violations = $validator->validate($dto);
 
         return $this->render('price/violations.html.twig', [
-            'title' => 'BcMath\Number — Direct Validation',
+            'title' => 'Prices with BcMath\Number type — Direct Validation',
             'dto' => $dto,
             'violations' => $violations,
             'cases' => $cases,
