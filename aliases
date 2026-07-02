@@ -64,4 +64,9 @@ makefile_aliases \
     sf:bin/console:c \
     php:compose.yaml:a \
     composer:composer.json:a \
+    node:webpack.config.js:a \
+    npm:webpack.config.js:a \
+    npx:webpack.config.js:a \
+    webpack:webpack.config.js:a \
+    encore:webpack.config.js:a \
     phpunit:bin/phpunit:a \
