@@ -55,7 +55,7 @@ Fork the [symfony/symfony](https://github.com/symfony/symfony) repository on Git
 
 ```shell
 # in ./
-git clone git@github.com:MY_USERNAME/symfony.git
+git clone git@github.com:<MY_USERNAME>/symfony.git
 cd symfony
 git remote add upstream https://github.com/symfony/symfony.git
 ```
@@ -171,7 +171,7 @@ Create a minimal test case in the reproducer and confirm the bug exists.
 
 ```shell
 # in ./
-git clone git@github.com:MY_USERNAME/monolog-bundle.git ../monolog-bundle
+git clone git@github.com:<MY_USERNAME>/monolog-bundle.git ../monolog-bundle
 cd ../monolog-bundle
 git remote add upstream https://github.com/symfony/monolog-bundle.git
 ```
@@ -257,7 +257,7 @@ flowchart TD
   CHOICE -->|Bundle or Bridge| BP1
 %% ── MONOREPO WORKFLOW ──────────────────────────────────────
   MP1["PHASE 1 — REPRODUCE\n─────────────────────\n$ make require_co a=symfony/http-client\n\nin /symfony-starter"]
-  MP1 --> MP2["PHASE 2 — CONTRIBUTE\n1. FORK & CLONE\n─────────────────────\n$ git clone MY_USERNAME/symfony.git\n$ git remote add upstream\n\nin ./"]
+  MP1 --> MP2["PHASE 2 — CONTRIBUTE\n1. FORK & CLONE\n─────────────────────\n$ git clone <MY_USERNAME>/symfony.git\n$ git remote add upstream\n\nin ./"]
   MP2 --> M2["2. CREATE TOPIC BRANCH\n─────────────────────\n$ git switch 8.x\n$ git pull --rebase upstream 8.x\n$ git switch -c MY_TOPIC_BRANCH 8.x\n\nin /symfony"]
   M2 --> M3["3. ADD DOCKER VOLUME\n─────────────────────\n$ make monorepo_volume\n\nin /symfony-starter"]
   M3 --> M4["4. INSTALL & LINK\n─────────────────────\n$ make monorepo_install\n$ make monorepo_link\n\nin /symfony-starter"]
@@ -265,7 +265,7 @@ flowchart TD
   M5 --> M6(["6. REVERT\n$ make monorepo_unlink"])
 %% ── BUNDLE WORKFLOW ────────────────────────────────────────
   BP1["PHASE 1 — REPRODUCE\n─────────────────────\n$ make require_co a=symfony/monolog-bundle\n\nin /symfony-starter"]
-  BP1 --> BP2["PHASE 2 — CONTRIBUTE\n1. FORK & CLONE\n─────────────────────\n$ git clone MY_USERNAME/monolog-bundle.git\n$ git remote add upstream\n\nin ./"]
+  BP1 --> BP2["PHASE 2 — CONTRIBUTE\n1. FORK & CLONE\n─────────────────────\n$ git clone <MY_USERNAME>/monolog-bundle.git\n$ git remote add upstream\n\nin ./"]
   BP2 --> B2["2. CREATE TOPIC BRANCH\n─────────────────────\n$ git switch 4.x\n$ git pull --rebase upstream 4.x\n$ git switch -c MY_TOPIC_BRANCH 4.x\n\nin /monolog-bundle"]
   B2 --> B3["3. ADD DOCKER VOLUME, REGISTER REPO & LINK\n─────────────────────\n$ make repo_volume d=monolog-bundle\n$ make repo_add d=monolog-bundle\n$ make require_co a=monolog-bundle:4.x-dev\n\nin /symfony-starter"]
   B3 --> B4["4. INSTALL DEPENDENCIES\n─────────────────────\n$ make repo_install d=monolog-bundle\n\nin /symfony-starter"]
