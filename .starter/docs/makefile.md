@@ -78,6 +78,8 @@ Usage: make <target>
   require [a=<args>]                      Add required packages to your composer.json and installs them (e.g. make require a="--dev phpunit/phpunit")
   update [a=<args>]                       Update Composer packages (e.g. make update a="symfony/monolog-bundle")
 
+— WEBPACK ⚙️ ———————————————————————————————————————————————————————————————
+
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
   db                                      Drop and create the database and migrate
   db@test                                 Drop and create the database and migrate (env=test)

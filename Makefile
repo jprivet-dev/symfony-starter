@@ -66,6 +66,7 @@ NOW                := $(shell date +%Y%m%d-%H%M%S-%3N)
 PWD                 = $(shell pwd)
 MAKE_LOCAL_MK       = .make/local.mk
 MAKE_LOCAL_MK_DIST  = $(MAKE_LOCAL_MK).dist
+
 BIN_CONSOLE         = bin/console
 BIN_PHPUNIT         = bin/phpunit
 COMPOSER_JSON       = composer.json
@@ -84,6 +85,7 @@ VENDOR_PROFILER     = vendor/symfony/web-profiler-bundle
 VENDOR_TAILWIND     = vendor/symfonycasts/tailwind-bundle
 VENDOR_TRANSLATION  = vendor/symfony/translation
 VENDOR_TWIGCSFIXER  = vendor/bin/twig-cs-fixer
+WEBPACK_CONFIG      = webpack.config.js
 
 # --- COMPONENTS CONFIG ---
 
@@ -519,6 +521,10 @@ ifeq ($(APP_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader $(a)
 else
 	$(COMPOSER) update $(a)
+endif
+
+ifneq ($(or $(ALL), $(wildcard $(WEBPACK_CONFIG))),)
+include .make/webpack.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE_ORM))),)
