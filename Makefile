@@ -232,6 +232,9 @@ CONTAINER_PHP_COVERAGE    = $(EXEC) -e XDEBUG_MODE=coverage php
 
 PHP              = $(CONTAINER_PHP) php
 COMPOSER         = $(CONTAINER_PHP) composer
+NODE             = $(CONTAINER_PHP) node
+NPM              = $(CONTAINER_PHP) npm
+NPX              = $(CONTAINER_PHP) npx
 BASH_COMMAND     = $(CONTAINER_PHP) bash -c
 CONSOLE          = $(CONTAINER_PHP) $(BIN_CONSOLE)
 PHPUNIT          = $(CONTAINER_PHP) $(BIN_PHPUNIT)
@@ -242,6 +245,9 @@ PHPSTAN          = $(PHP) $(VENDOR_PHPSTAN)
 PHPMD            = $(PHP) -d error_reporting="E_ALL & ~E_DEPRECATED" $(VENDOR_PHPMD)
 TWIGCSFIXER      = $(PHP) $(VENDOR_TWIGCSFIXER)
 PHPMETRICS       = $(PHP) $(VENDOR_PHPMETRICS)
+
+WEBPACK          = $(NPX) webpack
+ENCORE           = $(NPX) webpack encore
 
 # --- REQUIRES ---
 

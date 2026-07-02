@@ -79,6 +79,18 @@ Usage: make <target>
   update [a=<args>]                       Update Composer packages (e.g. make update a="symfony/monolog-bundle")
 
 — WEBPACK ⚙️ ———————————————————————————————————————————————————————————————
+  node [a=<args>]                         Run Node.js (e.g. make node a=--help)
+
+  npm [a=<args>]                          Run the Node Package Manager (e.g. make npm a=--help)
+  npm_install                             Install the project's Node.js dependencies
+  npm_watch                               Compile assets and automatically re-compile when files change
+  npm_dev_server                          Run a dev-server that can sometimes update your code without refreshing the page
+  npm_dev                                 Compile assets once
+  npm_build                               On deploy, create a production build
+
+  npx [a=<args>]                          Run the Node Package eXecute (e.g. make npx a=--help)
+  webpack [a=<args>]                      Run the Webpack bundler (e.g. make webpack a=--help)
+  encore [a=<args>]                       Run Webpack Encore (e.g. make encore a=--help)
 
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
   db                                      Drop and create the database and migrate
