@@ -24,8 +24,6 @@ class PricesBcMathNumberController extends AbstractController
         return $this->render('prices/index.html.twig', [
             'title' => 'Prices with BcMath\Number type with NumberType',
             'form' => $form,
-            'submitted' => $form->isSubmitted(),
-            'valid' => $form->isSubmitted() && $form->isValid(),
         ]);
     }
 
@@ -39,8 +37,6 @@ class PricesBcMathNumberController extends AbstractController
         return $this->render('prices/index.html.twig', [
             'title' => 'Prices with BcMath\Number type with BcMathNumberType',
             'form' => $form,
-            'submitted' => $form->isSubmitted(),
-            'valid' => $form->isSubmitted() && $form->isValid(),
         ]);
     }
 

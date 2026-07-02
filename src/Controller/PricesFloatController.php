@@ -22,8 +22,6 @@ class PricesFloatController extends AbstractController
         return $this->render('prices/index.html.twig', [
             'title' => 'Prices with float type with NumberType',
             'form' => $form,
-            'submitted' => $form->isSubmitted(),
-            'valid' => $form->isSubmitted() && $form->isValid(),
         ]);
     }
 
