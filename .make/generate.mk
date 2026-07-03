@@ -353,7 +353,7 @@ require_ux_twig_component: ## Install Twig Component - https://ux.symfony.com/
 	$(C) symfony/ux-twig-component
 	$(M) co m="Install Twig Component"
 
-require_ux_react: _encore ## Install Symfony UX React (needs Webpack Encore) - https://ux.symfony.com/react
+require_ux_react: _encore ## Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
 	$(C) require symfony/ux-react
 	$(M) co m="Install Symfony UX React"
 	$(M) npm_save_dev a=@babel/preset-react

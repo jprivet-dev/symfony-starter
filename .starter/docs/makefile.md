@@ -325,7 +325,7 @@ Usage: make <target>
   require_ux_live_component               Install Live Component - https://ux.symfony.com/
   require_ux_stimulus                     Install StimulusBundle - https://ux.symfony.com/
   require_ux_twig_component               Install Twig Component - https://ux.symfony.com/
-  require_ux_react                        Install Symfony UX React (needs Webpack Encore) - https://ux.symfony.com/react
+  require_ux_react                        Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
 
   require_phpcsfixer                      Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
   require_phpmd                           Install PHP Mess Detector - https://phpmd.org/
