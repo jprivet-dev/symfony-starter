@@ -156,6 +156,10 @@ make info     # Show project access info (URLs, ports)
 * [Symfony and Docker - Use build options](options.md)
 * [Shell Aliases: Seamless Docker Experience](aliases.md)
 
+### Steps
+
+* [Webpack Encore & React](steps/webpack-encore-react.md)
+
 ### IDE configuration
 
 * [PhpStorm - Configure a remote PHP interpreter (Docker)](ide/phpstorm-remote-php-interpreter.md)
