@@ -84,6 +84,13 @@ compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make bui
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(M) co m="use DATABASE_URL var in compose.yaml"
 
+add_node: # INTERNAL - Add Node.js and npm to the dev Dockerfile
+	$(M) permissions
+	$(M) rb m=recipes_dev t=Dockerfile s=.starter/block/node/Dockerfile
+	$(M) co m="Add Node.js and npm to the dev Dockerfile"
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) build_force_start
+
 orphan_branch: # INTERNAL - Create a new orphan branch before generation | FLAVOR=<flavor>
 	@printf "\n$(Y)--- Branch ---$(S)\n"
 	@printf " $(Y)›$(S) Current branch: $(G)$$(git rev-parse --abbrev-ref HEAD)$(S)\n"
@@ -295,6 +302,13 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 	# Running deep_clean is essential to properly take into account the ORM installed by symfony/webapp-pack
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
+
+##
+
+require_encore: add_node ## Install Webpack Encore (with Node.js) - https://symfony.com/doc/current/frontend/encore/installation.html
+	$(C) require symfony/twig-bundle symfony/webpack-encore-bundle
+	$(M) co m="Install Webpack Encore"
+	$(M) npm_install
 
 ##
 
