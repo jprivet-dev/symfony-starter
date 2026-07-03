@@ -11,9 +11,11 @@ npm: ## Run the Node Package Manager | [a=<args>] | a=--help
 	$(NPM) $(a)
 
 npm_install: ## Install the project's Node.js dependencies | [a=<args>] | a=--help
+	@printf "\n$(Y)--- NPM Install (env: $(APP_ENV)) ---$(S)\n"
 	$(NPM) install $(a)
 
 npm_save_dev: ## Install a Node.js package as a dev dependency | [a=<args>] | a=@babel/preset-react
+	@printf "\n$(Y)--- NPM Install - SAVE DEV (env: $(APP_ENV)) ---$(S)\n"
 	$(NPM) install $(a) --save-dev
 
 npm_watch: ## Compile assets and automatically re-compile when files change
