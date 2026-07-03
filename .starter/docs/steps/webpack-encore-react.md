@@ -32,9 +32,9 @@ make require_ux_react
 ## 4. Create the application files
 
 > [!TIP]
-> 
+>
 > Make sure you have the right permissions to create files:
-> 
+>
 > ```shell
 > # Fix file permissions (primarily for Linux hosts)
 > make permissions
@@ -89,6 +89,22 @@ make npm_dev
 ```
 
 Go to https://symfony-starter.localhost:8442/ — you should see "Hello World".
+
+## 6. Daily development commands
+
+```shell
+# Compile assets once
+make npm_dev
+
+# Watch for changes and re-compile automatically
+make npm_watch
+
+# Run a dev-server with hot updates
+make npm_dev_server
+
+# Production build (on deploy)
+make npm_build
+```
 
 ---
 
