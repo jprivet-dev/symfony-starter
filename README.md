@@ -2,6 +2,24 @@
 
 Generate a fully Dockerized Symfony application with a single command 🥳
 
+From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform](https://api-platform.com/) or [EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle) stack, [Symfony Starter](https://github.com/jprivet-dev/symfony-starter) handles the entire setup — Docker, database, dependencies — so you can focus on your code from the first minute. You can also use the official [Symfony Demo](https://github.com/symfony/demo) as a reference for best practices, or [contribute to Symfony Core](contrib.md) in a real Docker environment.
+
+Built on top of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) and driven by a powerful Makefile, it covers everything from project initialization to daily development.
+
+```mermaid
+flowchart LR
+  START([Start]) --> FCHOICE
+  FCHOICE["Which flavor?<br/>─────<br/>🌱 Minimalist<br/>🌍 Webapp<br/>🔌 API Platform<br/>⚡ EasyAdmin<br/>🎓 Symfony Demo<br/>🧪 Reproducer"] --> VERSION
+  VERSION["Which version?<br/>─────<br/>Dev<br/>Stable<br/>LTS<br/>6x"] --> DBCHOICE
+  DBCHOICE["Which database?<br/>─────<br/>🚫 No DB<br/>🐘 PostgreSQL<br/>🐬 MariaDB<br/>🪶 SQLite"] --> FRONTEND
+  FRONTEND["Which frontend stack?<br/>─────<br/>🚫 None<br/>🎨‍AssetMapper<br/>🧰 Encore"] --> DONE
+  DONE([Ready!])
+```
+
+## Prerequisites
+
+Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
+
 ## Installation
 
 ### 1. Clone the project
@@ -16,48 +34,9 @@ cd symfony-starter
 * [Generate your Symfony project](.starter/docs/README.md).
 * [Generate your reproducer and contribute to Symfony](.starter/docs/contrib.md) — see [existing reproducers](https://github.com/jprivet-dev/symfony-starter/branches/all?query=reproducer%2F).
 
-> [!NOTE]
->
-> Already generated? Just run `make install`.
-
-
-|                                                                                   |                                                                          |
- |:----------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
-| <strong>Symfony</strong><br>![minimalist.png](.starter/docs/img/minimalist.png)   | <strong>API Platform</strong><br>![api.png](.starter/docs/img/api.png)   |
-| <strong>EasyAdmin</strong><br>![easy-admin.png](.starter/docs/img/easy-admin.png) | <strong>Symfony Demo</strong><br>![demo.png](.starter/docs/img/demo.png) |
-
 ### 3. Go on the app
 
 Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334) on first visit.
-
-> [!TIP]
->
-> By default, the app runs on port `8442`. Two ways to change it:
->
-> * **Fixed ports:** set `HTTP_PORT` and `HTTPS_PORT` in `.env.local` (e.g. `HTTPS_PORT=9443`).
-> * **Auto ports:** set `HTTP_PORTS_AUTO=true` in `.env.local` to derive ports from the project name (avoids conflicts between projects).
-> 
-> Run `make restart` to apply, then `make info` to see the current URLs.
-
-### 4. Update your README
-
-Replace your `README.md` with one of these templates and fill in your details:
-
-* [README_PROJECT.md](.starter/templates/README_PROJECT.md) — for a new Symfony project.
-* [README_REPRODUCER.md](.starter/templates/README_REPRODUCER.md) — for a contribution reproducer.
-
-## Makefile daily usage
-
-```shell
-make install  # Start the project, install dependencies and show info
-make start    # Start the project and show info (detached mode)
-make stop     # Stop the project (down)
-make info     # Show project access info (URLs, ports)
-```
-
-> [!NOTE]
->
-> Run `make` to see all available commands ([makefile.md](.starter/docs/makefile.md)).
 
 ## Documentation
 

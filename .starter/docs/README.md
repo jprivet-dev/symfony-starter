@@ -16,51 +16,67 @@ From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform]
 
 Built on top of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) and driven by a powerful Makefile, it covers everything from project initialization to daily development.
 
-|                                                                     |                                                            |
-|:--------------------------------------------------------------------|:-----------------------------------------------------------|
-| <strong>Symfony</strong><br>![minimalist.png](img/minimalist.png)   | <strong>API Platform</strong><br>![api.png](img/api.png)   |
-| <strong>EasyAdmin</strong><br>![easy-admin.png](img/easy-admin.png) | <strong>Symfony Demo</strong><br>![demo.png](img/demo.png) |
+```mermaid
+flowchart LR
+  START([Start]) --> FCHOICE
+  FCHOICE["Which flavor?<br/>─────<br/>🌱 Minimalist<br/>🌍 Webapp<br/>🔌 API Platform<br/>⚡ EasyAdmin<br/>🎓 Symfony Demo<br/>🧪 Reproducer"] --> VERSION
+  VERSION["Which version?<br/>─────<br/>Stable<br/>LTS<br/>6x"] --> DBCHOICE
+  DBCHOICE["Which database?<br/>─────<br/>🚫 No DB<br/>🐘 PostgreSQL<br/>🐬 MariaDB<br/>🪶 SQLite"] --> FRONTEND
+  FRONTEND["Which frontend stack?<br/>─────<br/>🚫 None<br/>🎨‍AssetMapper<br/>🧰 Encore"] --> DONE
+  DONE([Ready!])
+```
 
-## Quick start
+## Prerequisites
 
-1. Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
+Be sure to install the latest version of [Docker Engine](https://docs.docker.com/engine/install/).
 
-2. Clone the project:
+## Installation
+
+### 1. Clone the project
 
 ```shell
 git clone git@github.com:jprivet-dev/symfony-starter.git
 cd symfony-starter
 ```
 
-3. And generate...
+### 2. Generate your Symfony project
 
-| Application     | Stable            | LTS                   | Database      |
-|-----------------|-------------------|-----------------------|---------------|
-| 🌱 Minimalist   | `make minimalist` | `make minimalist@lts` | 🚫 No DB      |
-| 🌍 Webapp       | `make webapp`     | `make webapp@lts`     | 🐘 PostgreSQL |
-| 🔌 API Platform | `make api`        | `make api@lts`        | 🐘 PostgreSQL |
-| ⚡ EasyAdmin     | `make easy_admin` | `make easy_admin@lts` | 🐘 PostgreSQL |
-| 🎓 Demo         | `make demo`       | —                     | 🪶 SQLite     |
+| Application     | Stable            | LTS                   | Database by default |
+|-----------------|-------------------|-----------------------|---------------------|
+| 🌱 Minimalist   | `make minimalist` | `make minimalist@lts` | 🚫 No DB            |
+| 🌍 Webapp       | `make webapp`     | `make webapp@lts`     | 🐘 PostgreSQL       |
+| 🔌 API Platform | `make api`        | `make api@lts`        | 🐘 PostgreSQL       |
+| ⚡ EasyAdmin     | `make easy_admin` | `make easy_admin@lts` | 🐘 PostgreSQL       |
+| 🎓 Symfony Demo | `make demo`       | —                     | 🪶 SQLite           |
+| 🧪 Reproducer   | `make reproducer` | `make reproducer@lts` | 🚫 No DB            |
 
 > [!NOTE]
 >
 > Each generation takes approximately ⏱️ 3-4 minutes depending on your machine and network speed.
 
-## Generate your reproducer and contribute to Symfony
-
-Use the starter as a reproducer to contribute to the Symfony framework, any Symfony bundle or
-bridge. It lets you mount a local fork directly into the Docker environment and run the test suite
-using the reproducer's PHP container (no local PHP installation required).
-
-| Command               | Symfony version                     |
-|-----------------------|-------------------------------------|
-| `make reproducer`     | Latest stable release               |
-| `make reproducer@lts` | Long-term support release           |
-| `make reproducer@6x`  | Symfony 6.x (for legacy reproducer) |
-
-All commands run in `/symfony-starter`.
-
+> 🧪 Reproducer
+> 
 > See full [Generate your reproducer and contribute to Symfony](contrib.md) documentation.
+
+### 3. Go on the app
+
+Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334) on first visit.
+
+> [!TIP]
+>
+> By default, the app runs on port `8442`. Two ways to change it:
+>
+> * **Fixed ports:** set `HTTP_PORT` and `HTTPS_PORT` in `.env.local` (e.g. `HTTPS_PORT=9443`).
+> * **Auto ports:** set `HTTP_PORTS_AUTO=true` in `.env.local` to derive ports from the project name (avoids conflicts between projects).
+>
+> Run `make restart` to apply, then `make info` to see the current URLs.
+
+### 4. You can update your README
+
+Replace your `README.md` with one of these templates and fill in your details:
+
+* [README_PROJECT.md](.starter/templates/README_PROJECT.md) — for a new Symfony project.
+* [README_REPRODUCER.md](.starter/templates/README_REPRODUCER.md) — for a contribution reproducer.
 
 ## Switch to another DB
 
@@ -74,7 +90,7 @@ All commands run in `/symfony-starter`.
 | 🌍 Webapp       | `make switch_to_mariadb`                       | `make switch_to_sqlite`                       |
 | 🔌 API Platform | `make switch_to_mariadb`                       | `make switch_to_sqlite`                       |
 | ⚡ EasyAdmin     | `make switch_to_mariadb`                       | `make switch_to_sqlite`                       |
-| 🎓 Demo         | —                                              | —                                             |
+| 🎓 Symfony Demo | `make switch_to_mariadb`                       | —                                             |
 
 ## Switch to a frontend stack
 
@@ -115,6 +131,19 @@ make install                # 4. Install and start
 > [!TIP]
 >
 > From there, use `make require_orm`, `make require_api`, `make switch_to_mariadb`, etc. to add more features.
+
+## Makefile daily usage
+
+```shell
+make install  # Start the project, install dependencies and show info
+make start    # Start the project and show info (detached mode)
+make stop     # Stop the project (down)
+make info     # Show project access info (URLs, ports)
+```
+
+> [!NOTE]
+>
+> Run `make` to see all available commands ([makefile.md](.starter/docs/makefile.md)).
 
 ## Documentation
 
