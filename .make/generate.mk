@@ -309,6 +309,7 @@ require_encore: add_node ## Install Webpack Encore (with Node.js) - https://symf
 	$(C) require symfony/twig-bundle symfony/webpack-encore-bundle
 	$(M) co m="Install Webpack Encore"
 	$(M) npm_install
+	$(M) co m="npm install"
 
 ##
 
