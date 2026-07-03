@@ -60,7 +60,7 @@ using the reproducer's PHP container (no local PHP installation required).
 
 All commands run in `/symfony-starter`.
 
- See full [Generate your reproducer and contribute to Symfony](contrib.md) documentation.
+> See full [Generate your reproducer and contribute to Symfony](contrib.md) documentation.
 
 ## Switch to another DB
 
@@ -75,6 +75,17 @@ All commands run in `/symfony-starter`.
 | 🔌 API Platform | `make switch_to_mariadb`                       | `make switch_to_sqlite`                       |
 | ⚡ EasyAdmin     | `make switch_to_mariadb`                       | `make switch_to_sqlite`                       |
 | 🎓 Demo         | —                                              | —                                             |
+
+## Switch to a frontend stack
+
+> [!NOTE]
+>
+> By default, no frontend stack is installed. Run one of the following commands after generation to add one.
+
+| Stack             | Command                     | Note                          |
+|-------------------|-----------------------------|-------------------------------|
+| 🗺️ AssetMapper   | `make require_asset_mapper` |                               |
+| ⚙️ Webpack Encore | `make require_encore`       | add Node.js in the Dockerfile |
 
 ## Generate from scratch
 
