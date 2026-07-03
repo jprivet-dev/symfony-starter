@@ -82,7 +82,8 @@ Usage: make <target>
   node [a=<args>]                         Run Node.js (e.g. make node a=--help)
 
   npm [a=<args>]                          Run the Node Package Manager (e.g. make npm a=--help)
-  npm_install                             Install the project's Node.js dependencies
+  npm_install [a=<args>]                  Install the project's Node.js dependencies (e.g. make npm_install a=--help)
+  npm_save_dev [a=<args>]                 Install a Node.js package as a dev dependency (e.g. make npm_save_dev a=@babel/preset-react)
   npm_watch                               Compile assets and automatically re-compile when files change
   npm_dev_server                          Run a dev-server that can sometimes update your code without refreshing the page
   npm_dev                                 Compile assets once
@@ -312,6 +313,8 @@ Usage: make <target>
   require_api                             Install API Platform - https://api-platform.com/docs/symfony/
   require_easy_admin                      Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
   require_webapp                          Install a web application - https://symfony.com/doc/current/setup.html
+
+  require_encore                          Install Webpack Encore (with Node.js) - https://symfony.com/doc/current/frontend/encore/installation.html
 
   require_asset_mapper                    Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
   require_maker_bundle                    Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
