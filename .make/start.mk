@@ -26,7 +26,12 @@ help: ## Display this help message with available commands
 .PHONY: install
 install: up_detached ## Start the project, install dependencies and show info
 	$(MAKE) composer_install
-	-$(MAKE) assets
+ifneq ($(wildcard $(VENDOR_ASSETS)),)
+	$(MAKE) assets
+endif
+ifneq ($(wildcard $(WEBPACK_CONFIG)),)
+	$(MAKE) npm_install
+endif
 	$(MAKE) images permissions git_hooks_init info
 
 .PHONY: info
