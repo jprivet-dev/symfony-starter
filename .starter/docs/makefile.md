@@ -78,7 +78,7 @@ Usage: make <target>
   require [a=<args>]                      Add required packages to your composer.json and installs them (e.g. make require a="--dev phpunit/phpunit")
   update [a=<args>]                       Update Composer packages (e.g. make update a="symfony/monolog-bundle")
 
-— WEBPACK ⚙️ ———————————————————————————————————————————————————————————————
+— WEBPACK 🧰 ———————————————————————————————————————————————————————————————
   node [a=<args>]                         Run Node.js (e.g. make node a=--help)
 
   npm [a=<args>]                          Run the Node Package Manager (e.g. make npm a=--help)
@@ -314,7 +314,7 @@ Usage: make <target>
   require_easy_admin                      Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
   require_webapp                          Install a web application - https://symfony.com/doc/current/setup.html
 
-  require_encore                          Install Webpack Encore (with Node.js) - https://symfony.com/doc/current/frontend/encore/installation.html
+  require_encore                          Install Webpack Encore (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
 
   require_asset_mapper                    Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
   require_maker_bundle                    Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
@@ -325,6 +325,7 @@ Usage: make <target>
   require_ux_live_component               Install Live Component - https://ux.symfony.com/
   require_ux_stimulus                     Install StimulusBundle - https://ux.symfony.com/
   require_ux_twig_component               Install Twig Component - https://ux.symfony.com/
+  require_ux_react                        Install Symfony UX React (needs Webpack Encore) - https://ux.symfony.com/react
 
   require_phpcsfixer                      Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
   require_phpmd                           Install PHP Mess Detector - https://phpmd.org/
