@@ -13,6 +13,9 @@ npm: ## Run the Node Package Manager | [a=<args>] | a=--help
 npm_install: ## Install the project's Node.js dependencies | [a=<args>] | a=--help
 	$(NPM) install $(a)
 
+npm_save_dev: ## xxx | [a=<args>] | a=--help
+	$(NPM) install $(a) --save-dev
+
 npm_watch: ## Compile assets and automatically re-compile when files change
 	$(NPM) run watch
 
