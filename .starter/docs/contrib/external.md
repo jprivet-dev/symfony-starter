@@ -1,12 +1,12 @@
-# Contribute to a Symfony bundle or bridge
+# Contribute to an external Symfony package
 
 [⬅️ Generate your reproducer and contribute to Symfony](contrib.md)
 
 ---
 
 This section uses the [MonologBundle](https://github.com/symfony/monolog-bundle) as an example.
-The same workflow applies to any Symfony bundle or bridge hosted in its own repository, outside
-the `symfony/symfony` monorepo.
+The same workflow applies to any external Symfony package hosted in its own repository, outside
+the Symfony monorepo.
 
 ## Overview
 
@@ -24,7 +24,7 @@ the `symfony/symfony` monorepo.
 
 ## Phase 1 — Reproduce the bug
 
-### 1. Install the bundle needed to reproduce
+### 1. Install the package needed to reproduce
 
 ```shell
 # in /symfony-starter
@@ -35,7 +35,7 @@ make require_co a="symfony/monolog-bundle"
 
 Create a minimal test case in the reproducer and confirm the bug exists.
 
-## Phase 2 — Contribute to the bundle or bridge
+## Phase 2 — Contribute to the external package
 
 ### 1. Fork and clone side-by-side with the starter
 
