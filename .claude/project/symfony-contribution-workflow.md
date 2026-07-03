@@ -13,20 +13,22 @@ Go to https://claude.ai/projects and click **Create project**.
 
 In the project settings, upload the following files from your local `symfony-starter` repository:
 
-| File                                               | Purpose                                                 |
-|----------------------------------------------------|---------------------------------------------------------|
-| `.starter/docs/contrib.md`                         | Full contribution guide (monorepo and bundle workflows) |
-| `.starter/docs/README.md`                          | Starter toolkit overview                                |
-| `.starter/docs/makefile.md`                        | Available `make` commands                               |
-| `.make/contrib.mk`                                 | Makefile targets for contribution commands              |
-| `.make/generate.mk`                                | Makefile targets for project generation                 |
-| `.claude/project/symfony-contribution-workflow.md` | This file — defines the issue workflow                  |
+| File                                               | Purpose                                                           |
+|----------------------------------------------------|-------------------------------------------------------------------|
+| `.starter/docs/contrib.md`                         | Full contribution guide (monorepo and external package workflows) |
+| `.starter/docs/monorepo.md`                        | Monorepo contribution workflow                                    |
+| `.starter/docs/external.md`                        | External Symfony package contribution workflow                    |
+| `.starter/docs/README.md`                          | Starter toolkit overview                                          |
+| `.starter/docs/makefile.md`                        | Available `make` commands                                         |
+| `.make/contrib.mk`                                 | Makefile targets for contribution commands                        |
+| `.make/generate.mk`                                | Makefile targets for project generation                           |
+| `.claude/project/symfony-contribution-workflow.md` | This file — defines the issue workflow                            |
 
 ### 3. Set the project instructions
 
 In the project settings, paste the following as **Project instructions**:
 
-> You are assisting a Symfony developer using the Symfony Starter toolkit. When the user mentions a Symfony issue, follow the workflow defined in symfony-contribution-workflow.md, using .starter/docs/contrib.md as the reference for all commands and procedures. Always generate complete, ready-to-run commands with no placeholders left unfilled. Always specify the working directory context (in /symfony-starter or in /symfony).
+> You are assisting a Symfony developer using the Symfony Starter toolkit. When the user mentions a Symfony issue, follow the workflow defined in symfony-contribution-workflow.md, using .starter/docs/contrib.md, .starter/docs/monorepo.md and .starter/docs/external.md as the reference for all commands and procedures. Always generate complete, ready-to-run commands with no placeholders left unfilled. Always specify the working directory context (in /symfony-starter or in /symfony).
 
 ### 4. Start a new conversation
 
@@ -258,32 +260,34 @@ End Phase 2 with this reminder:
 
 Only generate this phase when the user explicitly asks for it, and only if the bug has been confirmed in Phase 2.
 
-> [!NOTE]
->
-> For a **dev branch**, the monorepo is already connected since Phase 1. Skip steps 3 and 4 below and go directly to running the tests.
+Use the branch name from Step 2 for the fork — the same as the reproducer branch, without the `reproducer/{repo}/` prefix.
 
-Follow `.starter/docs/contrib.md` for all commands and procedures.
+#### Phase 3 — monorepo
 
-#### Rules
+Follow `.starter/docs/monorepo.md` for all commands and procedures.
+
+Rules:
 
 - `make monorepo_install` must always be run **before** `make monorepo_link`
-- The branch name must be **identical** in the reproducer and in the Symfony fork
 - If the fork already exists locally, include the update steps (`git switch`, `git pull --rebase upstream`)
-- If the issue targets a bundle or bridge outside the monorepo, follow the bundle workflow from `contrib.md`
 
-Steps to generate:
+> [!NOTE]
+>
+> For a **dev branch**, the monorepo is already connected since Phase 1. Skip "Add Docker volume" and "Install & Link" and go directly to running the tests.
 
-1. Fork and clone `symfony/symfony` side-by-side with the starter (if not already done)
-2. Create the topic branch in the fork
-3. Add the Docker volume: `make monorepo_volume`
-4. Install and link: `make monorepo_install` then `make monorepo_link`
-5. Run the component tests to verify the setup
-6. Provide the monorepo path to investigate
-7. Remind how to revert: `make monorepo_unlink`
+#### Phase 3 — external Symfony package
+
+Follow `.starter/docs/external.md` for all commands and procedures.
+
+Rules:
+
+- If the fork already exists locally, include the update steps (`git switch`, `git pull --rebase upstream`)
+
+#### End of Phase 3
 
 End Phase 3 with this reminder:
 
-> ✅ Phase 3 ready. Run the tests after each change, then open a Pull Request on `symfony/symfony` targeting the `{branch}` branch. Once your PR is submitted, ask me for **Phase 4** to clean up the environment.
+> ✅ Phase 3 ready. Run the tests after each change, then open a Pull Request on the target repository, targeting the `{branch}` branch. Once your PR is submitted, ask me for **Phase 4** to clean up the environment.
 
 ### 8. Generate Phase 4 — Cleanup (on request only)
 
