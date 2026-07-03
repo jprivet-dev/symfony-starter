@@ -1,6 +1,6 @@
 # Compose - Accessing the `var/` directory
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)
 
 ---
 
@@ -37,4 +37,4 @@ services:
 
 ---
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)

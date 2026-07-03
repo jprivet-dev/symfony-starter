@@ -1,6 +1,6 @@
 # Docker and Git - "detected dubious ownership in repository"
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -29,4 +29,4 @@ This will execute the necessary `git config` command inside your `php` Docker se
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)

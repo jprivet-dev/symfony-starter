@@ -1,6 +1,6 @@
 # Testing overview
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -86,4 +86,4 @@ class SmokeTest extends WebTestCase
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)

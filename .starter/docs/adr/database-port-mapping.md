@@ -1,6 +1,6 @@
 # Database: port mapping strategy
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -60,4 +60,4 @@ The `.starter/block/` directory contains one folder per database engine (`postgr
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)

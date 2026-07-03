@@ -1,6 +1,6 @@
 # Shell Aliases: Seamless Docker Experience
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)
 
 ---
 
@@ -72,4 +72,4 @@ To remove them, you have two options:
 
 ---
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)

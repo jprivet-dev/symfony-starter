@@ -1,6 +1,6 @@
 # Caddy - Validate certificates
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)
 
 ---
 
@@ -46,4 +46,4 @@ This will create a `tls/root.crt` file. You can then follow these steps to manua
 
 ---
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)

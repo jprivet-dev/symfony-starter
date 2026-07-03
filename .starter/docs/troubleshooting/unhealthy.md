@@ -1,6 +1,6 @@
 # Docker - "container is unhealthy" after `docker compose up`
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -50,4 +50,4 @@ Following these steps guarantees that you are always starting from a **clean and
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)

@@ -84,6 +84,13 @@ compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make bui
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(M) co m="use DATABASE_URL var in compose.yaml"
 
+add_node: # INTERNAL - Add Node.js and npm to the dev Dockerfile
+	$(M) permissions
+	$(M) rb m=recipes_dev t=Dockerfile s=.starter/block/node/Dockerfile
+	$(M) co m="Add Node.js and npm to the dev Dockerfile"
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) build_force_start
+
 orphan_branch: # INTERNAL - Create a new orphan branch before generation | FLAVOR=<flavor>
 	@printf "\n$(Y)--- Branch ---$(S)\n"
 	@printf " $(Y)›$(S) Current branch: $(G)$$(git rev-parse --abbrev-ref HEAD)$(S)\n"
@@ -207,6 +214,15 @@ ifneq ($(filter 6.%,$(SYMFONY_VERSION)),)
 endif
 	$(M) skeleton
 	$(M) require_maker_bundle
+	$(M) require_test_pack
+ifeq ($(STABILITY),dev)
+	$(C) update
+	$(M) co m="composer update (align lock with dev dependencies)"
+endif
+	$(M) require_phpcsfixer
+	$(M) require_phpmd
+	$(M) require_phpstan
+	$(M) require_twigcsfixer
 	$(M) reproducer_dockerfile
 	$(M) permissions images info
 	$(M) health_welcome_to_symfony
@@ -289,6 +305,14 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 
 ##
 
+require_encore: add_node ## Install Webpack Encore (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
+	$(C) require symfony/twig-bundle symfony/webpack-encore-bundle
+	$(M) co m="Install Webpack Encore"
+	$(M) npm_install
+	$(M) co m="npm install"
+
+##
+
 require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
 	$(C) require symfony/asset-mapper symfony/asset symfony/twig-pack
 	$(M) co m="Install AssetMapper"
@@ -329,6 +353,12 @@ require_ux_twig_component: ## Install Twig Component - https://ux.symfony.com/
 	$(C) symfony/ux-twig-component
 	$(M) co m="Install Twig Component"
 
+require_ux_react: _encore ## Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
+	$(C) require symfony/ux-react
+	$(M) co m="Install Symfony UX React"
+	$(M) npm_save_dev a=@babel/preset-react
+	$(M) co m="Install @babel/preset-react"
+
 ##
 
 require_phpcsfixer: ## Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
@@ -344,7 +374,7 @@ require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website
 	$(M) co m="composer require --dev phpmetrics/phpmetrics"
 
 require_phpstan: ## Install PHPStan - https://phpstan.org/
-	$(C) require --dev \
+	SYMFONY_ALLOW_CONTRIB=1 $(C) require --no-interaction --dev \
 		phpstan/phpstan \
 		phpstan/phpstan-symfony \
 		phpstan/phpstan-doctrine \
@@ -352,7 +382,7 @@ require_phpstan: ## Install PHPStan - https://phpstan.org/
 	$(M) co m="Install PHPStan (+ symfony, doctrine & phpunit)"
 
 require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
-	$(C) require --dev vincentlanglet/twig-cs-fixer
+	SYMFONY_ALLOW_CONTRIB=1 $(C) require --no-interaction --dev vincentlanglet/twig-cs-fixer
 	$(M) co m="Install Twig CS Fixer"
 
 ##

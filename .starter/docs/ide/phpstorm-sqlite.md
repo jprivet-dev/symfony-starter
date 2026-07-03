@@ -1,6 +1,6 @@
 # PhpStorm - Connect it to the SQLite database
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -41,4 +41,4 @@ make phpstorm_config
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)

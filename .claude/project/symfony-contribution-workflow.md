@@ -13,23 +13,26 @@ Go to https://claude.ai/projects and click **Create project**.
 
 In the project settings, upload the following files from your local `symfony-starter` repository:
 
-| File                                               | Purpose                                                 |
-|----------------------------------------------------|---------------------------------------------------------|
-| `.starter/docs/STARTER.md`                         | Starter toolkit overview and available `make` commands  |
-| `.starter/docs/contrib.md`                         | Full contribution guide (monorepo and bundle workflows) |
-| `.make/contrib.mk`                                 | Makefile targets for contribution commands              |
-| `.make/generate.mk`                                | Makefile targets for project generation                 |
-| `.claude/project/symfony-contribution-workflow.md` | This file — defines the issue workflow                  |
+| File                                               | Purpose                                                           |
+|----------------------------------------------------|-------------------------------------------------------------------|
+| `.starter/docs/contrib.md`                         | Full contribution guide (monorepo and external package workflows) |
+| `.starter/docs/monorepo.md`                        | Monorepo contribution workflow                                    |
+| `.starter/docs/external.md`                        | External Symfony package contribution workflow                    |
+| `.starter/docs/README.md`                          | Starter toolkit overview                                          |
+| `.starter/docs/makefile.md`                        | Available `make` commands                                         |
+| `.make/contrib.mk`                                 | Makefile targets for contribution commands                        |
+| `.make/generate.mk`                                | Makefile targets for project generation                           |
+| `.claude/project/symfony-contribution-workflow.md` | This file — defines the issue workflow                            |
 
 ### 3. Set the project instructions
 
 In the project settings, paste the following as **Project instructions**:
 
-> You are assisting a Symfony developer using the Symfony Starter toolkit. When the user mentions a Symfony issue, follow the workflow defined in symfony-contribution-workflow.md, using .starter/docs/contrib.md as the reference for all commands and procedures. Always generate complete, ready-to-run commands with no placeholders left unfilled. Always specify the working directory context (in /symfony-starter or in /symfony).
+> You are assisting a Symfony developer using the Symfony Starter toolkit. When the user mentions a Symfony issue, follow the workflow defined in symfony-contribution-workflow.md, using .starter/docs/contrib.md, .starter/docs/monorepo.md and .starter/docs/external.md as the reference for all commands and procedures. Always generate complete, ready-to-run commands with no placeholders left unfilled. Always specify the working directory context (in /symfony-starter or in /symfony).
 
 ### 4. Start a new conversation
 
-For each issue, **open a new conversation** in this project and name it after the branch: e.g. `symfony/12345-the-issue-sf7.4`
+For each issue, **open a new conversation** in this project and name it after the branch: e.g. `Symfony #12345: the issue title`, `Monolog #12345: the issue title`
 
 This keeps one conversation per issue, making it easy to resume work later.
 
@@ -60,21 +63,25 @@ Extract:
 
 - **Type**: bug, feature, deprecation, RFC
 
+> [!IMPORTANT]
+>
+> If the issue is a **feature** (or RFC), it must target the **next development branch**. New features are never accepted in stable or LTS branches — only bug fixes and security patches are. In this case, do **not** ask the user for a version: use the dev branch directly.
+
 ### 2. Propose a branch name and conversation title
 
-Use the format `{repo}/{issue_id}-{short-kebab-case-description}-sf{version}` **in the reproducer** to distinguish branches across different repositories and Symfony versions:
+Use the format `reproducer/{repo}/{issue_id}-{short-kebab-case-description}-sf{version}` **in the reproducer** to distinguish branches across different repositories and Symfony versions:
 
-| Reproducer branch name              | Fork branch name            |
-|-------------------------------------|-----------------------------|
-| `symfony/12345-the-issue-sf7.4`     | `12345-the-issue-sf7.4`     |
-| `symfony/12345-the-issue-sf8.2-dev` | `12345-the-issue-sf8.2-dev` |
-| `monolog/12345-the-issue-sf7.4`     | `12345-the-issue-sf7.4`     |
-| `gotenberg/12345-the-issue-sf7.4`   | `12345-the-issue-sf7.4`     |
+| Reproducer branch name                         | Fork branch name            |
+|------------------------------------------------|-----------------------------|
+| `reproducer/symfony/12345-the-issue-sf7.4`     | `12345-the-issue-sf7.4`     |
+| `reproducer/symfony/12345-the-issue-sf8.2-dev` | `12345-the-issue-sf8.2-dev` |
+| `reproducer/monolog/12345-the-issue-sf7.4`     | `12345-the-issue-sf7.4`     |
+| `reproducer/gotenberg/12345-the-issue-sf7.4`   | `12345-the-issue-sf7.4`     |
 
-- The `{repo}/` prefix is **only used in the reproducer** — it helps distinguish branches when working on multiple repositories simultaneously
+- The `reproducer/{repo}/` prefix is **only used in the reproducer** — it helps distinguish branches when working on multiple repositories simultaneously
 - The `-sf{version}` suffix uses the exact major.minor version (e.g. `sf8.1`, `sf7.4`) — never `sf8.x` or any wildcard form. For dev branches, append `-dev` (e.g. `sf8.2-dev`).
 
-If the target Symfony version **cannot be clearly deduced** from the issue (no explicit version tag, no affected version mentioned, no code reference pointing to a specific branch), **ask the user before going any further**:
+If the issue is a **bug fix** and the target Symfony version **cannot be clearly deduced** from the issue (no explicit version tag, no affected version mentioned, no code reference pointing to a specific branch), **ask the user before going any further**:
 
 > Which Symfony version should this branch target? (e.g. `8.1`, `7.4`)
 
@@ -88,7 +95,7 @@ Do **not** ask this question if the version is already apparent from:
 
 > [!TIP]
 >
-> This is a suggestion — the user is free to choose a different name. The only constraint is that the **fork branch name must match the suffix** of the reproducer branch name to avoid confusion. This can be verified at any time with:
+> This is a suggestion — the user is free to choose a different name. The only constraint is that the **fork branch name should match the suffix** of the reproducer branch name to avoid confusion. This can be verified at any time with:
 >
 > ```shell
 > # in /symfony-starter
@@ -99,7 +106,7 @@ Do **not** ask this question if the version is already apparent from:
 >
 > ```
 > REPOSITORY                 BRANCH
-> symfony-starter            symfony/12345-the-issue-sf7.4
+> symfony-starter            reproducer/symfony/12345-the-issue-sf7.4
 > symfony                    12345-the-issue-sf7.4
 > ```
 
@@ -141,6 +148,8 @@ Then generate only Phase 1. Wait for the user's confirmation before moving to th
 
 Generate the reproducer and install only the Composer dependencies needed to reproduce the issue. Do not write any application code at this stage.
 
+List **all** dependencies upfront — Composer packages, PHP extensions (`ext-*`), and framework bundles (e.g. `symfony/twig-bundle` for rendering, `symfony/validator` for constraints). Do not defer any dependency to Phase 2; the reproducer must be fully functional before writing application code.
+
 Fill in all values from the issue analysis. Never leave placeholders like `MY_TOPIC_BRANCH`, `MY_USERNAME`, or `{branch-name}` unfilled. Always specify the working directory context for each command block.
 
 > [!TIP]
@@ -151,18 +160,35 @@ Fill in all values from the issue analysis. Never leave placeholders like `MY_TO
 
 ```shell
 # in /symfony-starter
+
+# stable release
 make reproducer BRANCH={branch-name}
-# or for LTS:
+
+# or LTS - long-term support release
 make reproducer@lts BRANCH={branch-name}
+
+# or Symfony 6.x
+make reproducer@6x BRANCH={branch-name}
 ```
 
 Then add each required Composer dependency:
 
 ```shell
 # in /symfony-starter
-make require a={package}
-git add . && git commit -m "require {package}"
+# install the dependency and commit in one step
+make require_co a={package}
 ```
+
+Go to https://symfony-starter.localhost:8442/ and accept the auto-generated TLS certificate on first visit.
+
+> [!TIP]
+>
+> By default, the app runs on port `8442`. Two ways to change it:
+>
+> * **Fixed ports:** set `HTTP_PORT` and `HTTPS_PORT` in `.env.local` (e.g. `HTTPS_PORT=9443`).
+> * **Auto ports:** set `HTTP_PORTS_AUTO=true` in `.env.local` to derive ports from the project name (avoids conflicts between projects).
+>
+> Run `make restart` to apply, then `make info` to see the current URLs.
 
 End Phase 1 with this reminder:
 
@@ -181,8 +207,8 @@ Then add each required Composer dependency:
 
 ```shell
 # in /symfony-starter
-make require a={package}
-git add . && git commit -m "require {package}"
+# install the dependency and commit in one step
+make require_co a={package}
 ```
 
 Then fork and clone `symfony/symfony` side-by-side with the starter (if not already done), create the topic branch in the fork, then connect the monorepo:
@@ -200,6 +226,17 @@ Then verify that both branches are aligned:
 # in /symfony-starter
 make monorepo_status
 ```
+
+Go to https://symfony-starter.localhost:8442/ and accept the auto-generated TLS certificate on first visit.
+
+> [!TIP]
+>
+> By default, the app runs on port `8442`. Two ways to change it:
+>
+> * **Fixed ports:** set `HTTP_PORT` and `HTTPS_PORT` in `.env.local` (e.g. `HTTPS_PORT=9443`).
+> * **Auto ports:** set `HTTP_PORTS_AUTO=true` in `.env.local` to derive ports from the project name (avoids conflicts between projects).
+>
+> Run `make restart` to apply, then `make info` to see the current URLs.
 
 End Phase 1 with this reminder:
 > ✅ Phase 1 complete. Once the environment is ready, ask me for **Phase 2** to write the minimal reproduction code.
@@ -223,32 +260,34 @@ End Phase 2 with this reminder:
 
 Only generate this phase when the user explicitly asks for it, and only if the bug has been confirmed in Phase 2.
 
-> [!NOTE]
->
-> For a **dev branch**, the monorepo is already connected since Phase 1. Skip steps 3 and 4 below and go directly to running the tests.
+Use the branch name from Step 2 for the fork — the same as the reproducer branch, without the `reproducer/{repo}/` prefix.
 
-Follow `.starter/docs/contrib.md` for all commands and procedures.
+#### Phase 3 — monorepo
 
-#### Rules
+Follow `.starter/docs/monorepo.md` for all commands and procedures.
+
+Rules:
 
 - `make monorepo_install` must always be run **before** `make monorepo_link`
-- The branch name must be **identical** in the reproducer and in the Symfony fork
 - If the fork already exists locally, include the update steps (`git switch`, `git pull --rebase upstream`)
-- If the issue targets a bundle or bridge outside the monorepo, follow the bundle workflow from `contrib.md`
 
-Steps to generate:
+> [!NOTE]
+>
+> For a **dev branch**, the monorepo is already connected since Phase 1. Skip "Add Docker volume" and "Install & Link" and go directly to running the tests.
 
-1. Fork and clone `symfony/symfony` side-by-side with the starter (if not already done)
-2. Create the topic branch in the fork
-3. Add the Docker volume: `make monorepo_volume`
-4. Install and link: `make monorepo_install` then `make monorepo_link`
-5. Run the component tests to verify the setup
-6. Provide the monorepo path to investigate
-7. Remind how to revert: `make monorepo_unlink`
+#### Phase 3 — external Symfony package
+
+Follow `.starter/docs/external.md` for all commands and procedures.
+
+Rules:
+
+- If the fork already exists locally, include the update steps (`git switch`, `git pull --rebase upstream`)
+
+#### End of Phase 3
 
 End Phase 3 with this reminder:
 
-> ✅ Phase 3 ready. Run the tests after each change, then open a Pull Request on `symfony/symfony` targeting the `{branch}` branch. Once your PR is submitted, ask me for **Phase 4** to clean up the environment.
+> ✅ Phase 3 ready. Run the tests after each change, then open a Pull Request on the target repository, targeting the `{branch}` branch. Once your PR is submitted, ask me for **Phase 4** to clean up the environment.
 
 ### 8. Generate Phase 4 — Cleanup (on request only)
 

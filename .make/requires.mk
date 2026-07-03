@@ -10,6 +10,12 @@ ifeq ($(wildcard $(VENDOR_DOCTRINE_ORM)),)
 	@exit 1
 endif
 
+_encore: # INTERNAL
+ifeq ($(wildcard $(WEBPACK_CONFIG)),)
+	@printf "\n $(R)⨯$(S) Please install $(Y)Webpack Encore (with Node.js)$(S) with $(G)make require_encore$(S)\n"
+	@exit 1
+endif
+
 _monolog: # INTERNAL
 ifeq ($(wildcard $(VENDOR_MONOLOG)),)
 	@printf "\n $(R)⨯$(S) Please install $(Y)MonologBundle$(S)\n"

@@ -1,6 +1,6 @@
 # Makefile: target naming convention
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -58,4 +58,4 @@ The increased efficiency and seamless copy/paste experience enabled by double-cl
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)

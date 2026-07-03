@@ -1,10 +1,14 @@
 # Makefile - Discover all commands
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)
 
 ---
 
-This project uses a modular Makefile system. Commands are **loaded dynamically based on the components currently installed** in your project.
+> [!IMPORTANT]
+>
+> This page lists every command across the entire project. Commands are **loaded dynamically based on the components currently installed**, so only a subset will be available in your environment.
+>
+> Run `make` to see which ones apply to your current setup.
 
 <!-- MAKEFILE_COMMANDS_START -->
 
@@ -25,10 +29,9 @@ Usage: make <target>
   build_start                             [Level 2] Build & Start - Updating image with cache (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
   build_force_start                       [Level 3] Force build & Start - Rebuilding from scratch (triggers: Dockerfile, system packages, cache issues)
 
-  check                                   Check everything before you deliver - Composer, Doctrine validation, linters, ... (no stop on failure)
-  check_all                               Check everything before you deliver - check + tests (no stop on failure)
-  check_push                              Check on git push (stop on failure)
-  tests                                t  Run all tests
+  check                                   Check everything before you deliver - Composer, Doctrine validation, linters, ... (NO STOP on failure)
+  check_stop                              Check on git push (STOP on failure)
+  tests                                t  Run all tests (STOP on failure)
 
 — DOCKER 🐳 ————————————————————————————————————————————————————————————————
   build [a=<args>]                        Build or rebuild Docker services using cache (e.g. make build a=--no-cache)
@@ -74,6 +77,21 @@ Usage: make <target>
   remove [a=<args>]                       Remove a package from the require or require-dev (e.g. make remove a="phpunit/phpunit")
   require [a=<args>]                      Add required packages to your composer.json and installs them (e.g. make require a="--dev phpunit/phpunit")
   update [a=<args>]                       Update Composer packages (e.g. make update a="symfony/monolog-bundle")
+
+— WEBPACK 🧰 ———————————————————————————————————————————————————————————————
+  node [a=<args>]                         Run Node.js (e.g. make node a=--help)
+
+  npm [a=<args>]                          Run the Node Package Manager (e.g. make npm a=--help)
+  npm_install [a=<args>]                  Install the project's Node.js dependencies (e.g. make npm_install a=--help)
+  npm_save_dev [a=<args>]                 Install a Node.js package as a dev dependency (e.g. make npm_save_dev a=@babel/preset-react)
+  npm_watch                               Compile assets and automatically re-compile when files change
+  npm_dev_server                          Run a dev-server that can sometimes update your code without refreshing the page
+  npm_dev                                 Compile assets once
+  npm_build                               On deploy, create a production build
+
+  npx [a=<args>]                          Run the Node Package eXecute (e.g. make npx a=--help)
+  webpack [a=<args>]                      Run the Webpack bundler (e.g. make webpack a=--help)
+  encore [a=<args>]                       Run Webpack Encore (e.g. make encore a=--help)
 
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
   db                                      Drop and create the database and migrate
@@ -144,12 +162,11 @@ Usage: make <target>
   xdebug_version                          Xdebug version number
 
 — QUALITY ✅ ———————————————————————————————————————————————————————————————
-  fix                                     Fix with all linters
-  lint                                    Run all linters (stop on failure)
+  lint                                    Run all linters (NO STOP on failure)
 
   phpcsfixer [a=<args>]                   Run PHP CS Fixer (e.g. make phpcsfixer a=list)
+  phpcsfixer_check                        Check code style
   phpcsfixer_fix                          Fix code style
-  phpcsfixer_lint                         Check code style
 
   phpmd [a=<args>]                        Run PHP Mess Detector (e.g. make phpmd a="src ansi cleancode")
   phpmd_lint                              Run PHP Mess Detector with all rules
@@ -158,7 +175,7 @@ Usage: make <target>
 
   phpstan [a=<args>]                      Run PHPStan (e.g. make phpstan a="src tests")
   phpstan_baseline [a=<args>]             Generate PHPStan baseline (e.g. make phpstan_baseline a="src tests")
-  phpstan_lint [a=<args>]                 Run PHPStan analyse (e.g. make phpstan_lint a="src tests")
+  phpstan_analyse [a=<args>]              Run PHPStan analyse (e.g. make phpstan_analyse a="src tests")
 
   twigcsfixer [a=<args>]                  Run Twig CS Fixer (e.g. make twigcsfixer a="lint /path/to/code")
   twigcsfixer_fix                         Fix Twig style
@@ -173,10 +190,10 @@ Usage: make <target>
 
   importmap_audit                         Check for security vulnerability advisories for dependencies
   importmap_install                       Download all assets that should be downloaded
-  importmap_outdated                      List outdated JavaScript packages and their latest versions
-  importmap_remove                        Remove JavaScript packages
-  importmap_require                       Require JavaScript packages
-  importmap_update                        Update JavaScript packages to their latest versions
+  importmap_outdated [p=<packages>]       List outdated JavaScript packages and their latest versions (e.g. make importmap_outdated p="lodash")
+  importmap_remove p=<packages>           Remove JavaScript packages (e.g. make importmap_remove p="lodash")
+  importmap_require p=<packages>          Require JavaScript packages (e.g. make importmap_require p="lodash@^4.15")
+  importmap_update [p=<packages>]         Update JavaScript packages to their latest versions (e.g. make importmap_update p="lodash")
 
   tailwind_init                           Initializes Tailwind CSS for your project
   tailwind_clear                          Clear var/tailwind directory
@@ -218,29 +235,49 @@ Usage: make <target>
 
 ▸ SYMFONY MONOREPO
   monorepo_volume                         Add a Docker volume for the Symfony monorepo
-  monorepo_link                        ml Replace vendors with symlinks to the Symfony monorepo
-  monorepo_install                        Install external dependencies used during the tests in the Symfony monorepo
-  monorepo_update                         Update Composer dependencies in the Symfony monorepo
+  monorepo_install                        Install external dependencies used during the tests - Symfony monorepo
+  monorepo_update                         Update Composer dependencies - Symfony monorepo
+
+  monorepo_link                           Replace vendors with symlinks to the Symfony monorepo
+  monorepo_unlink                         Restore original vendors (rollback symlinks to the Symfony monorepo)
+  link                                    monorepo_link alias
+  unlink                                  monorepo_unlink alias
 
   monorepo_status                      ms Show current branch for reproducer and the Symfony monorepo
-  monorepo_tests [a=<args>]            mt Run PHPUnit tests in the Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
-  monorepo_tests_clean                    Clean PHPUnit cache and temporary files in the Symfony monorepo
+  monorepo_tests [a=<args>]            mt Run PHPUnit tests - Symfony monorepo (e.g. make monorepo_tests a=/symfony/src/Symfony/Bundle/FrameworkBundle)
+  monorepo_coverage [a=<args>]         mc Generate HTML coverage report - Symfony monorepo (e.g. make monorepo_coverage a="/symfony/src/Symfony/Component/Console")
+  monorepo_tests_clean                    Clean PHPUnit cache and temporary files - Symfony monorepo
+  monorepo_clean                          Remove vendor and lock file - Symfony monorepo
 
-  monorepo_clean                          Remove vendor and lock file from the Symfony monorepo
-  monorepo_unlink                      mu Restore original vendors (rollback symlinks to the Symfony monorepo)
+  monorepo_lint                           Run all linters - Symfony monorepo (NO STOP on failure)
+  monorepo_phpcsfixer_check               Check code style - Symfony monorepo
+  monorepo_phpcsfixer_fix                 Fix code style - Symfony monorepo
+  monorepo_phpmd_lint                     Run PHP Mess Detector with all rules - Symfony monorepo
+  monorepo_phpstan_analyse                Run PHPStan analyse - Symfony monorepo
+  monorepo_twigcsfixer_fix                Fix Twig code style - Symfony monorepo
+  monorepo_twigcsfixer_lint               Check Twig code style - Symfony monorepo
 
 ▸ OTHER REPO
   repo_volume d=<dir>                     Add a Docker volume for a local repository (e.g. make repo_volume d=monolog-bundle)
-  repo_add d=<dir>                        Register a path repository in composer.json (e.g. make repo_add d=monolog-bundle)
-  repo_install d=<dir>                    Install external dependencies used during the tests (e.g. make repo_install d=monolog-bundle)
-  repo_update d=<dir>                     Update Composer dependencies in a local repository (e.g. make repo_update d=monolog-bundle)
+  repo_add d=<dir>                        Register a path repository in composer.json - local repository (e.g. make repo_add d=monolog-bundle)
+  repo_install d=<dir>                    Install external dependencies used during the tests - local repository (e.g. make repo_install d=monolog-bundle)
+  repo_update d=<dir>                     Update Composer dependencies - local repository (e.g. make repo_update d=monolog-bundle)
 
   repo_status d=<dir>                  rs Show current branch for reproducer and a local repository (e.g. make repo_status d=monolog-bundle)
-  repo_tests d=<dir> [a=<args>]        rt Run PHPUnit tests in a local repository (e.g. make repo_tests d=monolog-bundle)
-  repo_tests_clean d=<dir>                Clean PHPUnit cache and temporary files in a local repository (e.g. make repo_tests_clean d=monolog-bundle)
+  repo_tests d=<dir> [a=<args>]        rt Run PHPUnit tests - local repository (e.g. make repo_tests d=monolog-bundle)
+  repo_coverage d=<dir> [a=<args>]     rc Generate HTML coverage report - local repository (e.g. make repo_coverage d=monolog-bundle)
+  repo_tests_clean d=<dir>                Clean PHPUnit cache and temporary files - local repository (e.g. make repo_tests_clean d=monolog-bundle)
 
-  repo_remove d=<dir>                     Unregister a path repository from composer.json (e.g. make repo_remove d=monolog-bundle)
-  repo_clean d=<dir>                      Remove vendor and lock file from a local repository (e.g. make repo_clean d=monolog-bundle)
+  repo_remove d=<dir>                     Unregister a path repository from composer.json - local repository (e.g. make repo_remove d=monolog-bundle)
+  repo_clean d=<dir>                      Remove vendor and lock file - local repository (e.g. make repo_clean d=monolog-bundle)
+
+  repo_lint d=<dir>                       Run all linters - local repository (NO STOP on failure) (e.g. make repo_lint d=monolog-bundle)
+  repo_phpcsfixer_check d=<dir>           Check code style - local repository (e.g. make repo_phpcsfixer_check d=monolog-bundle)
+  repo_phpcsfixer_fix d=<dir>             Fix code style - local repository (e.g. make repo_phpcsfixer_fix d=monolog-bundle)
+  repo_phpmd_lint d=<dir>                 Run PHP Mess Detector with all rules - local repository (e.g. make repo_phpmd_lint d=monolog-bundle)
+  repo_phpstan_analyse d=<dir>            Run PHPStan analyse - local repository (e.g. make repo_phpstan_analyse d=monolog-bundle)
+  repo_twigcsfixer_fix d=<dir>            Fix Twig code style - local repository (e.g. make repo_twigcsfixer_fix d=monolog-bundle)
+  repo_twigcsfixer_lint d=<dir>           Check Twig code style - local repository (e.g. make repo_twigcsfixer_lint d=monolog-bundle)
 
 — GENERATE 🔨 ——————————————————————————————————————————————————————————————
 
@@ -277,6 +314,8 @@ Usage: make <target>
   require_easy_admin                      Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
   require_webapp                          Install a web application - https://symfony.com/doc/current/setup.html
 
+  require_encore                          Install Webpack Encore (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
+
   require_asset_mapper                    Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
   require_maker_bundle                    Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
   require_orm                             Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
@@ -286,6 +325,7 @@ Usage: make <target>
   require_ux_live_component               Install Live Component - https://ux.symfony.com/
   require_ux_stimulus                     Install StimulusBundle - https://ux.symfony.com/
   require_ux_twig_component               Install Twig Component - https://ux.symfony.com/
+  require_ux_react                        Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
 
   require_phpcsfixer                      Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
   require_phpmd                           Install PHP Mess Detector - https://phpmd.org/
@@ -315,5 +355,5 @@ Usage: make <target>
 
 ---
 
-[⬅️ STARTER](STARTER.md)
+[⬅️ Symfony Starter documentation](README.md)
 

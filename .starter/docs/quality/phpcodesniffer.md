@@ -1,6 +1,6 @@
 # PHP_CodeSniffer
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -21,4 +21,4 @@ PHP_CodeSniffer is a set of two PHP scripts:
 
 ---
 
-[⬅️ STARTER](../STARTER.md)
+[⬅️ Symfony Starter documentation](../README.md)
