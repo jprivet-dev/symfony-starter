@@ -12,7 +12,7 @@
 
 Generate a fully Dockerized Symfony application with a single command 🥳
 
-From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform](https://api-platform.com/) or [EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle) stack, [Symfony Starter](https://github.com/jprivet-dev/symfony-starter) handles the entire setup — Docker, database, dependencies — so you can focus on your code from the first minute. You can also use the official [Symfony Demo](https://github.com/symfony/demo) as a reference for best practices, or [contribute to Symfony Core](contrib.md) in a real Docker environment.
+From a minimal [Symfony](https://symfony.com/) skeleton to a full [API Platform](https://api-platform.com/) or [EasyAdmin](https://github.com/EasyCorp/EasyAdminBundle) stack, [Symfony Starter](https://github.com/jprivet-dev/symfony-starter) handles the entire setup — Docker, database, dependencies — so you can focus on your code from the first minute. You can also use the official [Symfony Demo](https://github.com/symfony/demo) as a reference for best practices, or [contribute to Symfony Core](contrib/contrib.md) in a real Docker environment.
 
 Built on top of [dunglas/symfony-docker](https://github.com/dunglas/symfony-docker) and driven by a powerful Makefile, it covers everything from project initialization to daily development.
 
@@ -56,7 +56,7 @@ cd symfony-starter
 
 > 🧪 Reproducer
 > 
-> See full [Generate your reproducer and contribute to Symfony](contrib.md) documentation.
+> See full [Generate your reproducer and contribute to Symfony](contrib/contrib.md) documentation.
 
 ### 3. Go on the app
 
@@ -194,7 +194,7 @@ make info     # Show project access info (URLs, ports)
 
 ### Contributing
 
-* [Generate your reproducer and contribute to Symfony](contrib.md)
+* [Generate your reproducer and contribute to Symfony](contrib/contrib.md)
 
 ---
 

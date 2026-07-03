@@ -1,6 +1,6 @@
 # Generate your reproducer and contribute to Symfony
 
-[⬅️ Symfony Starter documentation](README.md)
+[⬅️ Symfony Starter documentation](../README.md)
 
 ---
 
@@ -27,8 +27,8 @@ All commands run in `/symfony-starter`.
 
 ## Step 2: Contribute
 
-* [Contribute to `symfony/symfony`](contrib-to-symfony.md)
-* [Contribute to a Symfony bundle or bridge](contrib-to-bundle-bridge.md)
+* [Contribute to `symfony/symfony`](symfony.md)
+* [Contribute to a Symfony bundle or bridge](bundle-bridge.md)
 
 
 ## Personal shortcuts
@@ -109,4 +109,4 @@ automatically generates the complete contribution procedure from a Symfony issue
 
 ---
 
-[⬅️ Symfony Starter documentation](README.md)
+[⬅️ Symfony Starter documentation](../README.md)

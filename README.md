@@ -32,7 +32,7 @@ cd symfony-starter
 ### 2. Generate your app
 
 * [Generate your Symfony project](.starter/docs/README.md).
-* [Generate your reproducer and contribute to Symfony](.starter/docs/contrib.md) — see [existing reproducers](https://github.com/jprivet-dev/symfony-starter/branches/all?query=reproducer%2F).
+* [Generate your reproducer and contribute to Symfony](.starter/docs/contrib/contrib.md) — see [existing reproducers](https://github.com/jprivet-dev/symfony-starter/branches/all?query=reproducer%2F).
 
 ### 3. Go on the app
 
