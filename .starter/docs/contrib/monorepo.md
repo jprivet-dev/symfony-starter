@@ -1,4 +1,4 @@
-# Contribute to `symfony/symfony`
+# Contribute to the Symfony monorepo
 
 [⬅️ Generate your reproducer and contribute to Symfony](contrib.md)
 
@@ -33,7 +33,7 @@ make require_co a=symfony/http-client
 
 Create a minimal test case in the reproducer and confirm the bug exists.
 
-## Phase 2 — Contribute to `symfony/symfony`
+## Phase 2 — Contribute to the Symfony monorepo
 
 ### 1. Fork and clone side-by-side with the starter
 
