@@ -4,14 +4,14 @@
 
 ---
 
-This starter provides a powerful toolkit to help you contribute to the Symfony framework or any
-Symfony bundle. It allows you to mount a local repository directly into your Dockerized application
-and test your changes immediately.
+This starter provides a powerful toolkit to help you contribute to the Symfony monorepo or any
+external Symfony package. It allows you to mount a local repository directly into your Dockerized
+application and test your changes immediately.
 
 ## Step 1: Generate your reproducer
 
-Before contributing to `symfony/symfony` or any Symfony bundle, generate a minimalist Symfony
-application configured as a reproducer:
+Before contributing to the Symfony monorepo or any external Symfony package, generate a minimalist
+Symfony application configured as a reproducer:
 
 | Command               | Symfony version                     |
 |-----------------------|-------------------------------------|
@@ -27,9 +27,8 @@ All commands run in `/symfony-starter`.
 
 ## Step 2: Contribute
 
-* [Contribute to `symfony/symfony`](symfony.md)
-* [Contribute to a Symfony bundle or bridge](bundle-bridge.md)
-
+* [Contribute to the Symfony monorepo](monorepo.md)
+* [Contribute to an external Symfony package](external.md)
 
 ## Personal shortcuts
 
@@ -90,7 +89,7 @@ monorepo_tests_twig: ## Run tests for TwigBridge
 > [!TIP]
 >
 > * Files matching `.make/_*.mk` are auto-loaded and can be committed to the repository — ideal
-> for project-specific commands.
+    > for project-specific commands.
 > * Use `.make/local.mk` (gitignored) for personal shortcuts you don't want to share.
 
 ## AI-assisted issue workflow with Claude.ai
