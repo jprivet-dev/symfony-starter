@@ -10,8 +10,8 @@ node: ## Run Node.js | [a=<args>] | a=--help
 npm: ## Run the Node Package Manager | [a=<args>] | a=--help
 	$(NPM) $(a)
 
-npm_install: ## Install the project's Node.js dependencies
-	$(NPM) install
+npm_install: ## Install the project's Node.js dependencies | [a=<args>] | a=--help
+	$(NPM) install $(a)
 
 npm_watch: ## Compile assets and automatically re-compile when files change
 	$(NPM) run watch
