@@ -28,6 +28,10 @@ make require_ux_react
 
 ## 4. Create the application files
 
+> [!NOTE]
+>
+> Run `make permissions` first to make sure you have the right permissions to create files.
+
 `src/Controller/DefaultController.php`:
 
 ```php
