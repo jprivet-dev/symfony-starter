@@ -305,7 +305,7 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 
 ##
 
-require_encore: add_node ## Install Webpack Encore (with Node.js) - https://symfony.com/doc/current/frontend/encore/installation.html
+require_encore: add_node ## Install Webpack Encore (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
 	$(C) require symfony/twig-bundle symfony/webpack-encore-bundle
 	$(M) co m="Install Webpack Encore"
 	$(M) npm_install
