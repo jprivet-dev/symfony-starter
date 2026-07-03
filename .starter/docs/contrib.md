@@ -100,7 +100,7 @@ make monorepo_volume
 make monorepo_install
 
 # 2. link the monorepo into your application's vendors
-make monorepo_link
+make link
 ```
 
 #### 5. Run the tests for the first time to verify everything is working
@@ -139,7 +139,7 @@ make monorepo_tests_clean
 
 ```shell
 # in /symfony-starter
-make monorepo_unlink
+make unlink
 ```
 
 ## Contribute to a Symfony bundle or bridge
@@ -260,9 +260,9 @@ flowchart TD
   MP1 --> MP2["PHASE 2 — CONTRIBUTE\n1. FORK & CLONE\n─────────────────────\n$ git clone <MY_USERNAME>/symfony.git\n$ git remote add upstream\n\nin ./"]
   MP2 --> M2["2. CREATE TOPIC BRANCH\n─────────────────────\n$ git switch 8.x\n$ git pull --rebase upstream 8.x\n$ git switch -c MY_TOPIC_BRANCH 8.x\n\nin /symfony"]
   M2 --> M3["3. ADD DOCKER VOLUME\n─────────────────────\n$ make monorepo_volume\n\nin /symfony-starter"]
-  M3 --> M4["4. INSTALL & LINK\n─────────────────────\n$ make monorepo_install\n$ make monorepo_link\n\nin /symfony-starter"]
+  M3 --> M4["4. INSTALL & LINK\n─────────────────────\n$ make monorepo_install\n$ make link\n\nin /symfony-starter"]
   M4 --> M5["5. RUN TESTS\n─────────────────────\n$ make monorepo_tests a=...\n\nin /symfony-starter"]
-  M5 --> M6(["6. REVERT\n$ make monorepo_unlink"])
+  M5 --> M6(["6. REVERT\n$ make unlink"])
 %% ── BUNDLE WORKFLOW ────────────────────────────────────────
   BP1["PHASE 1 — REPRODUCE\n─────────────────────\n$ make require_co a=symfony/monolog-bundle\n\nin /symfony-starter"]
   BP1 --> BP2["PHASE 2 — CONTRIBUTE\n1. FORK & CLONE\n─────────────────────\n$ git clone <MY_USERNAME>/monolog-bundle.git\n$ git remote add upstream\n\nin ./"]
