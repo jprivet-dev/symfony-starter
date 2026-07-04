@@ -68,21 +68,21 @@ commit co: # INTERNAL
 compose_activate_bind_mount: compose.override.yaml # INTERNAL - Execute after $ make restart
 	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
 	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
-	$(M) co m="activate the bind mount (var/, var/log)"
+	$(M) co m="Activate the bind mount (var/, var/log)"
 
 update_postgresql_configuration: .env compose.override.yaml # INTERNAL - Execute after $ make restart
 	$(M) rb m=doctrine/doctrine-bundle t=.env s=.starter/block/postgresql/.env
 	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.starter/block/postgresql/compose.override.yaml
-	$(M) co m="update PosgreSQL configuration"
+	$(M) co m="Update PosgreSQL configuration"
 
 demo_add_sqlite_configuration_before_orm_pack: Dockerfile frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make build_force_start
 	$(M) cb m=dunglas/symfony-docker t=frankenphp/docker-entrypoint.sh
 	$(M) rb m=recipes t=Dockerfile s=.starter/block/sqlite/Dockerfile
-	$(M) co m="add SQLite configuration before ORM pack installation"
+	$(M) co m="Add SQLite configuration before ORM pack installation"
 
 compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make build_force_start
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
-	$(M) co m="use DATABASE_URL var in compose.yaml"
+	$(M) co m="Use DATABASE_URL var in compose.yaml"
 
 add_node: # INTERNAL - Add Node.js and npm to the dev Dockerfile
 	$(M) permissions
@@ -177,7 +177,7 @@ demo: ## Generate a Symfony Demo application (with SQLite) with Docker configura
 	$(M) build_start
 	$(C) require symfony/orm-pack
 	git restore .env.local.demo
-	$(M) co m="composer require symfony/orm-pack"
+	$(M) co m="Composer: install symfony/orm-pack"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
 	$(M) health_symfony_demo
@@ -190,7 +190,7 @@ easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker c
 	$(M) require_orm
 	$(M) require_easy_admin
 	$(CONSOLE) make:admin:dashboard --no-interaction
-	$(M) co m="Quickly generate a dashboard controller - See https://symfony.com/bundles/EasyAdminBundle/current/dashboards.html"
+	$(M) co m="Quickly generate a dashboard controller with make:admin:dashboard"
 	# Need to repeat cache_clear to avoid "Clear the application cache to run the EasyAdmin cache warmer, which generates the needed data to find this route.". Find why!
 	$(M) cache_clear
 	$(M) cache_clear
@@ -217,7 +217,7 @@ endif
 	$(M) require_test_pack
 ifeq ($(STABILITY),dev)
 	$(C) update
-	$(M) co m="composer update (align lock with dev dependencies)"
+	$(M) co m="Composer: update all (align lock with dev dependencies)"
 endif
 	$(M) require_phpcsfixer
 	$(M) require_phpmd
@@ -272,32 +272,29 @@ ifeq ($(wildcard .env.local.demo),)
 else
 	@printf " $(G)✔$(S) https://github.com/symfony/demo files already present at the root.\n\n"
 endif
-	$(M) co m="make clone_symfony_demo"
+	$(M) co m="Symfony Demo cloned"
 
 ## ▸ COMPLETE INSTALLATION
 
 require_co: ## Add required packages, then commit | [a=<args>] | a="symfony/http-client"
 	$(M) require a="$(a)"
-	$(M) co m="composer require $(a)"
+	$(M) co m="Composer: install $(a)"
 
 ##
 
 require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
-	$(C) require api
-	$(M) co m="composer require api"
+	$(C) require_co a=api
 
 require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
-	$(C) require easycorp/easyadmin-bundle
-	$(M) co m="composer require easycorp/easyadmin-bundle"
+	$(C) require_co a=easycorp/easyadmin-bundle
 
 require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
 	# FIX: Ban version 6 for the moment to prevent Symfony PropertyInfo crash
 	# symfony/property-info v6 does not support phpdocumentor/reflection-docblock
 	# Please stick to ^5.2 in your composer.json file.
-	$(C) require "phpdocumentor/reflection-docblock:^5.2"
+	$(C) require_co a="phpdocumentor/reflection-docblock:^5.2"
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
-	$(C) require symfony/webapp-pack
-	$(M) co m="composer require symfony/webapp-pack"
+	$(C) require_co a=symfony/webapp-pack
 	$(M) update_postgresql_configuration
 	# Running deep_clean is essential to properly take into account the ORM installed by symfony/webapp-pack
 	$(M) deep_clean NO_INTERACTION=true
@@ -306,59 +303,48 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 ##
 
 require_encore: add_node ## Install Webpack Encore (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
-	$(C) require symfony/webpack-encore-bundle
-	$(M) co m="Install Webpack Encore"
+	$(C) require_co a=symfony/webpack-encore-bundle
 	$(M) npm_install
-	$(M) co m="npm install"
+	$(M) co m="NPM: install all"
 
 ##
 
 require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-	$(C) require symfony/asset-mapper symfony/asset symfony/twig-pack
-	$(M) co m="Install AssetMapper"
+	$(C) require_co a="symfony/asset-mapper symfony/asset symfony/twig-pack"
 
 require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
-	$(C) require --dev symfony/maker-bundle
-	$(M) co m="Install MakerBundle"
+	$(C) require_co a="--dev symfony/maker-bundle"
 
 require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
-	$(C) require symfony/orm-pack
-	$(M) co m="Install Doctrine"
+	$(C) require_co a=symfony/orm-pack
 	$(M) update_postgresql_configuration
 	# Running deep_clean is essential to properly take into account the ORM installed by symfony/orm-pack
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
-	$(C) require --dev symfony/profiler-pack
-	$(M) co m="Install Profiler"
+	$(C) require_co a="--dev symfony/profiler-pack"
 
 require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
-	$(C) require --dev symfony/test-pack
-	$(M) co m="Install PHPUnit"
+	$(C) require_co a="--dev symfony/test-pack"
 
 require_translation: ## Install Translation - https://symfony.com/doc/current/translation.html
-	$(C) require symfony/translation
-	$(M) co m="Install Translation"
+	$(C) require_co a=symfony/translation
 
 require_twig_bundle: ## Install Twig Bundle - https://symfony.com/doc/current/templates.html
-	$(C) require symfony/twig-bundle
-	$(M) co m="Install Twig Bundle"
+	$(C) require_co a=symfony/twig-bundle
 	$(M) permissions
 
 ##
 
 require_phpcsfixer: ## Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
-	$(C) require --dev friendsofphp/php-cs-fixer
-	$(M) co m="Install PHP CS Fixer"
+	$(C) require_co a="--dev friendsofphp/php-cs-fixer"
 
 require_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
-	$(C) require --dev phpmd/phpmd
-	$(M) co m="Install PHP Mess Detector"
+	$(C) require_co a="--dev phpmd/phpmd"
 
 require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website/
-	$(C) require --dev phpmetrics/phpmetrics
-	$(M) co m="composer require --dev phpmetrics/phpmetrics"
+	$(C) require_co a="--dev phpmetrics/phpmetrics"
 
 require_phpstan: ## Install PHPStan - https://phpstan.org/
 	SYMFONY_ALLOW_CONTRIB=1 $(C) require --no-interaction --dev \
@@ -366,18 +352,18 @@ require_phpstan: ## Install PHPStan - https://phpstan.org/
 		phpstan/phpstan-symfony \
 		phpstan/phpstan-doctrine \
 		phpstan/phpstan-phpunit
-	$(M) co m="Install PHPStan (+ symfony, doctrine & phpunit)"
+	$(M) co m="Composer: install phpstan/phpstan + phpstan-symfony + phpstan-doctrine + phpstan-phpunit"
 
 require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
 	SYMFONY_ALLOW_CONTRIB=1 $(C) require --no-interaction --dev vincentlanglet/twig-cs-fixer
-	$(M) co m="Install Twig CS Fixer"
+	$(M) co m="Composer: install --dev vincentlanglet/twig-cs-fixer"
 
 ##
 
 require_bootstrap: _assets_or_encore ## Install Bootstrap - https://getbootstrap.com/
 ifneq ($(wildcard $(VENDOR_ASSETS)),)
 	$(CONSOLE) importmap:require bootstrap
-	$(M) co m="Install Bootstrap"
+	$(M) co m="importmap:require bootstrap"
 endif
 ifneq ($(wildcard $(WEBPACK_CONFIG)),)
 	# TODO
@@ -385,35 +371,30 @@ endif
 
 require_tailwind: _assets_or_encore ## Install Tailwind CSS - https://tailwindcss.com/
 ifneq ($(wildcard $(VENDOR_ASSETS)),)
-	$(C) require symfonycasts/tailwind-bundle
-	$(M) co m="Install Tailwind CSS"
+	$(C) require_co a=symfonycasts/tailwind-bundle
 	$(CONSOLE) tailwind:init
-	$(M) co m="Initialize Tailwind CSS"
+	$(M) co m="Initialize Tailwind CSS with tailwind:init"
 endif
 ifneq ($(wildcard $(WEBPACK_CONFIG)),)
 	$(NPM) install --save-dev tailwindcss @tailwindcss/postcss postcss postcss-loader
-	$(M) co m="Install Tailwind CSS"
+	$(M) co m="NPM: install tailwindcss @tailwindcss/postcss postcss postcss-loader"
 endif
 
 require_ux_live_component: _assets_or_encore ## Install Live Component - https://ux.symfony.com/
-	$(C) require symfony/ux-live-component
-	$(M) co m="Install Live Component"
+	$(C) require_co a=symfony/ux-live-component
 
 require_ux_stimulus: _assets_or_encore ## Install StimulusBundle - https://ux.symfony.com/
-	$(C) require symfony/stimulus-bundle
-	$(M) co m="Install StimulusBundle"
+	$(C) require_co a=symfony/stimulus-bundle
 
 require_ux_twig_component: _assets_or_encore ## Install Twig Component - https://ux.symfony.com/
-	$(C) require symfony/ux-twig-component
-	$(M) co m="Install Twig Component"
+	$(C) require_co a=symfony/ux-twig-component
 
 ##
 
 require_ux_react: _encore ## Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
-	$(C) require symfony/ux-react
-	$(M) co m="Install Symfony UX React"
+	$(C) require_co a=symfony/ux-react
 	$(M) npm_save_dev a=@babel/preset-react
-	$(M) co m="Install @babel/preset-react"
+	$(M) co m="NPM: install @babel/preset-react"
 
 ##
 
@@ -474,7 +455,7 @@ endif
 	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.starter/block/mariadb/compose.override.yaml
 	$(M) rb m=doctrine/doctrine-bundle t=compose.yaml s=.starter/block/mariadb/compose.yaml
 	$(M) ya f=compose.yaml k=services.php.depends_on.database.condition v=service_healthy
-	$(M) co m="stack updated to MySQL/MariaDB"
+	$(M) co m="Stack updated to MySQL/MariaDB"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
 	@printf " $(G)✔$(S) Stack updated to MySQL/MariaDB!\n"
@@ -489,7 +470,7 @@ endif
 	$(M) rb m=doctrine/doctrine-bundle t=Dockerfile s=.starter/block/sqlite/Dockerfile
 	$(M) cb m=doctrine/doctrine-bundle t=compose.override.yaml
 	$(M) cb m=doctrine/doctrine-bundle t=compose.yaml
-	$(M) co m="stack updated to SQLite"
+	$(M) co m="Stack updated to SQLite"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
 	@printf " $(G)✔$(S) Stack updated to SQLite!\n"
