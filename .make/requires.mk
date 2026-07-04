@@ -4,6 +4,12 @@ ifeq ($(wildcard $(VENDOR_ASSETS)),)
 	@exit 1
 endif
 
+_assets_or_encore: # INTERNAL
+ifeq ($(wildcard $(VENDOR_ASSETS))$(wildcard $(WEBPACK_CONFIG)),)
+	@printf "\n $(R)⨯$(S) Please install $(Y)AssetMapper$(S) with $(G)make require_asset_mapper$(S) or $(Y)Webpack Encore$(S) with $(G)make require_encore$(S)\n"
+	@exit 1
+endif
+
 _doctrine: # INTERNAL
 ifeq ($(wildcard $(VENDOR_DOCTRINE_ORM)),)
 	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine$(S) with $(G)make require_orm$(S)\n"
