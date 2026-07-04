@@ -255,12 +255,6 @@ include .make/requires.mk
 
 # --- EXTEND THE MAIN MAKEFILE ---
 
-ifeq ($(ALL),)
-ifneq ($(APP_ENV),prod)
--include $(sort $(wildcard $(MAKE_LOCAL_MK)))
-endif
-endif
-
 include .make/start.mk
 
 include .make/docker.mk
@@ -306,3 +300,9 @@ include .make/end.mk
 -include .make/contrib.mk
 
 -include .make/generate.mk
+
+ifeq ($(ALL),)
+ifneq ($(APP_ENV),prod)
+-include $(sort $(wildcard $(MAKE_LOCAL_MK)))
+endif
+endif
