@@ -374,39 +374,46 @@ require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLangle
 
 ##
 
-require_bootstrap: _assets ## Install Bootstrap (needs Asset Mapper) - https://getbootstrap.com/
+require_bootstrap: _assets_or_encore ## Install Bootstrap - https://getbootstrap.com/
+ifneq ($(wildcard $(VENDOR_ASSETS)),)
 	$(CONSOLE) importmap:require bootstrap
 	$(M) co m="Install Bootstrap"
+endif
+ifneq ($(wildcard $(WEBPACK_CONFIG)),)
+	# TODO
+endif
 
-require_tailwind: _assets ## Install Tailwind CSS (needs Asset Mapper) - https://tailwindcss.com/
+require_tailwind: _assets_or_encore ## Install Tailwind CSS - https://tailwindcss.com/
+ifneq ($(wildcard $(VENDOR_ASSETS)),)
 	$(C) require symfonycasts/tailwind-bundle
 	$(M) co m="Install Tailwind CSS"
 	$(CONSOLE) tailwind:init
 	$(M) co m="Initialize Tailwind CSS"
+endif
+ifneq ($(wildcard $(WEBPACK_CONFIG)),)
+	$(NPM) install --save-dev tailwindcss @tailwindcss/postcss postcss postcss-loader
+	$(M) co m="Install Tailwind CSS"
+endif
 
-require_ux_live_component: ## Install Live Component (needs Asset Mapper) - https://ux.symfony.com/
+require_ux_live_component: _assets_or_encore ## Install Live Component - https://ux.symfony.com/
 	$(C) require symfony/ux-live-component
 	$(M) co m="Install Live Component"
 
-require_ux_stimulus: ## Install StimulusBundle (needs Asset Mapper) - https://ux.symfony.com/
+require_ux_stimulus: _assets_or_encore ## Install StimulusBundle - https://ux.symfony.com/
 	$(C) require symfony/stimulus-bundle
 	$(M) co m="Install StimulusBundle"
 
-require_ux_twig_component: ## Install Twig Component (needs Asset Mapper) - https://ux.symfony.com/
+require_ux_twig_component: _assets_or_encore ## Install Twig Component - https://ux.symfony.com/
 	$(C) require symfony/ux-twig-component
 	$(M) co m="Install Twig Component"
 
 ##
 
-encore_require_ux_react: _encore ## Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
+require_ux_react: _encore ## Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
 	$(C) require symfony/ux-react
 	$(M) co m="Install Symfony UX React"
 	$(M) npm_save_dev a=@babel/preset-react
 	$(M) co m="Install @babel/preset-react"
-
-encore_require_tailwind: _encore ## Install Tailwind CSS (needs Webpack Encore) - https://tailwindcss.com/
-	$(NPM) install --save-dev tailwindcss @tailwindcss/postcss postcss postcss-loader
-	$(M) co m="Install Tailwind CSS"
 
 ##
 
