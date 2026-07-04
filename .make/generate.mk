@@ -384,15 +384,15 @@ require_tailwind: _assets ## Install Tailwind CSS (needs Asset Mapper) - https:/
 	$(CONSOLE) tailwind:init
 	$(M) co m="Initialize Tailwind CSS"
 
-require_ux_live_component: _assets ## Install Live Component (needs Asset Mapper) - https://ux.symfony.com/
+require_ux_live_component: ## Install Live Component (needs Asset Mapper) - https://ux.symfony.com/
 	$(C) symfony/ux-live-component
 	$(M) co m="Install Live Component"
 
-require_ux_stimulus: _assets ## Install StimulusBundle (needs Asset Mapper) - https://ux.symfony.com/
+require_ux_stimulus: ## Install StimulusBundle (needs Asset Mapper) - https://ux.symfony.com/
 	$(C) require symfony/stimulus-bundle
 	$(M) co m="Install StimulusBundle"
 
-require_ux_twig_component: _assets ## Install Twig Component (needs Asset Mapper) - https://ux.symfony.com/
+require_ux_twig_component: ## Install Twig Component (needs Asset Mapper) - https://ux.symfony.com/
 	$(C) symfony/ux-twig-component
 	$(M) co m="Install Twig Component"
 
