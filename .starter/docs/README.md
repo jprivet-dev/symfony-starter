@@ -158,7 +158,7 @@ make info     # Show project access info (URLs, ports)
 
 ### Steps
 
-* [Webpack Encore & React](steps/webpack-encore-react.md)
+* [Webpack Encore, Tailwind & React](steps/webpack-encore-tailwind-react.md)
 
 ### IDE configuration
 
