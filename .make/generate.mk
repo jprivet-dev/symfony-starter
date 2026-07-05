@@ -385,12 +385,14 @@ require_ux_live_component: _assets_or_encore ## Install Live Component - https:/
 ifneq ($(wildcard $(WEBPACK_CONFIG)),)
 	$(M) npm_force_install_co
 endif
+	$(M) permissions
 
 require_ux_stimulus: _assets_or_encore ## Install StimulusBundle - https://ux.symfony.com/
 	$(M) require_co a=symfony/stimulus-bundle
 ifneq ($(wildcard $(WEBPACK_CONFIG)),)
 	$(M) npm_force_install_co
 endif
+	$(M) permissions
 
 require_ux_twig_component: _assets_or_encore ## Install Twig Component - https://ux.symfony.com/
 	$(M) require_co a=symfony/ux-twig-component
