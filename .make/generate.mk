@@ -411,6 +411,7 @@ require_ux_react: _encore ## Install Symfony UX React and Babel preset for React
 	$(M) require_co a=symfony/ux-react
 	$(M) npm_save_dev a=@babel/preset-react
 	$(M) co m="NPM: install @babel/preset-react"
+	$(M) permissions
 
 ##
 
