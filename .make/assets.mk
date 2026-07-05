@@ -4,16 +4,22 @@
 assets a: _assets ## Generate all assets
 	@printf "\n$(Y)--- Assets (env: $(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
+	$(MAKE) _assets_prod
+else
+	$(MAKE) _assets_dev
+endif
+	$(MAKE) cache_clear
+
+_assets_prod: # INTERNAL
 	$(MAKE) importmap_install
 ifneq ($(wildcard $(VENDOR_TAILWIND)),)
 	$(MAKE) tailwind_minify
 endif
-else
+
+_assets_dev: # INTERNAL
 ifneq ($(wildcard $(VENDOR_TAILWIND)),)
 	$(MAKE) tailwind_build
 endif
-endif
-	$(MAKE) cache_clear
 
 ##
 
