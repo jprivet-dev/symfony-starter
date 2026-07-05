@@ -25,6 +25,7 @@ help: ## Display this help message with available commands
 
 .PHONY: install
 install: up_detached ## Start the project, install dependencies and show info
+	@printf "\n $(Y)›$(S) Install all (env: $(APP_ENV))\n"
 	$(MAKE) composer_install
 ifneq ($(wildcard $(VENDOR_ASSETS)),)
 	$(MAKE) assets
