@@ -309,6 +309,7 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 
 frontend_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
 	$(M) require_co a="symfony/asset-mapper symfony/asset symfony/twig-pack"
+	$(M) permissions
 
 frontend_webpack_encore: add_node ## Install Webpack Encore with Twig pack (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
 	$(M) require_co a="symfony/webpack-encore-bundle symfony/twig-pack"
