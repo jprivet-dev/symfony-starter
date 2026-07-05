@@ -314,9 +314,9 @@ Usage: make <target>
   require_easy_admin                      Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
   require_webapp                          Install a web application - https://symfony.com/doc/current/setup.html
 
-  require_encore                          Install Webpack Encore (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
+  frontend_webpack_encore                          Install Webpack Encore (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
 
-  require_asset_mapper                    Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+  frontend_asset_mapper                    Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
   require_maker_bundle                    Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
   require_orm                             Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
   require_profiler                        Install Profiler - https://symfony.com/doc/current/profiler.html

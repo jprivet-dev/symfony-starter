@@ -1,12 +1,12 @@
 _assets: # INTERNAL
 ifeq ($(wildcard $(VENDOR_ASSETS)),)
-	@printf "\n $(R)⨯ Missing package:$(S) please install $(Y)AssetMapper$(S) with $(G)make require_asset_mapper$(S)\n"
+	@printf "\n $(R)⨯ Missing package:$(S) please install $(Y)AssetMapper$(S) with $(G)make frontend_asset_mapper$(S)\n"
 	@exit 1
 endif
 
 _assets_or_encore: # INTERNAL
 ifeq ($(wildcard $(VENDOR_ASSETS))$(wildcard $(WEBPACK_CONFIG)),)
-	@printf "\n $(R)⨯ Missing package:$(S) please install $(Y)AssetMapper$(S) with $(G)make require_asset_mapper$(S) or $(Y)Webpack Encore$(S) with $(G)make require_encore$(S)\n"
+	@printf "\n $(R)⨯ Missing package:$(S) please install $(Y)AssetMapper$(S) with $(G)make frontend_asset_mapper$(S) or $(Y)Webpack Encore$(S) with $(G)make frontend_webpack_encore$(S)\n"
 	@exit 1
 endif
 
@@ -18,7 +18,7 @@ endif
 
 _encore: # INTERNAL
 ifeq ($(wildcard $(WEBPACK_CONFIG)),)
-	@printf "\n $(R)⨯ Missing package:$(S) please install $(Y)Webpack Encore (with Node.js)$(S) with $(G)make require_encore$(S)\n"
+	@printf "\n $(R)⨯ Missing package:$(S) please install $(Y)Webpack Encore (with Node.js)$(S) with $(G)make frontend_webpack_encore$(S)\n"
 	@exit 1
 endif
 

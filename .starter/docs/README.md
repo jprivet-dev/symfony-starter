@@ -55,7 +55,7 @@ cd symfony-starter
 > Each generation takes approximately ⏱️ 3-4 minutes depending on your machine and network speed.
 
 > 🧪 Reproducer
-> 
+>
 > See full [Generate your reproducer and contribute to Symfony](contrib/contrib.md) documentation.
 
 ### 3. Go on the app
@@ -98,10 +98,10 @@ Replace your `README.md` with one of these templates and fill in your details:
 >
 > By default, no frontend stack is installed. Run one of the following commands after generation to add one.
 
-| Stack             | Command                     | Note                          |
-|-------------------|-----------------------------|-------------------------------|
-| 🗺️ AssetMapper   | `make require_asset_mapper` |                               |
-| ⚙️ Webpack Encore | `make require_encore`       | add Node.js in the Dockerfile |
+| Stack             | Command                        |
+|-------------------|--------------------------------|
+| 🗺️ AssetMapper   | `make frontend_asset_mapper`   |
+| ⚙️ Webpack Encore | `make frontend_webpack_encore` |
 
 ## Generate from scratch
 

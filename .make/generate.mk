@@ -302,15 +302,15 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 
 ##
 
-require_encore: add_node ## Install Webpack Encore (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
-	$(C) require_co a=symfony/webpack-encore-bundle
+frontend_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+	$(C) require_co a="symfony/asset-mapper symfony/asset symfony/twig-pack"
+
+frontend_webpack_encore: add_node ## Install Webpack Encore with Twig pack (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
+	$(C) require_co a="symfony/webpack-encore-bundle symfony/twig-pack"
 	$(M) npm_install
 	$(M) co m="NPM: install all"
 
 ##
-
-require_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-	$(C) require_co a="symfony/asset-mapper symfony/asset symfony/twig-pack"
 
 require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
 	$(C) require_co a="--dev symfony/maker-bundle"
@@ -330,10 +330,6 @@ require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.
 
 require_translation: ## Install Translation - https://symfony.com/doc/current/translation.html
 	$(C) require_co a=symfony/translation
-
-require_twig_bundle: ## Install Twig Bundle - https://symfony.com/doc/current/templates.html
-	$(C) require_co a=symfony/twig-bundle
-	$(M) permissions
 
 ##
 

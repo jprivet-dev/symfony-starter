@@ -19,7 +19,7 @@ make minimalist@lts BRANCH=steps/symfony-ux-webpack-react-sf7.4
 
 ```shell
 # Install Webpack Encore (add Node.js in the Dockerfile)
-make require_encore
+make frontend_webpack_encore
 ```
 
 ## 3. Install Symfony UX React
