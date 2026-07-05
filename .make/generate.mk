@@ -382,6 +382,9 @@ endif
 
 require_ux_live_component: _assets_or_encore ## Install Live Component - https://ux.symfony.com/
 	$(M) require_co a=symfony/ux-live-component
+ifneq ($(wildcard $(WEBPACK_CONFIG)),)
+	$(M) npm_force_install_co
+endif
 
 require_ux_stimulus: _assets_or_encore ## Install StimulusBundle - https://ux.symfony.com/
 	$(M) require_co a=symfony/stimulus-bundle
