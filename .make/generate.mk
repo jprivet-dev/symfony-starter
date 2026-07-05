@@ -314,6 +314,7 @@ frontend_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/
 frontend_webpack_encore: add_node ## Install Webpack Encore with Twig pack (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
 	$(M) require_co a="symfony/webpack-encore-bundle symfony/twig-pack"
 	$(M) npm_force_install_co
+	$(M) permissions
 
 ##
 
