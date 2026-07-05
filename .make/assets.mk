@@ -2,7 +2,7 @@
 
 .PHONY: assets a
 assets a: _assets ## Generate all assets
-	@printf "\n$(Y)--- Assets (env: $(APP_ENV)) ---$(S)\n"
+	@printf "\n$(Y)--- Assets (APP_ENV=$(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
 	$(MAKE) _assets_prod
 else
