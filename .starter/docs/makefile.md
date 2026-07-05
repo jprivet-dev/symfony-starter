@@ -309,23 +309,20 @@ Usage: make <target>
 
 ▸ COMPLETE INSTALLATION
   require_co [a=<args>]                   Add required packages, then commit (e.g. make require_co a="symfony/http-client")
+  npm_force_install_co                    Force install all Node packages, then commit
 
   require_api                             Install API Platform - https://api-platform.com/docs/symfony/
   require_easy_admin                      Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
   require_webapp                          Install a web application - https://symfony.com/doc/current/setup.html
 
-  frontend_webpack_encore                          Install Webpack Encore (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
+  frontend_asset_mapper                   Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+  frontend_webpack_encore                 Install Webpack Encore with Twig pack (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
 
-  frontend_asset_mapper                    Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
   require_maker_bundle                    Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
   require_orm                             Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
   require_profiler                        Install Profiler - https://symfony.com/doc/current/profiler.html
   require_test_pack                       Install PHPUnit - https://symfony.com/doc/current/testing.html
   require_translation                     Install Translation - https://symfony.com/doc/current/translation.html
-  require_ux_live_component               Install Live Component - https://ux.symfony.com/
-  require_ux_stimulus                     Install StimulusBundle - https://ux.symfony.com/
-  require_ux_twig_component               Install Twig Component - https://ux.symfony.com/
-  require_ux_react                        Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
 
   require_phpcsfixer                      Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
   require_phpmd                           Install PHP Mess Detector - https://phpmd.org/
@@ -335,6 +332,11 @@ Usage: make <target>
 
   require_bootstrap                       Install Bootstrap - https://getbootstrap.com/
   require_tailwind                        Install Tailwind CSS - https://tailwindcss.com/
+  require_ux_live_component               Install Live Component - https://ux.symfony.com/
+  require_ux_stimulus                     Install StimulusBundle - https://ux.symfony.com/
+  require_ux_twig_component               Install Twig Component - https://ux.symfony.com/
+
+  require_ux_react                        Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
 
   health [c=<status_code>] [t=<text>]     Check the website and database connection (via Doctrine) (e.g. make health c=404 t="Welcome to Symfony")
 
