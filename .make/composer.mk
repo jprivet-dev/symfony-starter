@@ -6,7 +6,7 @@ composer: ## Run composer command | [a=<args>] | a="require --dev phpunit/phpuni
 
 .PHONY: i
 composer_install i: ## Install Composer packages
-	@printf "\n$(Y)--- Composer Install (env: $(APP_ENV)) ---$(S)\n"
+	@printf "\n$(Y)--- Composer Install (APP_ENV=$(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) install --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader
 else
@@ -42,7 +42,7 @@ require: ## Add required packages to your composer.json and installs them | [a=<
 
 .PHONY: update
 update: ## Update Composer packages | [a=<args>] | a="symfony/monolog-bundle"
-	@printf "\n$(Y)--- Composer Update (env: $(APP_ENV)) ---$(S)\n"
+	@printf "\n$(Y)--- Composer Update (APP_ENV=$(APP_ENV)) ---$(S)\n"
 ifeq ($(APP_ENV),prod)
 	$(COMPOSER) update --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader $(a)
 else
