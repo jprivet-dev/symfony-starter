@@ -33,6 +33,8 @@ make require_tailwind
 make require_ux_react
 ```
 
+## 5. Create application files
+
 `src/Controller/DefaultController.php`:
 
 ```php
@@ -86,7 +88,7 @@ And save all:
 git add . && git commit -m "Create the application files"
 ```
 
-## 5. Build and verify
+## 6. Build and verify
 
 ```shell
 # Compile assets once
