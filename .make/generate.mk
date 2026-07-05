@@ -396,6 +396,7 @@ endif
 
 require_ux_twig_component: _assets_or_encore ## Install Twig Component - https://ux.symfony.com/
 	$(M) require_co a=symfony/ux-twig-component
+	$(M) permissions
 
 ##
 
