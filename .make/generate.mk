@@ -18,6 +18,7 @@ CLONE_DIR               = clone
 
 C = $(COMPOSER)
 M = $(MAKE)
+N = $(NPM)
 
 START_TIME := $(shell date +%s)
 
@@ -280,6 +281,10 @@ require_co: ## Add required packages, then commit | [a=<args>] | a="symfony/http
 	$(M) require a="$(a)"
 	$(M) co m="Composer: install $(a)"
 
+npm_force_install_co: ## Force install all Node packages, then commit
+	$(N) --force install
+	$(M) co m="NPM: force install all Node packages"
+
 ##
 
 require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
@@ -307,8 +312,7 @@ frontend_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/
 
 frontend_webpack_encore: add_node ## Install Webpack Encore with Twig pack (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
 	$(M) require_co a="symfony/webpack-encore-bundle symfony/twig-pack"
-	$(M) npm_install
-	$(M) co m="NPM: install all"
+	$(M) npm_force_install_co
 
 ##
 
@@ -381,6 +385,9 @@ require_ux_live_component: _assets_or_encore ## Install Live Component - https:/
 
 require_ux_stimulus: _assets_or_encore ## Install StimulusBundle - https://ux.symfony.com/
 	$(M) require_co a=symfony/stimulus-bundle
+ifneq ($(wildcard $(WEBPACK_CONFIG)),)
+	$(M) npm_force_install_co
+endif
 
 require_ux_twig_component: _assets_or_encore ## Install Twig Component - https://ux.symfony.com/
 	$(M) require_co a=symfony/ux-twig-component
