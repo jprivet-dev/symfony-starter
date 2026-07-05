@@ -25,18 +25,13 @@ help: ## Display this help message with available commands
 
 .PHONY: install
 install: up_detached ## Start the project, install dependencies and show info
-	@printf "\n $(Y)›$(S) Install all (env: $(APP_ENV))\n"
+	@printf "\n $(Y)›$(S) Install all (APP_ENV=$(APP_ENV))\n"
 	$(MAKE) composer_install
 ifneq ($(wildcard $(VENDOR_ASSETS)),)
 	$(MAKE) assets
 endif
 ifneq ($(wildcard $(WEBPACK_CONFIG)),)
-	$(MAKE) npm_install
-ifeq ($(APP_ENV),prod)
-	$(MAKE) npm_build
-else
-	$(MAKE) npm_dev
-endif
+	$(MAKE) encore_install
 endif
 	$(MAKE) images permissions git_hooks_init info
 
