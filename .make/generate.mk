@@ -283,18 +283,18 @@ require_co: ## Add required packages, then commit | [a=<args>] | a="symfony/http
 ##
 
 require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
-	$(C) require_co a=api
+	$(M) require_co a=api
 
 require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
-	$(C) require_co a=easycorp/easyadmin-bundle
+	$(M) require_co a=easycorp/easyadmin-bundle
 
 require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
 	# FIX: Ban version 6 for the moment to prevent Symfony PropertyInfo crash
 	# symfony/property-info v6 does not support phpdocumentor/reflection-docblock
 	# Please stick to ^5.2 in your composer.json file.
-	$(C) require_co a="phpdocumentor/reflection-docblock:^5.2"
+	$(M) require_co a="phpdocumentor/reflection-docblock:^5.2"
 	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
-	$(C) require_co a=symfony/webapp-pack
+	$(M) require_co a=symfony/webapp-pack
 	$(M) update_postgresql_configuration
 	# Running deep_clean is essential to properly take into account the ORM installed by symfony/webapp-pack
 	$(M) deep_clean NO_INTERACTION=true
@@ -303,44 +303,44 @@ require_webapp: ## Install a web application - https://symfony.com/doc/current/s
 ##
 
 frontend_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
-	$(C) require_co a="symfony/asset-mapper symfony/asset symfony/twig-pack"
+	$(M) require_co a="symfony/asset-mapper symfony/asset symfony/twig-pack"
 
 frontend_webpack_encore: add_node ## Install Webpack Encore with Twig pack (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
-	$(C) require_co a="symfony/webpack-encore-bundle symfony/twig-pack"
+	$(M) require_co a="symfony/webpack-encore-bundle symfony/twig-pack"
 	$(M) npm_install
 	$(M) co m="NPM: install all"
 
 ##
 
 require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
-	$(C) require_co a="--dev symfony/maker-bundle"
+	$(M) require_co a="--dev symfony/maker-bundle"
 
 require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
-	$(C) require_co a=symfony/orm-pack
+	$(M) require_co a=symfony/orm-pack
 	$(M) update_postgresql_configuration
 	# Running deep_clean is essential to properly take into account the ORM installed by symfony/orm-pack
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
 
 require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
-	$(C) require_co a="--dev symfony/profiler-pack"
+	$(M) require_co a="--dev symfony/profiler-pack"
 
 require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
-	$(C) require_co a="--dev symfony/test-pack"
+	$(M) require_co a="--dev symfony/test-pack"
 
 require_translation: ## Install Translation - https://symfony.com/doc/current/translation.html
-	$(C) require_co a=symfony/translation
+	$(M) require_co a=symfony/translation
 
 ##
 
 require_phpcsfixer: ## Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
-	$(C) require_co a="--dev friendsofphp/php-cs-fixer"
+	$(M) require_co a="--dev friendsofphp/php-cs-fixer"
 
 require_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
-	$(C) require_co a="--dev phpmd/phpmd"
+	$(M) require_co a="--dev phpmd/phpmd"
 
 require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website/
-	$(C) require_co a="--dev phpmetrics/phpmetrics"
+	$(M) require_co a="--dev phpmetrics/phpmetrics"
 
 require_phpstan: ## Install PHPStan - https://phpstan.org/
 	SYMFONY_ALLOW_CONTRIB=1 $(C) require --no-interaction --dev \
@@ -367,7 +367,7 @@ endif
 
 require_tailwind: _assets_or_encore ## Install Tailwind CSS - https://tailwindcss.com/
 ifneq ($(wildcard $(VENDOR_ASSETS)),)
-	$(C) require_co a=symfonycasts/tailwind-bundle
+	$(M) require_co a=symfonycasts/tailwind-bundle
 	$(CONSOLE) tailwind:init
 	$(M) co m="Initialize Tailwind CSS with tailwind:init"
 endif
@@ -377,18 +377,18 @@ ifneq ($(wildcard $(WEBPACK_CONFIG)),)
 endif
 
 require_ux_live_component: _assets_or_encore ## Install Live Component - https://ux.symfony.com/
-	$(C) require_co a=symfony/ux-live-component
+	$(M) require_co a=symfony/ux-live-component
 
 require_ux_stimulus: _assets_or_encore ## Install StimulusBundle - https://ux.symfony.com/
-	$(C) require_co a=symfony/stimulus-bundle
+	$(M) require_co a=symfony/stimulus-bundle
 
 require_ux_twig_component: _assets_or_encore ## Install Twig Component - https://ux.symfony.com/
-	$(C) require_co a=symfony/ux-twig-component
+	$(M) require_co a=symfony/ux-twig-component
 
 ##
 
 require_ux_react: _encore ## Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
-	$(C) require_co a=symfony/ux-react
+	$(M) require_co a=symfony/ux-react
 	$(M) npm_save_dev a=@babel/preset-react
 	$(M) co m="NPM: install @babel/preset-react"
 
