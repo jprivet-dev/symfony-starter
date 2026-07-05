@@ -380,6 +380,11 @@ endif
 ifneq ($(wildcard $(WEBPACK_CONFIG)),)
 	$(NPM) install --save-dev tailwindcss @tailwindcss/postcss postcss postcss-loader
 	$(M) co m="NPM: install tailwindcss @tailwindcss/postcss postcss postcss-loader"
+	@cp .starter/block/tailwind-encore/postcss.config.mjs postcss.config.mjs
+	@sed -i '/\.enableSourceMaps(!Encore\.isProduction())/a\    .enablePostCssLoader()' webpack.config.js
+	@grep -q 'enablePostCssLoader' webpack.config.js || (printf " $(R)⨯$(S) Anchor not found in webpack.config.js, patch failed\n" && exit 1)
+	@sed -i '1i @import "tailwindcss";\n' assets/styles/app.css
+	$(M) co m="Configure PostCSS and Tailwind entrypoint (Webpack Encore)"
 endif
 
 require_ux_live_component: _assets_or_encore ## Install Live Component - https://ux.symfony.com/
