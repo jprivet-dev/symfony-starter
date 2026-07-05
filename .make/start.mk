@@ -31,6 +31,11 @@ ifneq ($(wildcard $(VENDOR_ASSETS)),)
 endif
 ifneq ($(wildcard $(WEBPACK_CONFIG)),)
 	$(MAKE) npm_install
+ifeq ($(APP_ENV),prod)
+	$(MAKE) npm_build
+else
+	$(MAKE) npm_dev
+endif
 endif
 	$(MAKE) images permissions git_hooks_init info
 
