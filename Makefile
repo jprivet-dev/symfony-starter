@@ -266,7 +266,7 @@ include .make/php.mk
 include .make/composer.mk
 
 ifneq ($(or $(ALL), $(wildcard $(WEBPACK_CONFIG))),)
-include .make/webpack.mk
+include .make/encore.mk
 endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE_ORM))),)
