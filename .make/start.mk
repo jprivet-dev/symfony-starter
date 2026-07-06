@@ -38,16 +38,12 @@ endif
 .PHONY: dev
 dev: ## Set APP_ENV=dev in .env.local
 	@printf "\n $(G)› Switch to APP_ENV=dev$(S)\n"
-	@grep -q '^APP_ENV=' .env.local 2>/dev/null\
-		&& sed -i 's/^APP_ENV=.*/APP_ENV=dev/' .env.local\
-		|| echo 'APP_ENV=dev' >> .env.local
+	@grep -q '^APP_ENV=' .env.local 2>/dev/null && sed -i 's/^APP_ENV=.*/APP_ENV=dev/' .env.local || echo 'APP_ENV=dev' >> .env.local
 
 .PHONY: prod
 prod: ## Set APP_ENV=prod in .env.local
 	@printf "\n $(R)› Switch to APP_ENV=prod$(S)\n"
-	@grep -q '^APP_ENV=' .env.local 2>/dev/null\
-		&& sed -i 's/^APP_ENV=.*/APP_ENV=prod/' .env.local\
-		|| echo 'APP_ENV=prod' >> .env.local
+	@grep -q '^APP_ENV=' .env.local 2>/dev/null && sed -i 's/^APP_ENV=.*/APP_ENV=prod/' .env.local || echo 'APP_ENV=prod' >> .env.local
 
 .PHONY: info
 info: ## Show project access info
