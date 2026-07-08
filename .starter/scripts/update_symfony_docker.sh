@@ -78,7 +78,7 @@ rsync -av \
 
 printf " ${G}✔${S} dunglas/symfony-docker synced at the project root.\n"
 
-# --- 5bis. Add recipes_dev marker (dev-only recipes, not part of upstream) ---
+# --- 6. Add recipes_dev marker (dev-only recipes, not part of upstream) ---
 
 if ! grep -q '^###> recipes_dev ###$' Dockerfile; then
     printf "\n${Y}--- Adding recipes_dev marker ---${S}\n"
@@ -97,18 +97,26 @@ if ! grep -q '^###> recipes_dev ###$' Dockerfile; then
     printf " ${G}✔${S} recipes_dev marker added to Dockerfile\n"
 fi
 
-# --- 6. Cleanup temp clone ---
+# --- 7. Add custom .dockerignore entries (not part of upstream) ---
+
+printf "\n${Y}--- Adding custom .dockerignore entries ---${S}\n"
+for ENTRY in .claude/ .hooks/ .starter/ build/; do
+    grep -qxF "${ENTRY}" .dockerignore || echo "${ENTRY}" >> .dockerignore
+done
+printf " ${G}✔${S} Custom entries ensured in .dockerignore\n"
+
+# --- 8. Cleanup temp clone ---
 
 rm -rf "${CLONE_DIR}"
 printf " ${G}✔${S} Temp directory removed.\n"
 
-# --- 7. Update .starter/UPSTREAM ---
+# --- 9. Update .starter/UPSTREAM ---
 
 printf "\n${Y}--- Updating ${UPSTREAM_FILE} ---${S}\n"
 echo "${UPSTREAM_COMMIT}" > "${UPSTREAM_FILE}"
 printf " ${G}✔${S} Upstream commit recorded in ${Y}${UPSTREAM_FILE}${S}\n"
 
-# --- 8. Update README badges ---
+# --- 10. Update README badges ---
 
 printf "\n${Y}--- Updating README badges ---${S}\n"
 
@@ -128,7 +136,7 @@ else
     printf " ${Y}›${S} PHP version not found in Dockerfile, badge not updated.\n"
 fi
 
-# --- 9. Git commit ---
+# --- 11. Git commit ---
 
 printf "\n${Y}--- Committing ---${S}\n"
 git add .
