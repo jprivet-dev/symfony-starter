@@ -20,16 +20,17 @@ Usage: make <target>
   help                                    Display this help message with available commands
 
   install                                 Start the project, install dependencies and show info
-  dev                                     Set APP_ENV=dev in .env.local
-  prod                                    Set APP_ENV=prod in .env.local
   info                                    Show project access info
-
   start                                   Start the project and show info (detached mode)
   stop                                    Stop the project (down)
 
   restart                                 [Level 1] Standard restart - Reloading containers (triggers: .env, compose.yaml, code changes)
   build_start                             [Level 2] Build & Start - Updating image with cache (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
   build_force_start                       [Level 3] Force build & Start - Rebuilding from scratch (triggers: Dockerfile, system packages, cache issues)
+
+  dev                                     Set APP_ENV=dev and DOCKER_ENV=dev in .env.local (rebuild only if changed)
+  prod                                    Set APP_ENV=prod and DOCKER_ENV=dev in .env.local (rebuild only if changed)
+  prod_docker                             Set APP_ENV=prod and DOCKER_ENV=prod in .env.local (rebuild only if changed)
 
   check                                   Check everything before you deliver - Composer, Doctrine validation, linters, ... (NO STOP on failure)
   check_stop                              Check on git push (STOP on failure)
