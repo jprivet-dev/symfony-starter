@@ -74,8 +74,12 @@ endif
 
 .PHONY: safe
 safe: ## Add configured directories to Git's safe directories
+ifeq ($(DOCKER_ENV),prod)
+	@printf " $(Y)›$(S) 'make safe' is skipped with DOCKER_ENV=prod (no Git in prod images).\n"
+else
 	$(foreach dir, $(SAFE_DIRECTORIES), $(CONTAINER_PHP) git config --global --add safe.directory $(dir);)
 	@printf " $(G)✔$(S) Git safe directories updated: $(Y)$(SAFE_DIRECTORIES)$(S)\n"
+endif
 
 ## — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
 
