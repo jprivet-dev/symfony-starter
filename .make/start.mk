@@ -81,7 +81,7 @@ _set_env: # INTERNAL - Set a key in .env.local | k=<key> v=<value>
 	@grep -q '^$(k)=' .env.local 2>/dev/null && sed -i 's/^$(k)=.*/$(k)=$(v)/' .env.local || echo '$(k)=$(v)' >> .env.local
 
 .PHONY: dev
-dev: ## Set APP_ENV=dev and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
+dev: confirm ## Set APP_ENV=dev and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
 	@printf "\n $(G)› Switch to APP_ENV=dev + DOCKER_ENV=dev$(S)\n"
 	$(M) _set_env k=APP_ENV v=dev
 	$(M) _set_env k=DOCKER_ENV v=dev
@@ -93,7 +93,7 @@ ifneq ($(DOCKER_ENV)$(APP_ENV),devdev)
 endif
 
 .PHONY: prod
-prod: ## Set APP_ENV=prod and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
+prod: confirm ## Set APP_ENV=prod and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
 	@printf "\n $(R)› Switch to APP_ENV=prod + DOCKER_ENV=dev$(S)\n"
 	$(M) _set_env k=APP_ENV v=prod
 	$(M) _set_env k=DOCKER_ENV v=dev
@@ -104,7 +104,7 @@ ifneq ($(DOCKER_ENV)$(APP_ENV),devprod)
 	$(M) install
 endif
 
-prod_docker: ## Set APP_ENV=prod and DOCKER_ENV=prod in .env.local (rebuild/reinstall only if changed)
+prod_docker: confirm ## Set APP_ENV=prod and DOCKER_ENV=prod in .env.local (rebuild/reinstall only if changed)
 	@printf "\n $(R)› Switch to APP_ENV=prod + DOCKER_ENV=prod$(S)\n"
 	$(M) _set_env k=APP_ENV v=prod
 	$(M) _set_env k=DOCKER_ENV v=prod
