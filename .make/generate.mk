@@ -103,6 +103,11 @@ add_node: # INTERNAL - Add Node.js and npm to the dev Dockerfile
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
 
+align_babel_env: # INTERNAL - Align Babel envName (BABEL_ENV) with Encore's production/development mode
+	@sed -i "/^Encore$$/e cat .starter/block/babel/webpack.config.js" webpack.config.js
+	@grep -q "BABEL_ENV" webpack.config.js || (printf " $(R)⨯$(S) Anchor not found in webpack.config.js, patch failed\n" && exit 1)
+	$(M) co m="Align Babel envName (BABEL_ENV) with Encore's production/development mode"
+
 orphan_branch: # INTERNAL - Create a new orphan branch before generation | FLAVOR=<flavor>
 	@printf "\n$(Y)--- Branch ---$(S)\n"
 	@printf " $(Y)›$(S) Current branch: $(G)$$(git rev-parse --abbrev-ref HEAD)$(S)\n"
@@ -425,7 +430,9 @@ require_ux_twig_component: _asset_mapper_or_encore ## Install Twig Component - h
 
 require_ux_react: _encore ## Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
 	$(M) require_co a=symfony/ux-react
-	$(M) npm_save_dev_co a=@babel/preset-react
+	$(M) npm_save_dev a=@babel/preset-react
+	$(M) co m="NPM: install @babel/preset-react"
+	$(M) align_babel_env
 	$(M) permissions
 
 ##
