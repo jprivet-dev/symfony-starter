@@ -85,16 +85,15 @@ compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make bui
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(M) co m="Use DATABASE_URL var in compose.yaml"
 
-package_json_init: # INTERNAL - Verify the installed Node.js major version, then init package.json with engines.node constraint
+enforce_engines_node: # INTERNAL - Verify the installed Node.js major version, then enforce engines.node constraint on package.json
 	@ACTUAL=$$($(NODE) -v | sed 's/^v\([0-9]*\).*/\1/'); \
 	if [ "$$ACTUAL" != "$(NODE_MAJOR_VERSION)" ]; then \
 		printf " $(R)⨯$(S) Node.js version mismatch: expected $(Y)v$(NODE_MAJOR_VERSION).x$(S), got $(Y)v$$ACTUAL$(S)\n"; \
 		exit 1; \
 	fi
-	$(N) init -y
 	$(N) pkg set engines.node="$(NODE_MAJOR_VERSION).x"
 	cp .starter/block/node/.npmrc .npmrc
-	$(M) co m="Init package.json with engines.node constraint and enable engine-strict"
+	$(M) co m="Enforce engines.node constraint and enable engine-strict"
 
 add_node: # INTERNAL - Add Node.js and npm to the dev Dockerfile
 	$(M) permissions
@@ -102,7 +101,6 @@ add_node: # INTERNAL - Add Node.js and npm to the dev Dockerfile
 	$(M) co m="Add Node.js and npm to the dev Dockerfile"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
-	$(M) package_json_init
 
 orphan_branch: # INTERNAL - Create a new orphan branch before generation | FLAVOR=<flavor>
 	@printf "\n$(Y)--- Branch ---$(S)\n"
@@ -329,6 +327,7 @@ frontend_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/
 
 frontend_webpack_encore: add_node ## Install Webpack Encore with Twig pack (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
 	$(M) require_co a="symfony/webpack-encore-bundle symfony/twig-pack"
+	$(M) enforce_engines_node
 	$(M) npm_force_install_co
 	$(M) permissions
 
