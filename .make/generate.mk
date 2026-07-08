@@ -293,6 +293,10 @@ require_co: ## Add required packages, then commit | [a=<args>] | a="symfony/http
 	$(M) require a="$(a)"
 	$(M) co m="Composer: install $(a)"
 
+npm_save_dev_co: ## Install a Node.js package as a dev dependency, then commit
+	$(M) npm_save_dev a="$(a)"
+	$(M) co m="NPM: install $(a)"
+
 npm_force_install_co: ## Force install all Node packages, then commit
 	$(N) --force install
 	$(M) co m="NPM: force install all Node packages"
@@ -421,8 +425,7 @@ require_ux_twig_component: _asset_mapper_or_encore ## Install Twig Component - h
 
 require_ux_react: _encore ## Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
 	$(M) require_co a=symfony/ux-react
-	$(M) npm_save_dev a=@babel/preset-react
-	$(M) co m="NPM: install @babel/preset-react"
+	$(M) npm_save_dev_co a=@babel/preset-react@^$(BABEL_MAJOR_VERSION)
 	$(M) permissions
 
 ##

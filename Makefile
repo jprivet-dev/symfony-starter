@@ -56,10 +56,11 @@ YQ = docker run --rm --user "$(USER)" -v "$(PWD)":/workdir -w /workdir mikefarah
 # Add your local contribution volumes here (e.g., /symfony, /monolog-bundle).
 SAFE_DIRECTORIES = /app
 
-# --- NODE ---
+# --- NODE / BABEL ---
 
-# Node.js major version installed via apt in the dev Dockerfile
-NODE_MAJOR_VERSION = 20
+# Major versions enforced for consistency between the dev Dockerfile (Node.js) and npm packages (Babel)
+NODE_MAJOR_VERSION  = 20
+BABEL_MAJOR_VERSION = 7
 
 # --- FILES & DIRECTORIES ---
 
