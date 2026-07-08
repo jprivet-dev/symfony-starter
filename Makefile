@@ -210,11 +210,11 @@ COMPOSE = $(strip docker compose $(ENV_FILES))
 
 # In a first step, you can test the application's production behavior in a development environment by setting APP_ENV=prod.
 # To test the full Docker production setup (e.g., optimized images, production-specific configurations), you can also add DOCKER_ENV=prod.
+# DOCKER_ENV=prod always implies APP_ENV=prod (running prod Docker images with a dev app makes no sense).
 # This allows for a smooth transition from testing the code's behavior to testing the full Docker infrastructure.
-ifeq ($(APP_ENV),prod)
 ifeq ($(DOCKER_ENV),prod)
+APP_ENV := prod
 COMPOSE = docker compose -f compose.yaml -f compose.prod.yaml $(ENV_FILES)
-endif
 endif
 
 EXEC        = $(COMPOSE) exec
