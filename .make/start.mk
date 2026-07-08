@@ -80,29 +80,40 @@ _set_env: # INTERNAL - Set a key in .env.local | k=<key> v=<value>
 	$(if $(v),, $(error "Please specify a value with 'v=...'"))
 	@grep -q '^$(k)=' .env.local 2>/dev/null && sed -i 's/^$(k)=.*/$(k)=$(v)/' .env.local || echo '$(k)=$(v)' >> .env.local
 
-_set_docker_env: # INTERNAL - Set DOCKER_ENV in .env.local, rebuild only if it changed | v=<value>
-	$(if $(v),, $(error "Please specify a value with 'v=...'"))
-	$(M) _set_env k=DOCKER_ENV v=$(v)
-ifneq ($(DOCKER_ENV),$(v))
-	$(M) build_force_start
+.PHONY: dev
+dev: ## Set APP_ENV=dev and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
+	@printf "\n $(G)› Switch to APP_ENV=dev + DOCKER_ENV=dev$(S)\n"
+	$(M) _set_env k=APP_ENV v=dev
+	$(M) _set_env k=DOCKER_ENV v=dev
+ifneq ($(DOCKER_ENV),dev)
+	$(M) build_force
+endif
+ifneq ($(DOCKER_ENV)$(APP_ENV),devdev)
+	$(M) install
 endif
 
-.PHONY: dev
-dev: ## Set APP_ENV=dev and DOCKER_ENV=dev in .env.local (rebuild only if changed)
-	@printf "\n $(G)› Switch to APP_ENV=dev$(S)\n"
-	$(M) _set_env k=APP_ENV v=dev
-	$(M) _set_docker_env v=dev
-
 .PHONY: prod
-prod: ## Set APP_ENV=prod and DOCKER_ENV=dev in .env.local (rebuild only if changed)
-	@printf "\n $(R)› Switch to APP_ENV=prod$(S)\n"
+prod: ## Set APP_ENV=prod and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
+	@printf "\n $(R)› Switch to APP_ENV=prod + DOCKER_ENV=dev$(S)\n"
 	$(M) _set_env k=APP_ENV v=prod
-	$(M) _set_docker_env v=dev
+	$(M) _set_env k=DOCKER_ENV v=dev
+ifneq ($(DOCKER_ENV),dev)
+	$(M) build_force
+endif
+ifneq ($(DOCKER_ENV)$(APP_ENV),devprod)
+	$(M) install
+endif
 
-prod_docker: ## Set APP_ENV=prod and DOCKER_ENV=prod in .env.local (rebuild only if changed)
+prod_docker: ## Set APP_ENV=prod and DOCKER_ENV=prod in .env.local (rebuild/reinstall only if changed)
 	@printf "\n $(R)› Switch to APP_ENV=prod + DOCKER_ENV=prod$(S)\n"
 	$(M) _set_env k=APP_ENV v=prod
-	$(M) _set_docker_env v=prod
+	$(M) _set_env k=DOCKER_ENV v=prod
+ifneq ($(DOCKER_ENV),prod)
+	$(M) build_force
+endif
+ifneq ($(DOCKER_ENV)$(APP_ENV),prodprod)
+	$(M) install
+endif
 
 ##
 

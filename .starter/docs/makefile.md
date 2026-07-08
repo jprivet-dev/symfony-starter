@@ -28,9 +28,9 @@ Usage: make <target>
   build_start                             [Level 2] Build & Start - Updating image with cache (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
   build_force_start                       [Level 3] Force build & Start - Rebuilding from scratch (triggers: Dockerfile, system packages, cache issues)
 
-  dev                                     Set APP_ENV=dev and DOCKER_ENV=dev in .env.local (rebuild only if changed)
-  prod                                    Set APP_ENV=prod and DOCKER_ENV=dev in .env.local (rebuild only if changed)
-  prod_docker                             Set APP_ENV=prod and DOCKER_ENV=prod in .env.local (rebuild only if changed)
+  dev                                     Set APP_ENV=dev and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
+  prod                                    Set APP_ENV=prod and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
+  prod_docker                             Set APP_ENV=prod and DOCKER_ENV=prod in .env.local (rebuild/reinstall only if changed)
 
   check                                   Check everything before you deliver - Composer, Doctrine validation, linters, ... (NO STOP on failure)
   check_stop                              Check on git push (STOP on failure)
