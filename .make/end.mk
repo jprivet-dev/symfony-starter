@@ -63,7 +63,9 @@ git_pre_push: check_stop ## Actions on Git pre-push
 .PHONY: permissions
 permissions: ## Fix file permissions (primarily for Linux hosts)
 	@printf "\n$(Y)--- Permissions ---$(S)\n"
-ifeq ($(UNAME_S),Linux)
+ifeq ($(DOCKER_ENV),prod)
+	@printf " $(Y)›$(S) 'make permissions' is skipped with DOCKER_ENV=prod (no chown needed on prod images).\n"
+else ifeq ($(UNAME_S),Linux)
 	$(COMPOSE) run --rm php chown -R $(USER) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER)$(S) of the project files.\n"
 else
