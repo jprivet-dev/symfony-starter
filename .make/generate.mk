@@ -85,14 +85,22 @@ compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make bui
 	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
 	$(M) co m="Use DATABASE_URL var in compose.yaml"
 
+_node_check: # INTERNAL - Verify the installed Node.js major version matches NODE_MAJOR_VERSION
+	@ACTUAL=$$($(NODE) -v | sed 's/^v\([0-9]*\).*/\1/'); \
+	if [ "$$ACTUAL" != "$(NODE_MAJOR_VERSION)" ]; then \
+		printf " $(R)⨯$(S) Node.js version mismatch: expected $(Y)v$(NODE_MAJOR_VERSION).x$(S), got $(Y)v$$ACTUAL$(S)\n"; \
+		exit 1; \
+	fi
+
 add_node: # INTERNAL - Add Node.js and npm to the dev Dockerfile
 	$(M) permissions
 	$(M) rb m=recipes_dev t=Dockerfile s=.starter/block/node/Dockerfile
 	$(M) co m="Add Node.js and npm to the dev Dockerfile"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
+	$(M) _node_check
 	$(N) init -y
-	$(N) pkg set engines.node="$$($(NODE) -v | sed 's/^v\([0-9]*\).*/\1.x/')"
+	$(N) pkg set engines.node="$(NODE_MAJOR_VERSION).x"
 	cp .starter/block/node/.npmrc .npmrc
 	$(M) co m="Init package.json with engines.node constraint and enable engine-strict"
 
