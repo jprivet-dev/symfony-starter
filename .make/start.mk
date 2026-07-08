@@ -27,7 +27,7 @@ help: ## Display this help message with available commands
 install: up_detached ## Start the project, install dependencies and show info
 	@printf "\n $(Y)›$(S) Install all (APP_ENV=$(APP_ENV))\n"
 	$(MAKE) composer_install
-ifneq ($(wildcard $(VENDOR_ASSETS)),)
+ifneq ($(wildcard $(VENDOR_ASSET_MAPPER)),)
 	$(MAKE) assets
 endif
 ifneq ($(wildcard $(WEBPACK_CONFIG)),)

@@ -1,59 +1,40 @@
 ## — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
 
 .PHONY: assets a
-assets a: _assets ## Generate all assets
-	@printf "\n$(Y)--- Assets (APP_ENV=$(APP_ENV)) ---$(S)\n"
-ifeq ($(APP_ENV),prod)
-	$(MAKE) _assets_prod
-else
-	$(MAKE) _assets_dev
-endif
-	$(MAKE) cache_clear
+assets a: assets_install assets_generate ## Install and generate all assets
 
-_assets_prod: # INTERNAL
+assets_install: ## Install all assets
+ifneq ($(wildcard $(VENDOR_ASSET_MAPPER)),)
 	$(MAKE) importmap_install
-ifneq ($(wildcard $(VENDOR_TAILWIND)),)
-	$(MAKE) tailwind_minify
+endif
+ifneq ($(wildcard $(WEBPACK_CONFIG)),)
+	$(MAKE) npm_install
 endif
 
-_assets_dev: # INTERNAL
+assets_generate: ## Generate all assets
 ifneq ($(wildcard $(VENDOR_TAILWIND)),)
+ifeq ($(APP_ENV),prod)
+	$(MAKE) tailwind_minify
+else
 	$(MAKE) tailwind_build
 endif
+endif
+ifneq ($(wildcard $(WEBPACK_CONFIG)),)
+ifeq ($(APP_ENV),prod)
+	$(MAKE) npm_build
+else
+	$(MAKE) npm_dev
+endif
+endif
 
-##
-
-asset_map_clear: _assets ## Clear all assets in the public output directory
-	$(COMPOSE) run --rm php rm -rf ./public/assets
-
-asset_map_compile: _assets asset_map_clear ## Compile all mapped assets and write them to the final public output directory
-	$(CONSOLE) asset-map:compile
-
-asset_map_debug: _assets ## See all of the mapped assets
-	$(CONSOLE) debug:asset-map --full
-
-##
-
-importmap_audit: _assets ## Check for security vulnerability advisories for dependencies
-	$(CONSOLE) importmap:audit
-
-importmap_install: _assets ## Download all assets that should be downloaded
-	$(CONSOLE) importmap:install
-
-importmap_outdated: _assets ## List outdated JavaScript packages and their latest versions | [p=<packages>] | p="lodash"
-	$(CONSOLE) importmap:outdated $(p)
-
-importmap_remove: _assets ## Remove JavaScript packages | p=<packages> | p="lodash"
-	$(if $(p),, $(error "Please specify the packages with 'p=...'"))
-	$(CONSOLE) importmap:remove $(p)
-
-importmap_require: _assets ## Require JavaScript packages | p=<packages> | p="lodash@^4.15"
-	$(if $(p),, $(error "Please specify the packages with 'p=...'"))
-	$(CONSOLE) importmap:require $(p)
-
-importmap_update: _assets ## Update JavaScript packages to their latest versions | [p=<packages>] | p="lodash"
-	$(CONSOLE) importmap:update $(p)
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_ASSET_MAPPER))),)
+include .make/asset_mapper.mk
+endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_TAILWIND))),)
-include .make/assets_tailwind.mk
+include .make/asset_mapper_tailwind.mk
+endif
+
+ifneq ($(or $(ALL), $(wildcard $(WEBPACK_CONFIG))),)
+include .make/encore.mk
 endif

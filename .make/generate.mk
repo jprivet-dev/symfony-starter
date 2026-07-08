@@ -362,8 +362,8 @@ require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLangle
 
 ##
 
-require_bootstrap: _assets_or_encore ## Install Bootstrap - https://getbootstrap.com/
-ifneq ($(wildcard $(VENDOR_ASSETS)),)
+require_bootstrap: _asset_mapper_or_encore ## Install Bootstrap - https://getbootstrap.com/
+ifneq ($(wildcard $(VENDOR_ASSET_MAPPER)),)
 	$(CONSOLE) importmap:require bootstrap
 	$(M) co m="importmap:require bootstrap"
 endif
@@ -371,8 +371,8 @@ ifneq ($(wildcard $(WEBPACK_CONFIG)),)
 	# TODO
 endif
 
-require_tailwind: _assets_or_encore ## Install Tailwind CSS - https://tailwindcss.com/
-ifneq ($(wildcard $(VENDOR_ASSETS)),)
+require_tailwind: _asset_mapper_or_encore ## Install Tailwind CSS - https://tailwindcss.com/
+ifneq ($(wildcard $(VENDOR_ASSET_MAPPER)),)
 	$(M) require_co a=symfonycasts/tailwind-bundle
 	$(CONSOLE) tailwind:init
 	$(M) co m="Initialize Tailwind CSS with tailwind:init"
@@ -387,21 +387,21 @@ ifneq ($(wildcard $(WEBPACK_CONFIG)),)
 	$(M) co m="Configure PostCSS and Tailwind entrypoint (Webpack Encore)"
 endif
 
-require_ux_live_component: _assets_or_encore ## Install Live Component - https://ux.symfony.com/
+require_ux_live_component: _asset_mapper_or_encore ## Install Live Component - https://ux.symfony.com/
 	$(M) require_co a=symfony/ux-live-component
 ifneq ($(wildcard $(WEBPACK_CONFIG)),)
 	$(M) npm_force_install_co
 endif
 	$(M) permissions
 
-require_ux_stimulus: _assets_or_encore ## Install StimulusBundle - https://ux.symfony.com/
+require_ux_stimulus: _asset_mapper_or_encore ## Install StimulusBundle - https://ux.symfony.com/
 	$(M) require_co a=symfony/stimulus-bundle
 ifneq ($(wildcard $(WEBPACK_CONFIG)),)
 	$(M) npm_force_install_co
 endif
 	$(M) permissions
 
-require_ux_twig_component: _assets_or_encore ## Install Twig Component - https://ux.symfony.com/
+require_ux_twig_component: _asset_mapper_or_encore ## Install Twig Component - https://ux.symfony.com/
 	$(M) require_co a=symfony/ux-twig-component
 	$(M) permissions
 

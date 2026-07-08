@@ -6,17 +6,6 @@ node: ## Run Node.js | [a=<args>] | a=--help
 
 ##
 
-encore_install: ## Install npm packages and build assets (Webpack Encore)
-	@printf "\n$(Y)--- Webpack Encore Install (APP_ENV=$(APP_ENV)) ---$(S)\n"
-	$(MAKE) npm_install
-ifeq ($(APP_ENV),prod)
-	$(MAKE) npm_build
-else
-	$(MAKE) npm_dev
-endif
-
-##
-
 .PHONY: npm
 npm: ## Run the Node Package Manager | [a=<args>] | a=--help
 	$(NPM) $(a)

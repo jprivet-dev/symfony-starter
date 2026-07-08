@@ -20,6 +20,8 @@ Usage: make <target>
   help                                    Display this help message with available commands
 
   install                                 Start the project, install dependencies and show info
+  dev                                     Set APP_ENV=dev in .env.local
+  prod                                    Set APP_ENV=prod in .env.local
   info                                    Show project access info
 
   start                                   Start the project and show info (detached mode)
@@ -77,21 +79,6 @@ Usage: make <target>
   remove [a=<args>]                       Remove a package from the require or require-dev (e.g. make remove a="phpunit/phpunit")
   require [a=<args>]                      Add required packages to your composer.json and installs them (e.g. make require a="--dev phpunit/phpunit")
   update [a=<args>]                       Update Composer packages (e.g. make update a="symfony/monolog-bundle")
-
-— WEBPACK 🧰 ———————————————————————————————————————————————————————————————
-  node [a=<args>]                         Run Node.js (e.g. make node a=--help)
-
-  npm [a=<args>]                          Run the Node Package Manager (e.g. make npm a=--help)
-  npm_install [a=<args>]                  Install the project's Node.js dependencies (e.g. make npm_install a=--help)
-  npm_save_dev [a=<args>]                 Install a Node.js package as a dev dependency (e.g. make npm_save_dev a=@babel/preset-react)
-  npm_watch                               Compile assets and automatically re-compile when files change
-  npm_dev_server                          Run a dev-server that can sometimes update your code without refreshing the page
-  npm_dev                                 Compile assets once
-  npm_build                               On deploy, create a production build
-
-  npx [a=<args>]                          Run the Node Package eXecute (e.g. make npx a=--help)
-  webpack [a=<args>]                      Run the Webpack bundler (e.g. make webpack a=--help)
-  encore [a=<args>]                       Run Webpack Encore (e.g. make encore a=--help)
 
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
   db                                      Drop and create the database and migrate
@@ -182,8 +169,11 @@ Usage: make <target>
   twigcsfixer_lint                        Check Twig style
 
 — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
-  assets                               a  Generate all assets
+  assets                               a  Install and generate all assets
+  assets_install                          Install all assets
+  assets_generate                         Generate all assets
 
+— ASSET MAPPER 🧰‍ ——————————————————————————————————————————————————————————
   asset_map_clear                         Clear all assets in the public output directory
   asset_map_compile                       Compile all mapped assets and write them to the final public output directory
   asset_map_debug                         See all of the mapped assets
@@ -201,6 +191,21 @@ Usage: make <target>
   tailwind_watch                       w  Watch for changes and rebuild automatically.
   tailwind_minify                         Minify the output CSS.
   tailwind_debug                          See the full config from TailwindBundle
+
+— WEBPACK ENCORE 🧰 ————————————————————————————————————————————————————————
+  node [a=<args>]                         Run Node.js (e.g. make node a=--help)
+
+  npm [a=<args>]                          Run the Node Package Manager (e.g. make npm a=--help)
+  npm_install [a=<args>]                  Install the project's Node.js dependencies (e.g. make npm_install a=--help)
+  npm_save_dev [a=<args>]                 Install a Node.js package as a dev dependency (e.g. make npm_save_dev a=@babel/preset-react)
+  npm_watch                               Compile assets and automatically re-compile when files change
+  npm_dev_server                          Run a dev-server that can sometimes update your code without refreshing the page
+  npm_dev                                 Compile assets once
+  npm_build                               On deploy, create a production build
+
+  npx [a=<args>]                          Run the Node Package eXecute (e.g. make npx a=--help)
+  webpack [a=<args>]                      Run the Webpack bundler (e.g. make webpack a=--help)
+  encore [a=<args>]                       Run Webpack Encore (e.g. make encore a=--help)
 
 — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
   extract                                 Extract translation strings from templates

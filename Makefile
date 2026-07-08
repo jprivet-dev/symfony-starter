@@ -58,34 +58,36 @@ SAFE_DIRECTORIES = /app
 
 # --- FILES & DIRECTORIES ---
 
-SRC       = src
-TEMPLATES = templates
-TESTS     = tests
+SRC                   = src
+TEMPLATES             = templates
+TESTS                 = tests
 
-NOW                := $(shell date +%Y%m%d-%H%M%S-%3N)
-PWD                 = $(shell pwd)
-MAKE_LOCAL_MK       = .make/local.mk
-MAKE_LOCAL_MK_DIST  = $(MAKE_LOCAL_MK).dist
+NOW                  := $(shell date +%Y%m%d-%H%M%S-%3N)
+PWD                   = $(shell pwd)
+MAKE_LOCAL_MK         = .make/local.mk
+MAKE_LOCAL_MK_DIST    = $(MAKE_LOCAL_MK).dist
 
-BIN_CONSOLE         = bin/console
-BIN_PHPUNIT         = bin/phpunit
-COMPOSER_JSON       = composer.json
-DOCKERFILE          = Dockerfile
-VENDOR_API          = vendor/api-platform
-VENDOR_ASSETS       = vendor/symfony/asset-mapper
-VENDOR_DOCTRINE_ORM = vendor/doctrine/orm
-VENDOR_EASYADMIN    = vendor/easycorp/easyadmin-bundle
-VENDOR_MAILER       = vendor/symfony/mailer
-VENDOR_MONOLOG      = vendor/symfony/monolog-bundle
-VENDOR_PHPCSFIXER   = vendor/bin/php-cs-fixer
-VENDOR_PHPMD        = vendor/bin/phpmd
-VENDOR_PHPMETRICS   = vendor/bin/phpmetrics
-VENDOR_PHPSTAN      = vendor/bin/phpstan
-VENDOR_PROFILER     = vendor/symfony/web-profiler-bundle
-VENDOR_TAILWIND     = vendor/symfonycasts/tailwind-bundle
-VENDOR_TRANSLATION  = vendor/symfony/translation
-VENDOR_TWIGCSFIXER  = vendor/bin/twig-cs-fixer
-WEBPACK_CONFIG      = webpack.config.js
+BIN_CONSOLE           = bin/console
+BIN_PHPUNIT           = bin/phpunit
+COMPOSER_JSON         = composer.json
+DOCKERFILE            = Dockerfile
+
+NODE_MODULES_TAILWIND = node_modules/tailwindcss
+
+VENDOR_API            = vendor/api-platform
+VENDOR_ASSET_MAPPER   = vendor/symfony/asset-mapper
+VENDOR_DOCTRINE_ORM   = vendor/doctrine/orm
+VENDOR_EASYADMIN      = vendor/easycorp/easyadmin-bundle
+VENDOR_MAILER         = vendor/symfony/mailer
+VENDOR_MONOLOG        = vendor/symfony/monolog-bundle
+VENDOR_PHPCSFIXER     = vendor/bin/php-cs-fixer
+VENDOR_PHPMD          = vendor/bin/phpmd
+VENDOR_PHPMETRICS     = vendor/bin/phpmetrics
+VENDOR_PHPSTAN        = vendor/bin/phpstan
+VENDOR_PROFILER       = vendor/symfony/web-profiler-bundle
+VENDOR_TAILWIND       = vendor/symfonycasts/tailwind-bundle
+VENDOR_TRANSLATION    = vendor/symfony/translation
+VENDOR_TWIGCSFIXER    = vendor/bin/twig-cs-fixer
 
 # --- COMPONENTS CONFIG ---
 
@@ -93,6 +95,7 @@ BUILD             = build
 PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
 PHPSTAN_BASELINE  = phpstan-baseline.php
 PHPSTAN_CONFIG    = phpstan.dist.neon
+WEBPACK_CONFIG    = webpack.config.js
 
 # --- TESTS CONFIG ---
 
@@ -265,10 +268,6 @@ include .make/php.mk
 
 include .make/composer.mk
 
-ifneq ($(or $(ALL), $(wildcard $(WEBPACK_CONFIG))),)
-include .make/encore.mk
-endif
-
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE_ORM))),)
 include .make/doctrine.mk
 endif
@@ -285,7 +284,7 @@ ifneq ($(or $(ALL), $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)
 include .make/quality.mk
 endif
 
-ifneq ($(or $(ALL), $(wildcard $(VENDOR_ASSETS))),)
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_ASSET_MAPPER), $(wildcard $(WEBPACK_CONFIG)))),)
 include .make/assets.mk
 endif
 
