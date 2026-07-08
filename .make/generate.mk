@@ -91,6 +91,10 @@ add_node: # INTERNAL - Add Node.js and npm to the dev Dockerfile
 	$(M) co m="Add Node.js and npm to the dev Dockerfile"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
+	$(N) init -y
+	$(N) pkg set engines.node="$$($(NODE) -v | sed 's/^v\([0-9]*\).*/\1.x/')"
+	cp .starter/block/node/.npmrc .npmrc
+	$(M) co m="Init package.json with engines.node constraint and enable engine-strict"
 
 orphan_branch: # INTERNAL - Create a new orphan branch before generation | FLAVOR=<flavor>
 	@printf "\n$(Y)--- Branch ---$(S)\n"
