@@ -516,7 +516,7 @@ endif
 
 ## ▸ YQ
 
-yq: ## Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor | [a=<argument>] | a=--help
+yq: ## Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor | [a=<args>] | a=--help
 	$(YQ) $(a)
 
 yq_add ya: ## Append a value to an array key in a YAML file | f=<file> k=<key> v=<value> | f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway

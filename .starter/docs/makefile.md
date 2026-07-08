@@ -352,7 +352,7 @@ Usage: make <target>
   switch_to_sqlite                        Switch the stack from PostgreSQL to SQLite
 
 ▸ YQ
-  yq [a=<argument>]                       Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor (e.g. make yq a=--help)
+  yq [a=<args>]                           Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor (e.g. make yq a=--help)
   yq_add f=<file> k=<key> v=<value>    ya Append a value to an array key in a YAML file (e.g. make yq_add f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway)
   yq_clear f=<file> k=<key>            yc Clear a key's value in a YAML file (sets it to empty string) (e.g. make yq_clear f=compose.yaml k=services.php.extra_hosts)
   yq_delete f=<file> k=<key>           yd Delete a key from a YAML file (e.g. make yq_delete f=compose.yaml k=services.php.extra_hosts)
