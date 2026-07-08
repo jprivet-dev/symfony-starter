@@ -314,6 +314,7 @@ Usage: make <target>
 
 ▸ COMPLETE INSTALLATION
   require_co [a=<args>]                   Add required packages, then commit (e.g. make require_co a="symfony/http-client")
+  npm_save_dev_co                         Install a Node.js package as a dev dependency, then commit
   npm_force_install_co                    Force install all Node packages, then commit
 
   require_api                             Install API Platform - https://api-platform.com/docs/symfony/
