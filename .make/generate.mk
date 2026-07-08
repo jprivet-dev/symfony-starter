@@ -424,6 +424,8 @@ require_ux_twig_component: _asset_mapper_or_encore ## Install Twig Component - h
 
 require_ux_react: _encore ## Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
 	$(M) require_co a=symfony/ux-react
+	$(N) pkg set devDependencies.@babel/core="^$(BABEL_MAJOR_VERSION).0.0"
+	$(N) pkg set devDependencies.@babel/preset-env="^$(BABEL_MAJOR_VERSION).0.0"
 	$(M) npm_save_dev_co a=@babel/preset-react@^$(BABEL_MAJOR_VERSION)
 	$(M) permissions
 
