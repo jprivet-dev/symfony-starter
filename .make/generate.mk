@@ -87,17 +87,18 @@ compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make bui
 
 enforce_engines_node: # INTERNAL - Verify the installed Node.js major version, then enforce engines.node constraint on package.json
 	@ACTUAL=$$($(NODE) -v | sed 's/^v\([0-9]*\).*/\1/'); \
-	if [ "$$ACTUAL" != "$(NODE_MAJOR_VERSION)" ]; then \
-		printf " $(R)⨯$(S) Node.js version mismatch: expected $(Y)v$(NODE_MAJOR_VERSION).x$(S), got $(Y)v$$ACTUAL$(S)\n"; \
+	if [ "$$ACTUAL" != "$(NODE_MAJOR_LTS_VERSION)" ]; then \
+		printf " $(R)⨯$(S) Node.js version mismatch: expected $(Y)v$(NODE_MAJOR_LTS_VERSION).x$(S), got $(Y)v$$ACTUAL$(S)\n"; \
 		exit 1; \
 	fi
-	$(N) pkg set engines.node="$(NODE_MAJOR_VERSION).x"
+	$(N) pkg set engines.node="$(NODE_MAJOR_LTS_VERSION).x"
 	cp .starter/block/node/.npmrc .npmrc
 	$(M) co m="Enforce engines.node constraint and enable engine-strict"
 
 add_node: # INTERNAL - Add Node.js and npm to the dev Dockerfile
 	$(M) permissions
 	$(M) rb m=recipes_dev t=Dockerfile s=.starter/block/node/Dockerfile
+	$(M) rp f=Dockerfile o=NODE_MAJOR_LTS_VERSION n=$(NODE_MAJOR_LTS_VERSION)
 	$(M) co m="Add Node.js and npm to the dev Dockerfile"
 	$(M) deep_clean NO_INTERACTION=true
 	$(M) build_force_start
@@ -424,9 +425,7 @@ require_ux_twig_component: _asset_mapper_or_encore ## Install Twig Component - h
 
 require_ux_react: _encore ## Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
 	$(M) require_co a=symfony/ux-react
-	$(N) pkg set devDependencies.@babel/core="^$(BABEL_MAJOR_VERSION).0.0"
-	$(N) pkg set devDependencies.@babel/preset-env="^$(BABEL_MAJOR_VERSION).0.0"
-	$(M) npm_save_dev_co a=@babel/preset-react@^$(BABEL_MAJOR_VERSION)
+	$(M) npm_save_dev_co a=@babel/preset-react
 	$(M) permissions
 
 ##
