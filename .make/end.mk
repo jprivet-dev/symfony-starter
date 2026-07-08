@@ -97,7 +97,7 @@ tree: ## Visualize your structure (requires `tree` command) | [l=<level>] | l=1
 vars: ## Show key Makefile variables
 	@printf "\n$(Y)--- Vars ---$(S)\n"
 	@$(foreach var, \
-		USER UNAME_S GIT_HOOKS APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
+		USER UNAME_S GIT_HOOKS APP_ENV DOCKER_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
 		CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE NODE NPM NPX ENCORE \
 		IS_MYSQL IS_POSTGRESQL IS_SQLITE, \
 		printf "%-15s : %s\n" "${var}" "${${var}}"; \
