@@ -195,6 +195,7 @@ make info     # Show project access info (URLs, ports)
 * [Docker - "address already in use" or "port is already allocated"](troubleshooting/address-already-in-use.md)
 * [Docker - "container is unhealthy" after `docker compose up`](troubleshooting/unhealthy.md)
 * [Docker and Git - "detected dubious ownership in repository"](troubleshooting/dubious-ownership.md)
+* [React - "jsxDEV is not a function" in production build](troubleshooting/react-jsxdev-production-build.md)
 
 ### Contributing
 
