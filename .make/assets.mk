@@ -26,6 +26,7 @@ else
 	$(MAKE) npm_dev
 endif
 endif
+	$(MAKE) cache_clear
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_ASSET_MAPPER))),)
 include .make/asset_mapper.mk
