@@ -389,7 +389,7 @@ ifneq ($(wildcard $(VENDOR_ASSET_MAPPER)),)
 	$(M) co m="importmap:require bootstrap"
 endif
 ifneq ($(wildcard $(WEBPACK_CONFIG)),)
-	# TODO
+	$(M) npm_save_dev_co a=bootstrap
 endif
 
 require_tailwind: _asset_mapper_or_encore ## Install Tailwind CSS - https://tailwindcss.com/
