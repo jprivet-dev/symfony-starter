@@ -91,8 +91,8 @@ git add . && git commit -m "Create the application files"
 ## 6. Build and verify
 
 ```shell
-# Compile assets once
-make npm_dev
+# Install and generate all assets
+make assets
 ```
 
 Go to https://symfony-starter.localhost:8442/ — you should see "Hello World".
