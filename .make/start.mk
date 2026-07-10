@@ -117,6 +117,24 @@ endif
 
 ##
 
+.PHONY: ports_auto
+ports_auto: ## Set HTTP_PORTS_AUTO=true in .env.local to derive ports from the project name (restart only if changed)
+	@printf "\n $(G)› Switch to HTTP_PORTS_AUTO=true$(S)\n"
+ifneq ($(HTTP_PORTS_AUTO),true)
+	$(M) _set_env k=HTTP_PORTS_AUTO v=true
+	$(M) restart info
+endif
+
+.PHONY: ports_default
+ports_default: ## Set HTTP_PORTS_AUTO=false in .env.local to use the default fixed ports (restart only if changed)
+	@printf "\n $(Y)› Switch to HTTP_PORTS_AUTO=false$(S)\n"
+ifneq ($(HTTP_PORTS_AUTO),false)
+	$(M) _set_env k=HTTP_PORTS_AUTO v=false
+	$(M) restart info
+endif
+
+##
+
 check:  ## Check everything before you deliver - Composer, Doctrine validation, linters, ... (NO STOP on failure)
 	-$(MAKE) composer_validate
 ifneq ($(wildcard $(VENDOR_DOCTRINE_ORM)),)

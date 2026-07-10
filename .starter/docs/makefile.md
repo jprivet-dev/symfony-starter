@@ -32,6 +32,9 @@ Usage: make <target>
   prod                                    Set APP_ENV=prod and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
   prod_docker                             Set APP_ENV=prod and DOCKER_ENV=prod in .env.local (rebuild/reinstall only if changed)
 
+  ports_auto                              Set HTTP_PORTS_AUTO=true in .env.local to derive ports from the project name (restart only if changed)
+  ports_default                           Set HTTP_PORTS_AUTO=false in .env.local to use the default fixed ports (restart only if changed)
+
   check                                   Check everything before you deliver - Composer, Doctrine validation, linters, ... (NO STOP on failure)
   check_stop                              Check on git push (STOP on failure)
   tests                                t  Run all tests (STOP on failure)
