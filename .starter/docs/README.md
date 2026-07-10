@@ -158,6 +158,7 @@ make info     # Show project access info (URLs, ports)
 
 ### Steps
 
+* [Asset Mapper & Bootstrap](steps/asset-mapper-bootstrap.md)
 * [Webpack Encore, Tailwind & React](steps/webpack-encore-tailwind-react.md)
 
 ### IDE configuration
