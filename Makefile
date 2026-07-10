@@ -289,7 +289,7 @@ ifneq ($(or $(ALL), $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)
 include .make/quality.mk
 endif
 
-ifneq ($(or $(ALL), $(wildcard $(VENDOR_ASSET_MAPPER), $(wildcard $(WEBPACK_CONFIG)))),)
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_ASSET_MAPPER)), $(wildcard $(WEBPACK_CONFIG))),)
 include .make/assets.mk
 endif
 
