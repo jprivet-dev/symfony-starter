@@ -1,4 +1,4 @@
-# Webpack Encore, Tailwind & React
+# Starting with Webpack Encore, Tailwind & React
 
 [⬅️ Symfony Starter documentation](../README.md)
 
@@ -10,7 +10,7 @@ Follow these steps to reproduce the setup from scratch.
 
 ```shell
 # Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-make minimalist@lts BRANCH=steps/frontend-webpack-encore-tailwind-react-sf7.4
+make minimalist@lts BRANCH=starting/frontend-webpack-encore-tailwind-react-sf7.4
 ```
 
 ## 2. Install Webpack Encore

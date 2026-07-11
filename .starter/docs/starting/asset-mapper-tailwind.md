@@ -1,4 +1,4 @@
-# Asset Mapper & Bootstrap
+# Starting with Asset Mapper & Tailwind
 
 [⬅️ Symfony Starter documentation](../README.md)
 
@@ -10,7 +10,7 @@ Follow these steps to reproduce the setup from scratch.
 
 ```shell
 # Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
-make minimalist@lts BRANCH=steps/frontend-asset-mapper-bootstrap-sf7.4
+make minimalist@lts BRANCH=starting/frontend-asset-mapper-tailwind-sf7.4
 ```
 
 ## 2. Install AssetMapper
@@ -19,33 +19,17 @@ make minimalist@lts BRANCH=steps/frontend-asset-mapper-bootstrap-sf7.4
 make frontend_asset_mapper
 ```
 
-## 3. Install Bootstrap
+## 3. Install Tailwind CSS
 
 ```shell
-make require_bootstrap
+make require_tailwind
 ```
 
-## 4. Configure `app.js`
-
-> [!IMPORTANT]
+> [!TIP]
 >
-> `importmap:require bootstrap` only registers the package in `importmap.php` — it doesn't load it.
+> `tailwind:init` will ask a couple of questions — the defaults are fine, just press enter.
 
-Add it to `assets/app.js`:
-
-```js
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap';
-import './styles/app.css';
-```
-
-And save all:
-
-```shell
-git add . && git commit -m "Configure app.js to load Bootstrap"
-```
-
-## 5. Create application files
+## 4. Create application files
 
 `src/Controller/DefaultController.php`:
 
@@ -74,10 +58,12 @@ class DefaultController extends AbstractController
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container py-5">
-        <h1 class="display-4 fw-bold text-primary">Hello World</h1>
-        <p class="lead text-secondary">This page is styled with Bootstrap, installed via AssetMapper.</p>
-        <button type="button" class="btn btn-primary">Bootstrap button</button>
+    <div class="min-h-screen bg-slate-100 flex items-center justify-center">
+        <div class="max-w-3xl text-center">
+            <h1 class="text-5xl font-bold text-blue-600">Hello World</h1>
+            <p class="text-xl text-gray-600 mt-4">This page is styled with Tailwind CSS, installed via AssetMapper.</p>
+            <button type="button" class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700">Tailwind button</button>
+        </div>
     </div>
 {% endblock %}
 ```
@@ -88,14 +74,14 @@ And save all:
 git add . && git commit -m "Create the application files"
 ```
 
-## 6. Build and verify
+## 5. Build and verify
 
 ```shell
 # Install and generate all assets
 make assets
 ```
 
-Go to https://symfony-starter.localhost:8442/ — you should see "Hello World" styled with Bootstrap.
+Go to https://symfony-starter.localhost:8442/ — you should see "Hello World" styled with Tailwind CSS.
 
 ---
 

@@ -156,12 +156,12 @@ make info     # Show project access info (URLs, ports)
 * [Symfony and Docker - Use build options](options.md)
 * [Shell Aliases: Seamless Docker Experience](aliases.md)
 
-### Steps
+### Starting with ...
 
-* [Asset Mapper & Bootstrap](steps/asset-mapper-bootstrap.md)
-* [Asset Mapper & Tailwind](steps/asset-mapper-tailwind.md)
-* [Webpack Encore, Bootstrap & React](steps/webpack-encore-bootstrap-react.md)
-* [Webpack Encore, Tailwind & React](steps/webpack-encore-tailwind-react.md)
+* [Asset Mapper & Bootstrap](starting/asset-mapper-bootstrap.md)
+* [Asset Mapper & Tailwind](starting/asset-mapper-tailwind.md)
+* [Webpack Encore, Bootstrap & React](starting/webpack-encore-bootstrap-react.md)
+* [Webpack Encore, Tailwind & React](starting/webpack-encore-tailwind-react.md)
 
 ### IDE configuration
 
