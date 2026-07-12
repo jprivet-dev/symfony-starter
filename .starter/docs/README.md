@@ -162,7 +162,7 @@ make info     # Show project access info (URLs, ports)
 * [Asset Mapper & Tailwind](starting/asset-mapper-tailwind.md)
 * [Webpack Encore, Bootstrap & React](starting/webpack-encore-bootstrap-react.md)
 * [Webpack Encore, Tailwind & React](starting/webpack-encore-tailwind-react.md)
-* [Webpack Encore, Tailwind & React (TypeScript)](starting/webpack-encore-tailwind-react-tsx.md)
+* [Webpack Encore, Tailwind & React (TypeScript)](starting/webpack-encore-tailwind-react-typescript.md)
 
 ### IDE configuration
 
