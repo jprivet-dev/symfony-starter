@@ -31,7 +31,7 @@ make require_tailwind
 
 ## 4. Create application files
 
-`src/Controller/DefaultController.php`:
+Create `src/Controller/DefaultController.php`:
 
 ```php
 <?php
@@ -52,7 +52,7 @@ class DefaultController extends AbstractController
 }
 ```
 
-`templates/default/index.html.twig`:
+Create `templates/default/index.html.twig`:
 
 ```twig
 {% extends 'base.html.twig' %}
@@ -68,13 +68,13 @@ class DefaultController extends AbstractController
 {% endblock %}
 ```
 
-And save all:
+Save all:
 
 ```shell
 git add . && git commit -m "Create the application files"
 ```
 
-## 5. Build and verify
+## 5. Build and see it running
 
 ```shell
 # Install and generate all assets

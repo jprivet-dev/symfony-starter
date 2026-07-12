@@ -39,7 +39,7 @@ import 'bootstrap';
 import './styles/app.css';
 ```
 
-And save all:
+Save all:
 
 ```shell
 git add . && git commit -m "Configure app.js to load Bootstrap"
@@ -47,7 +47,7 @@ git add . && git commit -m "Configure app.js to load Bootstrap"
 
 ## 5. Create application files
 
-`src/Controller/DefaultController.php`:
+Create `src/Controller/DefaultController.php`:
 
 ```php
 <?php
@@ -68,7 +68,7 @@ class DefaultController extends AbstractController
 }
 ```
 
-`templates/default/index.html.twig`:
+Create `templates/default/index.html.twig`:
 
 ```twig
 {% extends 'base.html.twig' %}
@@ -82,13 +82,13 @@ class DefaultController extends AbstractController
 {% endblock %}
 ```
 
-And save all:
+Save all:
 
 ```shell
 git add . && git commit -m "Create the application files"
 ```
 
-## 6. Build and verify
+## 6. Build and see it running
 
 ```shell
 # Install and generate all assets

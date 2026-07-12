@@ -29,6 +29,7 @@ make require_tailwind
 ## 4. Install Symfony UX React
 
 ```shell
+# Install Symfony UX React and Babel preset for React
 make require_ux_react
 ```
 
@@ -65,7 +66,11 @@ Create `tsconfig.json`:
 ```shell
 # Generate tsconfig.json
 make npx a="tsc --init --jsx react-jsx --types node,webpack-env --declaration false --declarationMap false --esModuleInterop true"
+
+# Save all
 git add . && git commit -m "Generate tsconfig.json"
+
+# Fix file permissions (primarily for Linux hosts)
 make permissions
 ```
 
@@ -90,8 +95,7 @@ Encore
   .addEntry('app', './assets/app.ts')
   // ...
   .enableTypeScriptLoader()
-// ...
-;
+  // ...
 ```
 
 ```shell
@@ -127,7 +131,7 @@ Switch to `Hello.tsx`:
 mv assets/react/controllers/Hello.jsx assets/react/controllers/Hello.tsx
 ```
 
-Update `assets/react/controllers/Hello.tsx`:
+Update `assets/react/controllers/Hello.tsx` to use TypeScript and add some Tailwind classes:
 
 ```tsx
 import React from 'react';
@@ -174,7 +178,7 @@ Create `templates/default/index.html.twig`:
 {% endblock %}
 ```
 
-Save all files:
+Save all:
 
 ```shell
 git add . && git commit -m "Create the application files"
