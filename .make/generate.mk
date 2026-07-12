@@ -1,0 +1,545 @@
+## — GENERATE 🔨 ——————————————————————————————————————————————————————————————
+
+##   (to delete this section, delete .make/generate.mk)
+##
+
+# This GENERATE block, with these following targets and variables,
+# is only used for the initial setup and can be removed after saving the project.
+
+# Symfony 7.* is the current long-term support version.
+# Released on          : November 2025
+# End of bug fixes     : November 2028
+# End of security fixes: November 2029
+# See https://symfony.com/releases
+SYMFONY_LTS_VERSION     = 7
+SYMFONY_STABLE_VERSION  = 8
+REPOSITORY_SYMFONY_DEMO = git@github.com:symfony/demo.git
+CLONE_DIR               = clone
+
+C = $(COMPOSER)
+M = $(MAKE)
+N = $(NPM)
+
+START_TIME := $(shell date +%s)
+
+define PRINT_EXECUTION_TIME
+	@END_TIME=$$(date +%s); \
+	DURATION=$$(( $$END_TIME - $(START_TIME) )); \
+	MINUTES=$$(( $$DURATION / 60 )); \
+	SECONDS=$$(( $$DURATION % 60 )); \
+	printf "\n ⏱️ Total execution time: $(Y)%02dm %02ds$(S)\n" $$MINUTES $$SECONDS
+endef
+
+#
+
+.PHONY: replace
+replace rp: # INTERNAL - Replace a string in a file | f=<file> o=<old_string> n=<new_string> | f=Dockerfile o=pdo_pgsql n=pdo_mysql
+	$(if $(f),, $(error "Please specify a file with 'f=...'"))
+	$(if $(o),, $(error "Please specify the old string with 'o=...'"))
+	$(if $(n),, $(error "Please specify the new string with 'n=...'"))
+	@sed "s|$(o)|$(n)|g" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
+
+replace_line rl: # INTERNAL - Replace an entire line beginning with a specific pattern | f=<file> s=<start> n=<value> | f=.env s="DATABASE_URL=" n="DATABASE_URL=new value..."
+	$(if $(f),, $(error "Please specify a file with 'f=...'"))
+	$(if $(s),, $(error "Please specify the start of the line to match with 's=...'"))
+	$(if $(n),, $(error "Please specify the new line content with 'n=...'"))
+	@# Use $(subst) to automatically escape "&" with "\&" for sed
+	@sed "s|^$(s).*|$(subst &,\&,$(value n))|" "$(f)" > "$(f).tmp" && mv "$(f).tmp" "$(f)"
+
+replace_block rb: # INTERNAL - Replace a block in a target file | m=<marker> t=<target> s=<source> | m=doctrine/doctrine-bundle t=.env s=.starter/block/postgresql/.env
+	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
+	$(if $(t),, $(error "Please specify the target with 't=...'"))
+	$(if $(s),, $(error "Please specify the source with 's=...'"))
+	.starter/scripts/replace_block.sh -m "$(m)" -t "$(t)" -s "$(s)" -i "$(i)"
+
+clear_block cb: # INTERNAL - Clear a block in a target file | m=<marker> t=<target> | m=doctrine/doctrine-bundle t=compose.yaml
+	$(if $(m),, $(error "Please specify the marker with 'm=...'"))
+	$(if $(t),, $(error "Please specify the target with 't=...'"))
+	.starter/scripts/replace_block.sh -m "$(m)" -t "$(t)" -i "$(i)"
+
+#
+
+GIT_PREFIX = 🤖 [starter]
+
+.PHONY: commit co
+commit co: # INTERNAL
+	$(if $(m),, $(error "Please specify a message with 'm=...'"))
+	git add . && git commit -m "$(GIT_PREFIX) $(m)"
+
+compose_activate_bind_mount: compose.override.yaml # INTERNAL - Execute after $ make restart
+	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var:/app/var'
+	$(M) ya f=compose.override.yaml k=services.php.volumes v='./var/log:/app/var/log'
+	$(M) co m="Activate the bind mount (var/, var/log)"
+
+update_postgresql_configuration: .env compose.override.yaml # INTERNAL - Execute after $ make restart
+	$(M) rb m=doctrine/doctrine-bundle t=.env s=.starter/block/postgresql/.env
+	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.starter/block/postgresql/compose.override.yaml
+	$(M) co m="Update PosgreSQL configuration"
+
+demo_add_sqlite_configuration_before_orm_pack: Dockerfile frankenphp/docker-entrypoint.sh # INTERNAL - Execute after $ make build_force_start
+	$(M) cb m=dunglas/symfony-docker t=frankenphp/docker-entrypoint.sh
+	$(M) rb m=recipes t=Dockerfile s=.starter/block/sqlite/Dockerfile
+	$(M) co m="Add SQLite configuration before ORM pack installation"
+
+compose_use_database_url_var: compose.yaml # INTERNAL - Execute after $ make build_force_start
+	$(M) yu f=compose.yaml k=services.php.environment.DATABASE_URL v=\$${DATABASE_URL:-}
+	$(M) co m="Use DATABASE_URL var in compose.yaml"
+
+enforce_engines_node: # INTERNAL - Verify the installed Node.js major version, then enforce engines.node constraint on package.json
+	@ACTUAL=$$($(NODE) -v | sed 's/^v\([0-9]*\).*/\1/'); \
+	if [ "$$ACTUAL" != "$(NODE_MAJOR_LTS_VERSION)" ]; then \
+		printf " $(R)⨯$(S) Node.js version mismatch: expected $(Y)v$(NODE_MAJOR_LTS_VERSION).x$(S), got $(Y)v$$ACTUAL$(S)\n"; \
+		exit 1; \
+	fi
+	$(N) pkg set engines.node="$(NODE_MAJOR_LTS_VERSION).x"
+	cp .starter/block/node/.npmrc .npmrc
+	$(M) co m="Enforce engines.node constraint and enable engine-strict"
+
+add_node: # INTERNAL - Add Node.js and npm to the dev Dockerfile
+	$(M) permissions
+	$(M) rb m=recipes_dev t=Dockerfile s=.starter/block/node/Dockerfile
+	$(M) rp f=Dockerfile o=NODE_MAJOR_LTS_VERSION n=$(NODE_MAJOR_LTS_VERSION)
+	$(M) co m="Add Node.js and npm to the dev Dockerfile"
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) build_force_start
+
+align_babel_env: # INTERNAL - Align Babel envName (BABEL_ENV) with Encore's production/development mode
+	@sed -i "/^Encore$$/e cat .starter/block/babel/webpack.config.js" webpack.config.js
+	@grep -q "BABEL_ENV" webpack.config.js || (printf " $(R)⨯$(S) Anchor not found in webpack.config.js, patch failed\n" && exit 1)
+	$(M) co m="Align Babel envName (BABEL_ENV) with Encore's production/development mode"
+
+orphan_branch: # INTERNAL - Create a new orphan branch before generation | FLAVOR=<flavor>
+	@printf "\n$(Y)--- Branch ---$(S)\n"
+	@printf " $(Y)›$(S) Current branch: $(G)$$(git rev-parse --abbrev-ref HEAD)$(S)\n"
+	@if [ -n "$(BRANCH)" ]; then \
+		BRANCH_NAME="$(BRANCH)"; \
+		printf " $(Y)›$(S) Using specified orphan branch name: $(G)$$BRANCH_NAME$(S)\n"; \
+	elif [ "$${NO_INTERACTION}" != "true" ]; then \
+		printf " $(Y)›$(S) New orphan branch name [$(G)$(FLAVOR)$(S)]: "; \
+		read INPUT; \
+		BRANCH_NAME=$${INPUT:-$(FLAVOR)}; \
+	else \
+		BRANCH_NAME="$(FLAVOR)"; \
+	fi; \
+	git branch -D "$$BRANCH_NAME" 2>/dev/null || true; \
+	git checkout --orphan "$$BRANCH_NAME"; \
+	$(M) co m="Initial commit"; \
+	printf " $(G)✔$(S) Orphan branch $(G)$$BRANCH_NAME$(S) created with a fresh history\n"
+
+#
+
+clean_app: confirm ## Remove all fresh Symfony application files (var/, vendor/, ...)
+	-$(M) permissions
+	$(M) deep_clean NO_INTERACTION=true
+	git reset --hard
+	git clean -f -d
+	rm -rf var/ vendor/
+
+##
+
+.PHONY: minimalist
+minimalist: ## Generate a minimalist Symfony application with Docker configuration (stable release)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),minimalist) BRANCH=$(BRANCH)
+	$(M) skeleton
+	$(PRINT_EXECUTION_TIME)
+	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application generated!\n\n"
+
+minimalist@dev: ## Generate a minimalist Symfony application with Docker configuration (next dev release)
+	STABILITY=dev $(M) minimalist FLAVOR=minimalist@dev BRANCH=$(BRANCH)
+
+minimalist@lts: ## Generate a minimalist Symfony application with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) minimalist FLAVOR=minimalist@lts BRANCH=$(BRANCH)
+
+.PHONY: webapp
+webapp: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (stable release)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),webapp) BRANCH=$(BRANCH)
+	$(M) skeleton
+	$(M) require_webapp
+	$(M) permissions images info
+	$(M) health_welcome_to_symfony
+	$(PRINT_EXECUTION_TIME)
+	@printf " $(G)🎉 Success!$(S) Webapp Symfony application generated!\n\n"
+
+webapp@dev: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (next dev release)
+	STABILITY=dev $(M) webapp FLAVOR=webapp@dev BRANCH=$(BRANCH)
+
+webapp@lts: ## Generate a webapp Symfony application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) webapp FLAVOR=webapp@lts BRANCH=$(BRANCH)
+
+##
+
+.PHONY: api
+api: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),api) BRANCH=$(BRANCH)
+	$(M) skeleton
+	$(M) require_orm
+	$(M) require_api
+	$(M) permissions images info
+	$(M) health_entrypoint
+	$(PRINT_EXECUTION_TIME)
+	@printf " $(G)🎉 Success!$(S) ApiPlatform application (with PostgreSQL) generated!\n\n"
+
+api@lts: ## Generate an ApiPlatform application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) api FLAVOR=api@lts BRANCH=$(BRANCH)
+
+.PHONY: demo
+demo: ## Generate a Symfony Demo application (with SQLite) with Docker configuration
+	$(M) orphan_branch FLAVOR=demo BRANCH=$(BRANCH)
+	$(M) clone_symfony_demo
+	$(M) build_force_start
+	git restore .env.local.demo
+	$(M) compose_use_database_url_var
+	$(M) compose_activate_bind_mount
+	$(M) demo_add_sqlite_configuration_before_orm_pack
+	$(M) build_start
+	$(C) require symfony/orm-pack
+	git restore .env.local.demo
+	$(M) co m="Composer: install symfony/orm-pack"
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) build_force_start
+	$(M) health_symfony_demo
+	$(PRINT_EXECUTION_TIME)
+	@printf " $(G)🎉 Success!$(S) Symfony Demo application (with SQLite) generated!\n\n"
+
+easy_admin: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),easy_admin) BRANCH=$(BRANCH)
+	$(M) skeleton
+	$(M) require_orm
+	$(M) require_easy_admin
+	$(CONSOLE) make:admin:dashboard --no-interaction
+	$(M) co m="Quickly generate a dashboard controller with make:admin:dashboard"
+	# Need to repeat cache_clear to avoid "Clear the application cache to run the EasyAdmin cache warmer, which generates the needed data to find this route.". Find why!
+	$(M) cache_clear
+	$(M) cache_clear
+	$(M) cache_clear
+	$(M) permissions images info
+	$(M) health_welcome_to_easy_admin
+	$(PRINT_EXECUTION_TIME)
+	@printf " $(G)🎉 Success!$(S) EasyAdmin application (with PostgreSQL) generated!\n\n"
+
+easy_admin@lts: ## Generate an EasyAdmin application (with PostgreSQL) with Docker configuration (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) easy_admin FLAVOR=easy_admin@lts BRANCH=$(BRANCH)
+
+##
+
+.PHONY: reproducer
+reproducer: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (stable release)
+	$(M) orphan_branch FLAVOR=$(or $(FLAVOR),reproducer) BRANCH=$(BRANCH)
+ifneq ($(filter 6.%,$(SYMFONY_VERSION)),)
+	git apply .starter/patch/symfony6-frankenphp.patch
+	git commit -am "🤖 [starter] fix: restore Symfony 6 compatibility with FrankenPHP worker mode"
+endif
+	$(M) skeleton
+	$(M) require_maker_bundle
+	$(M) require_test_pack
+ifeq ($(STABILITY),dev)
+	$(C) update
+	$(M) co m="Composer: update all (align lock with dev dependencies)"
+endif
+	$(M) require_phpcsfixer
+	$(M) require_phpmd
+	$(M) require_phpstan
+	$(M) require_twigcsfixer
+	$(M) reproducer_dockerfile
+	$(M) permissions images info
+	$(M) health_welcome_to_symfony
+	$(PRINT_EXECUTION_TIME)
+	@printf " $(G)🎉 Success!$(S) Minimalist Symfony application (as a reproducer) generated!\n\n"
+
+reproducer@lts: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (LTS - long-term support release)
+	SYMFONY_VERSION=$(SYMFONY_LTS_VERSION).* $(M) reproducer FLAVOR=reproducer@lts BRANCH=$(BRANCH)
+
+reproducer@dev: ## Generate a minimalist Symfony application with Docker configuration as a reproducer (next dev release)
+	STABILITY=dev $(M) reproducer FLAVOR=reproducer@dev BRANCH=$(BRANCH)
+
+reproducer@6x: ## Generate a minimalist Symfony 6.x application with Docker configuration as a reproducer
+	SYMFONY_VERSION=6.* $(M) reproducer FLAVOR=reproducer@6x BRANCH=$(BRANCH)
+
+##
+
+update_symfony_docker: ## Update the vendored dunglas/symfony-docker snapshot at the root
+	.starter/scripts/update_symfony_docker.sh
+
+skeleton: ## Install symfony/skeleton from the versioned dunglas/symfony-docker files at the root
+	@printf "\n$(Y)--- Install symfony/skeleton ---$(S)\n"
+	@printf " $(Y)›$(S) dunglas/symfony-docker upstream commit: $(G)$$(cat UPSTREAM)$(S)\n"
+	@if [ "$$(cat composer.json)" = "{}" ]; then \
+		$(M) build_force_start; \
+		$(M) co m="symfony/skeleton installed"; \
+		$(M) compose_use_database_url_var; \
+		$(M) compose_activate_bind_mount; \
+		$(M) build_start; \
+		$(M) health_welcome_to_symfony; \
+	else \
+		printf " $(G)✔$(S) symfony/skeleton already installed, skipping.\n"; \
+	fi
+
+clone_symfony_demo: ## Clone and extract https://github.com/symfony/demo files at the root
+	@printf "\n$(Y)--- Clone https://github.com/symfony/demo ---$(S)\n"
+ifeq ($(wildcard .env.local.demo),)
+	@printf "Repository: $(Y)$(REPOSITORY_SYMFONY_DEMO)$(S)\n"
+	git clone $(REPOSITORY_SYMFONY_DEMO) $(CLONE_DIR) --depth 1
+	@printf "\n$(Y)--- Extract https://github.com/symfony/demo at the root ---$(S)\n"
+	rsync -av --exclude=".editorconfig" --exclude=".git" --exclude=".gitattributes" --exclude=".github" --exclude="docs" --exclude="LICENSE" --exclude="README.md" $(CLONE_DIR)/ .
+	rm -rf $(CLONE_DIR)
+	@if [ -f LICENSE ]; then \
+		git restore LICENSE; \
+	fi
+	@printf " $(G)✔$(S) https://github.com/symfony/demo cloned and extracted at the root.\n\n"
+else
+	@printf " $(G)✔$(S) https://github.com/symfony/demo files already present at the root.\n\n"
+endif
+	$(M) co m="Symfony Demo cloned"
+
+## ▸ COMPLETE INSTALLATION
+
+require_co: ## Add required packages, then commit | [a=<args>] | a="symfony/http-client"
+	$(M) require a="$(a)"
+	$(M) co m="Composer: install $(a)"
+
+npm_save_dev_co: ## Install a Node.js package as a dev dependency, then commit
+	$(M) npm_save_dev a="$(a)"
+	$(M) co m="NPM: install $(a)"
+
+npm_force_install_co: ## Force install all Node packages, then commit
+	$(N) --force install
+	$(M) co m="NPM: force install all Node packages"
+
+##
+
+require_api: ## Install API Platform - https://api-platform.com/docs/symfony/
+	$(M) require_co a=api
+
+require_easy_admin: ## Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
+	$(M) require_co a=easycorp/easyadmin-bundle
+
+require_webapp: ## Install a web application - https://symfony.com/doc/current/setup.html
+	# FIX: Ban version 6 for the moment to prevent Symfony PropertyInfo crash
+	# symfony/property-info v6 does not support phpdocumentor/reflection-docblock
+	# Please stick to ^5.2 in your composer.json file.
+	$(M) require_co a="phpdocumentor/reflection-docblock:^5.2"
+	# Use "symfony/webapp-pack" instead of "webapp" to avoid "Could not find package webapp."
+	$(M) require_co a=symfony/webapp-pack
+	$(M) update_postgresql_configuration
+	# Running deep_clean is essential to properly take into account the ORM installed by symfony/webapp-pack
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) build_force_start
+
+##
+
+frontend_asset_mapper: ## Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+	$(M) require_co a="symfony/asset-mapper symfony/asset symfony/twig-pack"
+	$(M) permissions
+
+frontend_webpack_encore: add_node ## Install Webpack Encore with Twig pack (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
+	$(M) require_co a="symfony/webpack-encore-bundle symfony/twig-pack"
+	$(M) enforce_engines_node
+	$(M) npm_force_install_co
+	$(M) permissions
+
+##
+
+require_maker_bundle: ## Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+	$(M) require_co a="--dev symfony/maker-bundle"
+
+require_orm: ## Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
+	$(M) require_co a=symfony/orm-pack
+	$(M) update_postgresql_configuration
+	# Running deep_clean is essential to properly take into account the ORM installed by symfony/orm-pack
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) build_force_start
+
+require_profiler: ## Install Profiler - https://symfony.com/doc/current/profiler.html
+	$(M) require_co a="--dev symfony/profiler-pack"
+
+require_test_pack: ## Install PHPUnit - https://symfony.com/doc/current/testing.html
+	$(M) require_co a="--dev symfony/test-pack"
+
+require_translation: ## Install Translation - https://symfony.com/doc/current/translation.html
+	$(M) require_co a=symfony/translation
+
+##
+
+require_phpcsfixer: ## Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
+	$(M) require_co a="--dev friendsofphp/php-cs-fixer"
+
+require_phpmd: ## Install PHP Mess Detector - https://phpmd.org/
+	$(M) require_co a="--dev phpmd/phpmd"
+
+require_phpmetrics: ## Install PHPMetrics - https://phpmetrics.github.io/website/
+	$(M) require_co a="--dev phpmetrics/phpmetrics"
+
+require_phpstan: ## Install PHPStan - https://phpstan.org/
+	SYMFONY_ALLOW_CONTRIB=1 $(C) require --no-interaction --dev \
+		phpstan/phpstan \
+		phpstan/phpstan-symfony \
+		phpstan/phpstan-doctrine \
+		phpstan/phpstan-phpunit
+	$(M) co m="Composer: install phpstan/phpstan + phpstan-symfony + phpstan-doctrine + phpstan-phpunit"
+
+require_twigcsfixer: ## Install Twig CS Fixer - https://github.com/VincentLanglet/Twig-CS-Fixer
+	SYMFONY_ALLOW_CONTRIB=1 $(C) require --no-interaction --dev vincentlanglet/twig-cs-fixer
+	$(M) co m="Composer: install --dev vincentlanglet/twig-cs-fixer"
+
+##
+
+require_bootstrap: _asset_mapper_or_encore ## Install Bootstrap - https://getbootstrap.com/
+ifneq ($(wildcard $(VENDOR_ASSET_MAPPER)),)
+	$(CONSOLE) importmap:require bootstrap
+	$(M) co m="importmap:require bootstrap"
+endif
+ifneq ($(wildcard $(WEBPACK_CONFIG)),)
+	$(M) npm_save_dev_co a=bootstrap
+endif
+
+require_tailwind: _asset_mapper_or_encore ## Install Tailwind CSS - https://tailwindcss.com/
+ifneq ($(wildcard $(VENDOR_ASSET_MAPPER)),)
+	$(M) require_co a=symfonycasts/tailwind-bundle
+	$(CONSOLE) tailwind:init
+	$(M) co m="Initialize Tailwind CSS with tailwind:init"
+endif
+ifneq ($(wildcard $(WEBPACK_CONFIG)),)
+	$(NPM) install --save-dev tailwindcss @tailwindcss/postcss postcss postcss-loader
+	$(M) co m="NPM: install tailwindcss @tailwindcss/postcss postcss postcss-loader"
+	@cp .starter/block/tailwind-encore/postcss.config.mjs postcss.config.mjs
+	@sed -i '/\.enableSourceMaps(!Encore\.isProduction())/a\    .enablePostCssLoader()' webpack.config.js
+	@grep -q 'enablePostCssLoader' webpack.config.js || (printf " $(R)⨯$(S) Anchor not found in webpack.config.js, patch failed\n" && exit 1)
+	@sed -i '1i @import "tailwindcss";\n' assets/styles/app.css
+	$(M) co m="Configure PostCSS and Tailwind entrypoint (Webpack Encore)"
+endif
+
+require_ux_live_component: _asset_mapper_or_encore ## Install Live Component - https://ux.symfony.com/
+	$(M) require_co a=symfony/ux-live-component
+ifneq ($(wildcard $(WEBPACK_CONFIG)),)
+	$(M) npm_force_install_co
+endif
+	$(M) permissions
+
+require_ux_stimulus: _asset_mapper_or_encore ## Install StimulusBundle - https://ux.symfony.com/
+	$(M) require_co a=symfony/stimulus-bundle
+ifneq ($(wildcard $(WEBPACK_CONFIG)),)
+	$(M) npm_force_install_co
+endif
+	$(M) permissions
+
+require_ux_twig_component: _asset_mapper_or_encore ## Install Twig Component - https://ux.symfony.com/
+	$(M) require_co a=symfony/ux-twig-component
+	$(M) permissions
+
+##
+
+require_ux_react: _encore ## Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
+	$(M) require_co a=symfony/ux-react
+	$(M) npm_save_dev_co a=@babel/preset-react
+	$(M) align_babel_env
+	$(M) permissions
+
+##
+
+health: c ?= 200
+health: ## Check the website and database connection (via Doctrine) | [c=<status_code>] [t=<text>] | c=404 t="Welcome to Symfony"
+	@printf "\n$(Y)--- Check Health ---$(S)\n"
+	@EXIT_CODE=0; \
+	STATUS_CODE=$$(curl -k -L -s -o /dev/null -w "%{http_code}" $(LOCALHOST_MAIN)); \
+	if [ "$${STATUS_CODE}" -eq $(c) ]; then \
+		printf " $(G)✔ HTTP status OK (Expecting $(c)) - $(LOCALHOST_MAIN)$(S)\n"; \
+	else \
+		printf " $(R)✘ HTTP status failed (Expecting $(c) - Got $${STATUS_CODE}) - $(LOCALHOST_MAIN)$(S)\n"; \
+		EXIT_CODE=1; \
+	fi; \
+	if [ -n "$(t)" ]; then \
+		if curl -k -L -s $(LOCALHOST_MAIN) | grep -q "$(t)"; then \
+			printf " $(G)✔ Content found (Searching for '$(t)') - $(LOCALHOST_MAIN)$(S)\n"; \
+		else \
+			printf " $(R)✘ Content missing (Searching for '$(t)') - $(LOCALHOST_MAIN)$(S)\n"; \
+			EXIT_CODE=1; \
+		fi; \
+	fi; \
+	if [ ! -e "$(VENDOR_DOCTRINE_ORM)" ]; then \
+		printf " $(Y)› Database connection skipped (Doctrine not installed)$(S)\n"; \
+	else \
+		if $(CONSOLE) dbal:run-sql "SELECT 1" > /dev/null 2>&1; then \
+			printf " $(G)✔ Database connection OK$(S)\n"; \
+		else \
+			printf " $(R)✘ Database connection Failed$(S)\n"; \
+			EXIT_CODE=1; \
+		fi; \
+	fi; \
+	printf "\n"; \
+	exit $${EXIT_CODE}
+
+health_entrypoint: # INTERNAL
+	$(M) health c=200 t="Entrypoint"
+
+health_symfony_demo: # INTERNAL
+	$(M) health c=200 t="Symfony Demo"
+
+health_welcome_to_easy_admin: # INTERNAL
+	$(M) health c=200 t="Welcome to EasyAdmin"
+
+health_welcome_to_symfony: # INTERNAL
+	$(M) health c=404 t="Welcome to Symfony"
+
+## ▸ DATABASE
+
+switch_to_mariadb: .env Dockerfile compose.override.yaml compose.yaml ## Switch the stack from PostgreSQL to MySQL/MariaDB
+ifeq ($(IS_POSTGRESQL),)
+	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine (with PostgreSQL by default)$(S) with $(G)make require_orm$(S)\n"
+	@exit 1
+endif
+	$(M) permissions
+	$(M) rb m=doctrine/doctrine-bundle t=.env s=.starter/block/mariadb/.env
+	$(M) rb m=doctrine/doctrine-bundle t=Dockerfile s=.starter/block/mariadb/Dockerfile
+	$(M) rb m=doctrine/doctrine-bundle t=compose.override.yaml s=.starter/block/mariadb/compose.override.yaml
+	$(M) rb m=doctrine/doctrine-bundle t=compose.yaml s=.starter/block/mariadb/compose.yaml
+	$(M) ya f=compose.yaml k=services.php.depends_on.database.condition v=service_healthy
+	$(M) co m="Stack updated to MySQL/MariaDB"
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) build_force_start
+	@printf " $(G)✔$(S) Stack updated to MySQL/MariaDB!\n"
+
+switch_to_sqlite: .env Dockerfile compose.override.yaml compose.yaml ## Switch the stack from PostgreSQL to SQLite
+ifeq ($(IS_POSTGRESQL),)
+	@printf "\n $(R)⨯$(S) Please install $(Y)Doctrine (with PostgreSQL by default)$(S) with $(G)make require_orm$(S)\n"
+	@exit 1
+endif
+	$(M) permissions
+	$(M) rb m=doctrine/doctrine-bundle t=.env s=.starter/block/sqlite/.env
+	$(M) rb m=doctrine/doctrine-bundle t=Dockerfile s=.starter/block/sqlite/Dockerfile
+	$(M) cb m=doctrine/doctrine-bundle t=compose.override.yaml
+	$(M) cb m=doctrine/doctrine-bundle t=compose.yaml
+	$(M) co m="Stack updated to SQLite"
+	$(M) deep_clean NO_INTERACTION=true
+	$(M) build_force_start
+	@printf " $(G)✔$(S) Stack updated to SQLite!\n"
+
+## ▸ YQ
+
+yq: ## Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor | [a=<args>] | a=--help
+	$(YQ) $(a)
+
+yq_add ya: ## Append a value to an array key in a YAML file | f=<file> k=<key> v=<value> | f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway
+	$(if $(f),, $(error "Please specify a file with 'f=...'"))
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
+	$(if $(value v),, $(error "Please specify a value with 'v=...'"))
+	$(YQ) --inplace '.$(k) += "$(value v)"' $(f)
+
+yq_clear yc: ## Clear a key's value in a YAML file (sets it to empty string) | f=<file> k=<key> | f=compose.yaml k=services.php.extra_hosts
+	$(if $(f),, $(error "Please specify a file with 'f=...'"))
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
+	$(YQ) --inplace '.$(k) = ""' $(f)
+
+yq_delete yd: ## Delete a key from a YAML file | f=<file> k=<key> | f=compose.yaml k=services.php.extra_hosts
+	$(if $(f),, $(error "Please specify a file with 'f=...'"))
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
+	$(YQ) --inplace 'del(.$(k))' $(f)
+
+yq_print: ## Print contents of a file as idiomatic YAML with colors | f=<file> | f=compose.yaml
+	$(if $(f),, $(error "Please specify a file with 'f=...'"))
+	$(YQ) --prettyPrint --colors --output-format yaml $(f)
+
+yq_update yu: ## Set or update a key's value in a YAML file | f=<file> | f=compose.yaml k=services.php.build.target v=frankenphp_prod
+	$(if $(f),, $(error "Please specify a file with 'f=...'"))
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
+	$(if $(value v),, $(error "Please specify a value with 'v=...'"))
+	$(YQ) --inplace '.$(k) = "$(value v)"' $(f)

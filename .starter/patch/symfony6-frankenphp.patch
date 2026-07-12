@@ -1,0 +1,25 @@
+diff --git a/frankenphp/Caddyfile b/frankenphp/Caddyfile
+index fef196e..2801cdb 100644
+--- a/frankenphp/Caddyfile
++++ b/frankenphp/Caddyfile
+@@ -56,6 +56,7 @@
+
+ 		worker {
+ 			file ./public/index.php
++			env APP_RUNTIME Runtime\FrankenPhpSymfony\Runtime
+ 			{$FRANKENPHP_WORKER_CONFIG}
+ 		}
+ 	}
+diff --git a/frankenphp/docker-entrypoint.sh b/frankenphp/docker-entrypoint.sh
+index a73124d..d8eb627 100755
+--- a/frankenphp/docker-entrypoint.sh
++++ b/frankenphp/docker-entrypoint.sh
+@@ -14,7 +14,7 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
+ 		cd -
+ 		rm -Rf tmp/
+
+-		composer require "php:>=$PHP_VERSION"
++		composer require "php:>=$PHP_VERSION" runtime/frankenphp-symfony
+ 		composer config --json extra.symfony.docker 'true'
+
+ 		# Remove the project install block from this script and the compose.yaml

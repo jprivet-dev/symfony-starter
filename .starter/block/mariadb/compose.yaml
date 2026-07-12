@@ -1,0 +1,16 @@
+  database:
+    image: mariadb:${MARIADB_VERSION:-11.8.5}
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-app}
+      # You should definitely change the password in production
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-!ChangeMe!}
+      MARIADB_USER: ${MARIADB_USER:-app}
+      MARIADB_ROOT_PASSWORD: '${MARIADB_ROOT_PASSWORD:-!ChangeMe!}'
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h localhost -u ${MARIADB_USER:-app} -p${MARIADB_PASSWORD:-!ChangeMe!} || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - database_data:/var/lib/mysql:rw
