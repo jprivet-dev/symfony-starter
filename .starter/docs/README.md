@@ -55,7 +55,7 @@ cd symfony-starter
 > Each generation takes approximately ⏱️ 3-4 minutes depending on your machine and network speed.
 
 > 🧪 Reproducer
-> 
+>
 > See full [Generate your reproducer and contribute to Symfony](contrib/contrib.md) documentation.
 
 ### 3. Go on the app
@@ -98,10 +98,10 @@ Replace your `README.md` with one of these templates and fill in your details:
 >
 > By default, no frontend stack is installed. Run one of the following commands after generation to add one.
 
-| Stack             | Command                     | Note                          |
-|-------------------|-----------------------------|-------------------------------|
-| 🗺️ AssetMapper   | `make require_asset_mapper` |                               |
-| ⚙️ Webpack Encore | `make require_encore`       | add Node.js in the Dockerfile |
+| Stack             | Command                        |
+|-------------------|--------------------------------|
+| 🗺️ AssetMapper   | `make frontend_asset_mapper`   |
+| ⚙️ Webpack Encore | `make frontend_webpack_encore` |
 
 ## Generate from scratch
 
@@ -156,9 +156,13 @@ make info     # Show project access info (URLs, ports)
 * [Symfony and Docker - Use build options](options.md)
 * [Shell Aliases: Seamless Docker Experience](aliases.md)
 
-### Steps
+### Starting with ...
 
-* [Webpack Encore & React](steps/webpack-encore-react.md)
+* [Asset Mapper & Bootstrap](starting/asset-mapper-bootstrap.md)
+* [Asset Mapper & Tailwind](starting/asset-mapper-tailwind.md)
+* [Webpack Encore, Bootstrap & React](starting/webpack-encore-bootstrap-react.md)
+* [Webpack Encore, Tailwind & React](starting/webpack-encore-tailwind-react.md)
+* [Webpack Encore, Tailwind & React (TypeScript)](starting/webpack-encore-tailwind-react-typescript.md)
 
 ### IDE configuration
 
@@ -195,6 +199,7 @@ make info     # Show project access info (URLs, ports)
 * [Docker - "address already in use" or "port is already allocated"](troubleshooting/address-already-in-use.md)
 * [Docker - "container is unhealthy" after `docker compose up`](troubleshooting/unhealthy.md)
 * [Docker and Git - "detected dubious ownership in repository"](troubleshooting/dubious-ownership.md)
+* [React - "jsxDEV is not a function" in production build](troubleshooting/react-jsxdev-production-build.md)
 
 ### Contributing
 

@@ -25,12 +25,10 @@ help: ## Display this help message with available commands
 
 .PHONY: install
 install: up_detached ## Start the project, install dependencies and show info
+	@printf "\n $(Y)›$(S) Install all (APP_ENV=$(APP_ENV))\n"
 	$(MAKE) composer_install
-ifneq ($(wildcard $(VENDOR_ASSETS)),)
+ifneq ($(wildcard $(VENDOR_ASSET_MAPPER))$(wildcard $(WEBPACK_CONFIG)),)
 	$(MAKE) assets
-endif
-ifneq ($(wildcard $(WEBPACK_CONFIG)),)
-	$(MAKE) npm_install
 endif
 	$(MAKE) images permissions git_hooks_init info
 
@@ -54,8 +52,6 @@ ifneq ($(wildcard $(VENDOR_MAILER)),)
 	@printf "    - Mail Catcher ... $(G)$(LOCALHOST_MAILER)$(S)\n"
 endif
 
-##
-
 .PHONY: start
 start: up_detached images info ## Start the project and show info (detached mode)
 
@@ -76,6 +72,66 @@ build_start: ## [Level 2] Build & Start - Updating image with cache (triggers: c
 build_force_start: ## [Level 3] Force build & Start - Rebuilding from scratch (triggers: Dockerfile, system packages, cache issues)
 	@printf " $(R)🏗️ [Level 3] Force build & Start - Rebuilding from scratch...$(S)\n"
 	$(MAKE) build_force start
+
+##
+
+_set_env: # INTERNAL - Set a key in .env.local | k=<key> v=<value>
+	$(if $(k),, $(error "Please specify a key with 'k=...'"))
+	$(if $(v),, $(error "Please specify a value with 'v=...'"))
+	@grep -q '^$(k)=' .env.local 2>/dev/null && sed -i 's/^$(k)=.*/$(k)=$(v)/' .env.local || echo '$(k)=$(v)' >> .env.local
+
+.PHONY: dev
+dev: confirm ## Set APP_ENV=dev and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
+	@printf "\n $(G)› Switch to APP_ENV=dev + DOCKER_ENV=dev$(S)\n"
+	$(M) _set_env k=APP_ENV v=dev
+	$(M) _set_env k=DOCKER_ENV v=dev
+ifneq ($(DOCKER_ENV),dev)
+	$(M) build_force
+endif
+ifneq ($(DOCKER_ENV)$(APP_ENV),devdev)
+	$(M) install
+endif
+
+.PHONY: prod
+prod: confirm ## Set APP_ENV=prod and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
+	@printf "\n $(R)› Switch to APP_ENV=prod + DOCKER_ENV=dev$(S)\n"
+	$(M) _set_env k=APP_ENV v=prod
+	$(M) _set_env k=DOCKER_ENV v=dev
+ifneq ($(DOCKER_ENV),dev)
+	$(M) build_force
+endif
+ifneq ($(DOCKER_ENV)$(APP_ENV),devprod)
+	$(M) install
+endif
+
+prod_docker: confirm ## Set APP_ENV=prod and DOCKER_ENV=prod in .env.local (rebuild/reinstall only if changed)
+	@printf "\n $(R)› Switch to APP_ENV=prod + DOCKER_ENV=prod$(S)\n"
+	$(M) _set_env k=APP_ENV v=prod
+	$(M) _set_env k=DOCKER_ENV v=prod
+ifneq ($(DOCKER_ENV),prod)
+	$(M) build_force
+endif
+ifneq ($(DOCKER_ENV)$(APP_ENV),prodprod)
+	$(M) install
+endif
+
+##
+
+.PHONY: ports_auto
+ports_auto: ## Set HTTP_PORTS_AUTO=true in .env.local to derive ports from the project name (restart only if changed)
+	@printf "\n $(G)› Switch to HTTP_PORTS_AUTO=true$(S)\n"
+ifneq ($(HTTP_PORTS_AUTO),true)
+	$(M) _set_env k=HTTP_PORTS_AUTO v=true
+	$(M) restart info
+endif
+
+.PHONY: ports_default
+ports_default: ## Set HTTP_PORTS_AUTO=false in .env.local to use the default fixed ports (restart only if changed)
+	@printf "\n $(Y)› Switch to HTTP_PORTS_AUTO=false$(S)\n"
+ifneq ($(HTTP_PORTS_AUTO),false)
+	$(M) _set_env k=HTTP_PORTS_AUTO v=false
+	$(M) restart info
+endif
 
 ##
 

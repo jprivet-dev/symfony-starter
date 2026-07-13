@@ -63,7 +63,9 @@ git_pre_push: check_stop ## Actions on Git pre-push
 .PHONY: permissions
 permissions: ## Fix file permissions (primarily for Linux hosts)
 	@printf "\n$(Y)--- Permissions ---$(S)\n"
-ifeq ($(UNAME_S),Linux)
+ifeq ($(DOCKER_ENV),prod)
+	@printf " $(Y)›$(S) 'make permissions' is skipped with DOCKER_ENV=prod (no chown needed on prod images).\n"
+else ifeq ($(UNAME_S),Linux)
 	$(COMPOSE) run --rm php chown -R $(USER) .
 	@printf " $(G)✔$(S) You are now defined as the owner $(Y)$(USER)$(S) of the project files.\n"
 else
@@ -72,8 +74,12 @@ endif
 
 .PHONY: safe
 safe: ## Add configured directories to Git's safe directories
+ifeq ($(DOCKER_ENV),prod)
+	@printf " $(Y)›$(S) 'make safe' is skipped with DOCKER_ENV=prod (no Git in prod images).\n"
+else
 	$(foreach dir, $(SAFE_DIRECTORIES), $(CONTAINER_PHP) git config --global --add safe.directory $(dir);)
 	@printf " $(G)✔$(S) Git safe directories updated: $(Y)$(SAFE_DIRECTORIES)$(S)\n"
+endif
 
 ## — UTILITIES 🛠️ —————————————————————————————————————————————————————————————
 
@@ -97,8 +103,8 @@ tree: ## Visualize your structure (requires `tree` command) | [l=<level>] | l=1
 vars: ## Show key Makefile variables
 	@printf "\n$(Y)--- Vars ---$(S)\n"
 	@$(foreach var, \
-		USER UNAME_S GIT_HOOKS APP_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
-		CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE \
+		USER UNAME_S GIT_HOOKS APP_ENV DOCKER_ENV UP_ENV COMPOSE_V2 COMPOSE FORCE_NO_TTY \
+		CONTAINER_PHP PHP COMPOSER BASH_COMMAND CONSOLE NODE NPM NPX ENCORE \
 		IS_MYSQL IS_POSTGRESQL IS_SQLITE, \
 		printf "%-15s : %s\n" "${var}" "${${var}}"; \
 	)

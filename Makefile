@@ -56,36 +56,43 @@ YQ = docker run --rm --user "$(USER)" -v "$(PWD)":/workdir -w /workdir mikefarah
 # Add your local contribution volumes here (e.g., /symfony, /monolog-bundle).
 SAFE_DIRECTORIES = /app
 
+# --- NODE ---
+
+# See https://nodejs.org/en/about/previous-releases for the current LTS version
+NODE_MAJOR_LTS_VERSION = 24
+
 # --- FILES & DIRECTORIES ---
 
-SRC       = src
-TEMPLATES = templates
-TESTS     = tests
+SRC                   = src
+TEMPLATES             = templates
+TESTS                 = tests
 
-NOW                := $(shell date +%Y%m%d-%H%M%S-%3N)
-PWD                 = $(shell pwd)
-MAKE_LOCAL_MK       = .make/local.mk
-MAKE_LOCAL_MK_DIST  = $(MAKE_LOCAL_MK).dist
+NOW                  := $(shell date +%Y%m%d-%H%M%S-%3N)
+PWD                   = $(shell pwd)
+MAKE_LOCAL_MK         = .make/local.mk
+MAKE_LOCAL_MK_DIST    = $(MAKE_LOCAL_MK).dist
 
-BIN_CONSOLE         = bin/console
-BIN_PHPUNIT         = bin/phpunit
-COMPOSER_JSON       = composer.json
-DOCKERFILE          = Dockerfile
-VENDOR_API          = vendor/api-platform
-VENDOR_ASSETS       = vendor/symfony/asset-mapper
-VENDOR_DOCTRINE_ORM = vendor/doctrine/orm
-VENDOR_EASYADMIN    = vendor/easycorp/easyadmin-bundle
-VENDOR_MAILER       = vendor/symfony/mailer
-VENDOR_MONOLOG      = vendor/symfony/monolog-bundle
-VENDOR_PHPCSFIXER   = vendor/bin/php-cs-fixer
-VENDOR_PHPMD        = vendor/bin/phpmd
-VENDOR_PHPMETRICS   = vendor/bin/phpmetrics
-VENDOR_PHPSTAN      = vendor/bin/phpstan
-VENDOR_PROFILER     = vendor/symfony/web-profiler-bundle
-VENDOR_TAILWIND     = vendor/symfonycasts/tailwind-bundle
-VENDOR_TRANSLATION  = vendor/symfony/translation
-VENDOR_TWIGCSFIXER  = vendor/bin/twig-cs-fixer
-WEBPACK_CONFIG      = webpack.config.js
+BIN_CONSOLE           = bin/console
+BIN_PHPUNIT           = bin/phpunit
+COMPOSER_JSON         = composer.json
+DOCKERFILE            = Dockerfile
+
+NODE_MODULES_TAILWIND = node_modules/tailwindcss
+
+VENDOR_API            = vendor/api-platform
+VENDOR_ASSET_MAPPER   = vendor/symfony/asset-mapper
+VENDOR_DOCTRINE_ORM   = vendor/doctrine/orm
+VENDOR_EASYADMIN      = vendor/easycorp/easyadmin-bundle
+VENDOR_MAILER         = vendor/symfony/mailer
+VENDOR_MONOLOG        = vendor/symfony/monolog-bundle
+VENDOR_PHPCSFIXER     = vendor/bin/php-cs-fixer
+VENDOR_PHPMD          = vendor/bin/phpmd
+VENDOR_PHPMETRICS     = vendor/bin/phpmetrics
+VENDOR_PHPSTAN        = vendor/bin/phpstan
+VENDOR_PROFILER       = vendor/symfony/web-profiler-bundle
+VENDOR_TAILWIND       = vendor/symfonycasts/tailwind-bundle
+VENDOR_TRANSLATION    = vendor/symfony/translation
+VENDOR_TWIGCSFIXER    = vendor/bin/twig-cs-fixer
 
 # --- COMPONENTS CONFIG ---
 
@@ -93,6 +100,7 @@ BUILD             = build
 PHPCSFIXER_CONFIG = .php-cs-fixer.dist.php
 PHPSTAN_BASELINE  = phpstan-baseline.php
 PHPSTAN_CONFIG    = phpstan.dist.neon
+WEBPACK_CONFIG    = webpack.config.js
 
 # --- TESTS CONFIG ---
 
@@ -201,12 +209,12 @@ endif
 COMPOSE = $(strip docker compose $(ENV_FILES))
 
 # In a first step, you can test the application's production behavior in a development environment by setting APP_ENV=prod.
-# To test the full Docker production setup (e.g., optimized images, production-specific configurations), you can also add USE_COMPOSE_PROD_YAML=true.
+# To test the full Docker production setup (e.g., optimized images, production-specific configurations), you can also add DOCKER_ENV=prod.
+# DOCKER_ENV=prod always implies APP_ENV=prod (running prod Docker images with a dev app makes no sense).
 # This allows for a smooth transition from testing the code's behavior to testing the full Docker infrastructure.
-ifeq ($(USE_COMPOSE_PROD_YAML),prod)
-ifeq ($(APP_ENV),prod)
+ifeq ($(DOCKER_ENV),prod)
+APP_ENV := prod
 COMPOSE = docker compose -f compose.yaml -f compose.prod.yaml $(ENV_FILES)
-endif
 endif
 
 EXEC        = $(COMPOSE) exec
@@ -255,10 +263,6 @@ include .make/requires.mk
 
 # --- EXTEND THE MAIN MAKEFILE ---
 
-ifneq ($(APP_ENV),prod)
--include $(sort $(wildcard $(MAKE_LOCAL_MK)))
-endif
-
 include .make/start.mk
 
 include .make/docker.mk
@@ -268,10 +272,6 @@ include .make/symfony.mk
 include .make/php.mk
 
 include .make/composer.mk
-
-ifneq ($(or $(ALL), $(wildcard $(WEBPACK_CONFIG))),)
-include .make/webpack.mk
-endif
 
 ifneq ($(or $(ALL), $(wildcard $(VENDOR_DOCTRINE_ORM))),)
 include .make/doctrine.mk
@@ -289,7 +289,7 @@ ifneq ($(or $(ALL), $(wildcard $(VENDOR_PHPCSFIXER)), $(wildcard $(VENDOR_PHPMD)
 include .make/quality.mk
 endif
 
-ifneq ($(or $(ALL), $(wildcard $(VENDOR_ASSETS))),)
+ifneq ($(or $(ALL), $(wildcard $(VENDOR_ASSET_MAPPER)), $(wildcard $(WEBPACK_CONFIG))),)
 include .make/assets.mk
 endif
 
@@ -304,3 +304,9 @@ include .make/end.mk
 -include .make/contrib.mk
 
 -include .make/generate.mk
+
+ifeq ($(ALL),)
+ifneq ($(APP_ENV),prod)
+-include $(sort $(wildcard $(MAKE_LOCAL_MK)))
+endif
+endif

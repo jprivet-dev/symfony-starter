@@ -21,13 +21,19 @@ Usage: make <target>
 
   install                                 Start the project, install dependencies and show info
   info                                    Show project access info
-
   start                                   Start the project and show info (detached mode)
   stop                                    Stop the project (down)
 
   restart                                 [Level 1] Standard restart - Reloading containers (triggers: .env, compose.yaml, code changes)
   build_start                             [Level 2] Build & Start - Updating image with cache (triggers: composer.lock, CaddyFile, *.ini, entrypoint.sh)
   build_force_start                       [Level 3] Force build & Start - Rebuilding from scratch (triggers: Dockerfile, system packages, cache issues)
+
+  dev                                     Set APP_ENV=dev and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
+  prod                                    Set APP_ENV=prod and DOCKER_ENV=dev in .env.local (rebuild/reinstall only if changed)
+  prod_docker                             Set APP_ENV=prod and DOCKER_ENV=prod in .env.local (rebuild/reinstall only if changed)
+
+  ports_auto                              Set HTTP_PORTS_AUTO=true in .env.local to derive ports from the project name (restart only if changed)
+  ports_default                           Set HTTP_PORTS_AUTO=false in .env.local to use the default fixed ports (restart only if changed)
 
   check                                   Check everything before you deliver - Composer, Doctrine validation, linters, ... (NO STOP on failure)
   check_stop                              Check on git push (STOP on failure)
@@ -77,21 +83,6 @@ Usage: make <target>
   remove [a=<args>]                       Remove a package from the require or require-dev (e.g. make remove a="phpunit/phpunit")
   require [a=<args>]                      Add required packages to your composer.json and installs them (e.g. make require a="--dev phpunit/phpunit")
   update [a=<args>]                       Update Composer packages (e.g. make update a="symfony/monolog-bundle")
-
-— WEBPACK 🧰 ———————————————————————————————————————————————————————————————
-  node [a=<args>]                         Run Node.js (e.g. make node a=--help)
-
-  npm [a=<args>]                          Run the Node Package Manager (e.g. make npm a=--help)
-  npm_install [a=<args>]                  Install the project's Node.js dependencies (e.g. make npm_install a=--help)
-  npm_save_dev [a=<args>]                 Install a Node.js package as a dev dependency (e.g. make npm_save_dev a=@babel/preset-react)
-  npm_watch                               Compile assets and automatically re-compile when files change
-  npm_dev_server                          Run a dev-server that can sometimes update your code without refreshing the page
-  npm_dev                                 Compile assets once
-  npm_build                               On deploy, create a production build
-
-  npx [a=<args>]                          Run the Node Package eXecute (e.g. make npx a=--help)
-  webpack [a=<args>]                      Run the Webpack bundler (e.g. make webpack a=--help)
-  encore [a=<args>]                       Run Webpack Encore (e.g. make encore a=--help)
 
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
   db                                      Drop and create the database and migrate
@@ -182,8 +173,11 @@ Usage: make <target>
   twigcsfixer_lint                        Check Twig style
 
 — ASSETS 🎨‍ ————————————————————————————————————————————————————————————————
-  assets                               a  Generate all assets
+  assets                               a  Install and generate all assets
+  assets_install                          Install all assets
+  assets_generate                         Generate all assets
 
+— ASSET MAPPER 🧰‍ ——————————————————————————————————————————————————————————
   asset_map_clear                         Clear all assets in the public output directory
   asset_map_compile                       Compile all mapped assets and write them to the final public output directory
   asset_map_debug                         See all of the mapped assets
@@ -201,6 +195,21 @@ Usage: make <target>
   tailwind_watch                       w  Watch for changes and rebuild automatically.
   tailwind_minify                         Minify the output CSS.
   tailwind_debug                          See the full config from TailwindBundle
+
+— WEBPACK ENCORE 🧰 ————————————————————————————————————————————————————————
+  node [a=<args>]                         Run Node.js (e.g. make node a=--help)
+
+  npm [a=<args>]                          Run the Node Package Manager (e.g. make npm a=--help)
+  npm_install [a=<args>]                  Install the project's Node.js dependencies (e.g. make npm_install a=--help)
+  npm_save_dev [a=<args>]                 Install a Node.js package as a dev dependency (e.g. make npm_save_dev a=@babel/preset-react)
+  npm_watch                               Compile assets and automatically re-compile when files change
+  npm_dev_server                          Run a dev-server that can sometimes update your code without refreshing the page
+  npm_dev                                 Compile assets once
+  npm_build                               On deploy, create a production build
+
+  npx [a=<args>]                          Run the Node Package eXecute (e.g. make npx a=--help)
+  webpack [a=<args>]                      Run the Webpack bundler (e.g. make webpack a=--help)
+  encore [a=<args>]                       Run Webpack Encore (e.g. make encore a=--help)
 
 — TRANSLATION 🇬🇧 ———————————————————————————————————————————————————————————
   extract                                 Extract translation strings from templates
@@ -309,23 +318,21 @@ Usage: make <target>
 
 ▸ COMPLETE INSTALLATION
   require_co [a=<args>]                   Add required packages, then commit (e.g. make require_co a="symfony/http-client")
+  npm_save_dev_co                         Install a Node.js package as a dev dependency, then commit
+  npm_force_install_co                    Force install all Node packages, then commit
 
   require_api                             Install API Platform - https://api-platform.com/docs/symfony/
   require_easy_admin                      Install EasyAdmin Bundle - https://symfony.com/bundles/EasyAdminBundle/current/index.html
   require_webapp                          Install a web application - https://symfony.com/doc/current/setup.html
 
-  require_encore                          Install Webpack Encore (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
+  frontend_asset_mapper                   Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
+  frontend_webpack_encore                 Install Webpack Encore with Twig pack (add Node.js in the Dockerfile) - https://symfony.com/doc/current/frontend/encore/installation.html
 
-  require_asset_mapper                    Install AssetMapper - https://symfony.com/doc/current/frontend/asset_mapper.html
   require_maker_bundle                    Install MakerBundle - https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
   require_orm                             Install Doctrine (with PostgreSQL by default) - https://symfony.com/doc/current/doctrine.html
   require_profiler                        Install Profiler - https://symfony.com/doc/current/profiler.html
   require_test_pack                       Install PHPUnit - https://symfony.com/doc/current/testing.html
   require_translation                     Install Translation - https://symfony.com/doc/current/translation.html
-  require_ux_live_component               Install Live Component - https://ux.symfony.com/
-  require_ux_stimulus                     Install StimulusBundle - https://ux.symfony.com/
-  require_ux_twig_component               Install Twig Component - https://ux.symfony.com/
-  require_ux_react                        Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
 
   require_phpcsfixer                      Install PHP CS Fixer - https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
   require_phpmd                           Install PHP Mess Detector - https://phpmd.org/
@@ -335,6 +342,11 @@ Usage: make <target>
 
   require_bootstrap                       Install Bootstrap - https://getbootstrap.com/
   require_tailwind                        Install Tailwind CSS - https://tailwindcss.com/
+  require_ux_live_component               Install Live Component - https://ux.symfony.com/
+  require_ux_stimulus                     Install StimulusBundle - https://ux.symfony.com/
+  require_ux_twig_component               Install Twig Component - https://ux.symfony.com/
+
+  require_ux_react                        Install Symfony UX React and Babel preset for React (needs Webpack Encore) - https://ux.symfony.com/react
 
   health [c=<status_code>] [t=<text>]     Check the website and database connection (via Doctrine) (e.g. make health c=404 t="Welcome to Symfony")
 
@@ -343,7 +355,7 @@ Usage: make <target>
   switch_to_sqlite                        Switch the stack from PostgreSQL to SQLite
 
 ▸ YQ
-  yq [a=<argument>]                       Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor (e.g. make yq a=--help)
+  yq [a=<args>]                           Run yq, a lightweight and portable command-line YAML, JSON, INI and XML processor (e.g. make yq a=--help)
   yq_add f=<file> k=<key> v=<value>    ya Append a value to an array key in a YAML file (e.g. make yq_add f=compose.yaml k=services.php.extra_hosts v=host.docker.internal:host-gateway)
   yq_clear f=<file> k=<key>            yc Clear a key's value in a YAML file (sets it to empty string) (e.g. make yq_clear f=compose.yaml k=services.php.extra_hosts)
   yq_delete f=<file> k=<key>           yd Delete a key from a YAML file (e.g. make yq_delete f=compose.yaml k=services.php.extra_hosts)

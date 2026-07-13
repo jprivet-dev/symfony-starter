@@ -40,7 +40,8 @@ Go to https://symfony-starter.localhost:8442/ and accept [the auto-generated TLS
 
 ## Documentation
 
-🚀 [The Symfony Starter documentation](.starter/docs/README.md).
+* 📖 [The Project documentation](docs/README.md).
+* 🚀 [The Symfony Starter documentation](.starter/docs/README.md).
 
 ## Comments, suggestions?
 
