@@ -38,6 +38,11 @@ make require_ux_react
 > The Flex recipe inserts a new, active `.enableReactPreset()` line right after `.splitEntryChunks()` — it doesn't uncomment the `//.enableReactPreset()` placeholder further down in `webpack.config.js`. React is enabled either way; the leftover commented line is just a harmless residue from the base Encore template.
 
 ```shell
+# No longer installed automatically by StimulusBundle 3.3+ with Webpack Encore
+make npm_save_dev_co a="@symfony/stimulus-bridge"
+```
+
+```shell
 # React's own types aren't bundled with the react/react-dom packages
 make npm_save_dev_co a="@types/react @types/react-dom"
 ```
