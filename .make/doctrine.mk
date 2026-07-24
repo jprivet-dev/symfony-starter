@@ -2,8 +2,8 @@
 
 db: _doctrine drop create migrate ## Drop and create the database and migrate
 
-db@test: a="--env=test"
-db@test: _doctrine drop create migrate ## Drop and create the database and migrate (env=test)
+db_test: a="--env=test"
+db_test: _doctrine drop create migrate ## Drop and create the database and migrate (env=test)
 
 ##
 
@@ -59,8 +59,8 @@ migration: _doctrine ## Create (via MakerBundle) a new migration based on databa
 fixtures: _doctrine ## Load fixtures (CAUTION! The load command purges the database) | [a=<args>] | a="--append"
 	$(CONSOLE) doctrine:fixtures:load -n $(a)
 
-fixtures@test: a="--env=test"
-fixtures@test: _doctrine fixtures ## Load fixtures (env=test)
+fixtures_test: a="--env=test"
+fixtures_test: _doctrine fixtures ## Load fixtures (env=test)
 
 .PHONY: sql
 sql: _doctrine ## Execute the given SQL query and output the results | [q=<query>] | q="SELECT * FROM user"

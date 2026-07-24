@@ -48,8 +48,8 @@ However, we face inconsistent selection behavior when using the **double-click**
 * ❌ **Failure** when double-clicking on an **`@`-categorized** target name: The double-click action treats the at sign (`@`) as a word separator too, resulting in the same fragmented selection. This pattern is sometimes used to visually group a command under a category (e.g., `test`), but suffers from the same selection issue.
 
   ```makefile
-      .PHONY: my_target_a@test
-      my_target_a@test: # Comment
+      .PHONY: my_target_a_test
+      my_target_a_test: # Comment
         command
   ```
 
@@ -67,7 +67,7 @@ This is the preferred standard for command-line options in some ecosystems. Sele
 
 Sometimes used to mimic a namespace or hierarchy (e.g., `docker/build`, `db/migrate`). Suffers from the same double-click selection failure as `kebab-case`, since `/` is also treated as a word separator.
 
-### 4. Use `@`-categorized naming (e.g., `my_target_a@test`)
+### 4. Use `@`-categorized naming (e.g., `my_target_a_test`)
 
 Sometimes used to visually group a command under a category, similar to a suffix tag. Visually appealing, but suffers from the same double-click selection failure as `kebab-case` and `slash/separated`, since `@` is also treated as a word separator. `my_target_a_test` (plain `snake_case`) achieves the same grouping intent without the selection issue.
 

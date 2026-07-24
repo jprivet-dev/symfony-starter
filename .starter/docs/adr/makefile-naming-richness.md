@@ -40,7 +40,7 @@ Examples already applied in the project:
 * `require_ux_react`, `require_test_pack`, `require_phpcsfixer`, … — a bare `require` could only install one thing; the suffix distinguishes each install target from the others.
 * `monorepo_tests`, `repo_tests`, and the project's own `tests` — three "run the tests" commands coexist in the same Makefile; a bare `tests` for each would collide, so a namespace
   prefix disambiguates them.
-* `db` / `db@test`, `monolog` / `monolog@prod`, `fixtures` / `fixtures@test` — the base name stays short; only a minimal suffix disambiguates the environment variant.
+* `db` / `db_test`, `monolog` / `monolog@prod`, `fixtures` / `fixtures_test` — the base name stays short; only a minimal suffix disambiguates the environment variant.
 * `p` (`phpunit`), `a` (`assets`), `cc` (`cache_clear`), `sh` (`php_sh`) — even shorter aliases, viable because `make help` documents what they expand to.
 
 ## Decision outcome

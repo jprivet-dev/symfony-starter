@@ -86,7 +86,7 @@ Usage: make <target>
 
 — DOCTRINE / SQL 💽 ————————————————————————————————————————————————————————
   db                                      Drop and create the database and migrate
-  db@test                                 Drop and create the database and migrate (env=test)
+  db_test                                 Drop and create the database and migrate (env=test)
 
   drop [a=<args>]                         Drop the database [y/N] (e.g. make drop a="--env=test")
   create [a=<args>]                       Create the database (e.g. make create a="--env=test")
@@ -99,7 +99,7 @@ Usage: make <target>
   migration [a=<args>]                    Create (via MakerBundle) a new migration based on database changes (format the generated SQL) (e.g. make migration a="--profile")
 
   fixtures [a=<args>]                     Load fixtures (CAUTION! The load command purges the database) (e.g. make fixtures a="--append")
-  fixtures@test                           Load fixtures (env=test)
+  fixtures_test                           Load fixtures (env=test)
   sql [q=<query>]                         Execute the given SQL query and output the results (e.g. make sql q="SELECT * FROM user")
   update_dump                             Generate and output the SQL needed to synchronize the database schema with the current mapping metadata
   update_force                            Execute the generated SQL needed to synchronize the database schema with the current mapping metadata
