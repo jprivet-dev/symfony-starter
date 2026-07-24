@@ -191,8 +191,9 @@ make info     # Show project access info (URLs, ports)
 
 * [What is an ADR?](adr/what-is-an-adr.md)
 * [Database: port mapping strategy](adr/database-port-mapping.md)
-* [Makefile: target naming convention](adr/makefile-naming.md)
 * [Makefile: .PHONY usage convention](adr/makefile-phony.md)
+* [Makefile: target naming convention](adr/makefile-naming.md)
+* [Makefile: target naming richness](adr/makefile-naming-richness.md)
 
 ### Troubleshooting
 
